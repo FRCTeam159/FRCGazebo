@@ -1,0 +1,8 @@
+#!/bin/bash
+cd plugins/build
+echo "configuring"
+cmake ..
+echo "building"
+cmake --build . --config Release
+cp Release/*.dll ../../../../plugins
+cd ../../

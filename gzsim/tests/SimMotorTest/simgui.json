@@ -1,0 +1,27 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo"
+    }
+  },
+  "NetworkTables": {
+    "LiveWindow": {
+      "open": true
+    },
+    "gazebo": {
+      "motor": {
+        "1": {
+          "open": true
+        },
+        "2": {
+          "open": true
+        },
+        "ctrl": {
+          "open": true
+        },
+        "open": true
+      },
+      "open": true
+    }
+  }
+}

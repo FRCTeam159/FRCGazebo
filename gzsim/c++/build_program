@@ -1,0 +1,7 @@
+#!/bin/bash
+cd program/build
+echo "configuring"
+cmake ..
+echo "building"
+cmake --build . --config Release
+cd ../../

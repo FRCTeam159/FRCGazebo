@@ -1,0 +1,37 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/LiveWindow/Drivetrain": "Subsystem",
+      "/LiveWindow/Simulation": "Subsystem",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/SmartDashboard/ControlSimulation": "Command",
+      "/SmartDashboard/DriveWithGamepad": "Command",
+      "/SmartDashboard/Drivetrain": "Subsystem",
+      "/SmartDashboard/Scheduler": "Scheduler",
+      "/SmartDashboard/Simulation": "Subsystem"
+    }
+  },
+  "NetworkTables": {
+    "gazebo": {
+      "encoder": {
+        "1": {
+          "open": true
+        },
+        "open": true
+      },
+      "gyro": {
+        "open": true
+      },
+      "motor": {
+        "1": {
+          "open": true
+        },
+        "2": {
+          "open": true
+        }
+      },
+      "open": true
+    }
+  }
+}

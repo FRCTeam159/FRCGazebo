@@ -1,0 +1,2 @@
+#!/bin/bash
+program/build/Release/GzProgram.exe;
