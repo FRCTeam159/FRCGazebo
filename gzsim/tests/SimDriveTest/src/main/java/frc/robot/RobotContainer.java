@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.DrivePath;
 import frc.robot.commands.ControlSimulation;
 import frc.robot.commands.DefaultAuto;
 import frc.robot.commands.DriveWithGamepad;
@@ -26,7 +27,7 @@ public class RobotContainer {
   private final Simulation m_simulation = new Simulation(m_drivetrain);
   private final XboxController m_controller = new XboxController(0);
 
-  private DefaultAuto m_autoCommand = null; // TODO
+  private DrivePath m_autoCommand = null; // TODO
   private ControlSimulation m_simCommand = null; // TODO
   private DriveWithGamepad m_driveCommand = null; // TODO
 
@@ -35,9 +36,11 @@ public class RobotContainer {
     // Configure the button bindings
     m_driveCommand=new DriveWithGamepad(m_drivetrain, m_controller);
     m_drivetrain.setDefaultCommand(m_driveCommand);
-    m_simCommand=new ControlSimulation(m_simulation);
+    //m_simCommand=new ControlSimulation(m_simulation);
    // m_simulation.setDefaultCommand(m_simCommand);
-    m_autoCommand=new DefaultAuto(m_drivetrain);
+    //m_autoCommand=new DefaultAuto(m_drivetrain);
+    m_autoCommand=new DrivePath(m_drivetrain);
+
     configureButtonBindings();
   }
 
@@ -60,7 +63,7 @@ public class RobotContainer {
   }
   public void robotInit(){
     m_simulation.init();
-    SmartDashboard.putData(m_simCommand);
+    //SmartDashboard.putData(m_simCommand);
   }
   public void simulationInit(){
     

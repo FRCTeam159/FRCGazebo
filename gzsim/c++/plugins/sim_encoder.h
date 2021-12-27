@@ -96,7 +96,7 @@ class Encoder : public gazebo::ModelPlugin {
   gazebo::transport::NodePtr node;
 
   /// \brief Subscriber handle.
-  gazebo::transport::SubscriberPtr sub;
+  gazebo::transport::SubscriberPtr ctrl;
 
   /// \brief Publisher handles.
   gazebo::transport::PublisherPtr pub;

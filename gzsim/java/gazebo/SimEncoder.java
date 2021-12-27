@@ -13,6 +13,7 @@ public class SimEncoder extends SimNode{
     private static NetworkTable objects;
     private static NetworkTable objects_chnls;
     private double distancePerRotation = 1;
+    private double sign=1;
 
     public SimEncoder(int id){
         chnl=id;
@@ -27,6 +28,9 @@ public class SimEncoder extends SimNode{
         vel_node= objects_chnls.getEntry("velocity");
         vel_node.setDouble(0.0);
         System.out.println("SimEncoder:"+id);
+    }
+    public void setInverted(){
+        sign=-1;
     }
     public void enable(){
         ctrl_node.setString("run");
@@ -44,9 +48,9 @@ public class SimEncoder extends SimNode{
         return distancePerRotation;
     }
     public double getDistance() {
-        return distancePerRotation*pos_node.getDouble(0.0);
+        return sign*distancePerRotation*pos_node.getDouble(0.0);
     }
     public double getRate() {
-        return distancePerRotation*vel_node.getDouble(0.0); 
+        return sign*distancePerRotation*vel_node.getDouble(0.0); 
     }
 }

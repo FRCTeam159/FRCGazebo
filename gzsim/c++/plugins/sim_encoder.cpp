@@ -48,7 +48,7 @@ if (model->GetJointCount() == 0) {
   node = gazebo::transport::NodePtr(new gazebo::transport::Node());
   node->Init(this->model->GetWorld()->Name());
 
-  sub = node->Subscribe(topic + "/control", &Encoder::Callback, this);
+  ctrl = node->Subscribe(topic + "/control", &Encoder::Callback, this);
   pub = node->Advertise<gazebo::msgs::Vector3d>(topic);
 
   // Connect to the world update event.

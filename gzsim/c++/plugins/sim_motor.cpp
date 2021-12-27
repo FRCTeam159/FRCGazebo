@@ -60,12 +60,13 @@ void MotorPlugin::OnMsg(ConstVector3dPtr &_msg) {
 /// \param[in] _vel New target velocity
 
 void MotorPlugin::SetVelocity(const double &_vel) {
+  // std::cerr << "MotorPlugin::SetVelocity:" << _vel<<"\n";
   // Set the joint's target velocity.
   double vel = _vel;
-  vel = vel < -1 ? -1 : vel;
-  vel = vel > 1 ? 1 : vel;
+  //vel = vel < -1 ? -1 : vel;
+  //vel = vel > 1 ? 1 : vel;
   vel *= multiplier;
-  // std::cerr << "MotorPlugin::SetVelocity:" << vel<<"\n";
+ 
   this->model->GetJointController()->SetVelocityTarget(
       this->joint->GetScopedName(), vel);
 }

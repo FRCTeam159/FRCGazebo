@@ -1,32 +1,28 @@
 <xml version="1.0">
 <dashboard>
-	<widget field="Scheduler" type="Scheduler" class="edu.wpi.first.smartdashboard.gui.elements.Scheduler">
-		<location x="258" y="112"/>
-	</widget>
 	<widget field="Reset" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="180" y="122"/>
-	</widget>
-	<widget field="Heading" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="334" y="9"/>
+		<location x="316" y="104"/>
 	</widget>
 	<widget field="ControlSimulation" type="Command" class="edu.wpi.first.smartdashboard.gui.elements.Command">
-		<location x="7" y="116"/>
+		<location x="-1" y="98"/>
 	</widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="11" y="77"/>
-	</static-widget>
+	<widget field="Scheduler" type="Scheduler" class="edu.wpi.first.smartdashboard.gui.elements.Scheduler">
+		<location x="174" y="108"/>
+	</widget>
 	<widget field="Right speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="168" y="37"/>
+		<location x="192" y="21"/>
 	</widget>
 	<widget field="Right distance" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="5" y="37"/>
-	</widget>
-	<widget field="Left speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="174" y="8"/>
+		<location x="181" y="51"/>
 	</widget>
 	<widget field="Left distance" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="10" y="7"/>
-		<height>21</height>
+		<location x="6" y="50"/>
+	</widget>
+	<widget field="Heading" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="354" y="22"/>
+	</widget>
+	<widget field="Left speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="15" y="19"/>
 	</widget>
 </dashboard>
 <live-window>
@@ -34,7 +30,19 @@
 		<location x="0" y="46"/>
 	</widget>
 	<widget field="Ungrouped" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
+		<widget field="PIDController[1]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+			<location x="6" y="16"/>
+			<height>155</height>
+			<width>139</width>
+		</widget>
+		<widget field="PIDController[2]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+			<location x="6" y="171"/>
+			<height>155</height>
+			<width>139</width>
+		</widget>
 		<location x="0" y="23"/>
+		<width>151</width>
+		<height>332</height>
 	</widget>
 	<widget field="Simulation" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
 		<location x="0" y="0"/>

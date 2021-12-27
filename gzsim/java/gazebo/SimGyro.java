@@ -2,8 +2,9 @@ package gazebo;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 
-public class SimGyro extends SimNode {
+public class SimGyro extends SimNode implements Gyro {
     private NetworkTableEntry ctrl_node;
     private NetworkTableEntry pos_node;
     private NetworkTableEntry vel_node;
@@ -30,5 +31,20 @@ public class SimGyro extends SimNode {
     }
     public double getRate() {
         return vel_node.getDouble(0.0); 
+    }
+    @Override
+    public void close() throws Exception {
+        // TODO Auto-generated method stub
+        
+    }
+    @Override
+    public void calibrate() {
+        // TODO Auto-generated method stub
+        
+    }
+    @Override
+    public double getAngle() {
+        // TODO Auto-generated method stub
+        return -getHeading();
     }
 }
