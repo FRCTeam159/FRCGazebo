@@ -4,4 +4,5 @@ echo "configuring"
 cmake ..
 echo "building"
 cmake --build . --config Release
+cp Release/*.exe ../../../../bin
 cd ../../

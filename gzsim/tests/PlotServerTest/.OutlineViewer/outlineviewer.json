@@ -1,0 +1,15 @@
+{
+  "Connections": {
+    "open": true
+  },
+  "NetworkTables Settings": {
+    "dsClient": false,
+    "mode": "Client",
+    "serverTeam": "localhost"
+  },
+  "connections": true,
+  "flags": true,
+  "plotdata": {
+    "open": true
+  }
+}

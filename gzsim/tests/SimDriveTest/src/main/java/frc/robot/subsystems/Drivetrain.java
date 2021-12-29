@@ -15,19 +15,19 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import gazebo.SimMotor;
-import gazebo.SimEncoder;
+
+import gazebo.SimEncMotor;
+
 import gazebo.SimGyro;
 
 public class Drivetrain extends SubsystemBase implements Constants {
-	private SimMotor leftMotor;
-	private SimMotor rightMotor;
-	private SimEncoder leftEncoder;
-	private SimEncoder rightEncoder;
+	private SimEncMotor leftMotor;
+	private SimEncMotor rightMotor;
+	
 	private SimGyro gyro = new SimGyro();
 
 	public static final double kTrackWidth = i2M(28.25); // inches
-	private static final double kWheelRadius = i2M(3); // 8 inch wheel diameter in tank model
+	private static final double kWheelRadius = i2M(3); // wheel radius in tank model
 
 	private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(kTrackWidth);
 	private final DifferentialDriveOdometry odometry;
@@ -40,11 +40,10 @@ public class Drivetrain extends SubsystemBase implements Constants {
 
 	/** Creates a new Subsystem. */
 	public Drivetrain() {
-		leftMotor = new SimMotor(FRONT_LEFT);
-		rightMotor = new SimMotor(FRONT_RIGHT);
-		leftEncoder=new SimEncoder(FRONT_LEFT);
-		rightEncoder=new SimEncoder(FRONT_RIGHT);
-		rightEncoder.setInverted();
+		leftMotor = new SimEncMotor(FRONT_LEFT);
+		rightMotor = new SimEncMotor(FRONT_RIGHT);
+	
+		rightMotor.setInverted();
 
 		odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
 		SmartDashboard.putData("Field", m_fieldSim);
@@ -96,38 +95,33 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		System.out.println("Drivetrain.disable");
 		leftMotor.disable();
 		rightMotor.disable();
-		leftEncoder.disable();
-		rightEncoder.disable();
 		gyro.disable();
 	}
 	public void enable(){
 		System.out.println("Drivetrain.enable");
 		leftMotor.enable();
 		rightMotor.enable();
-		leftEncoder.enable();
-		rightEncoder.enable();
+
 		gyro.enable();
 	}
 	public void reset(){
 		System.out.println("Drivetrain.reset");
-		leftEncoder.reset();
-		rightEncoder.reset();
 		gyro.reset();
 	}
 	public double getHeading(){
 		return gyro.getHeading();
 	}
 	public double getLeftDistance(){
-		return  r2M(leftEncoder.getDistance()) ;
+		return  r2M(leftMotor.getDistance()) ;
 	}
 	public double getRightDistance(){
-		return  r2M(rightEncoder.getDistance());
+		return  r2M(rightMotor.getDistance());
 	}
 	public double getLeftVelocity(){
-		return  r2M(leftEncoder.getRate());
+		return  r2M(leftMotor.getRate());
 	}
 	public double getRightVelocity(){
-		return  r2M(rightEncoder.getRate());
+		return  r2M(rightMotor.getRate());
 	}
 	public void log(){
 		SmartDashboard.putNumber("Heading", getHeading());
@@ -155,23 +149,23 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		final double leftFeedforward = feedforward.calculate(speeds.leftMetersPerSecond);
 		final double rightFeedforward = feedforward.calculate(speeds.rightMetersPerSecond);
 
-		final double leftOutput = leftPIDController.calculate(leftEncoder.getRate(), speeds.leftMetersPerSecond);
-		final double rightOutput = rightPIDController.calculate(rightEncoder.getRate(),speeds.rightMetersPerSecond);
+		final double leftOutput = leftPIDController.calculate(leftMotor.getRate(), speeds.leftMetersPerSecond);
+		final double rightOutput = rightPIDController.calculate(rightMotor.getRate(),speeds.rightMetersPerSecond);
 		leftMotor.set(leftOutput + leftFeedforward);
 		rightMotor.set(rightOutput + rightFeedforward);
 	}
 
 /** Updates the field-relative position. */
 	public void updateOdometry() {
-		double l=leftEncoder.getDistance();
-		double r=rightEncoder.getDistance();
+		double l=leftMotor.getDistance();
+		double r=rightMotor.getDistance();
 		//System.out.println(l+" "+r);
 		odometry.update(
 			gyro.getRotation2d(), l, r);
 	}
 	public void resetOdometry(Pose2d pose) {
-		leftEncoder.reset();
-		rightEncoder.reset();
+		leftMotor.reset();
+		rightMotor.reset();
 		odometry.resetPosition(pose, gyro.getRotation2d());
 	}
 

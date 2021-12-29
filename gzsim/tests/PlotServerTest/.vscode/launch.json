@@ -1,0 +1,50 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Launch PlotServer",
+      "request": "launch",
+      "mainClass": "utils.PlotServer",
+      "projectName": "PlotServerTest"
+    },
+    {
+      "type": "java",
+      "name": "Launch PlotTest",
+      "request": "launch",
+      "mainClass": "frc.robot.PlotTest",
+      "projectName": "PlotServerTest"
+    },
+    {
+      "type": "java",
+      "name": "Launch NTServerTest",
+      "request": "launch",
+      "mainClass": "frc.robot.NTServerTest",
+      "projectName": "PlotServerTest"
+    },
+    {
+      "type": "java",
+      "name": "Launch NTclientTest",
+      "request": "launch",
+      "mainClass": "frc.robot.NTClientTest",
+      "projectName": "PlotServerTest"
+    },
+   
+    {
+      "type": "java",
+      "name": "Launch Main",
+      "request": "launch",
+      "mainClass": "frc.robot.Main",
+      "projectName": "PlotTest"
+    },
+    {
+      "type": "wpilib",
+      "name": "WPILib Desktop Debug",
+      "request": "launch",
+      "desktop": true
+    },
+  ]
+}

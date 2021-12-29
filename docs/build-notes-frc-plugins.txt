@@ -1,0 +1,113 @@
+Gazebo Simulation on Windows
+
+A. Gazebo Installation
+   I. Native using python libraries
+    advantages
+      1) can use GPU
+      2) can use windows display
+      3) can use a direct interface to robot simulation (same host)
+
+    disadvantages
+      1) requires running from python environment
+      2) requires custom interface to robot program
+
+   II. Virtual using WSL2 & Ubuntu 18
+   advantages
+      1) easy to setup
+      2) my be able to use existing Linux based interface to robot program (older api) or newer hal_gazebo
+   disadvantages
+      1) requires installation of X-server application
+      2) (currently) not able to utilize GPU
+      3) need to usea web-based interface to connect differnt operating systems  (current robot simulation may not supprt this)
+
+B. Problems
+   I. build problem #1
+      1) current allwpilib gradle build uses pkg-config (unix)
+      2) but the pkg-config in the conda-forge Windows gazebo install returns invalid identifiers for VisualStudio build (e.g. -l library)
+         - some ".pc" files also need to be modified to fix config errors (e.g. curl.pc need to be removed fro gazebo.pc)
+      3) need to add explicit link instructions etc. in build.gradle files for gz_msgs and frc_gazebo_plugins (or could edit pkg-config files )
+      - for some reason a static (.lib) version of each plugin is also needs to be built (a code comment indicates that wpi development doesn't know why either)
+      - for the (static ?) build to succeed all gazebo libraries must be included as "static" (.lib) vs shared (.dll)
+
+   II. runtime problem #1
+      1) after heavy modification to the build scripts was able to complile the dlls for frc_gazebo_plugins and gz_msg.lib
+      2) but if the plugins were included in the model's sdf file gazebo immediately crashes without any message printed
+         - work-around is to try using cmake instead of gradle (details below)
+         - that seems to fix the crash problem but another runtime issue was discovered (see next)
+      3) updated: for some reason plugins built by gradle now don't crash gazebo (not sure what changed ??)
+         - still exhibit the problem descibed next
+
+   III. runtime problem #2:
+      1) when 2 or more plugins of a different type are present in a gazebo model file a run-time error occurs
+         and the second dll is not loaded
+         example output
+         [libprotobuf ERROR D:\bld\libprotobuf_1633467007319\work\src\google\protobuf\descriptor_database.cc:641] File already exists in database: float64.proto
+         [libprotobuf FATAL D:\bld\libprotobuf_1633467007319\work\src\google\protobuf\descriptor.cc:1936] CHECK failed: GeneratedDatabase()->Add(encoded_file_descriptor, size):
+
+         [Err] [Plugin.hh:212] Failed to load plugin C:\Users\Alpiner\Robotics\FRCTeam159Repos\MentorRepository\GazeboSimulation\plugins\dc_motor.dll:
+            "C:\Users\Alpiner\Robotics\FRCTeam159Repos\MentorRepository\GazeboSimulation\plugins\dc_motor.dll": A dynamic link library (DLL) initialization routine failed
+      2) assumed reason for problem
+      In the original code all plugins are linked with the same static gz_msgs.lib file
+      at runtime multiple seperate instances of a given message type
+      (e.g gazebo::msgs::ConstFloat64Ptr) try to register with some global database which results in the above error and the dll is not loaded for the plugin
+      - so need to only register a given message type once only
+
+      3) found an ugly work-around that seems to fix the issue
+      - don't link in gz_msgs.lib with each plugin but include the appropriate pb.cc generated in gz_msgs in the source path for each plugin build (e.g. float64.pb.cc)
+      - for all plugins that use the same message type (e.g. ConstFloat64Ptr) change the first argument of the const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable
+         (initialized flag) from false to true for all but one of the plugins (this seems to stop the message from being registered with the data base)
+      - since clock.dll will always be present in the sdf file cp the pb.cc files for bool and float64 into the source folder for that plugin and
+         set the initialized flag to true
+      - for all others include in the build build a version of bool.pb.cc or float64.pb.c with the initialize flag set to true
+
+      setup for work-around:
+
+      1) In test folder create directory called "simulation"
+      2) cp into simulation the following sources from allwpilib-2021 (most recent branch of allwpilib githup clone)
+         - frc_gazebo_plugins
+         - gz_msgs
+      3) build gz_msgs using cmake (a CMakeLists.txt is present in simulation/gz_msgs)
+      4) copy the generated protobuf files into the appropriate frc_gazebo_plugins directories and change the first argument of DescriptorTable from
+         false to true for all but clock as described above
+      5) create a CMakeLists.txt file in frc_gazebo_plugins (absent in most recent allwpilib code can start with the one from 2017 branch)
+         - modify as shown below (assumes gz_msgs has been built first)
+
+         set(gazebo_DIR /c/Users/Alpiner/anaconda3/envs/gz/Library/lib/cmake/gazebo)
+         set(GZ_MSGS_INCLUDE_PROTO_DIR ../gz_msgs/build/generated/simulation/gz_msgs)
+         set(GZ_MSGS_INCLUDE_DIR ../gz_msgs/build/generated)
+
+         foreach(PLUGIN ${PLUGINS})
+         find_package(gazebo REQUIRED)
+
+         add_compile_definitions(M_PI=3.14159265358979323846 BOOST_BIND_GLOBAL_PLACEHOLDERS=1)
+         include_directories(src/${PLUGIN}/headers ${Boost_INCLUDE_DIR} ${GZ_MSGS_INCLUDE_DIR} ${GZ_MSGS_INCLUDE_PROTO_DIR} ${GAZEBO_INCLUDE_DIRS})
+
+         if (WIN32)
+            add_library(${PLUGIN} SHARED ${SRC_FILES})
+         ...
+         # original: target_link_libraries(${PLUGIN}  ${GZ_MSGS_DIR}/gz_msgs ${GAZEBO_LIBRARIES} ${Boost_LIBRARIES})
+         # new: don't link in gz_msg.lib need to compile each plugin with it's own copy of proto.cc file (see runtime problem below)
+         target_link_libraries(${PLUGIN}  ${GAZEBO_LIBRARIES} ${Boost_LIBRARIES})
+
+   IV. runtime problem #3:
+      1) When passing a message to gazebo server using a custom type (e.g. float64) the following error occurs:
+         [libprotobuf FATAL D:\bld\libprotobuf_1633467007319\work\src\google\protobuf\generated_message_reflection.cc:2914] CHECK failed: file != nullptr
+      2) this is the line in the test program that causes the error:
+         gazebo::transport::PublisherPtr pub = node->Advertise<gazebo::msgs::Float64>("~/gazebo/frc/simulator/pwm/1");
+         - this may be a bug in the protobuf code on windows (from web comments)
+         - supposedly fixed in some non-debug versions ?
+         - tried installing a newer version of protoc (3.19) but ran into compatability issues with gazebo version 3.18 (ogre mismatch)
+         - tried installing newer version of libprotobuf (3.19.1) but that led to the inability to install/uninstall/update anything afterwords with the following error:
+         .. ResolvePackageNotFound python 3.1
+
+   V. Conclusions
+   1) Using google protobuf API on Windows is a real hassle with numerous problems (some as yet unsolved)
+   2) Q: Do we really need custom protoc messages for communicating between gazebo and a windows app ? (ultimately the frc robot program)
+   3) if not, maybe the built in gazebo message protocols (vevtor3 etc.) will work
+
+C. Plan
+ 1) change all plugins to use vector3 msg protocols vs protobuf (currently only float64 and bool)
+   - note: shouldn't need driver-station & joystick messages anymore since they are now part of the desktop simulation api
+ 2) in robot simulation runtime code (java,jni) find where hal code is sending/reciving messages
+   - add in calls to glclient with publish/subscribe vector3 messages
+   - note: may need to prevent blocking or make sure gazebo is running before robot app
