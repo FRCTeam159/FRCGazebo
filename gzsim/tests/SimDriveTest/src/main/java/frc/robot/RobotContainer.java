@@ -14,6 +14,7 @@ import frc.robot.commands.Calibrate;
 import frc.robot.commands.DriveWithGamepad;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Trajectories;
+import utils.PlotUtils;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -30,6 +31,7 @@ public class RobotContainer {
   public static boolean calibrate = false;
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
+  SendableChooser<Integer> m_plot_options = new SendableChooser<>();
 
   Calibrate m_calibrate=new Calibrate(m_drivetrain);
   DrivePath m_straightpath = new DrivePath(m_drivetrain,Trajectories.STRAIGHT);
@@ -45,7 +47,12 @@ public class RobotContainer {
     m_chooser.addOption("Straight Path", m_straightpath);
     m_chooser.addOption("Calibrate", m_calibrate);
 
+    m_plot_options.setDefaultOption("No Plot", PlotUtils.PLOT_NONE);
+    m_plot_options.addOption("Plot Path", PlotUtils.PLOT_PATH);
+    m_plot_options.addOption("Plot Dynamics", PlotUtils.PLOT_DYNAMICS);
+
     SmartDashboard.putData(m_chooser);
+    SmartDashboard.putData(m_plot_options);
 
     configureButtonBindings();
   }
@@ -64,6 +71,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+      PlotUtils.plot_option=m_plot_options.getSelected();
       return m_chooser.getSelected();
   }
   public void robotInit(){

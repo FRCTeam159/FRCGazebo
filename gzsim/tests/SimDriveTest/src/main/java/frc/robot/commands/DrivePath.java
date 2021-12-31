@@ -30,7 +30,6 @@ public class DrivePath extends CommandBase {
   private final Simulation m_simulation;
   static public boolean plot_trajectory_motion = false;
   static public boolean plot_trajectory_dynamics = false;
-  static public boolean plot_path = true;
   static public boolean plot_dynamics = false;
   static public boolean print_path=false;
 
@@ -86,7 +85,7 @@ public class DrivePath extends CommandBase {
     //System.out.format("%d %2.3f %2.3f %2.3f\n",data_count,elapsed,reference.timeSeconds,reference.poseMeters.getRotation().getDegrees());
     ChassisSpeeds speeds = m_ramsete.calculate(m_drive.getPose(), reference);
     m_drive.odometryDrive(speeds.vxMetersPerSecond, speeds.omegaRadiansPerSecond);
-    if (plot_path)
+    if (PlotUtils.plot_option==PlotUtils.PLOT_PATH)
       plotPath(reference);
     data_count++;
   }
@@ -150,7 +149,7 @@ public class DrivePath extends CommandBase {
       return;
     System.out.println("Simtime="+m_simulation.getTime()+" Realtime="+runtime);
     m_simulation.end();
-    if(plot_path)
+    if(PlotUtils.plot_option==PlotUtils.PLOT_PATH)
       PlotUtils.plotPathMotion(pathdata);
   }
 

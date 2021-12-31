@@ -16,6 +16,12 @@ public class PlotUtils {
     public static enum UnitType {
         FEET,METERS,INCHES
     }
+    public static int PLOT_NONE = 0;
+    public static int PLOT_PATH = 1;
+    public static int PLOT_DYNAMICS = 2;
+
+    public static int plot_option=PLOT_NONE;
+
     private static NetworkTable table=null;
     private static NetworkTableEntry newPlot;
     private static NetworkTableEntry plotParams;

@@ -107,7 +107,7 @@ public class Calibrate extends CommandBase {
     System.out.format("max vel=%f max acc=%f\n", max_vel, max_acc);
     m_simulation.end();
 
-    if (plot) {
+    if (PlotUtils.plot_option==PlotUtils.PLOT_PATH) {
       PlotUtils.plotCalibration(plotdata,max_pos,max_vel,max_acc);
     }
   }
