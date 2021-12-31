@@ -22,6 +22,7 @@ class MotorPlugin : public gazebo::ModelPlugin {
   /// \brief A PID controller for the joint.
   gazebo::common::PID pid;
   double multiplier;
+  double scale;
   /// \brief Constructor
  public:
   MotorPlugin() {}
@@ -34,5 +35,5 @@ class MotorPlugin : public gazebo::ModelPlugin {
   virtual void Load(gazebo::physics::ModelPtr _model, sdf::ElementPtr _sdf);
   /// \brief Set the velocity of the Velodyne
   /// \param[in] _vel New target velocity
-  void SetVelocity(const double &_vel);
+  void SetVelocity(double vel, double scale);
 };

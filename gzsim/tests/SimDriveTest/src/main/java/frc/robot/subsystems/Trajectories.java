@@ -15,38 +15,26 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Trajectories extends SubsystemBase {
 
-public static double MAX_VEL = 1.7;
-public static double MAX_ACC = 2.6;
-public static double MAX_JRK = 1.3;
-public static double KP = 4.0;
-public static double KD = 0.0;
-public static double KI = 0.0;
-public static double GFACT = 10.0;
-public static double KV = 1.0 / MAX_VEL;
-public static double KA = 0.0;
-
-static final public int STRAIGHT=0;
-static final public int SCURVE=1;
-
+  public static int CURVED = 0;
+  public static int STRAIGHT = 1;
+  
   Trajectory m_trajectory;
   /** Creates a new Trajectories. */
-  public Trajectories() {
-  }
-
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
   
   public static Trajectory straightPath(){
-    return straightPath(2,2,10);
+    return straightPath(0,0,10);
   }
   public static Trajectory straightPath(double xstart, double ystart, double distance){
     Trajectory traj = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(xstart, ystart, new Rotation2d()),
+      new Pose2d(xstart, ystart, new Rotation2d(0.0)),
       List.of(),
-      new Pose2d(xstart+distance, ystart+distance, new Rotation2d()),
-      new TrajectoryConfig(MAX_VEL, MAX_ACC)
+      new Pose2d(xstart+distance, ystart, new Rotation2d(0.0)),
+      new TrajectoryConfig(Drivetrain.kMaxVelocity, Drivetrain.kMaxAcceleration)
       );
       return traj;
   }
@@ -56,11 +44,17 @@ static final public int SCURVE=1;
   }
   public static Trajectory curvedPath(double xstart, double ystart, double xend, double yend){
     Trajectory traj = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(xstart, ystart, new Rotation2d()),
+      new Pose2d(xstart, ystart, new Rotation2d(0.0)),
       List.of(),
-      new Pose2d(xend, yend, new Rotation2d()),
-      new TrajectoryConfig(MAX_VEL, MAX_ACC)
+      new Pose2d(xend, yend, new Rotation2d(0.0)),
+      new TrajectoryConfig(Drivetrain.kMaxVelocity, Drivetrain.kMaxAcceleration)
       );
       return traj;
   }
+  public static double unwrap(double previous_angle, double new_angle) {
+    double d = new_angle - previous_angle;
+    d = d >= 180 ? d - 360 : (d <= -180 ? d + 360 : d);
+    return previous_angle + d;
+  }
+ 
 }

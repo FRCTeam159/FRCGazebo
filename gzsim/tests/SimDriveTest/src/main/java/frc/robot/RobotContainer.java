@@ -6,14 +6,14 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DrivePath;
-import frc.robot.commands.ControlSimulation;
-import frc.robot.commands.DefaultAuto;
+import frc.robot.commands.Calibrate;
 import frc.robot.commands.DriveWithGamepad;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Simulation;
+import frc.robot.subsystems.Trajectories;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -24,22 +24,28 @@ import frc.robot.subsystems.Simulation;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain m_drivetrain = new Drivetrain();
-  private final Simulation m_simulation = new Simulation(m_drivetrain);
   private final XboxController m_controller = new XboxController(0);
 
-  private DrivePath m_autoCommand = null; // TODO
-  private ControlSimulation m_simCommand = null; // TODO
   private DriveWithGamepad m_driveCommand = null; // TODO
+  public static boolean calibrate = false;
+
+  SendableChooser<Command> m_chooser = new SendableChooser<>();
+
+  Calibrate m_calibrate=new Calibrate(m_drivetrain);
+  DrivePath m_straightpath = new DrivePath(m_drivetrain,Trajectories.STRAIGHT);
+  DrivePath m_curvedpath = new DrivePath(m_drivetrain,Trajectories.CURVED);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     m_driveCommand=new DriveWithGamepad(m_drivetrain, m_controller);
     m_drivetrain.setDefaultCommand(m_driveCommand);
-    //m_simCommand=new ControlSimulation(m_simulation);
-   // m_simulation.setDefaultCommand(m_simCommand);
-    //m_autoCommand=new DefaultAuto(m_drivetrain);
-    m_autoCommand=new DrivePath(m_drivetrain);
+
+    m_chooser.setDefaultOption("Curved Path", m_curvedpath);
+    m_chooser.addOption("Straight Path", m_straightpath);
+    m_chooser.addOption("Calibrate", m_calibrate);
+
+    SmartDashboard.putData(m_chooser);
 
     configureButtonBindings();
   }
@@ -58,17 +64,14 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+      return m_chooser.getSelected();
   }
   public void robotInit(){
-    m_simulation.init();
-    //SmartDashboard.putData(m_simCommand);
+    m_drivetrain.simulation.init();
   }
   public void simulationInit(){
-    
     System.out.println("simulationInit()");
     m_drivetrain.enable();
-    m_simulation.run();  
+    m_drivetrain.simulation.run();  
   }
 }

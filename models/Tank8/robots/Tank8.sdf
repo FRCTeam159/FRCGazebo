@@ -696,9 +696,9 @@
         </limit>
       </axis>
     </joint>
-
+<!---->
     <plugin name="clock" filename="sim_clock.dll">
-      <topic>~/gazebo/frc/time</topic>
+      <topic>~/gazebo/frc/simulator/clock</topic>
     </plugin>
     
     <plugin name="Body_gyro" filename="sim_gyro.dll">

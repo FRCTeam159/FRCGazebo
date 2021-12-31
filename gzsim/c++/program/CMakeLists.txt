@@ -23,6 +23,7 @@ add_executable(
 ../src/GzNode.cpp 
 ../src/GzEncoder.cpp 
 ../src/GzGyro.cpp
+../src/GzClock.cpp
 )
 target_link_libraries(GzProgram ${GAZEBO_LIBRARIES} ${NT_LIBS})
 

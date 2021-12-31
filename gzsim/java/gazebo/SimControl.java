@@ -12,7 +12,8 @@ public class SimControl {
     NetworkTableEntry status;
     public SimControl() { }
     public void init(){
-        inst.startClient("localhost");
+        inst.setUpdateRate(0.02);
+        inst.startClient("localhost"); 
         table = inst.getTable("gazebo");
         control = table.getEntry("GzCntrl");
         status = table.getEntry("GzStatus");

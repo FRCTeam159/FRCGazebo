@@ -34,13 +34,11 @@ public class SimGyro extends SimNode implements Gyro {
     }
     @Override
     public void close() throws Exception {
-        // TODO Auto-generated method stub
-        
+        // TODO Auto-generated method stub 
     }
     @Override
     public void calibrate() {
-        // TODO Auto-generated method stub
-        
+        // TODO Auto-generated method stub 
     }
     @Override
     public double getAngle() {

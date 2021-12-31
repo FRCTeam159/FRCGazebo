@@ -8,6 +8,7 @@ public class SimNode {
     //public NetworkTableEntry node;
     public SimNode(){
         NetworkTableInstance inst = NetworkTableInstance.getDefault();
+        inst.setUpdateRate(0.02);
         table = inst.getTable("gazebo");
         //node = table.getEntry("GzNode");
     } 

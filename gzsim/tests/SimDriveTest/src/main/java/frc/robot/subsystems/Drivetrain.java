@@ -23,25 +23,36 @@ import gazebo.SimGyro;
 public class Drivetrain extends SubsystemBase implements Constants {
 	private SimEncMotor leftMotor;
 	private SimEncMotor rightMotor;
+
+	public Simulation simulation;
 	
 	private SimGyro gyro = new SimGyro();
 
-	public static final double kTrackWidth = i2M(28.25); // inches
-	private static final double kWheelRadius = i2M(3); // wheel radius in tank model
+	public static final double kTrackWidth = i2M(30); // inches
+	public static final double kWheelDiameter = i2M(11); // wheel radius in tank model
+	public static final double kMaxVelocity = 3;
+    public static final double kMaxAcceleration = 3;
 
 	private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(kTrackWidth);
 	private final DifferentialDriveOdometry odometry;
 
-	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(1, 0.5);
-	private final PIDController leftPIDController = new PIDController(0.25, 0, 0);
-	private final PIDController rightPIDController = new PIDController(0.25, 0, 0);
+	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.5, 0.5);
+	private final PIDController leftPIDController = new PIDController(0.25, 0, 0.0);
+	private final PIDController rightPIDController = new PIDController(0.25, 0, 0.0);
 
 	private final Field2d m_fieldSim = new Field2d();
 
+	private double scale=1;
+
 	/** Creates a new Subsystem. */
 	public Drivetrain() {
+		simulation = new Simulation(this);
+
 		leftMotor = new SimEncMotor(FRONT_LEFT);
 		rightMotor = new SimEncMotor(FRONT_RIGHT);
+
+		leftMotor.setScale(scale);
+		rightMotor.setScale(scale);
 	
 		rightMotor.setInverted();
 
@@ -58,7 +69,7 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		return meters / 0.0254;
 	}
 	private double r2M(double rotations) {
-		return rotations * 2 * Math.PI * kWheelRadius;
+		return rotations * Math.PI * kWheelDiameter;
 	}
 	public void arcadeDrive(double moveValue, double turnValue) {
 		double leftMotorOutput;
@@ -106,6 +117,8 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	}
 	public void reset(){
 		System.out.println("Drivetrain.reset");
+		leftMotor.reset();
+		rightMotor.reset();
 		gyro.reset();
 	}
 	public double getHeading(){
@@ -122,6 +135,12 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	}
 	public double getRightVelocity(){
 		return  r2M(rightMotor.getRate());
+	}
+	public double getVelocity(){
+		return  0.5*(getLeftVelocity()+getRightVelocity());
+	}
+	public double getDistance(){
+		return  0.5*(getLeftDistance()+getRightDistance());
 	}
 	public void log(){
 		SmartDashboard.putNumber("Heading", getHeading());
@@ -173,7 +192,11 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		//updateOdometry();
         return odometry.getPoseMeters();
     }
-
+	public void set(double value) {
+		leftMotor.set(value);
+		rightMotor.set(value);
+		log();
+	}
     public void odometryDrive(double xSpeed, double rot) {
 		drive(xSpeed, rot);
 		log();

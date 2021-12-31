@@ -9,6 +9,15 @@
   },
   "connections": true,
   "flags": true,
+  "gazebo": {
+    "motor": {
+      "1": {
+        "open": true
+      },
+      "open": true
+    },
+    "open": true
+  },
   "plotdata": {
     "open": true
   }

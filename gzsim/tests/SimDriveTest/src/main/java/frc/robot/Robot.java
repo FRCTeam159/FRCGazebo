@@ -30,7 +30,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     m_robotContainer.robotInit();
-    SmartDashboard.putData(CommandScheduler.getInstance());
+    //SmartDashboard.putData(CommandScheduler.getInstance());
   }
 
   /**

@@ -12,6 +12,7 @@
       "/SmartDashboard/Drivetrain": "Subsystem",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Scheduler": "Scheduler",
+      "/SmartDashboard/SendableChooser[0]": "String Chooser",
       "/SmartDashboard/Simulation": "Subsystem"
     },
     "windows": {
@@ -27,8 +28,7 @@
       "encoder": {
         "1": {
           "open": true
-        },
-        "open": true
+        }
       },
       "gyro": {
         "open": true
@@ -39,9 +39,13 @@
         },
         "2": {
           "open": true
-        }
+        },
+        "open": true
       },
       "open": true
     }
+  },
+  "NetworkTables View": {
+    "visible": false
   }
 }

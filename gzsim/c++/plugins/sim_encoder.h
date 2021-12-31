@@ -10,6 +10,7 @@
 #include <gazebo/physics/physics.hh>
 #include <gazebo/transport/transport.hh>
 
+
 /**
  * \brief Plugin for reading the speed and relative angle of a joint.
  *

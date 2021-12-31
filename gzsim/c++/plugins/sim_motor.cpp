@@ -13,7 +13,7 @@ void MotorPlugin::Load(gazebo::physics::ModelPtr model, sdf::ElementPtr sdf) {
     std::cerr << "Invalid joint count, plugin not loaded\n";
     return;
   }
-
+  
   // Get the first joint. We are making an assumption about the model
   // having one joint that is the rotational joint.
   std::string str = sdf->Get<std::string>("joint");
@@ -25,13 +25,13 @@ void MotorPlugin::Load(gazebo::physics::ModelPtr model, sdf::ElementPtr sdf) {
     this->joint =model->GetJoints()[0];
   } 
   // Setup a P-controller
-  this->pid = gazebo::common::PID(0.1, 0, 0);
+  this->pid = gazebo::common::PID(0.1, 0.0, 0);
 
   // Apply the P-controller to the joint.
   this->model->GetJointController()->SetVelocityPID(
       this->joint->GetScopedName(), this->pid);
 
-  this->SetVelocity(0.0);  // initial velocity
+  this->SetVelocity(0.0,1.0);  // initial velocity
 
   // Create the node
   this->node = gazebo::transport::NodePtr(new gazebo::transport::Node());
@@ -47,6 +47,8 @@ void MotorPlugin::Load(gazebo::physics::ModelPtr model, sdf::ElementPtr sdf) {
   else
     multiplier = 1;
 
+  scale=1;
+
   std::cout << "Initializing sim_motor: " << topic << " joint=" << joint->GetName()
         << " multiplier=" << multiplier << std::endl;
   // Subscribe to the topic, and register a callback
@@ -54,19 +56,24 @@ void MotorPlugin::Load(gazebo::physics::ModelPtr model, sdf::ElementPtr sdf) {
 }
 
 void MotorPlugin::OnMsg(ConstVector3dPtr &_msg) { 
-    this->SetVelocity(_msg->x()); 
+  this->SetVelocity(_msg->x(),_msg->y()); 
 }
 /// \brief Set the velocity of the Velodyne
 /// \param[in] _vel New target velocity
 
-void MotorPlugin::SetVelocity(const double &_vel) {
-  // std::cerr << "MotorPlugin::SetVelocity:" << _vel<<"\n";
+//#define USE_THE_FORCE
+void MotorPlugin::SetVelocity(double vel, double scale) {
+  //std::cerr << "MotorPlugin::SetVelocity:" << vel<<" "<<scale<<"\n";
   // Set the joint's target velocity.
-  double vel = _vel;
-  //vel = vel < -1 ? -1 : vel;
-  //vel = vel > 1 ? 1 : vel;
-  vel *= multiplier;
- 
+  /*
+  vel = vel < -1 ? -1 : vel;
+  vel = vel > 1 ? 1 : vel;
+  */
+  vel *= multiplier*scale;
+  #ifdef USE_THE_FORCE
+  this->joint->SetForce(0, vel);
+  #else
   this->model->GetJointController()->SetVelocityTarget(
       this->joint->GetScopedName(), vel);
+  #endif
 }

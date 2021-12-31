@@ -3,6 +3,7 @@
 #include "GzMotor.h"
 #include "GzEncoder.h"
 #include "GzGyro.h"
+#include "GzClock.h"
 
 #include <condition_variable>
 #include <mutex>
@@ -11,7 +12,7 @@
 using namespace std;
 
 std::shared_ptr<nt::NetworkTable> table;
-auto inst = nt::NetworkTableInstance::GetDefault();
+nt::NetworkTableInstance inst;
 gazebo::transport::NodePtr gz_node(new gazebo::transport::Node());
 
 GzMain::GzMain() {
@@ -92,6 +93,10 @@ void GzMain::genNodes() {
   // build gyro
   gyro=table->GetSubTable("gyro");
   nodes.emplace_back(new GzGyro(gyro));
+
+   // build clock
+  clock=table->GetSubTable("clock");
+  nodes.emplace_back(new GzClock(clock));
 }
 // ========================================================
 void GzMain::sortKeys(std::vector<std::string> &keys){
@@ -172,6 +177,8 @@ int main(int argc, char *argv[]) {
   connected = try_to_connect_gazebo();
 
   std::cout << "Gazebo NTClient started" << std::endl;
+  inst = nt::NetworkTableInstance::GetDefault();
+  inst.SetUpdateRate(0.01);
   inst.StartClient("localhost");
   GzMain *gzmain = new GzMain();
   // inform robot program if Gazebo is running or not

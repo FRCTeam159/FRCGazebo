@@ -6,7 +6,8 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 public class SimMotor extends SimNode {
     int chnl;
     public String idstr;
-    private NetworkTableEntry pub_node;
+    private NetworkTableEntry set_node;
+    private NetworkTableEntry scale_node;
     private NetworkTableEntry ctrl_node;
     private static NetworkTable objects;
     private static NetworkTable channels;
@@ -20,8 +21,10 @@ public class SimMotor extends SimNode {
         ctrl_node= channels.getEntry("ctrl");
         ctrl_node.setString("new");
 
-        pub_node= channels.getEntry("pub");
-        pub_node.setDouble(0.0);
+        set_node= channels.getEntry("set");
+        set_node.setDouble(0.0);
+        scale_node= channels.getEntry("scale");
+        scale_node.setDouble(1.0);
         System.out.println("SimMotor:"+id);
     }
     public void enable(){
@@ -34,7 +37,10 @@ public class SimMotor extends SimNode {
         ctrl_node.setString("reset");
     }
     public void set(double v){
-        pub_node.setDouble(v);
+        set_node.setDouble(v);
+    }
+    public void setScale(double v){
+        scale_node.setDouble(v);
     }
     public void setDistancePerRotation(double d){
         distancePerRotation = d;

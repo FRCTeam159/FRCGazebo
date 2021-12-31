@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import gazebo.SimClock;
 import gazebo.SimControl;
 
 public class Simulation extends SubsystemBase {
@@ -14,33 +15,54 @@ public class Simulation extends SubsystemBase {
   private Drivetrain m_drivetrain;
   private boolean resetting = false;
 
+  double simtime=0;
+
+  private SimClock m_simclock = new SimClock();
+
   public Simulation(Drivetrain drivetrain) {
     m_drivetrain = drivetrain;
     SmartDashboard.putBoolean("Reset", false);
+    SmartDashboard.putNumber("SimTime", 0);
+    SmartDashboard.putNumber("SimClock", 0);
   }
 
+  public double getTime(){
+    return m_simclock.getTime();
+  }
   public void reset() {
-    m_drivetrain.reset();
+    m_drivetrain.reset(); // reset encoders
+    m_simclock.reset();
     resetting=true;
+  }
+
+  public void start() {
+    m_simclock.reset();
+    m_simclock.enable();
   }
 
   public void enable() {
     m_drivetrain.enable();
+    SmartDashboard.putBoolean("Reset", false);
     resetting=false;
   }
-
-  public void disable() {
-    m_drivetrain.disable();
-    resetting=false;
-  }
-
+  public void end() {
+     SmartDashboard.putNumber("SimTime", m_simclock.getTime());
+     m_simclock.disable();
+   }
   @Override
   public void periodic() {
+    //SmartDashboard.putNumber("SimTime", m_simclock.getTime());
     // This method will be called once per scheduler run
   }
 
   public void simulationPeriodic() {
-    boolean b = SmartDashboard.getBoolean("Reset", resetting);
+    simtime=getTime();
+    SmartDashboard.putNumber("SimClock", getTime());
+    boolean b = SmartDashboard.getBoolean("Reset", false);
+    //if(b )
+    //  reset();
+    //SmartDashboard.putBoolean("Reset", false);
+    
     if (resetting && !b)
       enable();
     else if (!resetting && b)

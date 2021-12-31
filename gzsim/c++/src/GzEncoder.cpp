@@ -36,7 +36,7 @@ bool GzEncoder::connect(){
 }
 
 void GzEncoder::setstate(std::string s){
-    std::cout<<"GzEncoder::setstate "<<s<<std::endl;
+    //std::cout<<"GzEncoder::setstate "<<s<<std::endl;
     gazebo::msgs::GzString msg;
     msg.set_data(s);
     pub->Publish(msg);

@@ -26,6 +26,7 @@ class GzMain {
   std::shared_ptr<nt::NetworkTable> motors;
   std::shared_ptr<nt::NetworkTable> encoders;
   std::shared_ptr<nt::NetworkTable> gyro;
+  std::shared_ptr<nt::NetworkTable> clock;
   std::list<GzNode *> nodes;
 
   nt::NetworkTableEntry cntrl_node;

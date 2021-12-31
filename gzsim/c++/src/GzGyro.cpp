@@ -22,7 +22,7 @@ bool GzGyro::connect(){
     if(!success)
         std::cerr << "GzGyro command connection failed"<<std::endl;
     else
-         std::cerr << "GzGyro command connection failed"<<std::endl;
+         std::cerr << "GzGyro command connection established"<<std::endl;
     status=success?CONNECTED:0;
     return success;
 }

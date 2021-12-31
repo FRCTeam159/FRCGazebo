@@ -17,3 +17,6 @@ add_library(sim_encoder SHARED sim_encoder.cpp)
 target_link_libraries(sim_encoder ${GAZEBO_LIBRARIES})
 add_library(sim_gyro SHARED sim_gyro.cpp)
 target_link_libraries(sim_gyro ${GAZEBO_LIBRARIES})
+add_library(sim_clock SHARED sim_clock.cpp)
+target_link_libraries(sim_clock ${GAZEBO_LIBRARIES})
+

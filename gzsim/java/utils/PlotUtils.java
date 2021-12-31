@@ -88,6 +88,7 @@ public class PlotUtils {
         dataList.clear();
         plotCount++;
     }
+    
     // convert a Trajectory state to a Plot structure to display motion
     public static PathData getPathMotion(int i,Trajectory.State state, double chassis_width){
         PathData pd = new PathData();
@@ -98,7 +99,7 @@ public class PlotUtils {
         Rotation2d heading = state.poseMeters.getRotation();
         double cos_angle = heading.getCos();
         double sin_angle = heading.getSin();
-        double w = 0.5 * chassis_width;
+        double w =0.5*chassis_width;
 
         double lx = x - (w * sin_angle);
         double ly = y + (w * cos_angle);
@@ -106,16 +107,17 @@ public class PlotUtils {
         double ry = y - (w * cos_angle);
 
         pd.tm = tm;
-        pd.d[0] = units(lx);
+        pd.d[0] = units(lx); // left
         pd.d[1] = units(ly);
-        pd.d[2] = units(x);
+        pd.d[2] = units(x);  // center
         pd.d[3] = units(y);
-        pd.d[4] = units(rx);
+        pd.d[4] = units(rx); // right
         pd.d[5] = units(ry);
         if (print_path)
             System.out.format("%d %f %f %f %f %f %f %f\n", i, tm, lx, ly, x, y, rx, ry);
         return pd;
     }
+    
     // convert a Trajectory state to a Plot structure to display dynamics
     public static PathData getPathDynamics(int i,Trajectory.State state){
         PathData pd = new PathData();
@@ -135,7 +137,28 @@ public class PlotUtils {
         pd.d[4] = h;
         return pd;
     }
+
+    // Plot Path motion (wheel traces)
+    public static void plotCalibration(ArrayList<PathData> d,double p,double v, double a) {
+        String label_list[]={"","",""};
     
+        label_list[0]=String.format("Position  %1.2f",p);
+        label_list[1]=String.format("Velocity  %1.2f",v);
+        label_list[2]=String.format("Accel     %1.2f",a);
+        JFrame frame = new PlotRenderer(d, 3, PlotRenderer.TIME_MODE, label_list);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+    // Plot Path motion (wheel traces)
+    public static void plotPathMotion(ArrayList<PathData> d) {
+        String label_list[] = 
+        { "Left obs", "Left calc", "Right obs", "Right calc","angle obs","angle calc"};
+        JFrame frame = new PlotRenderer(d, 6, PlotRenderer.TIME_MODE, label_list);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
     // Plot Path motion (wheel traces)
     public static void plotPathMotion(List<Trajectory.State> list, double chassis_width) {
         data.clear();
