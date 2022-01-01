@@ -33,11 +33,14 @@ public class Simulation extends SubsystemBase {
     m_drivetrain.reset(); // reset encoders
     m_simclock.reset();
     resetting=true;
+    SmartDashboard.putNumber("SimTime", 0);
   }
 
   public void start() {
+    SmartDashboard.putBoolean("Reset", false);
     m_simclock.reset();
     m_simclock.enable();
+    m_drivetrain.enable();
   }
 
   public void enable() {

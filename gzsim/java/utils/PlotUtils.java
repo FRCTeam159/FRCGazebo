@@ -20,7 +20,8 @@ public class PlotUtils {
     public static int PLOT_PATH = 1;
     public static int PLOT_DYNAMICS = 2;
 
-    public static int plot_option=PLOT_NONE;
+    public static int auto_plot_option=PLOT_NONE;
+    public static int traj_plot_option=PLOT_NONE;
 
     private static NetworkTable table=null;
     private static NetworkTableEntry newPlot;
@@ -145,26 +146,13 @@ public class PlotUtils {
     }
 
     // Plot Path motion (wheel traces)
-    public static void plotCalibration(ArrayList<PathData> d,double p,double v, double a) {
-        String label_list[]={"","",""};
-    
-        label_list[0]=String.format("Position  %1.2f",p);
-        label_list[1]=String.format("Velocity  %1.2f",v);
-        label_list[2]=String.format("Accel     %1.2f",a);
-        JFrame frame = new PlotRenderer(d, 3, PlotRenderer.TIME_MODE, label_list);
+    public static void genericTimePlot(ArrayList<PathData> d, String label_list[], int traces ) {
+        JFrame frame = new PlotRenderer(d, traces, PlotRenderer.TIME_MODE, label_list);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
-    // Plot Path motion (wheel traces)
-    public static void plotPathMotion(ArrayList<PathData> d) {
-        String label_list[] = 
-        { "Left obs", "Left calc", "Right obs", "Right calc","angle obs","angle calc"};
-        JFrame frame = new PlotRenderer(d, 6, PlotRenderer.TIME_MODE, label_list);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-    }
+
     // Plot Path motion (wheel traces)
     public static void plotPathMotion(List<Trajectory.State> list, double chassis_width) {
         data.clear();
@@ -175,7 +163,6 @@ public class PlotUtils {
         }
         String label_list[] = { "Left", "Center", "Right" };
         JFrame frame = new PlotRenderer(data, 3, PlotRenderer.XY_MODE, label_list);
-        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
@@ -191,7 +178,6 @@ public class PlotUtils {
         }
         String label_list[] = { "X", "Y", "Velocity", "Acceleration", "Heading" };
         JFrame frame = new PlotRenderer(data, 5, PlotRenderer.TIME_MODE, label_list);
-        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);

@@ -731,7 +731,7 @@
      <plugin name="Frame-L2Wheel_encoder" filename="sim_encoder.dll">
       <joint>Frame-L2Wheel</joint>
        <topic>~/gazebo/frc/simulator/encoder/1</topic>
-      <units>degrees</units>
+      <multiplier>1</multiplier>
     </plugin>
     <plugin name="Frame-R1Wheel_motor" filename="sim_motor.dll">
         <joint>Frame-R1Wheel</joint>
@@ -756,7 +756,7 @@
     <plugin name="Frame-R2Wheel_encoder" filename="sim_encoder.dll">
       <joint>Frame-R2Wheel</joint>
        <topic>~/gazebo/frc/simulator/encoder/2</topic>
-      <units>degrees</units>
+      <multiplier>1</multiplier>
     </plugin>
   </model>
 </sdf>

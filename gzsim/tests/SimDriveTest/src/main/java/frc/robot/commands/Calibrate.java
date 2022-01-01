@@ -17,15 +17,14 @@ public class Calibrate extends CommandBase {
   Timer m_timer;
   double runtime = 4;
   private double lastVelocity = 0;
-
-  private LinkedList<Double> vals = null;
-  private double total = 0;
-  private double lastTime = 0;
-  int averages = 5;
-  int cnt = 0;
   ArrayList<PathData> plotdata = new ArrayList<PathData>();
-  private static final boolean plot = true;
-  private static final boolean print = true;
+
+  private double lastTime = 0;
+
+  int cnt = 0;
+  utils.Averager acc_average =new utils.Averager(20);
+  utils.Averager vel_average =new utils.Averager(2);
+   private static final boolean print = false;
 
   double max_acc = 0;
   double max_vel = 0;
@@ -50,8 +49,10 @@ public class Calibrate extends CommandBase {
     m_drive.reset(); // reset encoders
     m_timer.start();
     m_timer.reset();
-    vals = new LinkedList<Double>();
-    lastTime = 0;
+    acc_average.reset();
+    vel_average.reset();
+    plotdata.clear();
+     lastTime = 0;
     lastVelocity = 0;
     m_simulation.reset();
     m_simulation.start();
@@ -61,7 +62,7 @@ public class Calibrate extends CommandBase {
 
   // Called repeatedly when this Command is scheduled to run
   public void execute() {
-    elapsed = m_timer.get();
+    elapsed = m_simulation.getTime();
     //elapsed=m_simulation.getTime();
     if (cnt < 1) {
       lastTime = elapsed;
@@ -74,24 +75,25 @@ public class Calibrate extends CommandBase {
 
     double velocity = m_drive.getVelocity();
     double position = m_drive.getDistance();
-    double acceleration = (velocity - lastVelocity) / dt;
-    double aveAcceleration = rollingAverage(acceleration, averages);
-    max_acc = aveAcceleration > max_acc ? aveAcceleration : max_acc;
-    max_vel = velocity > max_vel ? velocity : max_vel;
+    double v = vel_average.getAve(velocity);
+    double acceleration = (v - lastVelocity) / 0.02;
+    double a = acc_average.getAve(acceleration);
+    max_acc = a > max_acc ? a : max_acc;
+    max_vel = v > max_vel ? v : max_vel;
     max_pos = position;
     if (print)
-      System.out.format("%f %d %f %f %f\n", elapsed, (int) Math.round(dt * 1000.0), position, velocity,
-          aveAcceleration);
-    if (plot) {
+      System.out.format("%f %d %f %f %f\n", elapsed, (int) Math.round(dt * 1000.0), position, v,
+          a);
+    if (PlotUtils.auto_plot_option!=PlotUtils.PLOT_NONE) {
       PathData pd = new PathData();
       pd.tm = elapsed;
       pd.d[0] = position;
-      pd.d[1] = velocity;
-      pd.d[2] = aveAcceleration;
+      pd.d[1] = v;
+      pd.d[2] = a;
       plotdata.add(pd);
     }
 
-    lastVelocity = velocity;
+    lastVelocity = v;
     lastTime = elapsed;
   }
 
@@ -107,17 +109,15 @@ public class Calibrate extends CommandBase {
     System.out.format("max vel=%f max acc=%f\n", max_vel, max_acc);
     m_simulation.end();
 
-    if (PlotUtils.plot_option==PlotUtils.PLOT_PATH) {
-      PlotUtils.plotCalibration(plotdata,max_pos,max_vel,max_acc);
+    if (PlotUtils.auto_plot_option!=PlotUtils.PLOT_NONE) {
+      String label_list[]={"","",""};
+    
+      label_list[0]=String.format("Position  %1.2f",max_pos);
+      label_list[1]=String.format("Velocity  %1.2f",max_vel);
+      label_list[2]=String.format("Accel     %1.2f",max_acc);
+      PlotUtils.genericTimePlot(plotdata,label_list,3);
+      //PlotUtils.plotCalibration(plotdata,max_pos,max_vel,max_acc);
     }
-  }
-
-  private double rollingAverage(double d, int aves) {
-    if (vals.size() == aves)
-      total -= vals.removeFirst().doubleValue();
-    vals.addLast(d);
-    total += d;
-    return total / vals.size();
   }
 
 }

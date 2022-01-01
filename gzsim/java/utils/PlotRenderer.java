@@ -95,6 +95,9 @@ public class PlotRenderer extends JFrame {
 				plot_height=MAX_H;
 				plot_width=(int)(plot_height*aspect);
 			}
+			if(aspect>1 && plot_width>MAX_H){
+				plot_width=MAX_H;
+			}
 		}	
 		System.out.println("PlotPath: xmax="+xmax+" xmin="+xmin+" ymax="+ymax+" ymin="+ymin+" aspect:"+aspect);
 	}

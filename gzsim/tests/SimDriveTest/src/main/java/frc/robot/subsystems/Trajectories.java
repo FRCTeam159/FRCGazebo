@@ -40,7 +40,7 @@ public class Trajectories extends SubsystemBase {
   }
   // default (2,2) (8,6)
   public static Trajectory curvedPath(){
-    return curvedPath(2,2,8,6);
+    return curvedPath(0,0,10,5);
   }
   public static Trajectory curvedPath(double xstart, double ystart, double xend, double yend){
     Trajectory traj = TrajectoryGenerator.generateTrajectory(

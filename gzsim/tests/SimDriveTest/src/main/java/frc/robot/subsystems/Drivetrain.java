@@ -28,17 +28,17 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	
 	private SimGyro gyro = new SimGyro();
 
-	public static final double kTrackWidth = i2M(30); // inches
-	public static final double kWheelDiameter = i2M(11); // wheel radius in tank model
-	public static final double kMaxVelocity = 3;
-    public static final double kMaxAcceleration = 3;
+	public static final double kTrackWidth = i2M(20); // inches
+	public static final double kWheelDiameter = i2M(8); // wheel radius in tank model
+	public static final double kMaxVelocity = 2;
+    public static final double kMaxAcceleration = 1.5;
 
 	private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(kTrackWidth);
 	private final DifferentialDriveOdometry odometry;
 
-	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.5, 0.5);
-	private final PIDController leftPIDController = new PIDController(0.25, 0, 0.0);
-	private final PIDController rightPIDController = new PIDController(0.25, 0, 0.0);
+	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(1,1.5);
+	private final PIDController leftPIDController = new PIDController(1, 0, 0.0);
+	private final PIDController rightPIDController = new PIDController(1, 0, 0.0);
 
 	private final Field2d m_fieldSim = new Field2d();
 
@@ -50,6 +50,8 @@ public class Drivetrain extends SubsystemBase implements Constants {
 
 		leftMotor = new SimEncMotor(FRONT_LEFT);
 		rightMotor = new SimEncMotor(FRONT_RIGHT);
+		leftMotor.setDistancePerRotation(Math.PI*kWheelDiameter);
+		rightMotor.setDistancePerRotation(Math.PI*kWheelDiameter);
 
 		leftMotor.setScale(scale);
 		rightMotor.setScale(scale);
@@ -69,7 +71,7 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		return meters / 0.0254;
 	}
 	private double r2M(double rotations) {
-		return rotations * Math.PI * kWheelDiameter;
+		return  Math.PI * kWheelDiameter*rotations;
 	}
 	public void arcadeDrive(double moveValue, double turnValue) {
 		double leftMotorOutput;
@@ -125,16 +127,16 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		return gyro.getHeading();
 	}
 	public double getLeftDistance(){
-		return  r2M(leftMotor.getDistance()) ;
+		return  leftMotor.getDistance() ;
 	}
 	public double getRightDistance(){
-		return  r2M(rightMotor.getDistance());
+		return  rightMotor.getDistance();
 	}
 	public double getLeftVelocity(){
-		return  r2M(leftMotor.getRate());
+		return  leftMotor.getRate();
 	}
 	public double getRightVelocity(){
-		return  r2M(rightMotor.getRate());
+		return  rightMotor.getRate();
 	}
 	public double getVelocity(){
 		return  0.5*(getLeftVelocity()+getRightVelocity());
@@ -157,6 +159,7 @@ public class Drivetrain extends SubsystemBase implements Constants {
 
 	@Override
 	public void simulationPeriodic() {
+		updateOdometry();
 		log();
 	}
 	

@@ -76,6 +76,7 @@ void Encoder::Callback(ConstGzStringPtr  & msg) {
   std::cout << "Encoder plugin received command:" << command << std::endl;
   if (command == "reset") {
     zero = GetAngle();
+    stopped=true;
   } else if (command == "start") {
     stopped = false;
     zero = (GetAngle() - stop_value);

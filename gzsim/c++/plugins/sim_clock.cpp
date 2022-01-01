@@ -51,8 +51,8 @@ void Clock::Callback(ConstGzStringPtr  & msg) {
   std::string command = msg->data();
   std::cout << "Clock plugin received command:" << command << std::endl;
   if (command == "reset") {
-    zero_time=clock_time;
-    //enabled=false;
+    zero_time=0;
+    this->model->GetWorld()->Reset();
   } 
   else if (command == "stop") {
     enabled =false;
