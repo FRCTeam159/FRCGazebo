@@ -2,12 +2,11 @@
 package utils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JFrame;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -17,11 +16,11 @@ public class PlotUtils {
         FEET,METERS,INCHES
     }
     public static int PLOT_NONE = 0;
-    public static int PLOT_PATH = 1;
+    public static int PLOT_DISTANCE = 1;
     public static int PLOT_DYNAMICS = 2;
+    public static int PLOT_POSITION = 3;
 
     public static int auto_plot_option=PLOT_NONE;
-    public static int traj_plot_option=PLOT_NONE;
 
     private static NetworkTable table=null;
     private static NetworkTableEntry newPlot;
@@ -29,20 +28,11 @@ public class PlotUtils {
     private static NetworkTableEntry plotData;
     private static UnitType units_type=UnitType.METERS; // assumes Trajectory data is in meters
 
-    private static boolean print_trajectory = false;
-    private static boolean print_path = false;
-
     private ArrayList<PathData> pathDataList = new ArrayList<>();
     static ArrayList<PathData> data = new ArrayList<>();
 
     private static int plotCount = 0;
 
-    public static void setPrintTrajectory(boolean b){
-        print_trajectory=b;
-    }
-    public static void setPrintPath(boolean b){
-        print_path=b;
-    }
     public static double metersToFeet(double meters) {
         return meters * 100 / (2.54 * 12);
     }
@@ -96,14 +86,13 @@ public class PlotUtils {
         plotCount++;
     }
     
-    // convert a Trajectory state to a Plot structure to display motion
-    public static PathData getPathMotion(int i,Trajectory.State state, double chassis_width){
+    // convert a Plot structure to display wheel positions
+    public static PathData getPathPosition(double tm,Pose2d pose, double chassis_width){
         PathData pd = new PathData();
-        double tm = state.timeSeconds;
-        double x = state.poseMeters.getX();
-        double y = state.poseMeters.getY();
+        double x = pose.getX();
+        double y = pose.getY();
 
-        Rotation2d heading = state.poseMeters.getRotation();
+        Rotation2d heading = pose.getRotation();
         double cos_angle = heading.getCos();
         double sin_angle = heading.getSin();
         double w =0.5*chassis_width;
@@ -120,66 +109,22 @@ public class PlotUtils {
         pd.d[3] = units(y);
         pd.d[4] = units(rx); // right
         pd.d[5] = units(ry);
-        if (print_path)
-            System.out.format("%d %f %f %f %f %f %f %f\n", i, tm, lx, ly, x, y, rx, ry);
         return pd;
     }
     
-    // convert a Trajectory state to a Plot structure to display dynamics
-    public static PathData getPathDynamics(int i,Trajectory.State state){
-        PathData pd = new PathData();
-        double tm = state.timeSeconds;
-        double x = state.poseMeters.getX();
-        double y = state.poseMeters.getY();
-        double v = state.velocityMetersPerSecond;
-        double a = state.accelerationMetersPerSecondSq;
-        double h = state.poseMeters.getRotation().getRadians();
-        if (print_trajectory)
-            System.out.format("%d %f %f %f %f %f %f\n", i, tm, x, y, v, a, h);
-        pd.tm = tm;
-        pd.d[0] = units(x);
-        pd.d[1] = units(y);
-        pd.d[2] = units(v);
-        pd.d[3] = units(a);
-        pd.d[4] = h;
-        return pd;
-    }
-
-    // Plot Path motion (wheel traces)
+    // Plot Path motion (values vs time)
     public static void genericTimePlot(ArrayList<PathData> d, String label_list[], int traces ) {
         JFrame frame = new PlotRenderer(d, traces, PlotRenderer.TIME_MODE, label_list);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
-
-    // Plot Path motion (wheel traces)
-    public static void plotPathMotion(List<Trajectory.State> list, double chassis_width) {
-        data.clear();
-        for (int i = 0; i < list.size(); i++) {
-            Trajectory.State state = list.get(i);
-            PathData pd = getPathMotion(i, state,chassis_width);
-            data.add(pd);
-        }
-        String label_list[] = { "Left", "Center", "Right" };
-        JFrame frame = new PlotRenderer(data, 3, PlotRenderer.XY_MODE, label_list);
+    // Plot Path motion (wheel traces y vs x)
+    public static void genericXYPlot(ArrayList<PathData> d, String label_list[], int traces ) {
+        JFrame frame = new PlotRenderer(d, traces, PlotRenderer.XY_MODE, label_list);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
-    // Plot Path dynamics
-    public static void plotPathDynamics(List<Trajectory.State> list) {
-        data.clear();
-        for (int i = 0; i < list.size(); i++) {
-            Trajectory.State state = list.get(i);
-            PathData pd=getPathDynamics(i,state);
-            data.add(pd);
-        }
-        String label_list[] = { "X", "Y", "Velocity", "Acceleration", "Heading" };
-        JFrame frame = new PlotRenderer(data, 5, PlotRenderer.TIME_MODE, label_list);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-    }
 }

@@ -14,4 +14,6 @@ class GzGyro : public GzNode{
     const std::string name() { return std::string("GzGyro");}
     bool connect();
     void reset();
+    void run();
+    void stop();
 };

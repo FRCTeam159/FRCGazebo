@@ -53,13 +53,9 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     CommandScheduler.getInstance().cancelAll();
+    m_robotContainer.disabledInit();
   }
-  @Override
   
-  public void simulationInit() {
-    m_robotContainer.simulationInit();
-  }
-
   @Override
   public void disabledPeriodic() {}
 
@@ -86,6 +82,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    m_robotContainer.teleopInit();
   }
 
   /** This function is called periodically during operator control. */

@@ -15,12 +15,15 @@ public class SimClock extends SimNode {
         System.out.println("SimClock");
     }
     public void reset(){
+        System.out.println("SimClock.reset");
         ctrl_node.setString("reset");
     }
     public void enable(){
+        System.out.println("SimClock.run");
         ctrl_node.setString("run");
     }
     public void disable(){
+        System.out.println("SimClock.stop");
         ctrl_node.setString("stop");
     }
     public double getTime() {

@@ -6,7 +6,7 @@ import java.util.LinkedList;
 public class Averager {
     private LinkedList<Double> vals = new LinkedList<Double>();
     double total = 0;
-    double aves;
+    int aves;
 
     public Averager(int num_aves) {
         aves = num_aves;
@@ -14,6 +14,11 @@ public class Averager {
 
     public void reset() {
         vals.clear();
+        total=0;
+    }
+
+    public int numAves(){
+        return aves;
     }
 
     public double getAve(double d) {

@@ -41,9 +41,10 @@ public class PlotRenderer extends JFrame {
 	private int plotMode=TIME_MODE;
 	private String labels[]=null;
 
-	static public Color colors[]= {
+	static public Color time_colors[]= {
 			Color.BLUE,Color.RED,Color.GREEN,Color.ORANGE,Color.DARK_GRAY,Color.GRAY};
-	
+	static public Color xy_colors[]= {
+			Color.BLUE,Color.BLUE,Color.DARK_GRAY,Color.DARK_GRAY,Color.RED,Color.RED};
 	public PlotRenderer(ArrayList<PathData> d, int n) {
 		this(d,n,TIME_MODE);
 	}
@@ -132,7 +133,7 @@ public class PlotRenderer extends JFrame {
 			double yScale = ((double) getHeight() - (2 * padding) - labelPadding) /  (ymax-ymin);
 
 			//System.out.println("w="+ getWidth()+" h="+getHeight()+" xScale="+xScale+" yscale="+yScale);
-
+			
 			// draw white background
 			g2.setColor(Color.WHITE);
 			g2.fillRect(padding + labelPadding, padding, getWidth() - (2 * padding) - labelPadding, getHeight() - 2 * padding - labelPadding);
@@ -183,7 +184,7 @@ public class PlotRenderer extends JFrame {
 			
 			String xAxisLabel="Time Secs";
 			if(plotMode==XY_MODE)
-				 xAxisLabel="X Feet";
+				 xAxisLabel="X Meters";
 			int x0 =  (getWidth() - padding * 2 - labelPadding) / 2 + padding + labelPadding;
 			int y0 = getHeight() - labelPadding;
 			FontMetrics metrics = g2.getFontMetrics();
@@ -197,7 +198,7 @@ public class PlotRenderer extends JFrame {
 					xs[i] = (int) (list.get(i).tm * xScale + padding + labelPadding);
 				}
 				for (int j = 0; j < traces; j++) {
-					g2.setColor(colors[j]);
+					g2.setColor(time_colors[j]);
 					for (int i = 0; i < list.size(); i++) {
 						ys[i] = (int) ((ymax - list.get(i).d[j]) * yScale + padding);
 					}
@@ -210,7 +211,7 @@ public class PlotRenderer extends JFrame {
 			}
 			else{
 				for (int j = 0; j < traces; j++) {
-					g2.setColor(colors[j]);
+					g2.setColor(xy_colors[j]);
 					for (int i = 0; i < list.size(); i++) {
 						xs[i] = (int) ((list.get(i).d[2*j]) * xScale + padding+labelPadding);
 						ys[i] = (int) ((ymax - list.get(i).d[2*j+1]) * yScale + padding);
@@ -244,7 +245,10 @@ public class PlotRenderer extends JFrame {
 				left+=10;
 				top+=10;
 				for (int j=0;j<labels.length;j++){
-					g2.setColor(colors[j]);
+					if(plotMode==XY_MODE)
+						g2.setColor(xy_colors[j]);
+					else
+						g2.setColor(time_colors[j]);
 					if ((j % 2) == 0)
 						g2.setStroke(GRAPH_STROKE);
 					else

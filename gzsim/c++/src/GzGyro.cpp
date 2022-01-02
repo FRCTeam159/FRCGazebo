@@ -37,3 +37,13 @@ void GzGyro::reset(){
     if(status != prev_state)
         setstate("reset");
 }
+void GzGyro::run(){
+    GzNode::run();
+    if(status != prev_state)
+        setstate("start");
+}
+void GzGyro::stop(){
+    GzNode::stop();
+    if(status != prev_state)
+        setstate("stop");
+}

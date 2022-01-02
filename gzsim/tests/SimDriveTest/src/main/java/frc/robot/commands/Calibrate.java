@@ -1,28 +1,30 @@
 package frc.robot.commands;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Simulation;
 import utils.PathData;
 import utils.PlotUtils;
-import frc.robot.subsystems.Simulation;
 
 /**
  *
  */
 public class Calibrate extends CommandBase {
   Timer m_timer;
-  double runtime = 4;
+  public static double warmup_time = 0.5;
+  public static double run_time = 2;
+  public static double set_value=3;
+  double end_time = run_time+warmup_time;
   private double lastVelocity = 0;
   ArrayList<PathData> plotdata = new ArrayList<PathData>();
 
   private double lastTime = 0;
 
   int cnt = 0;
-  utils.Averager acc_average =new utils.Averager(20);
+  utils.Averager acc_average =new utils.Averager(2);
   utils.Averager vel_average =new utils.Averager(2);
    private static final boolean print = false;
 
@@ -33,11 +35,11 @@ public class Calibrate extends CommandBase {
   double elapsed=0;
 
   private final Drivetrain m_drive;
-  private final Simulation m_simulation;
+  //private final Simulation m_simulation;
 
   public Calibrate(Drivetrain drive) {
     m_drive = drive;
-    m_simulation=m_drive.simulation;
+    //m_simulation=m_drive.simulation;
     addRequirements(drive);
     m_timer = new Timer();
     m_timer.start();
@@ -52,27 +54,28 @@ public class Calibrate extends CommandBase {
     acc_average.reset();
     vel_average.reset();
     plotdata.clear();
-     lastTime = 0;
+    lastTime = 0;
     lastVelocity = 0;
-    m_simulation.reset();
-    m_simulation.start();
-    m_drive.enable();
+    m_drive.startAuto();
+    //m_simulation.reset();
+    //m_simulation.start();
+    //m_drive.enable();
     cnt = 0;
   }
 
   // Called repeatedly when this Command is scheduled to run
   public void execute() {
-    elapsed = m_simulation.getTime();
-    //elapsed=m_simulation.getTime();
+    elapsed = m_drive.getTime();
     if (cnt < 1) {
       lastTime = elapsed;
       cnt++;
       return;
     }
     double dt = elapsed - lastTime;
-
-    m_drive.set(10.0);
-
+    if(elapsed>warmup_time && elapsed<=run_time)
+      m_drive.set(set_value);
+    else
+      m_drive.set(0.0);
     double velocity = m_drive.getVelocity();
     double position = m_drive.getDistance();
     double v = vel_average.getAve(velocity);
@@ -89,7 +92,10 @@ public class Calibrate extends CommandBase {
       pd.tm = elapsed;
       pd.d[0] = position;
       pd.d[1] = v;
-      pd.d[2] = a;
+      if(a<0)
+        pd.d[2] = -Math.sqrt(-a);
+      else
+        pd.d[2] = Math.sqrt(a);
       plotdata.add(pd);
     }
 
@@ -100,21 +106,23 @@ public class Calibrate extends CommandBase {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    return elapsed >= runtime;
+    return elapsed >= end_time;
   }
 
   @Override
   public void end(boolean interrupted) {
+    double a=Math.sqrt(max_acc);
     System.out.println("Calibrate.end()");
-    System.out.format("max vel=%f max acc=%f\n", max_vel, max_acc);
-    m_simulation.end();
+    System.out.format("max vel=%f max acc=%f\n", max_vel,a );
+    //m_simulation.end();
+    m_drive.disable();
 
     if (PlotUtils.auto_plot_option!=PlotUtils.PLOT_NONE) {
       String label_list[]={"","",""};
     
-      label_list[0]=String.format("Position  %1.2f",max_pos);
-      label_list[1]=String.format("Velocity  %1.2f",max_vel);
-      label_list[2]=String.format("Accel     %1.2f",max_acc);
+      label_list[0]=String.format("Position    %1.2f",max_pos);
+      label_list[1]=String.format("Velocity    %1.2f",max_vel);
+      label_list[2]=String.format("sqrt(Accel)  %1.2f",a);
       PlotUtils.genericTimePlot(plotdata,label_list,3);
       //PlotUtils.plotCalibration(plotdata,max_pos,max_vel,max_acc);
     }

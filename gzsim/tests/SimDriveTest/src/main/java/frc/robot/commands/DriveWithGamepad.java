@@ -14,6 +14,7 @@ public class DriveWithGamepad extends CommandBase implements Constants  {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Drivetrain m_drive;
   private final XboxController m_controller;
+  private boolean started=false;
 
   /**
    * Creates a new ExampleCommand.
@@ -32,6 +33,8 @@ public class DriveWithGamepad extends CommandBase implements Constants  {
   @Override
   public void initialize() {
     System.out.println("DriveWithGampad started");
+    started=false;
+    //m_drive.enable();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -43,6 +46,10 @@ public class DriveWithGamepad extends CommandBase implements Constants  {
       zs = 0;
     if (Math.abs(xs) < 0.1) 
       xs = 0;
+    if(!started && (zs>0 || xs>0)){
+      m_drive.enable();
+      started=true;
+    }
     m_drive.arcadeDrive(zs, xs);
   }
 

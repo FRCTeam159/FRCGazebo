@@ -1,24 +1,20 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="Heading" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="355" y="21"/>
+	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
 		<location x="22" y="131"/>
 	</static-widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
-		<location x="349" y="53"/>
-		<property name="Text" value="Trajectory "/>
-	</static-widget>
-	<widget field="SendableChooser[2]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
-		<location x="334" y="64"/>
-	</widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
-		<location x="448" y="52"/>
+		<location x="374" y="51"/>
 		<property name="Text" value="Autonomous"/>
 	</static-widget>
 	<widget field="SendableChooser[1]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
-		<location x="524" y="63"/>
+		<location x="461" y="45"/>
 	</widget>
 	<widget field="SendableChooser[0]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
-		<location x="431" y="63"/>
+		<location x="359" y="67"/>
 	</widget>
 	<widget field="SimClock" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="100" y="92"/>
@@ -40,9 +36,6 @@
 	</widget>
 	<widget field="Left distance" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="6" y="50"/>
-	</widget>
-	<widget field="Heading" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="354" y="22"/>
 	</widget>
 	<widget field="Left speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="15" y="19"/>
@@ -82,4 +75,5 @@
 	</widget>
 </live-window>
 	<hidden field="Field"/>
+	<hidden field="SendableChooser[2]"/>
 </xml>

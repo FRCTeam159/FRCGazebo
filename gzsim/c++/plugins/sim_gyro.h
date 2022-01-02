@@ -59,6 +59,12 @@ class Gyro : public gazebo::ModelPlugin {
   /// \brief The zero value of the gyro.
   double zero;
 
+  /// \brief Whether or not the encoder has been stopped.
+  bool stopped;
+
+/// \brief The value the encoder stopped counting at
+  double stop_value;
+  
   /// \brief The link that this gyro measures
   gazebo::physics::LinkPtr link;
 

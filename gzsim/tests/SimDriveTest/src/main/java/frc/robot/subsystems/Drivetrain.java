@@ -24,7 +24,7 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	private SimEncMotor leftMotor;
 	private SimEncMotor rightMotor;
 
-	public Simulation simulation;
+	private Simulation simulation;
 	
 	private SimGyro gyro = new SimGyro();
 
@@ -50,8 +50,8 @@ public class Drivetrain extends SubsystemBase implements Constants {
 
 		leftMotor = new SimEncMotor(FRONT_LEFT);
 		rightMotor = new SimEncMotor(FRONT_RIGHT);
-		leftMotor.setDistancePerRotation(Math.PI*kWheelDiameter);
-		rightMotor.setDistancePerRotation(Math.PI*kWheelDiameter);
+		leftMotor.setDistancePerRotation(r2M(1.0));
+		rightMotor.setDistancePerRotation(r2M(1.0));
 
 		leftMotor.setScale(scale);
 		rightMotor.setScale(scale);
@@ -60,8 +60,8 @@ public class Drivetrain extends SubsystemBase implements Constants {
 
 		odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
 		SmartDashboard.putData("Field", m_fieldSim);
-
-		enable();
+        //simulation.init();
+		//enable();
 	}
 
 	private static double i2M(double inches) {
@@ -103,21 +103,35 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	private static double coerce(double min, double max, double value) {
 		return Math.max(min, Math.min(value, max));
 	}
-
+	public double getTime(){
+		return simulation.getSimTime();
+	}
+	public void startAuto(){
+		simulation.reset();
+		simulation.start();
+		enable();
+	}
+	public void init(){
+		System.out.println("Drivetrain.init");
+		//simulation.init();
+		enable();
+	}
 	public void disable(){
 		System.out.println("Drivetrain.disable");
 		leftMotor.disable();
 		rightMotor.disable();
 		gyro.disable();
+		simulation.end();
 	}
 	public void enable(){
+		//simulation.run();
 		System.out.println("Drivetrain.enable");
 		leftMotor.enable();
 		rightMotor.enable();
-
 		gyro.enable();
 	}
 	public void reset(){
+		//simulation.reset();
 		System.out.println("Drivetrain.reset");
 		leftMotor.reset();
 		rightMotor.reset();
@@ -188,6 +202,7 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	public void resetOdometry(Pose2d pose) {
 		leftMotor.reset();
 		rightMotor.reset();
+		gyro.reset();
 		odometry.resetPosition(pose, gyro.getRotation2d());
 	}
 

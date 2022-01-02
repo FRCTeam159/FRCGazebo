@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import gazebo.SimClock;
@@ -15,7 +16,10 @@ public class Simulation extends SubsystemBase {
   private Drivetrain m_drivetrain;
   private boolean resetting = false;
 
+  private final Timer m_timer = new Timer();
+
   double simtime=0;
+  private boolean running=false;
 
   private SimClock m_simclock = new SimClock();
 
@@ -24,33 +28,43 @@ public class Simulation extends SubsystemBase {
     SmartDashboard.putBoolean("Reset", false);
     SmartDashboard.putNumber("SimTime", 0);
     SmartDashboard.putNumber("SimClock", 0);
+    m_timer.start();
+    init();
   }
 
-  public double getTime(){
+  public double getSimTime(){
     return m_simclock.getTime();
   }
+  public double getClockTime(){
+    return m_timer.get();
+  }
   public void reset() {
+    System.out.println("Simulation.reset");
     m_drivetrain.reset(); // reset encoders
     m_simclock.reset();
-    resetting=true;
+    m_timer.reset();
+    m_simclock.disable();
     SmartDashboard.putNumber("SimTime", 0);
+    running=false;
   }
 
   public void start() {
-    SmartDashboard.putBoolean("Reset", false);
+    System.out.println("Simulation.start");
     m_simclock.reset();
     m_simclock.enable();
-    m_drivetrain.enable();
+    running=true;
   }
 
   public void enable() {
+    System.out.println("Simulation.enable");
     m_drivetrain.enable();
-    SmartDashboard.putBoolean("Reset", false);
-    resetting=false;
+    //m_simclock.enable();
   }
   public void end() {
-     SmartDashboard.putNumber("SimTime", m_simclock.getTime());
-     m_simclock.disable();
+    System.out.println("Simulation.end");
+    SmartDashboard.putNumber("SimTime", m_simclock.getTime());
+    m_simclock.disable();
+    running=false;
    }
   @Override
   public void periodic() {
@@ -59,24 +73,34 @@ public class Simulation extends SubsystemBase {
   }
 
   public void simulationPeriodic() {
-    simtime=getTime();
-    SmartDashboard.putNumber("SimClock", getTime());
-    boolean b = SmartDashboard.getBoolean("Reset", false);
-    //if(b )
-    //  reset();
-    //SmartDashboard.putBoolean("Reset", false);
-    
-    if (resetting && !b)
-      enable();
-    else if (!resetting && b)
-      reset();
+    simtime=getClockTime();
+    if(running)
+      SmartDashboard.putNumber("SimClock", getClockTime());
+    else
+      SmartDashboard.putNumber("SimClock", 0);
+    boolean b=SmartDashboard.getBoolean("Reset", false);
+    if(b){
+      if(!resetting){
+        reset();
+        resetting=true;
+        m_timer.reset();
+      }
+      else if(m_timer.get()>0.5){
+        SmartDashboard.putBoolean("Reset", false);
+        resetting=false;
+        m_drivetrain.enable();
+        running=false;
+      }
+    }
   }
 
   public void init() {
     m_simcontrol.init();
+    m_simclock.disable();
   }
 
   public void run() {
+    running=true;
     m_simcontrol.run();
   }
 }

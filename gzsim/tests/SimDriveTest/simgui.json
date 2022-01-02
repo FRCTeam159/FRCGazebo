@@ -27,6 +27,9 @@
   },
   "NetworkTables": {
     "gazebo": {
+      "clock": {
+        "open": true
+      },
       "encoder": {
         "1": {
           "open": true
@@ -36,18 +39,11 @@
         "open": true
       },
       "motor": {
-        "1": {
-          "open": true
-        },
         "2": {
           "open": true
-        },
-        "open": true
+        }
       },
       "open": true
     }
-  },
-  "NetworkTables View": {
-    "visible": false
   }
 }

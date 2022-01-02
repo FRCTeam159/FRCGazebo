@@ -62,6 +62,7 @@ void Encoder::Update(const gazebo::common::UpdateInfo& info) {
   double p=0,v=0;
   if (stopped){
     p=stop_value * multiplier;
+    zero = GetAngle();
   }
   else {
     p=(GetAngle() - zero) * multiplier;
@@ -76,10 +77,10 @@ void Encoder::Callback(ConstGzStringPtr  & msg) {
   std::cout << "Encoder plugin received command:" << command << std::endl;
   if (command == "reset") {
     zero = GetAngle();
-    stopped=true;
+    stopped=false;
   } else if (command == "start") {
     stopped = false;
-    zero = (GetAngle() - stop_value);
+    zero = GetAngle();
   } else if (command == "stop") {
     stopped = true;
     stop_value = GetAngle();

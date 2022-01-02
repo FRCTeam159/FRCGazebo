@@ -32,7 +32,6 @@ public class RobotContainer {
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
   SendableChooser<Integer> m_auto_plot_option = new SendableChooser<>();
-  SendableChooser<Integer> m_traj_plot_option = new SendableChooser<>();
 
   Calibrate m_calibrate=new Calibrate(m_drivetrain);
   DrivePath m_straightpath = new DrivePath(m_drivetrain,Trajectories.STRAIGHT);
@@ -49,16 +48,12 @@ public class RobotContainer {
     m_chooser.addOption("Calibrate", m_calibrate);
 
     m_auto_plot_option.setDefaultOption("No Plot", PlotUtils.PLOT_NONE);
-    m_auto_plot_option.addOption("Plot Path", PlotUtils.PLOT_PATH);
+    m_auto_plot_option.addOption("Plot Distance", PlotUtils.PLOT_DISTANCE);
     m_auto_plot_option.addOption("Plot Dynamics", PlotUtils.PLOT_DYNAMICS);
-
-    m_traj_plot_option.setDefaultOption("No Plot", PlotUtils.PLOT_NONE);
-    m_traj_plot_option.addOption("Plot Path", PlotUtils.PLOT_PATH);
-    m_traj_plot_option.addOption("Plot Dynamics", PlotUtils.PLOT_DYNAMICS);
+    m_auto_plot_option.addOption("Plot Position", PlotUtils.PLOT_POSITION);
 
     SmartDashboard.putData(m_chooser);
     SmartDashboard.putData(m_auto_plot_option);
-    SmartDashboard.putData(m_traj_plot_option);
 
     configureButtonBindings();
   }
@@ -78,15 +73,16 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
       PlotUtils.auto_plot_option=m_auto_plot_option.getSelected();
-      PlotUtils.traj_plot_option=m_traj_plot_option.getSelected();
+      //PlotUtils.traj_plot_option=m_traj_plot_option.getSelected();
       return m_chooser.getSelected();
   }
-  public void robotInit(){
-    m_drivetrain.simulation.init();
+  public void teleopInit(){
+   //m_drivetrain.enable();
   }
-  public void simulationInit(){
-    System.out.println("simulationInit()");
-    m_drivetrain.enable();
-    m_drivetrain.simulation.run();  
+  public void disabledInit(){
+    m_drivetrain.disable();
+  }
+  public void robotInit(){
+    m_drivetrain.init();
   }
 }
