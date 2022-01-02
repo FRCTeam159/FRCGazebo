@@ -77,14 +77,11 @@ public class DrivePath extends CommandBase {
     vel_average.reset();
     m_timer.reset();
     m_timer.start();
-    // m_drive.simulation.reset();
-    // m_drive.simulation.start();
-    lastVelocity = 0;
+     lastVelocity = 0;
     data_count = 0;
     vel_count = 0;
     pathdata.clear();
     m_drive.startAuto();
-    // m_drive.enable();
     System.out.println("runtime:" + runtime + " states:" + states + " intervals:" + intervals);
   }
  
@@ -119,15 +116,15 @@ public class DrivePath extends CommandBase {
     //m_simulation.end();
     m_drive.disable();
     if (PlotUtils.auto_plot_option == PlotUtils.PLOT_DISTANCE){
-      String label_list[] = { "Left Travel", "Target", "Right Travel", "Target","Heading","Target"};
-      PlotUtils.genericTimePlot(pathdata,label_list,6);
+      String label_list[] = { "Distance Plot","Time (s)","","Left Travel", "Target", "Right Travel", "Target","Heading","Target"};
+      PlotUtils.genericPlot(pathdata,label_list,6);
     }
     else if (PlotUtils.auto_plot_option == PlotUtils.PLOT_DYNAMICS){
-      String label_list[] = { "Origin Distance", "Target", "Velocity", "Target","Acceleration","Target"};
-      PlotUtils.genericTimePlot(pathdata,label_list,6);
+      String label_list[] = { "Dynamics Plot","Time (s)","","Origin Distance", "Target", "Velocity", "Target","Acceleration","Target"};
+      PlotUtils.genericPlot(pathdata,label_list,6);
     }
     else if (PlotUtils.auto_plot_option == PlotUtils.PLOT_POSITION){
-      String label_list[] = { "Left Wheels", "Target", "Center", "Target","Right Wheels","Target"};
+      String label_list[] = { "Position Plot","X","Y","Left Wheels", "Target", "Center", "Target","Right Wheels","Target"};
       PlotUtils.genericXYPlot(pathdata,label_list,6);
     }
   }

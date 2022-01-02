@@ -113,7 +113,7 @@ public class PlotUtils {
     }
     
     // Plot Path motion (values vs time)
-    public static void genericTimePlot(ArrayList<PathData> d, String label_list[], int traces ) {
+    public static void genericPlot(ArrayList<PathData> d, String label_list[], int traces ) {
         JFrame frame = new PlotRenderer(d, traces, PlotRenderer.TIME_MODE, label_list);
         frame.pack();
         frame.setLocationRelativeTo(null);

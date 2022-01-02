@@ -3,6 +3,7 @@ package utils;
 import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -41,25 +42,34 @@ public class PlotRenderer extends JFrame {
 	private int plotMode=TIME_MODE;
 	private String labels[]=null;
 
+	private String plot_title = "Generic Plot";
+	private String x_axis_label = "X";
+	private String y_axis_label = "Y";
+
 	static public Color time_colors[]= {
 			Color.BLUE,Color.RED,Color.GREEN,Color.ORANGE,Color.DARK_GRAY,Color.GRAY};
 	static public Color xy_colors[]= {
 			Color.BLUE,Color.BLUE,Color.DARK_GRAY,Color.DARK_GRAY,Color.RED,Color.RED};
 	public PlotRenderer(ArrayList<PathData> d, int n) {
-		this(d,n,TIME_MODE);
+		//String label_list[] ={"Generic Plot","X"};
+		this(d,n,TIME_MODE,new String[] {"Generic Plot","X","Y"});
 	}
-	public PlotRenderer(ArrayList<PathData> d, int n, int m) {
-		this(d,n,m,null);
-	}
+	
 	public PlotRenderer(ArrayList<PathData> d, int n, int m, String[] l) {
-		labels=l;
+		labels=Arrays.copyOfRange(l, 3, l.length);
+		plot_title=l[0];
+		x_axis_label=l[1];
+		y_axis_label=l[2];
+		//labels=l;
 		plotMode=m;
 		list.addAll(d);
 		traces=n;
 		getLimits();
 
 		setSize(plot_width, plot_height);
-		setTitle("Path Plot");
+		//setTitle("Path Plot");
+		setTitle(plot_title);
+
 		setLocationRelativeTo(null);
 		add(new DrawPlot(), BorderLayout.CENTER);
 		pack();
@@ -103,9 +113,7 @@ public class PlotRenderer extends JFrame {
 		System.out.println("PlotPath: xmax="+xmax+" xmin="+xmin+" ymax="+ymax+" ymin="+ymin+" aspect:"+aspect);
 	}
 	class DrawPlot extends JPanel {
-		/**
-		 * 
-		 */
+		
 		private static final long serialVersionUID = 1L;
 		private int padding = 25;
 		private int labelPadding = 35;
@@ -182,9 +190,10 @@ public class PlotRenderer extends JFrame {
 			g2.drawLine(padding + labelPadding, getHeight() - padding - labelPadding, padding + labelPadding, padding);
 			g2.drawLine(padding + labelPadding, getHeight() - padding - labelPadding, getWidth() - padding, getHeight() - padding - labelPadding);
 			
-			String xAxisLabel="Time Secs";
-			if(plotMode==XY_MODE)
-				 xAxisLabel="X Meters";
+			//String xAxisLabel="Time Secs";
+			//if(plotMode==XY_MODE)
+			//	 xAxisLabel="X Meters";
+			String xAxisLabel=x_axis_label;
 			int x0 =  (getWidth() - padding * 2 - labelPadding) / 2 + padding + labelPadding;
 			int y0 = getHeight() - labelPadding;
 			FontMetrics metrics = g2.getFontMetrics();

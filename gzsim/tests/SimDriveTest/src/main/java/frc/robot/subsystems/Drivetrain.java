@@ -36,13 +36,20 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(kTrackWidth);
 	private final DifferentialDriveOdometry odometry;
 
-	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(1,1.5);
-	private final PIDController leftPIDController = new PIDController(1, 0, 0.0);
-	private final PIDController rightPIDController = new PIDController(1, 0, 0.0);
+	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.5,1);
+	private final PIDController leftPIDController = new PIDController(0.5, 0, 0.0);
+	private final PIDController rightPIDController = new PIDController(0.5, 0, 0.0);
 
 	private final Field2d m_fieldSim = new Field2d();
 
-	private double scale=1;
+	// For Gazebo simulation use "Calibrate" auto to determine where 
+	// model velocity stops increasing with input power
+	// 1) set scale to 1 and in Calibrate set max power to ~5 step size to 1 etc.
+	// 2) run calibrate (record max power at max velocity)
+	// 3) set scale to max_velocity (full power range should now be -1 to 1)
+	// 4) re-run Calibrate to verify (set max power to 1 step to 0.1 etc.)
+	// note: may need to reduce PID and feed-forward values above as well to avoid jitters
+	private double scale=2.5; // 
 
 	/** Creates a new Subsystem. */
 	public Drivetrain() {
@@ -164,6 +171,7 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		SmartDashboard.putNumber("Right distance", getRightDistance());
 		SmartDashboard.putNumber("Left speed", getLeftVelocity());
 		SmartDashboard.putNumber("Right speed", getRightVelocity());
+		//SmartDashboard.putNumber("Power Scale",scale);
 	}
 	@Override
 	public void periodic() {
