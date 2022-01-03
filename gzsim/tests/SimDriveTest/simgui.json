@@ -41,7 +41,8 @@
       "motor": {
         "2": {
           "open": true
-        }
+        },
+        "open": true
       },
       "open": true
     }

@@ -29,7 +29,7 @@ public class Simulation extends SubsystemBase {
     SmartDashboard.putNumber("SimTime", 0);
     SmartDashboard.putNumber("SimClock", 0);
     m_timer.start();
-    init();
+    //init();
   }
 
   public double getSimTime(){

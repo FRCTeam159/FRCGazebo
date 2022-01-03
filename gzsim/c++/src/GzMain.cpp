@@ -178,7 +178,7 @@ int main(int argc, char *argv[]) {
 
   std::cout << "Gazebo NTClient started" << std::endl;
   inst = nt::NetworkTableInstance::GetDefault();
-  inst.SetUpdateRate(0.01);
+  inst.SetUpdateRate(0.02);
   inst.StartClient("localhost");
   GzMain *gzmain = new GzMain();
   // inform robot program if Gazebo is running or not

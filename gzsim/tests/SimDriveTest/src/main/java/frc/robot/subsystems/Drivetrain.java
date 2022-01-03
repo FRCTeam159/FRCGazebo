@@ -120,7 +120,7 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	}
 	public void init(){
 		System.out.println("Drivetrain.init");
-		//simulation.init();
+		simulation.init();
 		enable();
 	}
 	public void disable(){
@@ -171,7 +171,6 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		SmartDashboard.putNumber("Right distance", getRightDistance());
 		SmartDashboard.putNumber("Left speed", getLeftVelocity());
 		SmartDashboard.putNumber("Right speed", getRightVelocity());
-		//SmartDashboard.putNumber("Power Scale",scale);
 	}
 	@Override
 	public void periodic() {
