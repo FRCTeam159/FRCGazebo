@@ -36,9 +36,9 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(kTrackWidth);
 	private final DifferentialDriveOdometry odometry;
 
-	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.5,1);
-	private final PIDController leftPIDController = new PIDController(0.5, 0, 0.0);
-	private final PIDController rightPIDController = new PIDController(0.5, 0, 0.0);
+	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.5,0.5);
+	private final PIDController leftPIDController = new PIDController(0.25, 0, 0.0);
+	private final PIDController rightPIDController = new PIDController(0.25, 0, 0.0);
 
 	private final Field2d m_fieldSim = new Field2d();
 
@@ -111,7 +111,7 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		return Math.max(min, Math.min(value, max));
 	}
 	public double getTime(){
-		return simulation.getClockTime();
+		return simulation.getSimTime();
 	}
 	public void startAuto(){
 		simulation.reset();

@@ -57,28 +57,8 @@
           </mesh>
         </geometry>
       </visual>
-      <!--
-      <sensor name="FrameCamera" type="camera">
-        <visualize>1</visualize>
-        <always_on>1</always_on>
-        <update_rate>100</update_rate>
-        <pose>-0.000573275356463565 0.3 -0.392489921187236 0 1.5707963267949 1.5707963267949</pose>
-        <camera name="Framecamera">
-          <horizontal_fov>1.05</horizontal_fov>
-          <image>
-            <width>320</width>
-            <height>240</height>
-          </image>
-          <clip>
-            <near>0.1</near>
-            <far>100</far>
-          </clip>
-          <save enabled="true">
-              <path>/tmp/shooter-camera</path>
-          </save>
-        </camera>
-      </sensor>
-      -->
+     
+     
     </link>
     <link name="L1Wheel">
       <gravity>1</gravity>
@@ -696,6 +676,36 @@
         </limit>
       </axis>
     </joint>
+
+     <!-- -->
+      <sensor name="FrameCamera" type="camera">
+        <visualize>1</visualize>
+        <always_on>1</always_on>
+        <update_rate>10</update_rate>
+        <pose>-0.000573275356463565 0.3 -0.392489921187236 0 1.5707963267949 1.5707963267949</pose>
+        <!---->
+        <camera name="Framecamera">
+          <horizontal_fov>1.05</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+          <!--
+          <save enabled="true">
+              <path>/tmp/shooter-camera</path>
+          </save>
+          -->
+        </camera>
+        <plugin name="my_camera" filename="sim_camera.dll">
+          <save>enabled="true"</save> 
+          <path>tmp/frame-%04d.png</path>
+          <maxFrames>10</maxFrames>
+      </plugin>
+      </sensor>
 <!---->
     <plugin name="clock" filename="sim_clock.dll">
       <topic>~/gazebo/frc/simulator/clock</topic>
