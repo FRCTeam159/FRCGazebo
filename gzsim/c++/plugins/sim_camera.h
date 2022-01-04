@@ -13,52 +13,52 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- */
+*/
 #ifndef GAZEBO_PLUGINS_CAMERAPLUGIN_HH_
 #define GAZEBO_PLUGINS_CAMERAPLUGIN_HH_
 
 #pragma once
 
 #pragma warning(push, 0)
+#include <boost/asio.hpp>
 #include <windows.h>
 
-#include <boost/asio.hpp>
 #include <string>
 
 #include "gazebo/common/Plugin.hh"
-#include "gazebo/rendering/Camera.hh"
 #include "gazebo/sensors/CameraSensor.hh"
-#include "gazebo/sensors/DepthCameraSensor.hh"
+#include "gazebo/rendering/Camera.hh"
 #include "gazebo/util/system.hh"
+#include "gazebo/sensors/DepthCameraSensor.hh"
 
-namespace gazebo {
-class GZ_PLUGIN_VISIBLE CameraPlugin : public SensorPlugin {
- public:
-  CameraPlugin();
+namespace gazebo
+{
+  class GZ_PLUGIN_VISIBLE CameraPlugin : public SensorPlugin
+  {
+    public: CameraPlugin();
 
-  /// \brief Destructor
-  virtual ~CameraPlugin();
+    /// \brief Destructor
+    public: virtual ~CameraPlugin();
 
-  virtual void Load(sensors::SensorPtr _sensor, sdf::ElementPtr _sdf);
+    public: virtual void Load(sensors::SensorPtr _sensor, sdf::ElementPtr _sdf);
 
-  virtual void OnNewFrame(const unsigned char *_image, unsigned int _width,
-                          unsigned int _height, unsigned int _depth,
-                          const std::string &_format);
+    public: virtual void OnNewFrame(const unsigned char *_image,
+                              unsigned int _width, unsigned int _height,
+                              unsigned int _depth, const std::string &_format);
 
- protected:
-  unsigned int width, height, depth;
-  std::string format;
+    protected: unsigned int width, height, depth;
+    protected: std::string format;
 
-  sensors::CameraSensorPtr parentSensor;
-  rendering::CameraPtr camera;
-  std::string path;
-  bool enabled;
+    protected: sensors::CameraSensorPtr parentSensor;
+    protected: rendering::CameraPtr camera;
 
- private:
-  event::ConnectionPtr newFrameConnection;
-  int saveCount;
-  int saveMax;
-};
-}  // namespace gazebo
+    private: event::ConnectionPtr newFrameConnection;
+    private: int saveCount;
+    private: int saveMax;
+    protected: std::string path;
+    protected: bool enabled;
+
+  };
+}
 
 #endif

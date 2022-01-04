@@ -1,0 +1,4 @@
+#!/bin/bash
+pushd tmp;
+ffmpeg -start_number 0 -i frame-%04d.png -vcodec mpeg4 test.avi
+popd;

@@ -1,2 +1,3 @@
 #!/bin/bash
+rm tmp/*;
 program/build/Release/GzProgram.exe;

@@ -31,35 +31,34 @@ CameraPlugin::~CameraPlugin() {
 }
 
 /////////////////////////////////////////////////
-void CameraPlugin::Load(sensors::SensorPtr _sensor, sdf::ElementPtr /*_sdf*/) {
+void CameraPlugin::Load(sensors::SensorPtr _sensor, sdf::ElementPtr sdf) {
   if (!_sensor) gzerr << "Invalid sensor pointer.\n";
 
   this->parentSensor =
       std::dynamic_pointer_cast<sensors::CameraSensor>(_sensor);
 
-  if (!this->parentSensor) {
-    gzerr << "CameraPlugin requires a CameraSensor.\n";
-    if (std::dynamic_pointer_cast<sensors::DepthCameraSensor>(_sensor))
-      gzmsg << "It is a depth camera sensor\n";
-
-    if (sdf->HasElement("path")) 
-      path = sdf->Get<std::string>("path");
-    else 
-      path = "frame-%04d.jpg";
-    if (sdf->HasElement("enabled")) 
-      enabled = sdf->Get<boolean>("enabled");
-    if (sdf->HasElement("maxFrames")) 
-      saveMax = sdf->Get<int>("maxFrames");
-    else
-      saveMax = 0;
-  }
-
-  this->camera = this->parentSensor->Camera();
 
   if (!this->parentSensor) {
     gzerr << "CameraPlugin not attached to a camera sensor\n";
     return;
   }
+  this->camera = this->parentSensor->Camera();
+
+  if (sdf->HasElement("path")) 
+    path = sdf->Get<std::string>("path");
+  else 
+    path = "tmp/frame_%04d.jpg";
+  if (sdf->HasElement("enabled")) 
+    enabled = sdf->Get<bool>("enabled");
+  else
+    enabled=true;
+  if (sdf->HasElement("maxFrames")) 
+    saveMax = sdf->Get<int>("maxFrames");
+  else
+    saveMax = 10;
+
+  gzmsg << "Initializing sim_camera:" << enabled << " path:" << path << " saveMax:"<<saveMax<<"\n";
+
 
   this->width = this->camera->ImageWidth();
   this->height = this->camera->ImageHeight();
@@ -78,12 +77,15 @@ void CameraPlugin::Load(sensors::SensorPtr _sensor, sdf::ElementPtr /*_sdf*/) {
 void CameraPlugin::OnNewFrame(const unsigned char *_image, unsigned int _width,
                               unsigned int _height, unsigned int _depth,
                               const std::string &_format) {
-  //char tmp[1024];
-  //snprintf(tmp, sizeof(tmp), path, this->saveCount);
+  char tmp[1024];
+  const char *c = path.c_str();
+  snprintf(tmp, sizeof(tmp), c, this->saveCount);
   if(!enabled)
    return;
   if (this->saveCount < saveMax || saveMax<=0) {
-    gzmsg << "Saving frame [" << this->saveCount << "] as [" << path << "]\n";
+    #ifdef DEBUG
+    gzmsg << "Saving frame [" << this->saveCount << "] as [" << tmp << "]\n";
+    #endif
     this->parentSensor->Camera()->SaveFrame(_image, _width, _height, _depth,
                                             _format, tmp);
     this->saveCount++;

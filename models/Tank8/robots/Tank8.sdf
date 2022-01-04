@@ -57,7 +57,30 @@
           </mesh>
         </geometry>
       </visual>
-     
+ 
+      <sensor name="FrameCamera" type="camera">
+        <visualize>1</visualize>
+        <always_on>1</always_on>
+        <update_rate>20</update_rate>
+        <pose>-0.000573275356463565 0.3 -0.392489921187236 0 1.5707963267949 1.5707963267949</pose>
+        <!---->
+        <camera name="Framecamera">
+          <horizontal_fov>1.05</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+        </camera>
+        <plugin name="my_camera" filename="sim_camera.dll">
+          <path>tmp/frame_%04d.png</path>
+          <enabled>true</enabled>
+          <maxFrames>20</maxFrames>
+      </plugin>
+    </sensor>
      
     </link>
     <link name="L1Wheel">
@@ -676,14 +699,12 @@
         </limit>
       </axis>
     </joint>
-
-     <!-- -->
-      <sensor name="FrameCamera" type="camera">
-        <visualize>1</visualize>
+<!--
+    <sensor name="FrameCamera" type="camera">
+      <visualize>1</visualize>
         <always_on>1</always_on>
         <update_rate>10</update_rate>
         <pose>-0.000573275356463565 0.3 -0.392489921187236 0 1.5707963267949 1.5707963267949</pose>
-        <!---->
         <camera name="Framecamera">
           <horizontal_fov>1.05</horizontal_fov>
           <image>
@@ -694,19 +715,13 @@
             <near>0.1</near>
             <far>100</far>
           </clip>
-          <!--
-          <save enabled="true">
-              <path>/tmp/shooter-camera</path>
-          </save>
-          -->
         </camera>
         <plugin name="my_camera" filename="sim_camera.dll">
-          <save>enabled="true"</save> 
-          <path>tmp/frame-%04d.png</path>
-          <maxFrames>10</maxFrames>
+          <path>tmp/frame_%04d.png</path>
+        <alwaysOn>true</alwaysOn>
       </plugin>
-      </sensor>
-<!---->
+    </sensor>
+    -->
     <plugin name="clock" filename="sim_clock.dll">
       <topic>~/gazebo/frc/simulator/clock</topic>
     </plugin>
@@ -768,5 +783,6 @@
        <topic>~/gazebo/frc/simulator/encoder/2</topic>
       <multiplier>1</multiplier>
     </plugin>
+    
   </model>
 </sdf>
