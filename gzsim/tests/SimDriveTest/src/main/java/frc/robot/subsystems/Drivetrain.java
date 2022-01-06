@@ -111,7 +111,7 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		return Math.max(min, Math.min(value, max));
 	}
 	public double getTime(){
-		return simulation.getSimTime();
+		return simulation.getClockTime();
 	}
 	public void startAuto(){
 		simulation.reset();
@@ -138,7 +138,7 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		gyro.enable();
 	}
 	public void reset(){
-		//simulation.reset();
+		simulation.reset();
 		System.out.println("Drivetrain.reset");
 		leftMotor.reset();
 		rightMotor.reset();

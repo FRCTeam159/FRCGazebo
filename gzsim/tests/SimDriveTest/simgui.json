@@ -33,7 +33,8 @@
       "encoder": {
         "1": {
           "open": true
-        }
+        },
+        "open": true
       },
       "gyro": {
         "open": true

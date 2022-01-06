@@ -114,7 +114,7 @@ public class DrivePath extends CommandBase {
       return;
     System.out.println("Simtime=" + m_drive.getTime() + " Realtime=" + runtime);
     //m_simulation.end();
-    m_drive.disable();
+    //m_drive.disable();
     if (PlotUtils.auto_plot_option == PlotUtils.PLOT_DISTANCE){
       String label_list[] = { "Distance Plot","Time (s)","","Left Travel", "Target", "Right Travel", "Target","Heading","Target"};
       PlotUtils.genericPlot(pathdata,label_list,6);

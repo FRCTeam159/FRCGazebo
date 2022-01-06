@@ -12,7 +12,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
 
 # Build plugins
 add_library(sim_camera SHARED sim_camera.cpp)
-target_link_libraries(sim_camera ${GAZEBO_LIBRARIES})
+target_link_libraries(sim_camera ${GAZEBO_LIBRARIES} FreeImage.lib)
 
 #add_library(camera_dump SHARED camera_dump.cc CameraPlugin.cc)
 #target_link_libraries(camera_dump ${GAZEBO_LIBRARIES})

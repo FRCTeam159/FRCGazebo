@@ -1,2 +1,4 @@
 #!/bin/bash
-gazebo --verbose sim_tank_test.world &
+rm -f tmp/*;
+gazebo --verbose tank8-2018-field.world &
+#gazebo --verbose sim_tank_test.world &

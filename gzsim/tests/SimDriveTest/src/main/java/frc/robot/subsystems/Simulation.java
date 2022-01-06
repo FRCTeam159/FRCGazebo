@@ -40,10 +40,10 @@ public class Simulation extends SubsystemBase {
   }
   public void reset() {
     System.out.println("Simulation.reset");
-    m_drivetrain.reset(); // reset encoders
+    //m_drivetrain.reset(); // reset encoders
     m_simclock.reset();
     m_timer.reset();
-    m_simclock.disable();
+   // m_simclock.disable();
     SmartDashboard.putNumber("SimTime", 0);
     running=false;
   }
@@ -81,7 +81,8 @@ public class Simulation extends SubsystemBase {
     boolean b=SmartDashboard.getBoolean("Reset", false);
     if(b){
       if(!resetting){
-        reset();
+       // reset();
+        m_drivetrain.reset();
         resetting=true;
         m_timer.reset();
       }

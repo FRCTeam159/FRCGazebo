@@ -30,6 +30,7 @@
 #include "gazebo/rendering/Camera.hh"
 #include "gazebo/util/system.hh"
 #include "gazebo/sensors/DepthCameraSensor.hh"
+#include <FreeImage.h>
 
 namespace gazebo
 {
@@ -51,6 +52,7 @@ namespace gazebo
 
     protected: sensors::CameraSensorPtr parentSensor;
     protected: rendering::CameraPtr camera;
+    protected: FIBITMAP *bitmap;
 
     private: event::ConnectionPtr newFrameConnection;
     private: int saveCount;

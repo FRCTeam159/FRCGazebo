@@ -57,13 +57,13 @@
           </mesh>
         </geometry>
       </visual>
- 
-      <sensor name="FrameCamera" type="camera">
+ <!---->
+       <sensor name="FrameCamera" type="camera">
         <visualize>1</visualize>
         <always_on>1</always_on>
         <update_rate>20</update_rate>
         <pose>-0.000573275356463565 0.3 -0.392489921187236 0 1.5707963267949 1.5707963267949</pose>
-        <!---->
+
         <camera name="Framecamera">
           <horizontal_fov>1.05</horizontal_fov>
           <image>
@@ -76,12 +76,12 @@
           </clip>
         </camera>
         <plugin name="my_camera" filename="sim_camera.dll">
-          <path>tmp/frame_%04d.png</path>
+          <path>tmp</path>
           <enabled>true</enabled>
-          <maxFrames>20</maxFrames>
+          <maxFrames>8</maxFrames>
       </plugin>
     </sensor>
-     
+  
     </link>
     <link name="L1Wheel">
       <gravity>1</gravity>
@@ -699,7 +699,8 @@
         </limit>
       </axis>
     </joint>
-<!--
+   
+<!--   
     <sensor name="FrameCamera" type="camera">
       <visualize>1</visualize>
         <always_on>1</always_on>
@@ -717,11 +718,11 @@
           </clip>
         </camera>
         <plugin name="my_camera" filename="sim_camera.dll">
-          <path>tmp/frame_%04d.png</path>
-        <alwaysOn>true</alwaysOn>
+          <path>tmp/frame_%04d.jpg</path>
+        <maxFrames>5</maxFrames>
       </plugin>
     </sensor>
-    -->
+ -->
     <plugin name="clock" filename="sim_clock.dll">
       <topic>~/gazebo/frc/simulator/clock</topic>
     </plugin>
