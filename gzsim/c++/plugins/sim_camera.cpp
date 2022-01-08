@@ -103,8 +103,10 @@ if (saveCount > saveMax)
  // This Orge version only supports png using this function
  // this->parentSensor->Camera()->SaveFrame(_image, _width, _height, _depth,_format, tmp);
 
-  // instead use FreeImage to output as jpeg (foe mjpeg-streamer)
-  memcpy( FreeImage_GetBits( bitmap ), _image, _width * _height * 3);
+  // instead use FreeImage to output as jpeg (for mjpeg-streamer)
+  
+  memcpy(FreeImage_GetBits(bitmap), _image, _width * _height * 3);
+  FreeImage_FlipVertical(bitmap);
   FreeImage_Save(FIF_JPEG,bitmap,tmp);
 
   saveCount++;

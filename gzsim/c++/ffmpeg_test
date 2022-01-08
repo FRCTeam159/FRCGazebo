@@ -1,7 +1,7 @@
 #!/bin/bash
 pushd tmp;
 #ffmpeg -start_number 0 -i frame-%04d.jpg -vcodec mpeg4 test.mpg
-ffmpeg -r 1 -start_number 0 -i frame-%04d.jpg -f mpjpeg -r 1 http://127.0.0.1:9000
+ffmpeg -r 1 -start_number 0 -i frame_%04d.jpg -f mpjpeg -r 1 http://127.0.0.1:9000
 #ffmpeg -i test.mpg -f mjpeg -r 1 http://127.0.0.1:4800
 #for (( ; ; ))
 #do

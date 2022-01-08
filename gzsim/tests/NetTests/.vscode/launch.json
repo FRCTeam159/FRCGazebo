@@ -9,36 +9,28 @@
       "name": "Launch PlotServer",
       "request": "launch",
       "mainClass": "utils.PlotServer",
-      "projectName": "PlotServerTest"
+      "projectName": "NetTests"
     },
     {
       "type": "java",
       "name": "Launch PlotTest",
       "request": "launch",
       "mainClass": "frc.robot.PlotTest",
-      "projectName": "PlotServerTest"
+      "projectName": "NetTests"
     },
     {
       "type": "java",
       "name": "Launch NTServerTest",
       "request": "launch",
       "mainClass": "frc.robot.NTServerTest",
-      "projectName": "PlotServerTest"
+      "projectName": "NetTests"
     },
     {
       "type": "java",
       "name": "Launch NTclientTest",
       "request": "launch",
       "mainClass": "frc.robot.NTClientTest",
-      "projectName": "PlotServerTest"
-    },
-   
-    {
-      "type": "java",
-      "name": "Launch Main",
-      "request": "launch",
-      "mainClass": "frc.robot.Main",
-      "projectName": "PlotTest"
+      "projectName": "NetTests"
     },
     {
       "type": "wpilib",

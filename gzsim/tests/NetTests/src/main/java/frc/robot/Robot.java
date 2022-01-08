@@ -18,7 +18,7 @@ public class Robot extends RobotBase {
   PlotTest plot_test= new PlotTest();
   public void robotInit() {
     // Dummy project for java compilation (enter "compile" in terminal) 
-    // Use Run/Debug menu for testing
+    // Use Run/Debug menu .json for testing
   }
 
   public void disabled() {}

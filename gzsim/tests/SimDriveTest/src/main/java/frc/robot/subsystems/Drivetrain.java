@@ -30,13 +30,13 @@ public class Drivetrain extends SubsystemBase implements Constants {
 
 	public static final double kTrackWidth = i2M(20); // inches
 	public static final double kWheelDiameter = i2M(8); // wheel radius in tank model
-	public static final double kMaxVelocity = 2;
-    public static final double kMaxAcceleration = 1.5;
+	public static final double kMaxVelocity = 1;
+    public static final double kMaxAcceleration = 1;
 
 	private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(kTrackWidth);
 	private final DifferentialDriveOdometry odometry;
 
-	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.5,0.5);
+	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.5,0.2);
 	private final PIDController leftPIDController = new PIDController(0.25, 0, 0.0);
 	private final PIDController rightPIDController = new PIDController(0.25, 0, 0.0);
 

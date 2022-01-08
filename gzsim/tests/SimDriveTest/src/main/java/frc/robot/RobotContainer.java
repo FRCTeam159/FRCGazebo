@@ -36,6 +36,7 @@ public class RobotContainer {
   Calibrate m_calibrate=new Calibrate(m_drivetrain);
   DrivePath m_straightpath = new DrivePath(m_drivetrain,Trajectories.STRAIGHT);
   DrivePath m_curvedpath = new DrivePath(m_drivetrain,Trajectories.CURVED);
+  DrivePath m_hookedpath = new DrivePath(m_drivetrain,Trajectories.HOOKED);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -43,8 +44,9 @@ public class RobotContainer {
     m_driveCommand=new DriveWithGamepad(m_drivetrain, m_controller);
     m_drivetrain.setDefaultCommand(m_driveCommand);
 
-    m_chooser.setDefaultOption("Curved Path", m_curvedpath);
-    m_chooser.addOption("Straight Path", m_straightpath);
+    m_chooser.setDefaultOption("SCurve", m_curvedpath);
+    m_chooser.addOption("Hooked", m_hookedpath);
+    m_chooser.addOption("Straight", m_straightpath);
     m_chooser.addOption("Calibrate", m_calibrate);
 
     m_auto_plot_option.setDefaultOption("No Plot", PlotUtils.PLOT_NONE);

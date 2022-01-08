@@ -13,7 +13,6 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Simulation;
 import frc.robot.subsystems.Trajectories;
 import utils.PathData;
 import utils.PlotUtils;
@@ -66,6 +65,8 @@ public class DrivePath extends CommandBase {
   public void initialize() {
     if (m_type == Trajectories.CURVED)
       setTrajectory(Trajectories.curvedPath());
+    else if (m_type == Trajectories.HOOKED)
+      setTrajectory(Trajectories.hookPath());
     else if (m_type == Trajectories.STRAIGHT)
       setTrajectory(Trajectories.straightPath());
     System.out.println("DrivePath Error: unknown trajectory option:" + m_type);
