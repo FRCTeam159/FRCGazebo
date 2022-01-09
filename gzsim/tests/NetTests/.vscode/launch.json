@@ -33,6 +33,13 @@
       "projectName": "NetTests"
     },
     {
+      "type": "java",
+      "name": "Launch MJpegTest",
+      "request": "launch",
+      "mainClass": "frc.robot.MJpegTest",
+      "projectName": "NetTests"
+    },
+    {
       "type": "wpilib",
       "name": "WPILib Desktop Debug",
       "request": "launch",

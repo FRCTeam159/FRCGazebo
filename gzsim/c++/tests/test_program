@@ -1,0 +1,4 @@
+#!/bin/bash
+cd bin
+MjpegTest.exe;
+cd ../
