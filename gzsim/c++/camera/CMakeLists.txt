@@ -1,0 +1,27 @@
+cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
+
+# Find gazebo-config
+
+add_compile_definitions(M_PI=3.14159265358979323846)
+
+# Find Gazebo
+find_package(gazebo REQUIRED)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
+
+include_directories(${GAZEBO_INCLUDE_DIRS} . )
+include_directories($ENV{MY_GAZEBO}/wpilib/includes)
+
+set(CV_LIBS 
+    $ENV{MY_GAZEBO}/wpilib/libs/cameraserver.lib;
+    $ENV{MY_GAZEBO}/wpilib/libs/cscore.lib;
+    $ENV{MY_GAZEBO}/wpilib/libs/opencv_core452.lib;
+    $ENV{MY_GAZEBO}/wpilib/libs/opencv_imgcodecs452.lib;
+)
+
+link_directories(${GAZEBO_LIBRARY_DIRS} $ENV{MY_GAZEBO}/wpilib/libs)
+
+# Build plugins
+add_library(sim_camera SHARED sim_camera.cpp)
+target_link_libraries(sim_camera ${GAZEBO_LIBRARIES} FreeImage.lib ${CV_LIBS})
+

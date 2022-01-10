@@ -32,6 +32,12 @@
 #include "gazebo/sensors/DepthCameraSensor.hh"
 #include <FreeImage.h>
 
+#include <cameraserver/CameraServer.h>
+#include <opencv2/core/core.hpp>
+#include <opencv2/core/types.hpp>
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+
 namespace gazebo
 {
   class GZ_PLUGIN_VISIBLE CameraPlugin : public SensorPlugin
@@ -50,6 +56,8 @@ namespace gazebo
     protected: unsigned int width, height, depth;
     protected: std::string format;
 
+    protected: double fps;
+
     protected: sensors::CameraSensorPtr parentSensor;
     protected: rendering::CameraPtr camera;
     protected: FIBITMAP *bitmap;
@@ -59,6 +67,9 @@ namespace gazebo
     private: int saveMax;
     protected: std::string path;
     protected: bool enabled;
+
+    protected: cs::CvSource stream;
+    protected: cs::MjpegServer server;
 
   };
 }

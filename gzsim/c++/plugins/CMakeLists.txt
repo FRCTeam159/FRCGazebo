@@ -11,19 +11,16 @@ link_directories(${GAZEBO_LIBRARY_DIRS})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
 
 # Build plugins
-add_library(sim_camera SHARED sim_camera.cpp)
-target_link_libraries(sim_camera ${GAZEBO_LIBRARIES} FreeImage.lib)
-
-#add_library(camera_dump SHARED camera_dump.cc CameraPlugin.cc)
-#target_link_libraries(camera_dump ${GAZEBO_LIBRARIES})
 
 add_library(sim_motor SHARED sim_motor.cpp)
 target_link_libraries(sim_motor ${GAZEBO_LIBRARIES})
 
 add_library(sim_encoder SHARED sim_encoder.cpp)
 target_link_libraries(sim_encoder ${GAZEBO_LIBRARIES})
+
 add_library(sim_gyro SHARED sim_gyro.cpp)
 target_link_libraries(sim_gyro ${GAZEBO_LIBRARIES})
+
 add_library(sim_clock SHARED sim_clock.cpp)
 target_link_libraries(sim_clock ${GAZEBO_LIBRARIES})
 
