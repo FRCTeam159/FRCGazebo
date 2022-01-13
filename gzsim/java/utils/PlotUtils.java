@@ -49,7 +49,6 @@ public class PlotUtils {
     }
     public void addPlotData(PathData data){
         pathDataList.add(data);
-
     }
     // publish plot data to NetworkTables
     public static void publish(ArrayList<PathData> dataList, int traces) {

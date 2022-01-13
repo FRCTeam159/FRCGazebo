@@ -13,8 +13,7 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public interface Constants {
-    public static final int FRONT_LEFT = 1;
-    public static final int FRONT_RIGHT = 2;
+    
     
     public static final int LEFT_JOYSTICK = 1;
     public static final int RIGHT_JOYSTICK = 4;

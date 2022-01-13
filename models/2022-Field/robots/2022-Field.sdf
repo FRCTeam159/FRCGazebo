@@ -11,21 +11,8 @@
         <linear>0</linear>
         <angular>0</angular>
       </velocity_decay>
-      <!--
-      <inertial>
-        <mass>710.923962300241</mass>
-        <pose>0 0 0 0 0 0</pose>
-        <inertia>
-          <ixx>6059.75005581668</ixx>
-          <ixy>1.1060728426089</ixy>
-          <ixz>1401.98074367036</ixz>
-          <iyy>40831.4779640037</iyy>
-          <iyz>20.5834040785038</iyz>
-          <izz>34926.1255188767</izz>
-        </inertia>
-      </inertial>
-      -->
-      <!---->
+     
+      <!-- Lost solidworks 2022-Field model - so now using sides only model for collisions -->
       <collision name="Field_collision">
         <pose>0.00606682331500135 -0.696635081374032 0.00525352273594806 0 0 0</pose>
         <geometry>

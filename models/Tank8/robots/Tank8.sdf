@@ -78,13 +78,14 @@
             <far>100</far>
           </clip>
         </camera>
-        <plugin name="my_camera" filename="sim_camera.dll">
+        <plugin name="camera1" filename="sim_camera.dll">
           <topic>~/gazebo/frc/simulator/camera/1</topic>
           <port>9000</port>
-          <fps>20</fps>
+          <fps>10</fps>
           <enabled>true</enabled>
-          <save-frames>0</save-frames>
-          <save-path>tmp</save-path>
+          <savepath>tmp</savepath>
+          <maxframes>0</maxframes>
+          <video>test.avi</video>
       </plugin>
     </sensor>
   
@@ -706,29 +707,6 @@
       </axis>
     </joint>
    
-<!--   
-    <sensor name="FrameCamera" type="camera">
-      <visualize>1</visualize>
-        <always_on>1</always_on>
-        <update_rate>10</update_rate>
-        <pose>-0.000573275356463565 0.3 -0.392489921187236 0 1.5707963267949 1.5707963267949</pose>
-        <camera name="Framecamera">
-          <horizontal_fov>1.05</horizontal_fov>
-          <image>
-            <width>640</width>
-            <height>480</height>
-          </image>
-          <clip>
-            <near>0.1</near>
-            <far>100</far>
-          </clip>
-        </camera>
-        <plugin name="my_camera" filename="sim_camera.dll">
-          <path>tmp/frame_%04d.jpg</path>
-        <maxFrames>5</maxFrames>
-      </plugin>
-    </sensor>
- -->
     <plugin name="clock" filename="sim_clock.dll">
       <topic>~/gazebo/frc/simulator/clock</topic>
     </plugin>

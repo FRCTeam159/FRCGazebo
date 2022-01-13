@@ -35,7 +35,7 @@ void MotorPlugin::Load(gazebo::physics::ModelPtr model, sdf::ElementPtr sdf) {
 
   // Create the node
   this->node = gazebo::transport::NodePtr(new gazebo::transport::Node());
-  this->node->Init(this->model->GetWorld()->Name());
+  this->node->Init("default");
 
   std::string topic;
   if (sdf->HasElement("topic"))

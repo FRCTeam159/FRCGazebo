@@ -4,6 +4,7 @@
 #include "GzEncoder.h"
 #include "GzGyro.h"
 #include "GzClock.h"
+#include "GzCamera.h"
 
 #include <condition_variable>
 #include <mutex>
@@ -89,6 +90,18 @@ void GzMain::genNodes() {
     std::shared_ptr<nt::NetworkTable> tbl = encoders->GetSubTable(keys[i]);
     int j = std::stoi(keys[i]);
     nodes.emplace_back(new GzEncoder(j, tbl));
+  }
+
+  // build cameras
+  keys.clear();
+  cameras = table->GetSubTable("camera");
+  keys = cameras->GetSubTables();
+  sortKeys(keys);
+  std::cout << "cameras:" << keys.size() << std::endl;
+  for (int i = 0; i < keys.size(); i++) {
+    std::shared_ptr<nt::NetworkTable> tbl = cameras->GetSubTable(keys[i]);
+    int j = std::stoi(keys[i]);
+    nodes.emplace_back(new GzCamera(j, tbl));
   }
   // build gyro
   gyro=table->GetSubTable("gyro");

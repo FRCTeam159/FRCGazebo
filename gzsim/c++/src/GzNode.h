@@ -15,7 +15,7 @@
 
 enum {
   DISABLED=0,
-  ACTIVE =1, 
+  ENABLED = 1, 
   CONNECTED=2, 
   RUNNING=4, 
   RESET = 8
@@ -45,9 +45,11 @@ class GzNode {
     virtual void reset();
     virtual void stop();
     virtual void run();
+    virtual void enable();
+    virtual void disable();
     bool running() { return status & RUNNING;}
     bool stopped() { return running()?false:true;}
     bool connected() { return status & CONNECTED;}
-    bool active() { return status & ACTIVE;}
-    bool disabled() { return status==0;}
+    bool enabled() { return status & ENABLED;}
+    bool disabled() { return enabled()?true:false;}
 };

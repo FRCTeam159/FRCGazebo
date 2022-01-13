@@ -1,2 +1,2 @@
 #!/bin/bash
-rm -fr plugins/build/*
+rm -fr camera/build/*

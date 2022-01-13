@@ -4,11 +4,14 @@
 
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import gazebo.SimClock;
 import gazebo.SimControl;
+import gazebo.SimCamera;
 
 public class Simulation extends SubsystemBase {
   /** Creates a new SimulationControl. */
@@ -22,6 +25,7 @@ public class Simulation extends SubsystemBase {
   private boolean running=false;
 
   private SimClock m_simclock = new SimClock();
+  private ArrayList<SimCamera> m_cameras;
 
   public Simulation(Drivetrain drivetrain) {
     m_drivetrain = drivetrain;
@@ -29,6 +33,7 @@ public class Simulation extends SubsystemBase {
     SmartDashboard.putNumber("SimTime", 0);
     SmartDashboard.putNumber("SimClock", 0);
     m_timer.start();
+    m_cameras=new ArrayList<SimCamera>();
     //init();
   }
 
@@ -48,6 +53,44 @@ public class Simulation extends SubsystemBase {
     running=false;
   }
 
+  public void addCamera(SimCamera c){
+    m_cameras.add(c);
+  }
+
+  public SimCamera getCamera(int n){
+    for (int i = 0; i < m_cameras.size(); i++){
+      SimCamera c= m_cameras.get(i);
+      if(c.getChannel()== n && c.isEnabled()){
+        return c;
+      }
+    }
+    return null;
+  }
+  public void startCamera(int i){
+    SimCamera camera=getCamera(i);
+    if(camera !=null && !camera.isRecording())
+      camera.run();
+  }
+  public void stopCamera(int i){
+    SimCamera camera=getCamera(i);
+    if(camera !=null && camera.isRecording())
+      camera.stop();
+  }
+  public void resetCamera(int i){
+    SimCamera camera=getCamera(i);
+    if(camera !=null)
+      camera.reset();
+  }
+  public void enableCamera(int i){
+    SimCamera camera=getCamera(i);
+    if(camera !=null && !camera.isEnabled())
+      camera.enable();
+  }
+  public void disableCamera(int i){
+    SimCamera camera=getCamera(i);
+    if(camera !=null && camera.isEnabled())
+      camera.disable();
+  }
   public void start() {
     System.out.println("Simulation.start");
     m_simclock.reset();
@@ -81,7 +124,6 @@ public class Simulation extends SubsystemBase {
     boolean b=SmartDashboard.getBoolean("Reset", false);
     if(b){
       if(!resetting){
-       // reset();
         m_drivetrain.reset();
         resetting=true;
         m_timer.reset();

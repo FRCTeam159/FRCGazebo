@@ -14,13 +14,15 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 
+import gazebo.SimCamera;
 import gazebo.SimEncMotor;
 
 import gazebo.SimGyro;
 
-public class Drivetrain extends SubsystemBase implements Constants {
+public class Drivetrain extends SubsystemBase {
+
+	private SimCamera camera;
 	private SimEncMotor leftMotor;
 	private SimEncMotor rightMotor;
 
@@ -40,6 +42,11 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	private final PIDController leftPIDController = new PIDController(0.25, 0, 0.0);
 	private final PIDController rightPIDController = new PIDController(0.25, 0, 0.0);
 
+	public static final int FRONT_LEFT = 1;
+    public static final int FRONT_RIGHT = 2;
+
+	public static final int FRONT_CAMERA = 1;
+
 	private final Field2d m_fieldSim = new Field2d();
 
 	// For Gazebo simulation use "Calibrate" auto to determine where 
@@ -55,6 +62,9 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	public Drivetrain() {
 		simulation = new Simulation(this);
 
+		camera=new SimCamera(FRONT_CAMERA);
+		simulation.addCamera(camera);
+
 		leftMotor = new SimEncMotor(FRONT_LEFT);
 		rightMotor = new SimEncMotor(FRONT_RIGHT);
 		leftMotor.setDistancePerRotation(r2M(1.0));
@@ -67,8 +77,8 @@ public class Drivetrain extends SubsystemBase implements Constants {
 
 		odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
 		SmartDashboard.putData("Field", m_fieldSim);
-        //simulation.init();
-		//enable();
+		SmartDashboard.putBoolean("record", false);
+        
 	}
 
 	private static double i2M(double inches) {
@@ -181,6 +191,10 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	@Override
 	public void simulationPeriodic() {
 		updateOdometry();
+		if(SmartDashboard.getBoolean("record", false))
+			simulation.startCamera(FRONT_CAMERA);
+		else
+			simulation.stopCamera(FRONT_CAMERA);
 		log();
 	}
 	

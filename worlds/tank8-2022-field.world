@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sdf version="1.4">
   <world name="default">
+  <!---->
     <include>
       <uri>model://sun</uri>
     </include>
     <include>
       <uri>model://ground_plane</uri>
     </include>
+    
     <include>
       <uri>model://2022-Field</uri>
       <pose>-10.2 -3.35 0.01 0 -0 0</pose>
     </include>
-    <!--
-   <include>
-      <uri>model://2022-Field-Border</uri>
-      <pose>7.2 5.44 0 0 0 0</pose>
-    </include>  
-    -->
+   
     <include>
-      <uri>model://BlueHanger</uri>
+      <uri>model://Hanger</uri>
       <name>Blue-Hanger</name>
       <pose>-6.14 3.98 0 1.570 0 -3.12</pose>
     </include>
@@ -28,7 +25,7 @@
     </include>
 
     <include>
-      <uri>model://RedHanger</uri>
+      <uri>model://Hanger</uri>
       <name>Red-Hanger</name>
       <pose>7.39 -1.44 0 1.570 0 0</pose>
     </include>

@@ -46,7 +46,9 @@ if (model->GetJointCount() == 0) {
   // Connect to Gazebo transport for messaging
 
   node = gazebo::transport::NodePtr(new gazebo::transport::Node());
-  node->Init(this->model->GetWorld()->Name());
+  node->Init("default");
+
+  //std::cout << this->model->GetWorld()->Name() <<std::endl;
 
   ctrl = node->Subscribe(topic + "/control", &Encoder::Callback, this);
   pub = node->Advertise<gazebo::msgs::Vector3d>(topic);

@@ -37,6 +37,7 @@
 #include <opencv2/core/types.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/videoio.hpp>
 
 namespace gazebo
 {
@@ -65,8 +66,18 @@ namespace gazebo
     private: event::ConnectionPtr newFrameConnection;
     private: int saveCount;
     private: int saveMax;
-    protected: std::string path;
+    private: int port;
+    private: int video_index;
+    protected: std::string savepath;
+    protected: std::string video_file;
+    protected: std::string topic;
+    protected: bool record_video;
     protected: bool enabled;
+    protected: bool stopped;
+    protected: gazebo::transport::SubscriberPtr ctrl;
+    protected: gazebo::transport::NodePtr node;
+    protected: void Callback(const ConstGzStringPtr &msg);
+    protected: cv::VideoWriter video;
 
     protected: cs::CvSource stream;
     protected: cs::MjpegServer server;

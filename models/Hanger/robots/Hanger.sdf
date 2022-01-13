@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.5">
+  <model name="Hanger">
+    <pose>0 0 0 0 0 0</pose>
+    <link name="Hanger">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.167265109085238 1.47673580997936 -2.04343317332631E-06 0 0 0</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>249.005529427352</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>301.247010703051</ixx>
+          <ixy>12.1708648417498</ixy>
+          <ixz>0.00183170061089966</ixz>
+          <iyy>335.020417516745</iyy>
+          <iyz>0.000428422278406581</iyz>
+          <izz>182.220226765704</izz>
+        </inertia>
+      </inertial>
+      <collision name="Hanger_collision">
+        <pose>-0.167265109085238 -1.47673580997936 2.04343317332631E-06 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Hanger/meshes/Hanger_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="Hanger_visual">
+        <pose>-0.167265109085238 -1.47673580997936 2.04343317332631E-06 0 0 0</pose>
+        <material>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Hanger/meshes/Hanger.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <!-- -->
+    <joint name="Hanger-World" type="fixed">
+      <parent>world</parent>
+      <child>Hanger</child>
+   </joint>
+  
+  </model>
+</sdf>

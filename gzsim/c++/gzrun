@@ -1,4 +1,4 @@
 #!/bin/bash
-#gazebo --verbose sim_tank_test.world &
 start_gazebo
-program/build/Release/GzProgram.exe;
+../../bin/GzProgram.exe;
+#program/build/Release/GzProgram.exe;

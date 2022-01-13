@@ -7,7 +7,7 @@
 GzNode::GzNode(std::string s,std::shared_ptr<nt::NetworkTable> t) {
     gz_topic=s;
     table=t;
-    status = ACTIVE;
+    status = ENABLED;
     pub=NULL;
     sub=NULL; 
     changed_state=false;
@@ -22,6 +22,10 @@ void GzNode::getCtrlState(){
         stop();
     else if(s=="run")
         run();
+    else if(s=="enable")
+        enable();
+    else if(s=="disable")
+        disable();
     changed_state=(status != prev_state);
 }
 void GzNode::set_status_bit(int b){
@@ -35,22 +39,34 @@ const std::string GzNode::name(){
     return "GzNode";
 }
 
+void GzNode::disable(){
+    clr_status_bit(ENABLED);
+#ifdef DEBUG_CNTRL
+    if(changed_state)
+        std::cout<<name()<<" disable"<<std::endl;
+#endif
+}
+void GzNode::enable(){
+    set_status_bit(ENABLED);
+#ifdef DEBUG_CNTRL
+    if(changed_state)
+        std::cout<<name()<<" enable"<<std::endl;
+#endif
+}
 void GzNode::reset(){
     set_status_bit(RESET);
 #ifdef DEBUG_CNTRL
     if(changed_state)
         std::cout<<name()<<" reset"<<std::endl;
 #endif
-    //clr_status_bit(RESET);
-    //changed_state=false;
-}
+ }
 void GzNode::stop(){
     clr_status_bit(RUNNING|RESET);
 #ifdef DEBUG_CNTRL
     if(changed_state)
         std::cout<<name()<<" stop"<<std::endl;
 #endif
-    //changed_state=false;
+
 }
 void GzNode::run(){
     clr_status_bit(RESET);
@@ -59,5 +75,5 @@ void GzNode::run(){
     if(changed_state)
         std::cout<<name()<<" run"<<std::endl;
 #endif
-    //changed_state=false;
+
 }

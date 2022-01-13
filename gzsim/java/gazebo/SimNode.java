@@ -5,11 +5,20 @@ import edu.wpi.first.networktables.NetworkTable;
 
 public class SimNode {
     public NetworkTable table;
-    //public NetworkTableEntry node;
+    protected boolean enabled;
     public SimNode(){
         NetworkTableInstance inst = NetworkTableInstance.getDefault();
         inst.setUpdateRate(0.02);
         table = inst.getTable("gazebo");
-        //node = table.getEntry("GzNode");
+        enabled=true;
     } 
+    public void enable(){
+        enabled=true;
+    }
+    public void disable(){
+        enabled=false;
+    }
+    public boolean isEnabled(){
+        return enabled;
+    }
 }
