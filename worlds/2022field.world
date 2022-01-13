@@ -23,7 +23,7 @@
 
      <include>
       <uri>model://TapeRing</uri>
-      <pose>0.733 1.185 1.57 0 0 0</pose>
+      <pose>0.7433 1.1794 0 1.57 0 0</pose>
     </include>
    <!---->
     <include>
