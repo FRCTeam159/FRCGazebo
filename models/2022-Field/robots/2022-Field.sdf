@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.5">
+  <model name="2022-Field">
+    <pose>0 0 -0.0519747499997509 0 0 0</pose>
+    <link name="Field">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>10.978866823315 4.57725352273595 0.691859881374033 1.5707963267949 8.5056076161269E-19 3.14159265358979</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>710.923962300241</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>6059.75005581668</ixx>
+          <ixy>1.1060728426089</ixy>
+          <ixz>1401.98074367036</ixz>
+          <iyy>40831.4779640037</iyy>
+          <iyz>20.5834040785038</iyz>
+          <izz>34926.1255188767</izz>
+        </inertia>
+      </inertial>
+      <collision name="Field_collision">
+        <pose>0.00606682331500135 -0.696635081374032 -0.00525352273594806 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://2022-Field/meshes/Field_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="Field_visual">
+        <pose>0.00606682331500135 -0.696635081374032 -0.00525352273594806 0 0 0</pose>
+        <material>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://2022-Field/meshes/Field.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <!---->
+    <joint name="Field-World" type="fixed">
+      <parent>world</parent>
+      <child>Field</child>
+   </joint>
+   
+  </model>
+</sdf>
