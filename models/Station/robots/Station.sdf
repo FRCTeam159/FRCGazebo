@@ -1,37 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sdf version="1.5">
-  <model name="2022-Field">
-    <pose>0 0 -0.0519747499997509 0 0 0</pose>
-    <link name="Field">
+  <model name="Station">
+    <pose>0 0 -0.443912867568871 0 0 0</pose>
+    
+    <link name="Body">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>10.978866823315 4.57725352273595 0.691859881374033 1.5707963267949 8.5056076161269E-19 3.14159265358979</pose>
+      <pose>-0.00156202569450492 0.876254871940638 0.68672996307511 2.35216808247077 -1.5707963267949 3.14159265358978</pose>
       <must_be_base_link>1</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
         <angular>0</angular>
       </velocity_decay>
-      <!--
       <inertial>
-        <mass>710.923962300241</mass>
+        <mass>82.9981678115218</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
-          <ixx>6059.75005581668</ixx>
-          <ixy>1.1060728426089</ixy>
-          <ixz>1401.98074367036</ixz>
-          <iyy>40831.4779640037</iyy>
-          <iyz>20.5834040785038</iyz>
-          <izz>34926.1255188767</izz>
+          <ixx>27.3607140430657</ixx>
+          <ixy>1.58669613829594</ixy>
+          <ixz>0.0283294764850764</ixz>
+          <iyy>21.8141809572281</iyy>
+          <iyz>0.011503117659058</iyz>
+          <izz>23.5032095841239</izz>
         </inertia>
       </inertial>
-      -->
-      <!---->
-      <collision name="Field_collision">
-        <pose>0.00606682331500135 -0.696635081374032 0.00525352273594806 0 0 0</pose>
+      <collision name="Body_collision">
+        <pose>-0.639160112132628 -0.940623251783402 -1.91901739490554 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://2022-Field-Border/meshes/Field_col.STL</uri>
+            <uri>model://Station/meshes/Body_col.STL</uri>
           </mesh>
         </geometry>
         <surface>
@@ -46,9 +44,8 @@
           </friction>
         </surface>
       </collision>
-      
-      <visual name="Field_visual">
-        <pose>0.00606682331500135 -0.696635081374032 -0.00525352273594806 0 0 0</pose>
+      <visual name="Body_visual">
+        <pose>-0.639160112132628 -0.940623251783402 -1.91901739490554 0 0 0</pose>
         <material>
           <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
           <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
@@ -56,16 +53,10 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://2022-Field/meshes/Field.STL</uri>
+            <uri>model://Station/meshes/Body.STL</uri>
           </mesh>
         </geometry>
       </visual>
     </link>
-    <!---->
-    <joint name="Field-World" type="fixed">
-      <parent>world</parent>
-      <child>Field</child>
-   </joint>
-   
   </model>
 </sdf>

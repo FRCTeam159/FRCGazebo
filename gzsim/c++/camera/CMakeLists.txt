@@ -17,6 +17,7 @@ set(CV_LIBS
     $ENV{MY_GAZEBO}/wpilib/libs/cscore.lib;
     $ENV{MY_GAZEBO}/wpilib/libs/opencv_core452.lib;
     $ENV{MY_GAZEBO}/wpilib/libs/opencv_imgcodecs452.lib;
+    $ENV{MY_GAZEBO}/wpilib/libs/opencv_imgproc452.lib;
 )
 
 link_directories(${GAZEBO_LIBRARY_DIRS} $ENV{MY_GAZEBO}/wpilib/libs)

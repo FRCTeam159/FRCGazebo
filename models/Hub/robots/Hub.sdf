@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.5">
+  <model name="Hub">
+    <pose>0 0 0 0 0 0</pose>
+    <link name="Hub">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-1.6870349382043E-15 0.947738784194687 -3.83967876294514E-15 0 0 0</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>417.756360625355</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>367.907361633735</ixx>
+          <ixy>1.53965729055017E-12</ixy>
+          <ixz>1.68753899743024E-13</ixz>
+          <iyy>273.772658079447</iyy>
+          <iyz>6.81676937119846E-13</iyz>
+          <izz>367.907361633737</izz>
+        </inertia>
+      </inertial>
+      <collision name="Hub_collision">
+        <pose>1.6870349382043E-15 -0.947738784194687 3.83967876294514E-15 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Hub/meshes/Hub_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="Hub_visual">
+        <pose>1.6870349382043E-15 -0.947738784194687 3.83967876294514E-15 0 0 0</pose>
+        <material>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Hub/meshes/Hub.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <link name="TapeStrips">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0 2.60746875 0 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <visual name="TapeStrips_visual">
+        <pose>0 -2.60746875 0 0 0 0</pose>
+        <material>
+          <ambient>0 1 1 1</ambient>
+          <diffuse>0 1 1 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://TapeRing/meshes/TapeStrips.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Tape" type="fixed">
+      <parent>Hub</parent>
+      <child>TapeStrips</child>
+   </joint>
+    <joint name="Hub-World" type="fixed">
+      <parent>world</parent>
+      <child>Hub</child>
+   </joint>
+  </model>
+</sdf>

@@ -1,33 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sdf version="1.5">
-  <model name="2022-Field">
-    <pose>0 0 -0.0519747499997509 0 0 0</pose>
+  <model name="2022-Field-Border">
+    <pose>0 0 -0.045929549999993 0 0 0</pose>
+
     <link name="Field">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>10.978866823315 4.57725352273595 0.691859881374033 1.5707963267949 8.5056076161269E-19 3.14159265358979</pose>
+      <pose>-6.44989285848413 -4.2197085615022 0.405152692933353 1.5707963267949 5.55111512312578E-17 -3.14159265358979</pose>
       <must_be_base_link>1</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
         <angular>0</angular>
       </velocity_decay>
-      <!--
       <inertial>
-        <mass>710.923962300241</mass>
+        <mass>381.500402674738</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
-          <ixx>6059.75005581668</ixx>
-          <ixy>1.1060728426089</ixy>
-          <ixz>1401.98074367036</ixz>
-          <iyy>40831.4779640037</iyy>
-          <iyz>20.5834040785038</iyz>
-          <izz>34926.1255188767</izz>
+          <ixx>4331.26144590537</ixx>
+          <ixy>11.6767315930569</ixy>
+          <ixz>962.358017721636</ixz>
+          <iyy>18471.6366545422</iyy>
+          <iyz>28.6677025473262</iyz>
+          <izz>14176.6065740627</izz>
         </inertia>
       </inertial>
-      -->
-      <!---->
       <collision name="Field_collision">
-        <pose>0.00606682331500135 -0.696635081374032 0.00525352273594806 0 0 0</pose>
+        <pose>-0.0109928584841396 -0.415973092932858 -0.000946267854619089 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
@@ -46,9 +44,9 @@
           </friction>
         </surface>
       </collision>
-      
+      <!--
       <visual name="Field_visual">
-        <pose>0.00606682331500135 -0.696635081374032 -0.00525352273594806 0 0 0</pose>
+        <pose>-0.0109928584841396 -0.415973092932858 -0.000946267854619089 0 0 0</pose>
         <material>
           <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
           <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
@@ -56,16 +54,15 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://2022-Field/meshes/Field.STL</uri>
+            <uri>model://2022-Field-Border/meshes/Field.STL</uri>
           </mesh>
         </geometry>
       </visual>
+      -->
     </link>
-    <!---->
-    <joint name="Field-World" type="fixed">
+    <joint name="Field-Border-World" type="fixed">
       <parent>world</parent>
-      <child>Field</child>
+      <child>2022-Field-Border</child>
    </joint>
-   
   </model>
 </sdf>

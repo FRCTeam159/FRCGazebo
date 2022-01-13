@@ -119,6 +119,8 @@ if (saveCount <= saveMax) {
   // Instead of using mjpeg-streamer (which isn't supported on Windows) 
   // we can use WPI's MjpegServer and CvSource classes to avoid having to write out
   // jpeg files at all
-  cv::Mat img(height, width, CV_8UC3, (void*)_image,3*width);
-  stream.PutFrame(img); // publish directly to port 9000
+  cv::Mat bgr(height, width, CV_8UC3, (void*)_image,3*width);
+  cv::Mat rgb;
+  cv::cvtColor( bgr, rgb, cv::COLOR_BGR2RGB );
+  stream.PutFrame(rgb); // publish directly to port 9000
 }

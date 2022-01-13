@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.5">
+  <model name="TapeRing">
+    <pose>0 0 0 0 0 0</pose>
+    <link name="TapeStrips">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>2.63038067965995E-15 2.60746875 -3.06282637209273E-15 0 0 0</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <!--
+      <inertial>
+        <mass>0.0819834991090512</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0.0186604195565645</ixx>
+          <ixy>6.51461423748627E-17</ixy>
+          <ixz>1.11672823766007E-16</ixz>
+          <iyy>0.037320839113129</iyy>
+          <iyz>5.33582990607919E-17</iyz>
+          <izz>0.0186604195565645</izz>
+        </inertia>
+      </inertial>
+      <collision name="TapeStrips_collision">
+        <pose>-2.63038067965995E-15 -2.60746875 3.06282637209273E-15 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://TapeRing/meshes/TapeStrips_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      -->
+      <visual name="TapeStrips_visual">
+        <pose>-2.63038067965995E-15 -2.60746875 3.06282637209273E-15 0 0 0</pose>
+        <material>
+          <emissive>0 1 1 1</emissive>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://TapeRing/meshes/TapeStrips.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="TapeRing-World" type="fixed">
+      <parent>Hub</parent>
+      <child>TapeStrips</child>
+   </joint>
+  </model>
+</sdf>
