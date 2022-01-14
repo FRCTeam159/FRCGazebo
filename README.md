@@ -40,9 +40,9 @@ II. Install Gazebo-11 from conda-forge
 
 <h2>FRCGazebo Installation</h2>
 
-This Git repository contains a number of tools that should allow you to connect a robot program to Gazebo in simulation mode. It should be noted however that this is just one approcah that can be followed and no promises are made that it will work as well for you withoutt some tweeking (as very limited testing has been done as of this writing !)
+This repository contains a number of tools that should allow you to connect a robot program to Gazebo in simulation mode. It should be noted however that this is just one approach that can be followed and no promises are made that it will work for you without at least a bit of tweeking !
 
-In any case, to Install these tools just clone the current repository into a Windows folder of your choosing by entering the following in a bash shell:
+In any case, to Install just clone the current repository into a Windows folder of your choosing by entering the following in a bash shell:
 
 $ git clone https://github.com/FRCTeam159/FRCGazebo
 
