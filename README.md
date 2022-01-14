@@ -10,7 +10,10 @@ Recently however, a number of factors have combined to open up the possibility o
 2) wpilib's new "Simulate on Desktop" option which provides a driver-station selection box that can be used to switch between disabled,auto and teleop modes
 
 <h2>Hardware Requirements</h2>
-As of this writing, installation and testing has only been done on a single Windows laptop (a Dell Inspison 7000 series with an Nvidia GTX 960M graphics card) but any similarly equiped laptop or desktop computer should be adequate.
+Testing has only been done on a single Windows laptop (a Dell Inspison 7000 series with an Nvidia GTX 960M graphics card) but any similarly equiped laptop or desktop computer would probably be adequate.
+
+<h2>Software Requirements</h2>
+Support is currenly provided for VSCode projects written in the Java programming lanquage targeting the 2022.1.1 FRC release
 
 <h2>Gazebo Installation</h2>
 
@@ -72,10 +75,13 @@ Note: set "MY_GAZEBO" to the directory that this repo was cloned to and "GAZEBO_
 <dt>wpilib</dt><dd>wpilib c++ includes and libraries</dd>
 </dl>
 
-<h2> Testing
-<h2> Building
+<h2> Testing </h2>
+As of this writing testing and Gazebo support has only been provided for FRC robot programs that use the Java programming lanquage. However, migration to c++ applications should be fairly straightforward since most of the communication is done though NetworkTables which is supported in both environments. A number of Java VSCode projects can be found in the gzsim/tests directory but only one of these will be chosen as a testing example
+<h3>SimDriveTest</h3>
+This project uses a simple command-based program to demonstate Gazebo teleop and autonomous operation in simulation mode. The robot model is an 8-wheel differential drive "tankbot" which can be deployed in an "empty world", the current 2022 "RapidReact" arena or the 2018 "PowerUp" field. In addition to basic Gazebo simulation the project also demonstates the use of First's new odometry and kinematics feature, and trajectory generation and following in autonomous mode.
+
 <h2> Implementation Details
-<h3> Interfacing an application to Gazebo (problems and solutions)</h3>
+<h3> Interfacing a FRC Robot application to Gazebo (general issues)</h3>
 
 With Gazebo running natively it's possible to develop a communications interface to other Windows applications (such as a robot program) using a variety of approaches, although there are some problems that may be incountered that were not seen in Linux. As a head's up I've itemized some of these issues which largely dictated the scheme that was eventually followed here (which will be briefly descibed below)
 
@@ -95,9 +101,8 @@ The version of Gazebo supplied by conda-forge was apparently build with support 
 
 It is possible get around this problem and to generate the expected ".jpg" files using the "freeimage" library (present in the anaconda environment) but the general purpose "mjpeg-streamer" application that's available in Linux isn't supported in a useful form in Windows. An "MJPEG" server is used to publish a video stream or a set of jpeg images to an httml client such as a web page or an "mjpeg video window" in First's smartdashboard application
 
-The solution to this problem was to use Wpilib's Camera Server API (cscore) instead. This has nice advantage in that it allows images to be sent directly from memory to a cs::MjpegServer class without having to be written out to an intermediate jpeg file at all. 
-
-  
+The solution to this problem was to use Wpilib's Camera Server API (cscore) instead. This has nice advantage in that it allows images to be sent directly from memory to a cs::MjpegServer class without having to be written out to an intermediate jpeg file at all.
    
+<h3> Project Implentation Method</h3>
 
-
+<h2> Building This Project
