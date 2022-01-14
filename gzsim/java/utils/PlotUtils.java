@@ -13,7 +13,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class PlotUtils {
     public static enum UnitType {
-        FEET, METERS, INCHES
+        FEET, METERS, INCHES, DEGREES, RADIANS
     }
 
     public static int PLOT_NONE = 0;
@@ -27,7 +27,8 @@ public class PlotUtils {
     private static NetworkTableEntry newPlot;
     private static NetworkTableEntry plotParams;
     private static NetworkTableEntry plotData;
-    private static UnitType units_type = UnitType.METERS; // assumes Trajectory data is in meters
+    private static UnitType distance_units_type = UnitType.METERS; // assumes input data is in meters (keep)
+    private static UnitType angle_units_type = UnitType.RADIANS; // assumes input data is in degrees (convert)
 
     private static PathData last_data;
     private static double lastVelocity = 0;
@@ -35,31 +36,22 @@ public class PlotUtils {
 
     private static PathData data_sum;
 
-    private static Averager acc_average = new utils.Averager(20);
-    private static Averager vel_average = new utils.Averager(10);
+    private static Averager acc_average = new Averager(20);
+    private static Averager vel_average = new Averager(10);
 
     static ArrayList<PathData> data = new ArrayList<>();
 
     private static int plotCount = 0;
     private static int data_count = 0;
 
-    public static double metersToFeet(double meters) {
-        return meters * 100 / (2.54 * 12);
+    
+    public static void setDistanceUnits(UnitType t) {
+        distance_units_type = t;
     }
-
-    public static void setUnits(UnitType t) {
-        units_type = t;
+    public static void setAngleUnits(UnitType t) {
+        angle_units_type = t;
     }
-
-    public static double units(double f) {
-        if (units_type == UnitType.INCHES)
-            return 12.0 * metersToFeet(f);
-        else if (units_type == UnitType.FEET)
-            return metersToFeet(f);
-        else
-            return f;
-    }
-
+    
     public static void initPlot() {
         acc_average.reset();
         vel_average.reset();
@@ -71,41 +63,6 @@ public class PlotUtils {
     }
     public static void setInitialPose(Pose2d pose, double trackwidth){
         last_data = getPathPosition(0, pose, trackwidth);
-    }
-
-    // publish plot data to NetworkTables
-    public static void publish(ArrayList<PathData> dataList, int traces) {
-        if (table == null) {
-            NetworkTableInstance inst = NetworkTableInstance.getDefault();
-            table = inst.getTable("plotdata");
-            newPlot = table.getEntry("NewPlot");
-            plotParams = table.getEntry("PlotParams" + plotCount);
-            plotData = table.getEntry("PlotData");
-        }
-        double info[] = new double[4];
-        int points = dataList.size();
-        info[0] = plotCount;
-        info[1] = traces;
-        info[2] = points;
-        info[3] = 3;
-
-        System.out.println("Publishing Plot Data");
-
-        newPlot.setNumber(plotCount);
-        plotParams.setDoubleArray(info);
-
-        for (int i = 0; i < points; i++) {
-            PathData pathData = dataList.get(i);
-            double data[] = new double[traces + 2];
-            data[0] = (double) i;
-            data[1] = pathData.tm;
-            for (int j = 0; j < traces; j++) {
-                data[j + 2] = pathData.d[j];
-            }
-            plotData.setDoubleArray(data);
-        }
-        dataList.clear();
-        plotCount++;
     }
 
     // =================================================
@@ -127,12 +84,12 @@ public class PlotUtils {
         double ry = y - (w * cos_angle);
 
         pd.tm = tm;
-        pd.d[0] = units(lx); // left
-        pd.d[1] = units(ly);
-        pd.d[2] = units(x); // center
-        pd.d[3] = units(y);
-        pd.d[4] = units(rx); // right
-        pd.d[5] = units(ry);
+        pd.d[0] = distanceUnits(lx); // left
+        pd.d[1] = distanceUnits(ly);
+        pd.d[2] = distanceUnits(x); // center
+        pd.d[3] = distanceUnits(y);
+        pd.d[4] = distanceUnits(rx); // right
+        pd.d[5] = distanceUnits(ry);
         return pd;
     }
 
@@ -222,8 +179,8 @@ public class PlotUtils {
         pd.d[1] = cl;
         pd.d[2] = rd;
         pd.d[3] = cr;
-        pd.d[4] = d2R(gh);
-        pd.d[5] = d2R(ch);
+        pd.d[4] = angleUnits(gh);
+        pd.d[5] = angleUnits(ch);
 
         last_heading = gh;
         last_data = cd;
@@ -252,17 +209,17 @@ public class PlotUtils {
     public static PathData plotDynamics(double tm,
       Pose2d target, Pose2d current, double tv, double v, double ta) {
         PathData pd = new PathData();
-        double x=current.getX();
-        double y=current.getY();
+        double x=distanceUnits(current.getX());
+        double y=distanceUnits(current.getY());
         double obs_distance = Math.sqrt(x * x + y * y);
 
-        x = target.getX();
-        y = target.getY();
+        x = distanceUnits(target.getX());
+        y = distanceUnits(target.getY());
         double exp_distance = Math.sqrt(x * x + y * y);
 
         double acceleration = 0;
         double a = 0;
-        double vel = vel_average.getAve(v);
+        double vel = vel_average.getAve(distanceUnits(v));
 
         if (data_count > vel_average.numAves())
             acceleration = (vel - lastVelocity) / 0.02;
@@ -275,16 +232,38 @@ public class PlotUtils {
         pd.d[2] = v;
         pd.d[3] = tv;
         pd.d[4] = a;
-        pd.d[5] = ta;
+        pd.d[5] = distanceUnits(ta);
         lastVelocity = vel;
         data_count++;
         return pd;
     }
 
-    public static double d2R(double t) {
+    public static double metersToFeet(double meters) {
+        return meters * 100 / (2.54 * 12);
+    }
+    public static double degreesToRadians(double t) {
         return t * 2 * Math.PI / 360.0;
     }
-
+    
+    // convert to requested distance units type
+    // assumes input data is in meters
+    public static double distanceUnits(double f) {
+        if (distance_units_type == UnitType.INCHES)
+            return 12.0 * metersToFeet(f);
+        else if (distance_units_type == UnitType.FEET)
+            return metersToFeet(f);
+        else
+            return f;
+    }
+    // convert to requested angle units type
+    // assumes input data is in degrees
+    public static double angleUnits(double f) {
+        if (angle_units_type == UnitType.RADIANS)
+            return degreesToRadians(f);
+        else
+            return f;
+    }
+    // removes heading discontinuity at 180 degrees
     public static double unwrap(double previous_angle, double new_angle) {
         double d = new_angle - previous_angle;
         d = d >= 180 ? d - 360 : (d <= -180 ? d + 360 : d);
@@ -306,5 +285,41 @@ public class PlotUtils {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
+    
+    // publish plot data to NetworkTables
+    public static void publish(ArrayList<PathData> dataList, int traces) {
+        if (table == null) {
+            NetworkTableInstance inst = NetworkTableInstance.getDefault();
+            table = inst.getTable("plotdata");
+            newPlot = table.getEntry("NewPlot");
+            plotParams = table.getEntry("PlotParams" + plotCount);
+            plotData = table.getEntry("PlotData");
+        }
+        double info[] = new double[4];
+        int points = dataList.size();
+        info[0] = plotCount;
+        info[1] = traces;
+        info[2] = points;
+        info[3] = 3;
+
+        System.out.println("Publishing Plot Data");
+
+        newPlot.setNumber(plotCount);
+        plotParams.setDoubleArray(info);
+
+        for (int i = 0; i < points; i++) {
+            PathData pathData = dataList.get(i);
+            double data[] = new double[traces + 2];
+            data[0] = (double) i;
+            data[1] = pathData.tm;
+            for (int j = 0; j < traces; j++) {
+                data[j + 2] = pathData.d[j];
+            }
+            plotData.setDoubleArray(data);
+        }
+        dataList.clear();
+        plotCount++;
+    }
+
 
 }

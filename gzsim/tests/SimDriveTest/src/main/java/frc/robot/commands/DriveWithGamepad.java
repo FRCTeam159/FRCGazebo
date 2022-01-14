@@ -4,17 +4,19 @@
 
 package frc.robot.commands;
 
-import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class DriveWithGamepad extends CommandBase implements Constants  {
+public class DriveWithGamepad extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Drivetrain m_drive;
   private final XboxController m_controller;
   private boolean started=false;
+
+  public static final int LEFT_JOYSTICK = 1;
+  public static final int RIGHT_JOYSTICK = 4;
 
   /**
    * Creates a new ExampleCommand.

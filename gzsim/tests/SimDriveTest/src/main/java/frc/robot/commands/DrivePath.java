@@ -57,6 +57,7 @@ public class DrivePath extends CommandBase {
     }
     
     PlotUtils.setInitialPose(m_trajectory.sample(0).poseMeters,Drivetrain.kTrackWidth);
+    //PlotUtils.setDistanceUnits(PlotUtils.UnitType.FEET);
 
     runtime = m_trajectory.getTotalTimeSeconds();
     states = m_trajectory.getStates().size();

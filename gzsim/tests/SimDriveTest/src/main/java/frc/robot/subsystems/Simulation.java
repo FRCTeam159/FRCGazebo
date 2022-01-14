@@ -34,7 +34,6 @@ public class Simulation extends SubsystemBase {
     SmartDashboard.putNumber("SimClock", 0);
     m_timer.start();
     m_cameras=new ArrayList<SimCamera>();
-    //init();
   }
 
   public double getSimTime(){
@@ -45,10 +44,9 @@ public class Simulation extends SubsystemBase {
   }
   public void reset() {
     System.out.println("Simulation.reset");
-    //m_drivetrain.reset(); // reset encoders
+
     m_simclock.reset();
     m_timer.reset();
-   // m_simclock.disable();
     SmartDashboard.putNumber("SimTime", 0);
     running=false;
   }
@@ -101,7 +99,6 @@ public class Simulation extends SubsystemBase {
   public void enable() {
     System.out.println("Simulation.enable");
     m_drivetrain.enable();
-    //m_simclock.enable();
   }
   public void end() {
     System.out.println("Simulation.end");

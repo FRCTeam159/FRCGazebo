@@ -55,7 +55,7 @@ public class Drivetrain extends SubsystemBase {
 
 	private final Field2d m_fieldSim = new Field2d();
 
-	// For Gazebo simulation use "Calibrate" auto to determine where 
+	// For Gazebo simulation use "Calibrate" auto routine to determine where 
 	// model velocity stops increasing with input power
 	// 1) set scale to 1 and in Calibrate set max power to ~5 step size to 1 etc.
 	// 2) run calibrate (record max power at max velocity)
@@ -83,8 +83,7 @@ public class Drivetrain extends SubsystemBase {
 
 		odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
 		SmartDashboard.putData("Field", m_fieldSim);
-		SmartDashboard.putBoolean("record", false);
-        
+		SmartDashboard.putBoolean("record", false); 
 	}
 
 	private static double i2M(double inches) {
@@ -95,32 +94,6 @@ public class Drivetrain extends SubsystemBase {
 	}
 	private double r2M(double rotations) {
 		return  Math.PI * kWheelDiameter*rotations;
-	}
-	public void arcadeDrive(double moveValue, double turnValue) {
-		double leftMotorOutput;
-		double rightMotorOutput;
-		if (moveValue > 0.0) {
-			if (turnValue > 0.0) {
-				leftMotorOutput = Math.max(moveValue, turnValue);
-				rightMotorOutput = moveValue - turnValue;
-			} else {
-				leftMotorOutput = moveValue + turnValue;
-				rightMotorOutput = Math.max(moveValue, -turnValue);
-			}
-		} else {
-			if (turnValue > 0.0) {
-				leftMotorOutput = moveValue + turnValue;
-				rightMotorOutput = -Math.max(-moveValue, turnValue);
-			} else {
-				leftMotorOutput = -Math.max(-moveValue, -turnValue);
-				rightMotorOutput = moveValue - turnValue;
-			}
-		}
-		// Make sure values are between -1 and 1
-		leftMotorOutput = coerce(-1, 1, leftMotorOutput);
-		rightMotorOutput = coerce(-1, 1, rightMotorOutput);
-		leftMotor.set(leftMotorOutput);
-		rightMotor.set(rightMotorOutput);
 	}
 
 	private static double coerce(double min, double max, double value) {
@@ -164,7 +137,7 @@ public class Drivetrain extends SubsystemBase {
 		return gyro.getHeading();
 	}
 	public double getLeftDistance(){
-		return  leftMotor.getDistance() ;
+		return  leftMotor.getDistance();
 	}
 	public double getRightDistance(){
 		return  rightMotor.getDistance();
@@ -197,6 +170,7 @@ public class Drivetrain extends SubsystemBase {
 	@Override
 	public void simulationPeriodic() {
 		updateOdometry();
+		// capture a movie from the Gazebo camera (gztest/c++/tmp/test_0.avi)
 		if(SmartDashboard.getBoolean("record", false))
 			simulation.startCamera(FRONT_CAMERA);
 		else
@@ -210,6 +184,7 @@ public class Drivetrain extends SubsystemBase {
 		var wheelSpeeds = kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, 0.0, rot));
 		setSpeeds(wheelSpeeds);
 	}
+
 	public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
 		final double leftFeedforward = feedforward.calculate(speeds.leftMetersPerSecond);
 		final double rightFeedforward = feedforward.calculate(speeds.rightMetersPerSecond);
@@ -220,13 +195,11 @@ public class Drivetrain extends SubsystemBase {
 		rightMotor.set(rightOutput + rightFeedforward);
 	}
 
-/** Updates the field-relative position. */
+    /** Updates the field-relative position. */
 	public void updateOdometry() {
 		double l=leftMotor.getDistance();
 		double r=rightMotor.getDistance();
-		//System.out.println(l+" "+r);
-		odometry.update(
-			gyro.getRotation2d(), l, r);
+		odometry.update(gyro.getRotation2d(), l, r);
 	}
 	public void resetOdometry(Pose2d pose) {
 		leftMotor.reset();
@@ -236,7 +209,6 @@ public class Drivetrain extends SubsystemBase {
 	}
 
     public Pose2d getPose() {
-		//updateOdometry();
         return odometry.getPoseMeters();
     }
 	public void set(double value) {
@@ -244,8 +216,37 @@ public class Drivetrain extends SubsystemBase {
 		rightMotor.set(value);
 		log();
 	}
+	// A teleop drive method that uses odometry and kinetemtics
     public void odometryDrive(double xSpeed, double rot) {
 		drive(xSpeed, rot);
+		log();
+	}
+	// A simple teleop drive method that sets motor voltages only
+	public void arcadeDrive(double moveValue, double turnValue) {
+		double leftMotorOutput;
+		double rightMotorOutput;
+		if (moveValue > 0.0) {
+			if (turnValue > 0.0) {
+				leftMotorOutput = Math.max(moveValue, turnValue);
+				rightMotorOutput = moveValue - turnValue;
+			} else {
+				leftMotorOutput = moveValue + turnValue;
+				rightMotorOutput = Math.max(moveValue, -turnValue);
+			}
+		} else {
+			if (turnValue > 0.0) {
+				leftMotorOutput = moveValue + turnValue;
+				rightMotorOutput = -Math.max(-moveValue, turnValue);
+			} else {
+				leftMotorOutput = -Math.max(-moveValue, -turnValue);
+				rightMotorOutput = moveValue - turnValue;
+			}
+		}
+		// Make sure values are between -1 and 1
+		leftMotorOutput = coerce(-1, 1, leftMotorOutput);
+		rightMotorOutput = coerce(-1, 1, rightMotorOutput);
+		leftMotor.set(leftMotorOutput);
+		rightMotor.set(rightMotorOutput);
 		log();
 	}
 }
