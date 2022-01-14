@@ -50,7 +50,8 @@ public class DriveWithGamepad extends CommandBase implements Constants  {
       m_drive.enable();
       started=true;
     }
-    m_drive.arcadeDrive(zs, xs);
+    m_drive.odometryDrive(zs, -xs);
+    //m_drive.arcadeDrive(zs, xs);
   }
 
   // Called once the command ends or is interrupted.

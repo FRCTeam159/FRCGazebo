@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
@@ -34,6 +35,8 @@ public class Drivetrain extends SubsystemBase {
 	public static final double kWheelDiameter = i2M(8); // wheel radius in tank model
 	public static final double kMaxVelocity = 1;
     public static final double kMaxAcceleration = 1;
+	public static double kMaxSpeed = i2M(100); // inches per second
+	public static double kMaxAngularSpeed = 180; // degrees per second
 
 	private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(kTrackWidth);
 	private final DifferentialDriveOdometry odometry;
@@ -41,6 +44,9 @@ public class Drivetrain extends SubsystemBase {
 	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.5,0.2);
 	private final PIDController leftPIDController = new PIDController(0.25, 0, 0.0);
 	private final PIDController rightPIDController = new PIDController(0.25, 0, 0.0);
+
+	private final SlewRateLimiter speedLimiter = new SlewRateLimiter(kMaxSpeed);
+	private final SlewRateLimiter rotLimiter = new SlewRateLimiter(kMaxAngularSpeed);
 
 	public static final int FRONT_LEFT = 1;
     public static final int FRONT_RIGHT = 2;
@@ -199,6 +205,8 @@ public class Drivetrain extends SubsystemBase {
 	}
 	
 	public void drive(double xSpeed, double rot) {
+	    xSpeed = speedLimiter.calculate(xSpeed);
+		rot = rotLimiter.calculate(rot);
 		var wheelSpeeds = kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, 0.0, rot));
 		setSpeeds(wheelSpeeds);
 	}
