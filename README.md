@@ -80,6 +80,39 @@ As of this writing testing and Gazebo support has only been provided for FRC rob
 <h3>SimDriveTest</h3>
 This project uses a simple command-based program to demonstate Gazebo teleop and autonomous operation in simulation mode. The robot model is an 8-wheel differential drive "tankbot" which can be deployed in an "empty world", the current 2022 "RapidReact" arena or the 2018 "PowerUp" field. In addition to basic Gazebo simulation the project also demonstates the use of First's new odometry and kinematics feature, and trajectory generation and following in autonomous mode.
 
+<h3>Setup</h3>
+<ol>
+<li>In vscode, open the SimDrive project in gztest/tests
+<li>Change the default terminal in vscode to "Git Bash"
+  <ul>
+  <li>in lower right corner of screen press the down carot (next to the + sign)
+  <li>at The bottom of the popup choose "Select Default Profile"
+  <li>select "Git Bash" from list
+  </ul>
+<li>Open a gitbash terminal
+  <ul>
+    <li>menu/terminal/new terminal
+  </ul>
+<li>In the terminal enter: gzrun
+   <ul>
+   <li> gzrun is a script (text file) where you can select the "world" file used in the simulation (e.g. tank8-2022-field.world)
+   <li> world files are located in the worlds folder in the repostory base directory (root)
+   <li> after opening Gazebo with the selected world file gzrun starts the program GzProgram.exe (inroot/bin) that established communication between network tables and the Gazebo application
+   </ul>
+<li>Open a second terminal in vscode
+   <ul>
+   <li>in the terminal enter "simulate"
+   <li>"simulate" (in root/bin) is just a shortcut for "gradlew simulateJavaRelease" (you can optionally select "Simulate Robot Code" from the (W) pulldown menu)
+   <li>simulate starts the robot program in simulation mode
+   </ul>
+<li>Open "SmartDashboard"
+   <ul>
+      <li>in the (W) pulldown select "Start Tool"-> SmartDashboard
+   </ul>
+<li>If all goes well you should see a a screen similar to this:
+</ol>
+
+
 <h2> Implementation Details
 <h3> Interfacing a FRC Robot application to Gazebo (general issues)</h3>
 
