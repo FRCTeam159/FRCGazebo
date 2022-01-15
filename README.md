@@ -13,7 +13,7 @@ Recently however, a number of factors have combined to open up the possibility o
 Testing has only been done on a single Windows laptop (a Dell Inspison 7000 series with an Nvidia GTX 960M graphics card) but any similarly equiped laptop or desktop computer would probably be adequate.
 
 <h2>Software Requirements</h2>
-Support is currenly provided for VSCode projects written in the Java programming lanquage targeting the 2022.1.1 FRC release
+Run-time support is currenly provided for VSCode projects written in the Java programming lanquage targeting the 2022.1.1 FRC release. In order to build the non-java components of this project you will also need to download and install Visual Studio Community edition 2015-2019 (with c++ support)
 
 <h2>Gazebo Installation</h2>
 
@@ -47,9 +47,8 @@ In any case, to Install just clone the current repository into a Windows folder 
 $ git clone https://github.com/FRCTeam159/FRCGazebo
 
 <h3> configure a "bash" environment to use the libraries, models and other utilities provided</h3>
-   Create a ".bashrc" file (text) in your home directory that contains environment variables etc. that will allow you to more easilly access the models and plugins provided by this project. 
+   Create a ".bashrc" file (text) in your home directory that contains environment variables etc. that will allow you to more easilly access the models and plugins provided by this project (an example .bashrc file is provided in the "docs" directory)
 <pre>
-example:
 export MY_GAZEBO=/c/Users/Alpiner/Robotics/FRCTeam159Repos/FRCGazebo
 export GAZEBO_LIBRARY=/c/Users/Alpiner/miniconda3/Library
 export GAZEBO_TOOLS=$GAZEBO_LIBRARY/share/gazebo-11
