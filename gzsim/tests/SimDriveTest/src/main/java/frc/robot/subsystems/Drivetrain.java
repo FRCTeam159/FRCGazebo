@@ -95,7 +95,6 @@ public class Drivetrain extends SubsystemBase {
 	private double r2M(double rotations) {
 		return  Math.PI * kWheelDiameter*rotations;
 	}
-
 	private static double coerce(double min, double max, double value) {
 		return Math.max(min, Math.min(value, max));
 	}

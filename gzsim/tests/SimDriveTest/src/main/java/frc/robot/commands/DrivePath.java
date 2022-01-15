@@ -24,8 +24,6 @@ public class DrivePath extends CommandBase {
   private final Drivetrain m_drive;
   static public boolean plot_trajectory_motion = false;
   static public boolean plot_trajectory_dynamics = false;
-  
-  static public boolean publish_path = false;
 
   Trajectory m_trajectory;
   int m_type;
@@ -103,7 +101,7 @@ public class DrivePath extends CommandBase {
       PlotUtils.genericPlot(pathdata,label_list,6);
     }
     else if (PlotUtils.auto_plot_option == PlotUtils.PLOT_DYNAMICS){
-      String label_list[] = { "Dynamics Plot","Time (s)","","Origin Distance", "Target", "Velocity", "Target","Acceleration","Target"};
+      String label_list[] = { "Dynamics Plot","Time (s)","","Distance", "Target", "Velocity", "Target","Acceleration","Target"};
       PlotUtils.genericPlot(pathdata,label_list,6);
     }
     else if (PlotUtils.auto_plot_option == PlotUtils.PLOT_POSITION){
@@ -168,7 +166,7 @@ public class DrivePath extends CommandBase {
   // =================================================
    private void plotDynamics(Trajectory.State state) {
     PathData pd = PlotUtils.plotDynamics(
-        elapsed,
+        state.timeSeconds,
         state.poseMeters, m_drive.getPose(),
         state.velocityMetersPerSecond, m_drive.getVelocity(),
         state.accelerationMetersPerSecondSq);
