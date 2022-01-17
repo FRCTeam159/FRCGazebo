@@ -50,7 +50,9 @@
           "open": true
         },
         "open": true
-      },
+      }
+    },
+    "plotdata": {
       "open": true
     }
   }

@@ -3,19 +3,17 @@ package frc.robot.commands;
 import java.util.ArrayList;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 import utils.PathData;
 import utils.PlotUtils;
 
-/**
- *
- */
 public class Calibrate extends CommandBase {
   Timer m_timer;
    private double lastVelocity = 0;
   ArrayList<PathData> plotdata = new ArrayList<PathData>();
-
+ 
   private double lastTime = 0;
 
   int cnt = 0;
@@ -35,7 +33,7 @@ public class Calibrate extends CommandBase {
   public static double vel_delta=0.1;
 
   public static double warmup_time = 0.25;
-  public static double run_time = 1;
+  public static double run_time = 0.5;
   public static double set_value=0;
   double next_step=0;
   double end_time = vel_steps*run_time+warmup_time;
@@ -45,6 +43,8 @@ public class Calibrate extends CommandBase {
   private final Drivetrain m_drive;
 
   public Calibrate(Drivetrain drive) {
+    SmartDashboard.putNumber("Max Power", max_power);
+    SmartDashboard.putNumber("Max Speed", max_vel); 
     m_drive = drive;
     //m_simulation=m_drive.simulation;
     addRequirements(drive);
@@ -68,6 +68,8 @@ public class Calibrate extends CommandBase {
     cnt = 0;
     set_value=vel_start;
     next_step=warmup_time;
+    max_vel=0;
+    max_power=0;
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -79,6 +81,8 @@ public class Calibrate extends CommandBase {
       set_value += vel_delta;
       next_step += run_time;
       last_max_vel = max_vel;
+      SmartDashboard.putNumber("Max Power", max_power);
+      SmartDashboard.putNumber("Max Speed", max_vel); 
     }
     if (next_step <= end_time) {
       m_drive.set(set_value);
@@ -125,18 +129,12 @@ public class Calibrate extends CommandBase {
   public void end(boolean interrupted) {
     double a=Math.sqrt(max_acc);
     System.out.println("Calibrate.end()");
-    System.out.format("max vel=%f max acc=%f\n", max_vel,a );
-    //m_simulation.end();
-    m_drive.disable();
+    System.out.format("max power=%f max velocity=%f\n", max_power,max_vel); 
+    SmartDashboard.putNumber("Max Power", max_power);
+    SmartDashboard.putNumber("Max Speed", max_vel); 
 
     if (PlotUtils.auto_plot_option!=PlotUtils.PLOT_NONE) {
-      String label_list[]={"Power Plot","Distance","","","",""};
-      label_list[3]=String.format("Power       %1.2f",max_power);
-      label_list[4]=String.format("Velocity    %1.2f",max_vel);
-      label_list[5]=String.format("Accel       %1.2f",a);
-      PlotUtils.genericPlot(plotdata,label_list,3);
-      //PlotUtils.plotCalibration(plotdata,max_pos,max_vel,max_acc);
+      utils.PlotUtils.publish(plotdata,3,PlotUtils.PLOT_CALIBRATE);
     }
   }
-
 }

@@ -3,8 +3,6 @@ package utils;
 
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
@@ -20,12 +18,13 @@ public class PlotUtils {
     public static int PLOT_DISTANCE = 1;
     public static int PLOT_DYNAMICS = 2;
     public static int PLOT_POSITION = 3;
+    public static int PLOT_CALIBRATE  = 4;
+    public static int PLOT_GENERIC  = 5;
 
     public static int auto_plot_option = PLOT_NONE;
 
     private static NetworkTable table = null;
     private static NetworkTableEntry newPlot;
-    private static NetworkTableEntry plotParams;
     private static NetworkTableEntry plotData;
     private static UnitType distance_units_type = UnitType.METERS; // assumes input data is in meters (keep)
     private static UnitType angle_units_type = UnitType.RADIANS; // assumes input data is in degrees (convert)
@@ -269,7 +268,7 @@ public class PlotUtils {
         d = d >= 180 ? d - 360 : (d <= -180 ? d + 360 : d);
         return previous_angle + d;
     }
-
+/*
     // Plot Path motion (values vs time)
     public static void genericPlot(ArrayList<PathData> d, String label_list[], int traces) {
         JFrame frame = new PlotRenderer(d, traces, PlotRenderer.TIME_MODE, label_list);
@@ -285,14 +284,13 @@ public class PlotUtils {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
-    
+  */  
     // publish plot data to NetworkTables
-    public static void publish(ArrayList<PathData> dataList, int traces) {
+    public static void publish(ArrayList<PathData> dataList, int traces, int type) {
         if (table == null) {
             NetworkTableInstance inst = NetworkTableInstance.getDefault();
             table = inst.getTable("plotdata");
             newPlot = table.getEntry("NewPlot");
-            plotParams = table.getEntry("PlotParams" + plotCount);
             plotData = table.getEntry("PlotData");
         }
         double info[] = new double[4];
@@ -300,13 +298,13 @@ public class PlotUtils {
         info[0] = plotCount;
         info[1] = traces;
         info[2] = points;
-        info[3] = 3;
+        info[3] = type;
 
-        System.out.println("Publishing Plot Data");
+        System.out.println("Publishing Plot Data "+plotCount+" points:"+points+" traces:"+traces);
 
-        newPlot.setNumber(plotCount);
-        plotParams.setDoubleArray(info);
-
+        newPlot.setDoubleArray(info);
+        if(type==PLOT_POSITION)
+            traces*=2;
         for (int i = 0; i < points; i++) {
             PathData pathData = dataList.get(i);
             double data[] = new double[traces + 2];
@@ -315,11 +313,10 @@ public class PlotUtils {
             for (int j = 0; j < traces; j++) {
                 data[j + 2] = pathData.d[j];
             }
+            plotData = table.getEntry("PlotData"+i);
             plotData.setDoubleArray(data);
         }
         dataList.clear();
         plotCount++;
     }
-
-
 }

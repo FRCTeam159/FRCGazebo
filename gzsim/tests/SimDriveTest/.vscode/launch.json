@@ -12,10 +12,19 @@
       "desktop": true,
     },
     {
-      "type": "wpilib",
-      "name": "WPILib roboRIO Debug",
+      "type": "java",
+      "name": "PlotServer",
       "request": "launch",
-      "desktop": false,
+      "cwd": "../../../gzsim/java",
+      "console": "internalConsole",
+      "stopOnEntry": false,
+      "mainClass": "PlotServer",
+      "projectName": "FRCGazebo",
+      "vmargs": [ "-Djava.library.path=../../../wpilib/libs" ],
+      "env": {
+        "LD_LIBRARY_PATH": "../../../wpilib/libs" ,
+        "DYLD_LIBRARY_PATH": "../../../wpilib/libs"
+      }
     }
   ]
 }

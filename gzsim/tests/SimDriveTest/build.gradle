@@ -17,6 +17,7 @@ sourceSets {
         }
     }
 }
+
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project DeployUtils.
 deploy {
@@ -73,6 +74,9 @@ dependencies {
     nativeRelease wpi.java.deps.wpilibJniRelease(wpi.platforms.desktop)
     nativeRelease wpi.java.vendor.jniRelease(wpi.platforms.desktop)
     simulationRelease wpi.sim.enableRelease()
+
+    //implementation fileTree(dir: '../../../bin', include: '*.jar')
+    //implementation files('../../../bin/gzsim.jar')
 
     testImplementation 'junit:junit:4.12'
 }

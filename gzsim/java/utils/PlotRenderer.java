@@ -46,17 +46,79 @@ public class PlotRenderer extends JFrame {
 	private String x_axis_label = "X";
 	private String y_axis_label = "Y";
 
+
 	static public Color time_colors[]= {
 			Color.BLUE,Color.RED,Color.GREEN,Color.ORANGE,Color.DARK_GRAY,Color.GRAY};
 	static public Color xy_colors[]= {
 			Color.BLUE,Color.BLUE,Color.DARK_GRAY,Color.DARK_GRAY,Color.RED,Color.RED};
-	public PlotRenderer(ArrayList<PathData> d, int n) {
+
+	public PlotRenderer(ArrayList<PathData> d, int n, int type) {
 		//String label_list[] ={"Generic Plot","X"};
-		this(d,n,TIME_MODE,new String[] {"Generic Plot","X","Y"});
+		//this(d,n,TIME_MODE,new String[] {"Generic Plot","X","Y"});
+	}
+	public static void showPlot(ArrayList<PathData> d, int traces, int type){
+		if(type==PlotUtils.PLOT_DISTANCE)
+			distancePlot(d,traces);
+		else if(type==PlotUtils.PLOT_DYNAMICS)
+			dynamicsPlot(d,traces);
+		else if(type==PlotUtils.PLOT_POSITION)
+			positionPlot(d,traces);
+		else if(type==PlotUtils.PLOT_CALIBRATE)
+			calibratePlot(d,traces);
+		else
+			genericPLot(d,traces);
 	}
 	
+	// Plot Path motion (values vs time)
+	public static void calibratePlot(ArrayList<PathData> d, int traces) {
+		String list[] ={"Calibrate Plot","Distance","Time","Power","Velocity","Acceleration"};
+		JFrame frame = new PlotRenderer(d, traces, PlotRenderer.TIME_MODE, list);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+	
+    }
+	// Plot Path motion (values vs time)
+	public static void genericPLot(ArrayList<PathData> d, int traces) {
+		String list[] ={"Generic Plot","X",""};
+		JFrame frame = new PlotRenderer(d, traces, PlotRenderer.TIME_MODE, list);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+	
+    }
+	// Plot Path motion (values vs time)
+	public static void distancePlot(ArrayList<PathData> d, int traces) {
+		String list[] = { "Distance Plot","Time (s)","","Left Travel", "Target", "Right Travel", "Target","Heading","Target"};
+        JFrame frame = new PlotRenderer(d, traces, PlotRenderer.TIME_MODE, list);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+	
+	// Plot Path dynamics (values vs time)
+	public static void dynamicsPlot(ArrayList<PathData> d, int traces) {
+		String list[] = { "Dynamics Plot","Time (s)","","Distance", "Target", "Velocity", "Target","Acceleration","Target"};
+        JFrame frame = new PlotRenderer(d, traces, PlotRenderer.TIME_MODE, list);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+
+    // Plot Path position (wheel traces y vs x)
+    public static void positionPlot(ArrayList<PathData> d, int traces) {
+		String list[] = { "Position Plot","X","Y","Left Wheels", "Target", "Center", "Target","Right Wheels","Target"};
+        JFrame frame = new PlotRenderer(d, traces, PlotRenderer.XY_MODE, list);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+
 	public PlotRenderer(ArrayList<PathData> d, int n, int m, String[] l) {
-		labels=Arrays.copyOfRange(l, 3, l.length);
+		if(l.length>3)
+			labels=Arrays.copyOfRange(l, 3, l.length);
+		else
+		    labels=null;
 		plot_title=l[0];
 		x_axis_label=l[1];
 		y_axis_label=l[2];

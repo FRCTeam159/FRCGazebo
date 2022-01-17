@@ -2,7 +2,6 @@ package utils;
 
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import edu.wpi.first.networktables.NetworkTable;
@@ -17,33 +16,43 @@ public class PlotServer implements TableEntryListener {
 	int index = 0;
 	int points = 0;
 	int count = 0;
-	int id = 0;
+	int id = 0;boolean debug=false;
+
+	int type = PlotUtils.PLOT_GENERIC;
+	String mode=null;
+
 	NetworkTable table;
-	private NetworkTableEntry newPlot;
-	private NetworkTableEntry plotData;
 	public boolean server_running = false;
 	static NetworkTableInstance inst;
 
 	public static void main(String[] args) {
 		inst = NetworkTableInstance.getDefault();
-		inst.startServer();
-		PlotServer plotter = new PlotServer();
+		PlotServer plotter;
+		if(args.length>0)
+			plotter = new PlotServer(args[0]);
+		else
+			plotter = new PlotServer("client");
 		plotter.run();
 	}
 
-	public PlotServer() {
+	public PlotServer(String h) {
+		mode=h;
 	}
 
 	public void run() {
+		System.out.println("starting Plot Server<"+mode+">");
 		inst = NetworkTableInstance.getDefault();
-		inst.startClient("localhost");
+		if(mode != null && mode == "server")
+			inst.startServer();
+		else
+			inst.startClient("localhost");
 		table = inst.getTable("plotdata");
-		newPlot = table.getEntry("NewPlot");
-		plotData = table.getEntry("PlotData");
+		table.getEntry("NewPlot");
+		table.getEntry("PlotData");
 		table.addEntryListener(this, kUpdate | kNew);
 		while (true) {
 			try {
-				System.out.println("PlotSever waiting for data");
+				//System.out.println("PlotServer waiting for data");
 				Thread.sleep(1000);
 			} catch (Exception ex) {
 				System.out.println("exception " + ex);
@@ -51,13 +60,9 @@ public class PlotServer implements TableEntryListener {
 		}
 	}
 
-	private static void createAndShowGui(ArrayList<PathData> list, int traces) {
-		JFrame frame = new PlotRenderer(list, traces);
-		// frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		System.out.println("Showing plot: Size = " + list.size());
-		frame.pack();
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
+	private void createAndShowGui(ArrayList<PathData> d, int traces, int type) {
+		System.out.println("Showing plot: Size:" + d.size()+" traces:"+" type:"+type);
+		PlotRenderer.showPlot(d, traces, type);
 		list = new ArrayList<PathData>();
 	}
 
@@ -67,12 +72,19 @@ public class PlotServer implements TableEntryListener {
 		if (key.equals("NewPlot")) {
 			list.clear();
 			double info[] = entry.getDoubleArray(new double[0]);
-			id = (int) info[0];
-			traces = (int) info[1];
-			points = (int) info[2];
-			index = 0;
-			count = 0;
-			System.out.println("NewPlot:" + id + " " + traces + " " + points);
+			if(info.length==0){
+				System.out.println("Error empty plot !");
+			}
+			else{
+				id = (int) info[0];
+				traces = (int) info[1];
+				points = (int) info[2];
+				type = (int) info[3];
+				index = 0;
+				count = 0;
+				if(debug)
+					System.out.println("NewPlot id:" + id + " traces:" + traces + " points:" + points+" type:"+type);
+			}
 		}
 		if (key.equals("PlotData" + count)) {
 			double data[] = entry.getDoubleArray(new double[0]);
@@ -89,14 +101,15 @@ public class PlotServer implements TableEntryListener {
 				list.add(pd);
 			}
 			count++;
-			System.out.println("PlotData:" + id + " " + index + " " + list.size() + " " + data.length);
+			if(debug)
+				System.out.println("PlotData:" + id + " " + index + " " + list.size() + " " + data.length);
 		}
 		if (count == points && points > 0) {
 			count = 0;
 			index = 0;
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
-					createAndShowGui(list, traces);
+					createAndShowGui(list, traces, type);
 				}
 			});
 		}

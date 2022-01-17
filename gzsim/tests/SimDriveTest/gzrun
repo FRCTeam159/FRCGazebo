@@ -1,0 +1,4 @@
+#!/bin/bash
+#gazebo --verbose tank8-2022-field.world &
+gazebo --verbose tank8-2018-field.world &
+GzProgram.exe;

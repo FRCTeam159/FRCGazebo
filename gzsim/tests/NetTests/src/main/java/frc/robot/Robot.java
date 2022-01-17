@@ -14,13 +14,13 @@ import utils.PlotServer;
 public class Robot extends RobotBase {
   //NTServerTest nt_server= new NTServerTest();
   //NTClientTest nt_client= new NTClientTest();
-  //utils.PlotServer plot_server= new PlotServer();
-  //PlotTest plot_test= new PlotTest();
+  utils.PlotServer plot_server= new PlotServer();
+  PlotTest plot_test= new PlotTest();
   MJpegTest mjpg_test;
   public void robotInit() {
     // Dummy project for java compilation (enter "compile" in terminal) 
     // Use Run/Debug menu .json for testing
-    mjpg_test=new MJpegTest();;
+    //mjpg_test=new PlotTest();;
   }
 
   public void disabled() {}

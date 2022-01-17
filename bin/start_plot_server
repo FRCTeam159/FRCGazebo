@@ -1,0 +1,3 @@
+#!/bin/bash
+pushd $GAZEBO_SIM/bin
+java -cp gzsim.jar utils.PlotServer "server"

@@ -19,7 +19,7 @@ public class PlotTest {
 	public PlotTest(){}
 	public void run(){	
 		inst = NetworkTableInstance.getDefault();
-		inst.startClient("localhost");
+		//inst.startClient("localhost");
 		table = inst.getTable("plotdata");
 		newPlot = table.getEntry("NewPlot");
 		plotData = table.getEntry("PlotData");	

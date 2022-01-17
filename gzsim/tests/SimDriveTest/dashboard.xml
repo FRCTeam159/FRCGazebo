@@ -1,5 +1,19 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="Max Speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="471" y="209"/>
+		<width>107</width>
+		<property name="Editable" value="false"/>
+	</widget>
+	<widget field="Max Power" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="471" y="179"/>
+		<width>109</width>
+		<height>20</height>
+		<property name="Editable" value="false"/>
+	</widget>
+	<widget field="record" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="139" y="147"/>
+	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.MjpgStreamViewerImpl">
 		<location x="110" y="174"/>
 		<width>378</width>
@@ -32,7 +46,7 @@
 		<height>20</height>
 	</widget>
 	<widget field="Reset" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="19" y="91"/>
+		<location x="20" y="91"/>
 	</widget>
 	<widget field="Right speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="192" y="21"/>
@@ -66,9 +80,14 @@
 			<width>0</width>
 		</widget>
 		<widget field="PIDController[1]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
-			<location x="6" y="16"/>
-			<height>155</height>
-			<width>139</width>
+			<location x="0" y="0"/>
+			<height>0</height>
+			<width>0</width>
+		</widget>
+		<widget field="PIDController[1]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+			<location x="0" y="0"/>
+			<height>0</height>
+			<width>0</width>
 		</widget>
 		<location x="0" y="23"/>
 		<width>151</width>
@@ -76,4 +95,5 @@
 	</widget>
 </live-window>
 	<hidden field="Field"/>
+	<hidden field="Max speed"/>
 </xml>

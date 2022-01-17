@@ -33,6 +33,8 @@ public class DrivePath extends CommandBase {
   int states;
   int intervals;
 
+  int plot_type=utils.PlotUtils.PLOT_NONE;
+
   public DrivePath(Drivetrain drive, int type) {
     m_drive = drive;
     m_type=type;
@@ -42,6 +44,7 @@ public class DrivePath extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    plot_type=PlotUtils.auto_plot_option;
     PlotUtils.initPlot();
     if (m_type == Trajectories.CURVED)
       m_trajectory=Trajectories.curvedPath();
@@ -82,11 +85,11 @@ public class DrivePath extends CommandBase {
     ChassisSpeeds speeds = m_ramsete.calculate(m_drive.getPose(), reference);
     m_drive.odometryDrive(speeds.vxMetersPerSecond, speeds.omegaRadiansPerSecond);
 
-    if (PlotUtils.auto_plot_option == PlotUtils.PLOT_DISTANCE)
+    if (plot_type == PlotUtils.PLOT_DISTANCE)
       plotDistance(reference);
-    else if (PlotUtils.auto_plot_option == PlotUtils.PLOT_DYNAMICS)
+    else if (plot_type  == PlotUtils.PLOT_DYNAMICS)
       plotDynamics(reference);
-    else if (PlotUtils.auto_plot_option == PlotUtils.PLOT_POSITION)
+    else if (plot_type  == PlotUtils.PLOT_POSITION)
       plotPosition(reference);
   }
   // Called once the command ends or is interrupted.
@@ -95,19 +98,8 @@ public class DrivePath extends CommandBase {
     if (m_trajectory == null)
       return;
     System.out.println("Simtime=" + m_drive.getTime() + " Realtime=" + runtime);
-   
-    if (PlotUtils.auto_plot_option == PlotUtils.PLOT_DISTANCE){
-      String label_list[] = { "Distance Plot","Time (s)","","Left Travel", "Target", "Right Travel", "Target","Heading","Target"};
-      PlotUtils.genericPlot(pathdata,label_list,6);
-    }
-    else if (PlotUtils.auto_plot_option == PlotUtils.PLOT_DYNAMICS){
-      String label_list[] = { "Dynamics Plot","Time (s)","","Distance", "Target", "Velocity", "Target","Acceleration","Target"};
-      PlotUtils.genericPlot(pathdata,label_list,6);
-    }
-    else if (PlotUtils.auto_plot_option == PlotUtils.PLOT_POSITION){
-      String label_list[] = { "Position Plot","X","Y","Left Wheels", "Target", "Center", "Target","Right Wheels","Target"};
-      PlotUtils.genericXYPlot(pathdata,label_list,6);
-    }
+    if (plot_type != utils.PlotUtils.PLOT_NONE)
+      utils.PlotUtils.publish(pathdata,6,plot_type);
   }
 
   // Returns true when the command should end.

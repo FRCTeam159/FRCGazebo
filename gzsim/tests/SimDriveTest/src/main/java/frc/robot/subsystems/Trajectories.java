@@ -47,9 +47,13 @@ public class Trajectories extends SubsystemBase {
   }
 
   public static Trajectory hookPath(double xmid, double ymid, double xend, double yend) {
-    Trajectory traj = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)),
-        List.of(new Translation2d(xmid, ymid)), new Pose2d(xend, yend, new Rotation2d(90.0)),
-        new TrajectoryConfig(Drivetrain.kMaxVelocity, Drivetrain.kMaxAcceleration));
+    Trajectory traj = TrajectoryGenerator.generateTrajectory
+    (
+      new Pose2d(0, 0, new Rotation2d(0)),
+      List.of(new Translation2d(xmid, ymid)), 
+      new Pose2d(xend, yend, new Rotation2d(90.0)),
+      new TrajectoryConfig(Drivetrain.kMaxVelocity, Drivetrain.kMaxAcceleration)
+    );
     return traj;
   }
 
