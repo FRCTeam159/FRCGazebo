@@ -26,6 +26,9 @@
     }
   },
   "NetworkTables": {
+    "SmartDashboard": {
+      "open": true
+    },
     "gazebo": {
       "camera": {
         "1": {

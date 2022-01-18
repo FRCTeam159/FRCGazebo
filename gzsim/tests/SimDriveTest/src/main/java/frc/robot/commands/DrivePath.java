@@ -5,14 +5,18 @@
 package frc.robot.commands;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Trajectories;
 import utils.PathData;
 import utils.PlotUtils;
 
@@ -35,27 +39,22 @@ public class DrivePath extends CommandBase {
 
   int plot_type=utils.PlotUtils.PLOT_NONE;
 
-  public DrivePath(Drivetrain drive, int type) {
+  public DrivePath(Drivetrain drive) {
     m_drive = drive;
-    m_type=type;
     addRequirements(drive);
+
   }
  
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     plot_type=PlotUtils.auto_plot_option;
+    m_type=m_drive.selected_path;
+    System.out.println("path="+m_type);
+
     PlotUtils.initPlot();
-    if (m_type == Trajectories.CURVED)
-      m_trajectory=Trajectories.curvedPath();
-    else if (m_type == Trajectories.HOOKED)
-      m_trajectory=Trajectories.hookPath();
-    else if (m_type == Trajectories.STRAIGHT)
-      m_trajectory=Trajectories.straightPath();
-    else{
-      System.out.println("DrivePath Error: unknown trajectory option:" + m_type);
-      return;
-    }
+    
+    m_trajectory=genericPath(m_drive.xPath,m_drive.yPath,m_drive.rPath);
     
     PlotUtils.setInitialPose(m_trajectory.sample(0).poseMeters,Drivetrain.kTrackWidth);
     //PlotUtils.setDistanceUnits(PlotUtils.UnitType.FEET);
@@ -82,6 +81,7 @@ public class DrivePath extends CommandBase {
       return;
 
     Trajectory.State reference = m_trajectory.sample(elapsed);
+  
     ChassisSpeeds speeds = m_ramsete.calculate(m_drive.getPose(), reference);
     m_drive.odometryDrive(speeds.vxMetersPerSecond, speeds.omegaRadiansPerSecond);
 
@@ -108,6 +108,16 @@ public class DrivePath extends CommandBase {
     return elapsed >= 1.01*runtime || m_trajectory == null;
   }
 
+  public Trajectory genericPath(double xVal, double yVal, double rVal) {
+    Trajectory traj = TrajectoryGenerator.generateTrajectory
+    (
+      new Pose2d(0, 0, new Rotation2d(0)),
+      List.of(), 
+      new Pose2d(xVal, yVal, Rotation2d.fromDegrees(rVal)),
+      new TrajectoryConfig(Drivetrain.kMaxVelocity, Drivetrain.kMaxAcceleration)
+    );
+    return traj;
+  }
   // =================================================
   // plotPosition: collect PathData for motion error plot
   // =================================================

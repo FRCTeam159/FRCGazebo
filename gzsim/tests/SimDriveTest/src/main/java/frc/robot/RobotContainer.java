@@ -13,7 +13,6 @@ import frc.robot.commands.DrivePath;
 import frc.robot.commands.Calibrate;
 import frc.robot.commands.DriveWithGamepad;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Trajectories;
 import utils.PlotUtils;
 
 /**
@@ -34,9 +33,9 @@ public class RobotContainer {
   SendableChooser<Integer> m_auto_plot_option = new SendableChooser<>();
 
   Calibrate m_calibrate=new Calibrate(m_drivetrain);
-  DrivePath m_straightpath = new DrivePath(m_drivetrain,Trajectories.STRAIGHT);
-  DrivePath m_curvedpath = new DrivePath(m_drivetrain,Trajectories.CURVED);
-  DrivePath m_hookedpath = new DrivePath(m_drivetrain,Trajectories.HOOKED);
+  DrivePath m_autopath = new DrivePath(m_drivetrain);
+  //DrivePath m_curvedpath = new DrivePath(m_drivetrain,Trajectories.CURVED);
+  //DrivePath m_hookedpath = new DrivePath(m_drivetrain,Trajectories.HOOKED);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -44,17 +43,17 @@ public class RobotContainer {
     m_driveCommand=new DriveWithGamepad(m_drivetrain, m_controller);
     m_drivetrain.setDefaultCommand(m_driveCommand);
 
-    m_chooser.setDefaultOption("SCurve", m_curvedpath);
-    m_chooser.addOption("Hooked", m_hookedpath);
-    m_chooser.addOption("Straight", m_straightpath);
-    m_chooser.addOption("Calibrate", m_calibrate);
+   // m_chooser.setDefaultOption("SCurve", m_curvedpath);
+   /// m_chooser.addOption("Hooked", m_hookedpath);
+    //m_chooser.addOption("Straight", m_straightpath);
+   // m_chooser.addOption("Calibrate", m_calibrate);
 
     m_auto_plot_option.setDefaultOption("No Plot", PlotUtils.PLOT_NONE);
     m_auto_plot_option.addOption("Plot Distance", PlotUtils.PLOT_DISTANCE);
     m_auto_plot_option.addOption("Plot Dynamics", PlotUtils.PLOT_DYNAMICS);
     m_auto_plot_option.addOption("Plot Position", PlotUtils.PLOT_POSITION);
 
-    SmartDashboard.putData(m_chooser);
+    //SmartDashboard.putData(m_chooser);
     SmartDashboard.putData(m_auto_plot_option);
 
     configureButtonBindings();
@@ -75,8 +74,11 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
       PlotUtils.auto_plot_option=m_auto_plot_option.getSelected();
-      //PlotUtils.traj_plot_option=m_traj_plot_option.getSelected();
-      return m_chooser.getSelected();
+
+      if(m_drivetrain.selected_path==Drivetrain.CALIBRATE)
+        return m_calibrate;
+      else
+        return m_autopath;
   }
   public void teleopInit(){
    //m_drivetrain.enable();
