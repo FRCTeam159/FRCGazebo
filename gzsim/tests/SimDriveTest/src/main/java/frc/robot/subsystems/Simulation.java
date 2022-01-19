@@ -30,6 +30,7 @@ public class Simulation extends SubsystemBase {
   public Simulation(Drivetrain drivetrain) {
     m_drivetrain = drivetrain;
     SmartDashboard.putBoolean("Reset", false);
+    SmartDashboard.putBoolean("Gazebo", false);
     SmartDashboard.putNumber("SimTime", 0);
     SmartDashboard.putNumber("SimClock", 0);
     m_timer.start();
@@ -118,10 +119,13 @@ public class Simulation extends SubsystemBase {
       SmartDashboard.putNumber("SimClock", getClockTime());
     else
       SmartDashboard.putNumber("SimClock", 0);
+    boolean m=SmartDashboard.getBoolean("Gazebo", false);
     boolean b=SmartDashboard.getBoolean("Reset", false);
     if(b){
       if(!resetting){
         m_drivetrain.reset();
+        if(m)
+          reset();
         resetting=true;
         m_timer.reset();
       }
@@ -129,6 +133,8 @@ public class Simulation extends SubsystemBase {
         SmartDashboard.putBoolean("Reset", false);
         resetting=false;
         m_drivetrain.enable();
+        run();
+
         running=false;
       }
     }

@@ -14,7 +14,6 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -33,8 +32,8 @@ public class Drivetrain extends SubsystemBase {
 	
 	private SimGyro gyro = new SimGyro();
 
-	public static final double kTrackWidth = i2M(2*20); // inches
-	public static final double kWheelDiameter = i2M(8); // wheel radius in tank model
+	public static final double kTrackWidth = i2M(2*23); // bug? need to double actual value for geometry to work
+	public static final double kWheelDiameter = i2M(7.8); // wheel diameter in tank model
 	public static final double kMaxVelocity = 1;
     public static final double kMaxAcceleration = 1;
 	public static double kMaxSpeed = i2M(100); // inches per second
@@ -50,24 +49,19 @@ public class Drivetrain extends SubsystemBase {
 	private final SlewRateLimiter speedLimiter = new SlewRateLimiter(kMaxSpeed);
 	private final SlewRateLimiter rotLimiter = new SlewRateLimiter(kMaxAngularSpeed);
 
+	private double distancePerRotation=kWheelDiameter*Math.PI;
+
 	public static final int FRONT_LEFT = 1;
     public static final int FRONT_RIGHT = 2;
 
 	public static final int FRONT_CAMERA = 1;
-	public double yPath=0;
-	public double xPath=2;
-	public double rPath=0;
-
-  	public static int PROGRAM = 1;
-  	public static int CALIBRATE = 2;
-
+	
 	private final Field2d m_fieldSim = new Field2d();
-
 	public boolean enable_gyro = false;
-	public int selected_path=PROGRAM;
+	public boolean reversed=false;
+	private double last_heading=0;
 
-	SendableChooser<Integer> m_path_chooser = new SendableChooser<Integer>();
-
+	
 	// For Gazebo simulation use "Calibrate" auto routine to determine where 
 	// model velocity stops increasing with input power
 	// 1) set scale to 1 and in Calibrate set max power to ~5 step size to 1 etc.
@@ -86,8 +80,8 @@ public class Drivetrain extends SubsystemBase {
 
 		leftMotor = new SimEncMotor(FRONT_LEFT);
 		rightMotor = new SimEncMotor(FRONT_RIGHT);
-		leftMotor.setDistancePerRotation(r2M(1.0));
-		rightMotor.setDistancePerRotation(r2M(1.0));
+		leftMotor.setDistancePerRotation(distancePerRotation);
+		rightMotor.setDistancePerRotation(distancePerRotation);
 
 		leftMotor.setScale(scale);
 		rightMotor.setScale(scale);
@@ -98,15 +92,6 @@ public class Drivetrain extends SubsystemBase {
 		SmartDashboard.putData("Field", m_fieldSim);
 		SmartDashboard.putBoolean("record", false);
 		SmartDashboard.putBoolean("Enable gyro", enable_gyro); 
-
-		m_path_chooser.setDefaultOption("Program", PROGRAM);
-	
-		m_path_chooser.addOption("Calibrate", CALIBRATE);
-		SmartDashboard.putData(m_path_chooser);
-
-		SmartDashboard.putNumber("xPath", xPath);
-		SmartDashboard.putNumber("yPath", yPath);
-		SmartDashboard.putNumber("rPath", rPath);
 	}
 
 	private static double i2M(double inches) {
@@ -117,6 +102,9 @@ public class Drivetrain extends SubsystemBase {
 	}
 	private double r2M(double rotations) {
 		return  Math.PI * kWheelDiameter*rotations;
+	}
+	private double r2D(double radians) {
+		return  180*radians/Math.PI;
 	}
 	private static double coerce(double min, double max, double value) {
 		return Math.max(min, Math.min(value, max));
@@ -149,30 +137,37 @@ public class Drivetrain extends SubsystemBase {
 		gyro.enable();
 	}
 	public void reset(){
-		simulation.reset();
+		//simulation.reset();
 		System.out.println("Drivetrain.reset");
 		leftMotor.reset();
 		rightMotor.reset();
 		gyro.reset();
+		last_heading = 0;
+		reversed=false;
 	}
 	public double getHeading(){
-		if(enable_gyro)
-			return gyro.getHeading();
-		else return calcRotation().getDegrees();
+		return getRotation2d().getDegrees();
 	}
 	
-	public Rotation2d calcRotation(){
-		double delta=getLeftDistance() - getRightDistance();
-		Rotation2d r = new Rotation2d(-delta/kTrackWidth);
-		return r;
+	public double gyroHeading(){
+		return gyro.getHeading();
 	}
-
-
+	public double calcHeading(){
+		double angle=r2D((getRightDistance()-getLeftDistance())/kTrackWidth);	
+		return angle;
+	}
+	
 	public Rotation2d getRotation2d(){
+		double angle;
 		if(enable_gyro)
-			return gyro.getRotation2d();
+			angle=gyroHeading();
 		else
-			return calcRotation();
+			angle=calcHeading();
+		if(reversed)
+			angle+=180;
+		angle=unwrap(last_heading,angle);
+		last_heading=angle;
+		return Rotation2d.fromDegrees(angle);
 	}
 	public double getLeftDistance(){
 		return  leftMotor.getDistance();
@@ -198,11 +193,7 @@ public class Drivetrain extends SubsystemBase {
 		SmartDashboard.putNumber("Right distance", getRightDistance());
 		SmartDashboard.putNumber("Left speed", getLeftVelocity());
 		SmartDashboard.putNumber("Right speed", getRightVelocity());
-		enable_gyro=SmartDashboard.getBoolean("Enable gyro", enable_gyro); 
-		xPath=SmartDashboard.getNumber("xPath", xPath);
-		yPath=SmartDashboard.getNumber("yPath", yPath);
-		rPath=SmartDashboard.getNumber("rPath", rPath);
-		selected_path=m_path_chooser.getSelected();
+		enable_gyro=SmartDashboard.getBoolean("Enable gyro", enable_gyro); 	
 	}
 	@Override
 	public void periodic() {
@@ -247,6 +238,8 @@ public class Drivetrain extends SubsystemBase {
 	public void resetOdometry(Pose2d pose) {
 		leftMotor.reset();
 		rightMotor.reset();
+		last_heading = 0;
+		gyro.reset();
 		odometry.resetPosition(pose, getRotation2d());
 	}
 
@@ -263,6 +256,12 @@ public class Drivetrain extends SubsystemBase {
 		drive(xSpeed, rot);
 		log();
 	}
+	// removes heading discontinuity at 180 degrees
+    public static double unwrap(double previous_angle, double new_angle) {
+        double d = new_angle - previous_angle;
+        d = d >= 180 ? d - 360 : (d <= -180 ? d + 360 : d);
+        return previous_angle + d;
+    }
 	// A simple teleop drive method that sets motor voltages only
 	public void arcadeDrive(double moveValue, double turnValue) {
 		double leftMotorOutput;

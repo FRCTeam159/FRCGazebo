@@ -153,20 +153,24 @@ public class PlotUtils {
     //  pd.d[4] expected heading
     //  pd.d[5] observed heading
     // =================================================
-    public static PathData plotDistance(double tm, Pose2d pose, double ld, double rd, double gh,double trackwidth) {
+  
+    public static PathData plotDistance(double tm, Pose2d pose, double curve, double ld, double rd, double gh,double trackwidth) {
         PathData pd = new PathData();
 
         PathData cd = getPathPosition(tm, pose, trackwidth);
         PathData delta = cd.minus(last_data);
-        data_sum = data_sum.plus(delta); // accumulated travel
-        // left wheels
-        double lx = data_sum.d[0];
-        double ly = data_sum.d[1];
-        double cl = Math.sqrt(lx * lx + ly * ly);
-        // right wheels
-        double rx = data_sum.d[4];
-        double ry = data_sum.d[5];
-        double cr = Math.sqrt(rx * rx + ry * ry);
+        double x = delta.d[0];
+        double y = delta.d[1];
+        double d = Math.sqrt(x * x + y * y);
+        double cl=d*(1+0.2*Math.abs(curve));
+        data_sum.d[0]+=cl;
+        x = delta.d[4];
+        y = delta.d[5];
+        d = Math.sqrt(x * x + y * y);
+        double cr=d*(1+0.2*Math.abs(curve));
+        data_sum.d[1]+=cr;
+
+        //System.out.println("cl:"+cl+" cr:"+cr+" curve:"+curve);
 
         double ch = pose.getRotation().getDegrees();
         ch = ch > 180 ? ch - 360 : ch; // convert to signed angle fixes problem:th 0->360 gh:-180->180
@@ -175,9 +179,9 @@ public class PlotUtils {
 
         pd.tm = tm;
         pd.d[0] = ld;
-        pd.d[1] = cl;
+        pd.d[1] = data_sum.d[0];
         pd.d[2] = rd;
-        pd.d[3] = cr;
+        pd.d[3] = data_sum.d[1];
         pd.d[4] = angleUnits(gh);
         pd.d[5] = angleUnits(ch);
 

@@ -32,10 +32,14 @@ public class RobotContainer {
   SendableChooser<Command> m_chooser = new SendableChooser<>();
   SendableChooser<Integer> m_auto_plot_option = new SendableChooser<>();
 
-  Calibrate m_calibrate=new Calibrate(m_drivetrain);
-  DrivePath m_autopath = new DrivePath(m_drivetrain);
-  //DrivePath m_curvedpath = new DrivePath(m_drivetrain,Trajectories.CURVED);
-  //DrivePath m_hookedpath = new DrivePath(m_drivetrain,Trajectories.HOOKED);
+  Calibrate m_calibrate = new Calibrate(m_drivetrain);
+  DrivePath m_autopath  = new DrivePath(m_drivetrain);
+
+  public static int PROGRAM = 1;
+  public static int CALIBRATE = 2;
+  public int selected_path=PROGRAM;
+
+  SendableChooser<Integer> m_path_chooser = new SendableChooser<Integer>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -43,15 +47,14 @@ public class RobotContainer {
     m_driveCommand=new DriveWithGamepad(m_drivetrain, m_controller);
     m_drivetrain.setDefaultCommand(m_driveCommand);
 
-   // m_chooser.setDefaultOption("SCurve", m_curvedpath);
-   /// m_chooser.addOption("Hooked", m_hookedpath);
-    //m_chooser.addOption("Straight", m_straightpath);
-   // m_chooser.addOption("Calibrate", m_calibrate);
-
     m_auto_plot_option.setDefaultOption("No Plot", PlotUtils.PLOT_NONE);
     m_auto_plot_option.addOption("Plot Distance", PlotUtils.PLOT_DISTANCE);
     m_auto_plot_option.addOption("Plot Dynamics", PlotUtils.PLOT_DYNAMICS);
     m_auto_plot_option.addOption("Plot Position", PlotUtils.PLOT_POSITION);
+
+    m_path_chooser.setDefaultOption("Program", PROGRAM);
+		m_path_chooser.addOption("Calibrate", CALIBRATE);
+		SmartDashboard.putData(m_path_chooser);
 
     //SmartDashboard.putData(m_chooser);
     SmartDashboard.putData(m_auto_plot_option);
@@ -74,8 +77,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
       PlotUtils.auto_plot_option=m_auto_plot_option.getSelected();
-
-      if(m_drivetrain.selected_path==Drivetrain.CALIBRATE)
+      selected_path=m_path_chooser.getSelected();
+      if(selected_path==CALIBRATE)
         return m_calibrate;
       else
         return m_autopath;

@@ -15,6 +15,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 import utils.PathData;
@@ -30,31 +31,41 @@ public class DrivePath extends CommandBase {
   static public boolean plot_trajectory_dynamics = false;
 
   Trajectory m_trajectory;
-  int m_type;
-
   double runtime;
   double elapsed = 0;
   int states;
   int intervals;
+  double yPath=4;
+	double xPath=4;
+	double rPath=90;
+  boolean reversed =false;
 
   int plot_type=utils.PlotUtils.PLOT_NONE;
 
   public DrivePath(Drivetrain drive) {
     m_drive = drive;
     addRequirements(drive);
-
+    SmartDashboard.putNumber("xPath", xPath);
+		SmartDashboard.putNumber("yPath", yPath);
+		SmartDashboard.putNumber("rPath", rPath);
+    SmartDashboard.putBoolean("reversed", reversed);
   }
  
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     plot_type=PlotUtils.auto_plot_option;
-    m_type=m_drive.selected_path;
-    System.out.println("path="+m_type);
+    //m_type=m_drive.selected_path;
+    //System.out.println("path="+m_type);
+
+    xPath=SmartDashboard.getNumber("xPath", xPath);
+		yPath=SmartDashboard.getNumber("yPath", yPath);
+		rPath=SmartDashboard.getNumber("rPath", rPath);
+    reversed=SmartDashboard.getBoolean("reversed", reversed);
 
     PlotUtils.initPlot();
     
-    m_trajectory=genericPath(m_drive.xPath,m_drive.yPath,m_drive.rPath);
+    m_trajectory=genericPath(xPath,yPath,rPath, reversed);
     
     PlotUtils.setInitialPose(m_trajectory.sample(0).poseMeters,Drivetrain.kTrackWidth);
     //PlotUtils.setDistanceUnits(PlotUtils.UnitType.FEET);
@@ -69,6 +80,7 @@ public class DrivePath extends CommandBase {
 
     pathdata.clear();
     m_drive.startAuto();
+  
     System.out.println("runtime:" + runtime + " states:" + states + " intervals:" + intervals);
   }
  
@@ -97,7 +109,18 @@ public class DrivePath extends CommandBase {
   public void end(boolean interrupted) {
     if (m_trajectory == null)
       return;
-    System.out.println("Simtime=" + m_drive.getTime() + " Realtime=" + runtime);
+    Pose2d traj_pose=m_trajectory.sample(runtime).poseMeters;
+    Pose2d drive_pose=m_drive.getPose();
+    System.out.println(traj_pose);
+    System.out.println(drive_pose);
+    double ld=m_drive.getLeftDistance();
+    double rd=m_drive.getRightDistance();
+    double lc=0.5*Math.PI*(4.0-0.5*m_drive.kTrackWidth);
+    double rc=0.5*Math.PI*(4.0+0.5*m_drive.kTrackWidth);
+
+    System.out.println(m_trajectory.sample(runtime));
+    System.out.println("left:"+ld+" calc:"+lc+ " right:"+rd+" calc:"+rc);
+    System.out.println("\nSimtime=" + m_drive.getTime() + " Realtime=" + runtime);
     if (plot_type != utils.PlotUtils.PLOT_NONE)
       utils.PlotUtils.publish(pathdata,6,plot_type);
   }
@@ -105,16 +128,19 @@ public class DrivePath extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return elapsed >= 1.01*runtime || m_trajectory == null;
+    return elapsed >= 1.001*runtime || m_trajectory == null;
   }
 
-  public Trajectory genericPath(double xVal, double yVal, double rVal) {
+  public Trajectory genericPath(double xVal, double yVal, double rVal, boolean reversed) {
+    TrajectoryConfig config=new TrajectoryConfig(Drivetrain.kMaxVelocity, Drivetrain.kMaxAcceleration);
+    config.setReversed(reversed);
+    double h=reversed?-1:1;
     Trajectory traj = TrajectoryGenerator.generateTrajectory
     (
       new Pose2d(0, 0, new Rotation2d(0)),
       List.of(), 
-      new Pose2d(xVal, yVal, Rotation2d.fromDegrees(rVal)),
-      new TrajectoryConfig(Drivetrain.kMaxVelocity, Drivetrain.kMaxAcceleration)
+      new Pose2d(h*xVal, yVal, Rotation2d.fromDegrees(h*rVal)),
+      config
     );
     return traj;
   }
@@ -147,12 +173,16 @@ public class DrivePath extends CommandBase {
   // arg[5]  trackwidth
   // =================================================
  private void plotDistance(Trajectory.State state) {
+    double h=reversed?-1:1;
     PathData pd = PlotUtils.plotDistance(
     state.timeSeconds, 
-    state.poseMeters, 
-    m_drive.getLeftDistance(), 
-    m_drive.getRightDistance(), 
+    state.poseMeters,
+    state.curvatureRadPerMeter,
+    
+    h*m_drive.getLeftDistance(), 
+    h*m_drive.getRightDistance(), 
     m_drive.getHeading(),
+    
     Drivetrain.kTrackWidth);
     pathdata.add(pd);
   }

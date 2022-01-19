@@ -1,34 +1,37 @@
 <xml version="1.0">
 <dashboard>
-	<widget field="SendableChooser[2]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
-		<location x="491" y="52"/>
+	<widget field="reversed" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="482" y="268"/>
+	</widget>
+	<widget field="SendableChooser[0]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="392" y="58"/>
 	</widget>
 	<widget field="yPath" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="467" y="300"/>
+		<location x="474" y="204"/>
 	</widget>
 	<widget field="xPath" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="467" y="270"/>
+		<location x="474" y="172"/>
 		<height>20</height>
 	</widget>
 	<widget field="rPath" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="470" y="328"/>
+		<location x="479" y="236"/>
 	</widget>
 	<widget field="Enable gyro" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="494" y="243"/>
+		<location x="381" y="126"/>
 	</widget>
 	<widget field="Max Speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="471" y="209"/>
+		<location x="237" y="125"/>
 		<width>107</width>
 		<property name="Editable" value="false"/>
 	</widget>
 	<widget field="Max Power" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="471" y="179"/>
+		<location x="104" y="123"/>
 		<width>109</width>
 		<height>20</height>
 		<property name="Editable" value="false"/>
 	</widget>
 	<widget field="record" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="139" y="147"/>
+		<location x="99" y="391"/>
 	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.MjpgStreamViewerImpl">
 		<location x="64" y="177"/>
@@ -43,7 +46,7 @@
 		<location x="22" y="131"/>
 	</static-widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
-		<location x="432" y="47"/>
+		<location x="458" y="49"/>
 		<property name="Text" value="Autonomous"/>
 	</static-widget>
 	<widget field="SendableChooser[1]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
@@ -59,7 +62,7 @@
 		<height>20</height>
 	</widget>
 	<widget field="Reset" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="20" y="91"/>
+		<location x="506" y="20"/>
 	</widget>
 	<widget field="Right speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="192" y="21"/>
@@ -92,10 +95,15 @@
 			<height>0</height>
 			<width>0</width>
 		</widget>
-		<widget field="PIDController[2]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
-			<location x="6" y="16"/>
-			<height>155</height>
-			<width>139</width>
+		<widget field="PIDController[2]" type="Table" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+			<location x="0" y="0"/>
+			<height>0</height>
+			<width>0</width>
+		</widget>
+		<widget field="PIDController[2]" type="Table" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+			<location x="0" y="0"/>
+			<height>0</height>
+			<width>0</width>
 		</widget>
 		<location x="0" y="23"/>
 		<width>151</width>
@@ -103,5 +111,5 @@
 	</widget>
 </live-window>
 	<hidden field="Field"/>
-	<hidden field="Max speed"/>
+	<hidden field="SendableChooser[2]"/>
 </xml>

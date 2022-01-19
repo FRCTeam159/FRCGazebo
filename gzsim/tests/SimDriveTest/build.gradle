@@ -9,7 +9,7 @@ sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
-/*
+
 sourceSets {
     main {
         java{
@@ -17,7 +17,7 @@ sourceSets {
         }
     }
 }
-*/
+
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project DeployUtils.
 deploy {
@@ -80,7 +80,7 @@ dependencies {
     //implementation fileTree(dir: '../../../bin', include: '*.jar')
     //implementation files('../../../bin/gzsim.jar')
    
-    implementation files("file://$System.env.GAZEBO_SIM/bin/gzsim.jar")
+    //implementation files("file://$System.env.GAZEBO_SIM/bin/gzsim.jar")
 
     testImplementation 'junit:junit:4.12'
 }
