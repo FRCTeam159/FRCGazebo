@@ -1,23 +1,26 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="SendableChooser[2]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="391" y="52"/>
+	</widget>
 	<widget field="reversed" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="482" y="268"/>
+		<location x="489" y="276"/>
 	</widget>
 	<widget field="SendableChooser[0]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
 		<location x="392" y="58"/>
 	</widget>
 	<widget field="yPath" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="474" y="204"/>
+		<location x="473" y="216"/>
 	</widget>
 	<widget field="xPath" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="474" y="172"/>
+		<location x="475" y="183"/>
 		<height>20</height>
 	</widget>
 	<widget field="rPath" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="479" y="236"/>
+		<location x="473" y="241"/>
 	</widget>
 	<widget field="Enable gyro" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="381" y="126"/>
+		<location x="370" y="126"/>
 	</widget>
 	<widget field="Max Speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="237" y="125"/>
@@ -35,7 +38,7 @@
 	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.MjpgStreamViewerImpl">
 		<location x="64" y="177"/>
-		<width>378</width>
+		<width>322</width>
 		<height>246</height>
 		<property name="MJPG Server URL" value="http://localhost:9000/?action=stream"/>
 	</static-widget>
@@ -53,16 +56,16 @@
 		<location x="464" y="56"/>
 	</widget>
 	<widget field="SimClock" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="100" y="92"/>
+		<location x="32" y="94"/>
 		<width>99</width>
 	</widget>
 	<widget field="SimTime" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="213" y="93"/>
+		<location x="148" y="94"/>
 		<width>109</width>
 		<height>20</height>
 	</widget>
 	<widget field="Reset" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="506" y="20"/>
+		<location x="487" y="20"/>
 	</widget>
 	<widget field="Right speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="192" y="21"/>
@@ -76,40 +79,45 @@
 	<widget field="Left speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="15" y="19"/>
 	</widget>
+	<widget field="Gazebo" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="543" y="20"/>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.MjpgStreamViewerImpl">
+		<location x="16" y="177"/>
+		<width>446</width>
+		<height>246</height>
+		<property name="MJPG Server URL" value="http://localhost:9000/?action=stream"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="22" y="131"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="458" y="49"/>
+		<property name="Text" value="Autonomous"/>
+	</static-widget>
 </dashboard>
 <live-window>
-	<widget field="Simulation" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
-		<location x="0" y="201"/>
-	</widget>
 	<widget field="Drivetrain" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
-		<location x="0" y="0"/>
+		<location x="0" y="46"/>
 	</widget>
 	<widget field="Ungrouped" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
-		<widget field="PIDController[1]" type="Table" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
-			<location x="0" y="0"/>
-			<height>0</height>
-			<width>0</width>
+		<widget field="PIDController[1]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+			<location x="6" y="16"/>
+			<height>155</height>
+			<width>139</width>
 		</widget>
-		<widget field="PIDController[1]" type="Table" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
-			<location x="0" y="0"/>
-			<height>0</height>
-			<width>0</width>
-		</widget>
-		<widget field="PIDController[2]" type="Table" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
-			<location x="0" y="0"/>
-			<height>0</height>
-			<width>0</width>
-		</widget>
-		<widget field="PIDController[2]" type="Table" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
-			<location x="0" y="0"/>
-			<height>0</height>
-			<width>0</width>
+		<widget field="PIDController[2]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+			<location x="6" y="171"/>
+			<height>155</height>
+			<width>139</width>
 		</widget>
 		<location x="0" y="23"/>
 		<width>151</width>
-		<height>177</height>
+		<height>332</height>
+	</widget>
+	<widget field="Simulation" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
+		<location x="0" y="0"/>
 	</widget>
 </live-window>
 	<hidden field="Field"/>
-	<hidden field="SendableChooser[2]"/>
 </xml>

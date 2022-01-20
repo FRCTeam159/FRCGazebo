@@ -5,15 +5,18 @@
 package frc.robot.commands;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -77,6 +80,7 @@ public class DrivePath extends CommandBase {
     m_drive.resetOdometry(m_trajectory.getInitialPose());
     m_timer.reset();
     m_timer.start();
+    m_drive.enable();
 
     pathdata.clear();
     m_drive.startAuto();
@@ -87,8 +91,8 @@ public class DrivePath extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.\n
   @Override
   public void execute() {
-    // elapsed = m_timer.get();
-    elapsed = m_drive.getTime();
+    elapsed = m_timer.get();
+    //elapsed = m_drive.getTime();
     if(elapsed<0.02)
       return;
 
@@ -109,18 +113,8 @@ public class DrivePath extends CommandBase {
   public void end(boolean interrupted) {
     if (m_trajectory == null)
       return;
-    Pose2d traj_pose=m_trajectory.sample(runtime).poseMeters;
-    Pose2d drive_pose=m_drive.getPose();
-    System.out.println(traj_pose);
-    System.out.println(drive_pose);
-    double ld=m_drive.getLeftDistance();
-    double rd=m_drive.getRightDistance();
-    double lc=0.5*Math.PI*(4.0-0.5*m_drive.kTrackWidth);
-    double rc=0.5*Math.PI*(4.0+0.5*m_drive.kTrackWidth);
-
-    System.out.println(m_trajectory.sample(runtime));
-    System.out.println("left:"+ld+" calc:"+lc+ " right:"+rd+" calc:"+rc);
-    System.out.println("\nSimtime=" + m_drive.getTime() + " Realtime=" + runtime);
+    m_drive.reset();
+    
     if (plot_type != utils.PlotUtils.PLOT_NONE)
       utils.PlotUtils.publish(pathdata,6,plot_type);
   }
@@ -131,18 +125,45 @@ public class DrivePath extends CommandBase {
     return elapsed >= 1.001*runtime || m_trajectory == null;
   }
 
+  // =================================================
+  // genericPath: build a 2-point trajectory from end point variables
+  // =================================================
   public Trajectory genericPath(double xVal, double yVal, double rVal, boolean reversed) {
+    Pose2d pos1=new Pose2d(0, 0, new Rotation2d(0));
+    Pose2d pos2=new Pose2d(xVal, yVal, Rotation2d.fromDegrees(rVal));
+    Pose2d pos3=new Pose2d(2*xVal, 2*yVal, Rotation2d.fromDegrees(rVal));
+    List<Pose2d> points=new ArrayList<Pose2d>();
+    points.add(pos1);
+    points.add(pos2);
+    //points.add(pos3);
+    return makeTrajectory(points,reversed);
+  }
+  
+  // =================================================
+  // makeTrajectory: build a trajectory from a list of poses
+  // =================================================
+  // - if "reverse" is set reorder the list last->first
+  // - transform each element so that the original path is
+  //   followed backwards with the original heading reversed
+  //   (i.e. back of the robot is now the front)
+  // - only been tested on 2 point curves
+  // =================================================
+  Trajectory makeTrajectory(List<Pose2d> points,boolean reversed){
     TrajectoryConfig config=new TrajectoryConfig(Drivetrain.kMaxVelocity, Drivetrain.kMaxAcceleration);
     config.setReversed(reversed);
-    double h=reversed?-1:1;
-    Trajectory traj = TrajectoryGenerator.generateTrajectory
-    (
-      new Pose2d(0, 0, new Rotation2d(0)),
-      List.of(), 
-      new Pose2d(h*xVal, yVal, Rotation2d.fromDegrees(h*rVal)),
-      config
-    );
-    return traj;
+    if (reversed) {
+      Transform2d tf= new Transform2d(points.get(0),points.get(points.size()-1));
+      tf=tf.inverse();
+      Collections.reverse(points);
+      for (int i = 0; i < points.size()-1; i++) {
+        Pose2d p = points.get(i).transformBy(tf);
+        points.set(i, p);
+      }
+    }
+    for (Pose2d p: points) {
+      System.out.println(p);
+    }
+    return TrajectoryGenerator.generateTrajectory(points,config);
   }
   // =================================================
   // plotPosition: collect PathData for motion error plot

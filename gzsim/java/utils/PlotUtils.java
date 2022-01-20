@@ -116,19 +116,21 @@ public class PlotUtils {
         PathData t_data = getPathPosition(tm, target_pose, trackwidth);
         PathData d_data = getPathPosition(tm, current_pose, trackwidth);
 
-        pd.d[0] = d_data.d[0];
+        pd.d[0] = Math.abs(d_data.d[0]);
         pd.d[1] = d_data.d[1];
-        pd.d[2] = t_data.d[0];
+        pd.d[2] = Math.abs(t_data.d[0]);
         pd.d[3] = t_data.d[1];
 
-        pd.d[4] = d_data.d[2];
+        //System.out.println(pd.d[0]+" "+pd.d[1]+" "+pd.d[2]+" "+pd.d[3]);
+
+        pd.d[4] = Math.abs(d_data.d[2]);
         pd.d[5] = d_data.d[3];
-        pd.d[6] = t_data.d[2];
+        pd.d[6] = Math.abs(t_data.d[2]);
         pd.d[7] = t_data.d[3];
 
-        pd.d[8] = d_data.d[4];
+        pd.d[8] = Math.abs(d_data.d[4]);
         pd.d[9] = d_data.d[5];
-        pd.d[10] = t_data.d[4];
+        pd.d[10] = Math.abs(t_data.d[4]);
         pd.d[11] = t_data.d[5];
 
         return pd;
