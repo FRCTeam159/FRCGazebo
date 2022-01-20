@@ -131,11 +131,16 @@ public class DrivePath extends CommandBase {
   public Trajectory genericPath(double xVal, double yVal, double rVal, boolean reversed) {
     Pose2d pos1=new Pose2d(0, 0, new Rotation2d(0));
     Pose2d pos2=new Pose2d(xVal, yVal, Rotation2d.fromDegrees(rVal));
-    Pose2d pos3=new Pose2d(2*xVal, 2*yVal, Rotation2d.fromDegrees(rVal));
+    Pose2d pos3=new Pose2d(2*xVal, yVal, Rotation2d.fromDegrees(rVal));
+    Pose2d pos4=new Pose2d(2*xVal, 2*yVal, Rotation2d.fromDegrees(rVal));
+
     List<Pose2d> points=new ArrayList<Pose2d>();
+
     points.add(pos1);
     points.add(pos2);
-    //points.add(pos3);
+    points.add(pos3);
+    points.add(pos4);
+
     return makeTrajectory(points,reversed);
   }
   
@@ -146,23 +151,17 @@ public class DrivePath extends CommandBase {
   // - transform each element so that the original path is
   //   followed backwards with the original heading reversed
   //   (i.e. back of the robot is now the front)
-  // - only been tested on 2 point curves
+  // - lots of magic done when reverse is set in config
+  //   inverts coordinate system from p.o.v. of robot's last pose
+  //   (but facing in reverse direction)
+  //   just need to reverse order of points to drive backwards
   // =================================================
   Trajectory makeTrajectory(List<Pose2d> points,boolean reversed){
     TrajectoryConfig config=new TrajectoryConfig(Drivetrain.kMaxVelocity, Drivetrain.kMaxAcceleration);
     config.setReversed(reversed);
-    if (reversed) {
-      Transform2d tf= new Transform2d(points.get(0),points.get(points.size()-1));
-      tf=tf.inverse();
-      Collections.reverse(points);
-      for (int i = 0; i < points.size()-1; i++) {
-        Pose2d p = points.get(i).transformBy(tf);
-        points.set(i, p);
-      }
-    }
-    for (Pose2d p: points) {
-      System.out.println(p);
-    }
+    if (reversed) 
+      Collections.reverse(points); // reverse order of waypoints first point=orig last point
+    
     return TrajectoryGenerator.generateTrajectory(points,config);
   }
   // =================================================
