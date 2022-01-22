@@ -53,11 +53,11 @@ public class DriveWithGamepad extends CommandBase {
       m_drive.enable();
       started=true;
     }
-    //xs*=zs>0?1:-1;
+    xs*=zs>0?1:-1;
     if(m_drive.arcade_mode)
       m_drive.arcadeDrive(zs, xs);
     else
-      m_drive.odometryDrive(zs,-xs);
+      m_drive.odometryDrive(zs,xs);
   }
 
   // Called once the command ends or is interrupted.

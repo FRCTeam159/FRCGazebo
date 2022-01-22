@@ -25,7 +25,9 @@ import gazebo.SimGyro;
 
 public class Drivetrain extends SubsystemBase {
 
-	private SimCamera camera;
+	private SimCamera front_camera;
+	private SimCamera back_camera;
+	private int camera;
 	private SimEncMotor leftMotor;
 	private SimEncMotor rightMotor;
 
@@ -56,6 +58,7 @@ public class Drivetrain extends SubsystemBase {
     public static final int FRONT_RIGHT = 2;
 
 	public static final int FRONT_CAMERA = 1;
+	public static final int BACK_CAMERA = 2;
 	
 	private final Field2d m_fieldSim = new Field2d();
 	public boolean enable_gyro = false;
@@ -77,8 +80,13 @@ public class Drivetrain extends SubsystemBase {
 	public Drivetrain() {
 		simulation = new Simulation(this);
 
-		camera=new SimCamera(FRONT_CAMERA);
-		simulation.addCamera(camera);
+		front_camera=new SimCamera(FRONT_CAMERA);
+		simulation.addCamera(front_camera);
+
+		back_camera=new SimCamera(BACK_CAMERA);
+		simulation.addCamera(back_camera);
+
+		camera=FRONT_CAMERA;
 
 		leftMotor = new SimEncMotor(FRONT_LEFT);
 		rightMotor = new SimEncMotor(FRONT_RIGHT);
@@ -93,6 +101,7 @@ public class Drivetrain extends SubsystemBase {
 		odometry = new DifferentialDriveOdometry(getRotation2d());
 		SmartDashboard.putData("Field", m_fieldSim);
 		SmartDashboard.putBoolean("record", false);
+		SmartDashboard.putBoolean("front", true);
 		SmartDashboard.putBoolean("Enable gyro", enable_gyro);
 		SmartDashboard.putBoolean("Arcade mode", arcade_mode);
 	}
@@ -218,16 +227,20 @@ public class Drivetrain extends SubsystemBase {
 	public void simulationPeriodic() {
 		updateOdometry();
 		// capture a movie from the Gazebo camera (gztest/c++/tmp/test_0.avi)
-		if(SmartDashboard.getBoolean("record", false))
-			simulation.startCamera(FRONT_CAMERA);
+		
+		int which_camera=SmartDashboard.getBoolean("front", true)?FRONT_CAMERA:BACK_CAMERA;
+		if(SmartDashboard.getBoolean("record", false)){
+			camera=which_camera;
+			simulation.startCamera(camera);
+		}
 		else
-			simulation.stopCamera(FRONT_CAMERA);
+			simulation.stopCamera(camera);
 		log();
 	}
 	
 	public void drive(double xSpeed, double rot) {
-	    //xSpeed = speedLimiter.calculate(xSpeed);
-		//rot = rotLimiter.calculate(rot);
+	    xSpeed = speedLimiter.calculate(xSpeed);
+		rot = rotLimiter.calculate(rot);
 		var wheelSpeeds = kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, 0.0, rot));
 		setSpeeds(wheelSpeeds);
 	}

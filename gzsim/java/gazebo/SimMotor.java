@@ -34,6 +34,7 @@ public class SimMotor extends SimNode {
         enabled=true;
     }
     public void disable(){
+        set(0);
         ctrl_node.setString("stop");
         enabled=false;
     }

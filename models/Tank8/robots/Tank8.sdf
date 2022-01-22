@@ -65,9 +65,9 @@
         <!--
         <pose>-0.000573275356463565 0.3 -0.392489921187236 0 0.9 1.5707963267949</pose>
         -->
-         <pose>-0.000573275356463565 0.3 -0.392489921187236 0 0.9 1.5707963267949</pose>
+         <pose>0.0 0.3 -0.4   0 0.9 1.5707963267949</pose>
         <camera name="Frontcamera">
-          <horizontal_fov>1.05</horizontal_fov>
+          <horizontal_fov>0.7</horizontal_fov>
           <image>
             <width>640</width>
             <height>480</height>
@@ -88,15 +88,15 @@
           <video>front.avi</video>
       </plugin>
     </sensor>
-    <!--Camera 1-->
+    <!--Camera 2-->
     <sensor name="FrameCamera2" type="camera">
-        <visualize>1</visualize>
+        <visualize>0</visualize>
         <always_on>1</always_on>
         <update_rate>20</update_rate>
         <!--
         <pose>-0.000573275356463565 0.3 -0.392489921187236 0 0.9 1.5707963267949</pose>
         -->
-         <pose>0 0 0 0 0 1.5707963267949</pose>
+         <pose>0.0 0.1 0.3  0 -1.57 -1.57</pose>
         <camera name="Rearcamera">
           <horizontal_fov>1.05</horizontal_fov>
           <image>
@@ -111,7 +111,7 @@
         </camera>
         <plugin name="camera2" filename="sim_camera.dll">
           <topic>~/gazebo/frc/simulator/camera/2</topic>
-          <port>9000</port>
+          <port>9001</port>
           <fps>10</fps>
           <enabled>true</enabled>
           <savepath>tmp</savepath>

@@ -32,7 +32,8 @@
 
      <include>
       <uri>model://Tank8</uri>
-      <pose>-0.081 -1.586 0.065 0 0 -2.009</pose>
+      <!--<pose>-0.081 -1.586 0.065 0 0 -2.009</pose>-->
+      <pose>0.35 -1.43 0.065 0 0 -1.54</pose>
     </include>
 
     <!-- Cargo 
