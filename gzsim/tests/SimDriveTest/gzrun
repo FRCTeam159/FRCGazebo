@@ -1,4 +1,4 @@
 #!/bin/bash
-gazebo --verbose tank8-2022-field.world &
+start_gazebo
 #gazebo --verbose tank8-empty-field.world &
 GzProgram.exe;
