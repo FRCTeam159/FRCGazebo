@@ -12,6 +12,7 @@ public class SimMotor extends SimNode {
     private static NetworkTable objects;
     private static NetworkTable channels;
     private double distancePerRotation = 1;
+    boolean enabled=false;
 
     public SimMotor(int id){
         chnl=id;
@@ -26,18 +27,24 @@ public class SimMotor extends SimNode {
         scale_node= channels.getEntry("scale");
         scale_node.setDouble(1.0);
         System.out.println("SimMotor:"+id);
+
     }
     public void enable(){
         ctrl_node.setString("run");
+        enabled=true;
     }
     public void disable(){
         ctrl_node.setString("stop");
+        enabled=false;
     }
     public void reset(){
         ctrl_node.setString("reset");
     }
     public void set(double v){
-        set_node.setDouble(v);
+        if(enabled)
+            set_node.setDouble(v);
+        else 
+            set_node.setDouble(0);
     }
     public void setScale(double v){
         scale_node.setDouble(v);

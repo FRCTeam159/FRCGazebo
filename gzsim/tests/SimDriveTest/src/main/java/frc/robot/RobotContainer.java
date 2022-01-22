@@ -35,8 +35,11 @@ public class RobotContainer {
   Calibrate m_calibrate = new Calibrate(m_drivetrain);
   DrivePath m_autopath  = new DrivePath(m_drivetrain);
 
-  public static int PROGRAM = 1;
-  public static int CALIBRATE = 2;
+  public static final int CALIBRATE = 0;
+  public static final int PROGRAM = 1;
+  public static final int AUTOTEST = 2;
+  public static final int PATHWEAVER = 3;
+ 
   public int selected_path=PROGRAM;
 
   SendableChooser<Integer> m_path_chooser = new SendableChooser<Integer>();
@@ -53,7 +56,10 @@ public class RobotContainer {
     m_auto_plot_option.addOption("Plot Position", PlotUtils.PLOT_POSITION);
 
     m_path_chooser.setDefaultOption("Program", PROGRAM);
-		m_path_chooser.addOption("Calibrate", CALIBRATE);
+	  m_path_chooser.addOption("AutoTest", AUTOTEST);
+    m_path_chooser.addOption("PathWeaver", PATHWEAVER);
+    m_path_chooser.addOption("Calibrate", CALIBRATE);
+   
 		SmartDashboard.putData(m_path_chooser);
 
     //SmartDashboard.putData(m_chooser);
@@ -80,8 +86,10 @@ public class RobotContainer {
       selected_path=m_path_chooser.getSelected();
       if(selected_path==CALIBRATE)
         return m_calibrate;
-      else
+      else{
+        m_autopath.setProgram(selected_path);
         return m_autopath;
+      }
   }
   public void teleopInit(){
    //m_drivetrain.enable();

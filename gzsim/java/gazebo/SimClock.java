@@ -7,6 +7,7 @@ public class SimClock extends SimNode {
     private NetworkTableEntry ctrl_node;
     private NetworkTableEntry time_node;
     private static NetworkTable subtable;
+    private double zero;
     public SimClock(){
         subtable=table.getSubTable("clock");
         ctrl_node= subtable.getEntry("ctrl");
@@ -14,9 +15,14 @@ public class SimClock extends SimNode {
         time_node= subtable.getEntry("simtime");
         System.out.println("SimClock");
     }
-    public void reset(){
-        System.out.println("SimClock.reset");
+    public void clear(){
+        System.out.println("SimClock.clear");
         ctrl_node.setString("reset");
+        zero=0;
+    }
+    public void reset(){
+        zero=time_node.getDouble(0.0);
+        System.out.println("SimClock.reset");
     }
     public void enable(){
         System.out.println("SimClock.run");
@@ -27,6 +33,6 @@ public class SimClock extends SimNode {
         ctrl_node.setString("stop");
     }
     public double getTime() {
-        return time_node.getDouble(0.0); 
+        return time_node.getDouble(0.0)-zero; 
     } 
 }

@@ -9,6 +9,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -30,23 +31,23 @@ public class Drivetrain extends SubsystemBase {
 
 	private Simulation simulation;
 	
-	private SimGyro gyro = new SimGyro();
+	public SimGyro gyro = new SimGyro();
 
 	public static final double kTrackWidth = i2M(2*23); // bug? need to double actual value for geometry to work
 	public static final double kWheelDiameter = i2M(7.8); // wheel diameter in tank model
-	public static final double kMaxVelocity = 1;
-    public static final double kMaxAcceleration = 1;
-	public static double kMaxSpeed = i2M(100); // inches per second
+	
+	public static double kMaxVelocity = 1.5; // meters per second
+	public static double kMaxAcceleration = 1.0; //  meters/second/second
 	public static double kMaxAngularSpeed = 180; // degrees per second
 
-	private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(kTrackWidth);
+	private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(2*kTrackWidth);
 	private final DifferentialDriveOdometry odometry;
 
-	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.25,0.5);
-	private final PIDController leftPIDController = new PIDController(0.25, 0, 0.0);
-	private final PIDController rightPIDController = new PIDController(0.25, 0, 0.0);
+	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.1,1);
+	private final PIDController leftPIDController = new PIDController(0.25, 0.0, 0.0);
+	private final PIDController rightPIDController = new PIDController(0.25, 0.0, 0.0);
 
-	private final SlewRateLimiter speedLimiter = new SlewRateLimiter(kMaxSpeed);
+	private final SlewRateLimiter speedLimiter = new SlewRateLimiter(kMaxVelocity);
 	private final SlewRateLimiter rotLimiter = new SlewRateLimiter(kMaxAngularSpeed);
 
 	private double distancePerRotation=kWheelDiameter*Math.PI;
@@ -60,6 +61,7 @@ public class Drivetrain extends SubsystemBase {
 	public boolean enable_gyro = false;
 	public boolean reversed=false;
 	private double last_heading=0;
+	public boolean arcade_mode=false;
 
 	
 	// For Gazebo simulation use "Calibrate" auto routine to determine where 
@@ -87,11 +89,12 @@ public class Drivetrain extends SubsystemBase {
 		rightMotor.setScale(scale);
 	
 		rightMotor.setInverted();
-		
+	
 		odometry = new DifferentialDriveOdometry(getRotation2d());
 		SmartDashboard.putData("Field", m_fieldSim);
 		SmartDashboard.putBoolean("record", false);
-		SmartDashboard.putBoolean("Enable gyro", enable_gyro); 
+		SmartDashboard.putBoolean("Enable gyro", enable_gyro);
+		SmartDashboard.putBoolean("Arcade mode", arcade_mode);
 	}
 
 	private static double i2M(double inches) {
@@ -110,7 +113,7 @@ public class Drivetrain extends SubsystemBase {
 		return Math.max(min, Math.min(value, max));
 	}
 	public double getTime(){
-		return simulation.getClockTime();
+		return simulation.getSimTime();
 	}
 	public void startAuto(){
 		simulation.reset();
@@ -136,13 +139,22 @@ public class Drivetrain extends SubsystemBase {
 		rightMotor.enable();
 		gyro.enable();
 	}
+	public void resetAll(){
+		//simulation.reset();
+		System.out.println("Drivetrain.reseAll");
+		leftMotor.reset();
+		rightMotor.reset();
+		gyro.clear();
+		last_heading = 0;
+
+	}
 	public void reset(){
 		//simulation.reset();
 		System.out.println("Drivetrain.reset");
 		leftMotor.reset();
 		rightMotor.reset();
+		//last_heading = gyro.getHeading();
 		gyro.reset();
-		last_heading = 0;
 		reversed=false;
 	}
 	public double getHeading(){
@@ -193,7 +205,8 @@ public class Drivetrain extends SubsystemBase {
 		SmartDashboard.putNumber("Right distance", getRightDistance());
 		SmartDashboard.putNumber("Left speed", getLeftVelocity());
 		SmartDashboard.putNumber("Right speed", getRightVelocity());
-		enable_gyro=SmartDashboard.getBoolean("Enable gyro", enable_gyro); 	
+		enable_gyro=SmartDashboard.getBoolean("Enable gyro", enable_gyro); 
+		arcade_mode=SmartDashboard.getBoolean("Arcade mode", arcade_mode);	
 	}
 	@Override
 	public void periodic() {
@@ -213,9 +226,14 @@ public class Drivetrain extends SubsystemBase {
 	}
 	
 	public void drive(double xSpeed, double rot) {
-	    xSpeed = speedLimiter.calculate(xSpeed);
-		rot = rotLimiter.calculate(rot);
+	    //xSpeed = speedLimiter.calculate(xSpeed);
+		//rot = rotLimiter.calculate(rot);
 		var wheelSpeeds = kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, 0.0, rot));
+		setSpeeds(wheelSpeeds);
+	}
+	public void tankDrive(double xSpeed, double rot) {
+		Translation2d speeds=arcadeToTank(xSpeed,rot);
+		DifferentialDriveWheelSpeeds wheelSpeeds = new DifferentialDriveWheelSpeeds(speeds.getX(),speeds.getY());
 		setSpeeds(wheelSpeeds);
 	}
 
@@ -262,8 +280,7 @@ public class Drivetrain extends SubsystemBase {
         d = d >= 180 ? d - 360 : (d <= -180 ? d + 360 : d);
         return previous_angle + d;
     }
-	// A simple teleop drive method that sets motor voltages only
-	public void arcadeDrive(double moveValue, double turnValue) {
+	public Translation2d arcadeToTank(double moveValue, double turnValue){
 		double leftMotorOutput;
 		double rightMotorOutput;
 		if (moveValue > 0.0) {
@@ -283,9 +300,17 @@ public class Drivetrain extends SubsystemBase {
 				rightMotorOutput = moveValue - turnValue;
 			}
 		}
+		return new Translation2d(leftMotorOutput,rightMotorOutput);
+	}
+	// A simple teleop drive method that sets motor voltages only
+	public void arcadeDrive(double moveValue, double turnValue) {
+		double leftMotorOutput;
+		double rightMotorOutput;
+		
+		Translation2d speeds=arcadeToTank(moveValue,turnValue);
 		// Make sure values are between -1 and 1
-		leftMotorOutput = coerce(-1, 1, leftMotorOutput);
-		rightMotorOutput = coerce(-1, 1, rightMotorOutput);
+		leftMotorOutput = coerce(-1, 1, speeds.getX());
+		rightMotorOutput = coerce(-1, 1, speeds.getY());
 		leftMotor.set(leftMotorOutput);
 		rightMotor.set(rightMotorOutput);
 		log();
