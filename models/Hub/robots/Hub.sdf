@@ -57,21 +57,23 @@
         </geometry>
       </visual>
     </link>
+    <!---->
     <link name="TapeStrips">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
       <pose>0 2.60746875 0 0 0 0</pose>
       <must_be_base_link>0</must_be_base_link>
       <visual name="TapeStrips_visual">
-        <pose>0 -2.60746875 0 0 0 0</pose>
+        <pose>0 -2.6 0 0 0 0</pose>
         <material>
+          <emissive>0 1 1 1</emissive>
           <ambient>0 1 1 1</ambient>
           <diffuse>0 1 1 1</diffuse>
         </material>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://TapeRing/meshes/TapeStrips.STL</uri>
+            <uri>model://TapeRing/meshes/Ring.STL</uri>
           </mesh>
         </geometry>
       </visual>
@@ -80,6 +82,7 @@
       <parent>Hub</parent>
       <child>TapeStrips</child>
    </joint>
+   
     <joint name="Hub-World" type="fixed">
       <parent>world</parent>
       <child>Hub</child>

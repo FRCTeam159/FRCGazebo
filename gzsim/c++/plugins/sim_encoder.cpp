@@ -34,9 +34,9 @@ if (model->GetJointCount() == 0) {
   }
 
   multiplier = 1.0;
-  zero = GetAngle();
+  //zero = GetAngle();
   stopped = false;
-  stop_value = 0;
+  //stop_value = 0;
 
   if (sdf->HasElement("multiplier"))
     multiplier = sdf->Get<double>("multiplier");
@@ -62,14 +62,16 @@ if (model->GetJointCount() == 0) {
 void Encoder::Update(const gazebo::common::UpdateInfo& info) {
   gazebo::msgs::Vector3d msg;
   double p=0,v=0;
+  /*
   if (stopped){
     p=stop_value * multiplier;
     zero = GetAngle();
   }
   else {
-    p=(GetAngle() - zero) * multiplier;
-    v= GetVelocity() * multiplier;
-  }
+    */
+    p = GetAngle() * multiplier;
+    v = GetVelocity() * multiplier;
+  //}
   gazebo::msgs::Set(&msg, ignition::math::Vector3d(p, v, stopped));
   pub->Publish(msg);
 }
@@ -77,6 +79,7 @@ void Encoder::Update(const gazebo::common::UpdateInfo& info) {
 void Encoder::Callback(ConstGzStringPtr  & msg) {
   std::string command = msg->data();
   std::cout << "Encoder plugin received command:" << command << std::endl;
+  /*
   if (command == "reset") {
     zero = GetAngle();
     stopped=false;
@@ -90,6 +93,7 @@ void Encoder::Callback(ConstGzStringPtr  & msg) {
     gzerr << "WARNING: Encoder got unknown command '" << command << "'."
           << std::endl;
   }
+  */
 }
 
 double Encoder::GetAngle() {

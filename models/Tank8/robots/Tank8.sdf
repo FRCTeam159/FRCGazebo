@@ -93,9 +93,6 @@
         <visualize>0</visualize>
         <always_on>1</always_on>
         <update_rate>20</update_rate>
-        <!--
-        <pose>-0.000573275356463565 0.3 -0.392489921187236 0 0.9 1.5707963267949</pose>
-        -->
          <pose>0.0 0.1 0.3  0 -1.57 -1.57</pose>
         <camera name="Rearcamera">
           <horizontal_fov>1.05</horizontal_fov>

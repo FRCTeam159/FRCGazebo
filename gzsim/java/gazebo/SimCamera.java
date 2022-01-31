@@ -40,13 +40,17 @@ public class SimCamera extends SimNode {
         recording=false;
     } 
     public void run(){
-        System.out.println("SimCamera.record");
-        ctrl_node.setString("run");
+        if(!recording){
+            System.out.println("SimCamera.record");
+            ctrl_node.setString("run");
+        }
         recording=true;
     }
     public void stop(){
-        System.out.println("SimCamera.stop");
-        ctrl_node.setString("stop");
+        if(recording){
+            System.out.println("SimCamera.stop");
+            ctrl_node.setString("stop");
+        }
         recording=false;
     }
     public boolean isRecording(){

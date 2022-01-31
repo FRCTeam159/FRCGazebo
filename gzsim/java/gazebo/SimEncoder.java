@@ -15,6 +15,8 @@ public class SimEncoder extends SimNode{
     private double distancePerRotation = 1;
     private double sign=1;
     boolean enabled=false;
+    private double zero;
+    boolean resetting=false;
 
     public SimEncoder(int id){
         chnl=id;
@@ -29,22 +31,25 @@ public class SimEncoder extends SimNode{
         vel_node= objects_chnls.getEntry("velocity");
         vel_node.setDouble(0.0);
         System.out.println("SimEncoder:"+id);
+        zero=0;
     }
     public void setInverted(){
         sign=-1;
     }
     public void enable(){
         enabled=true;
+        resetting=false;
         ctrl_node.setString("run");
     }
     public void disable(){
         enabled=false;
-        ctrl_node.setString("stop");
-    }
-    public void reset(){
-        ctrl_node.setString("reset");
         pos_node.setNumber(0);
-        vel_node.setNumber(0);
+       // ctrl_node.setString("stop");
+    }
+   
+    public void reset(){
+        resetting=true;
+        zero=pos_node.getDouble(0.0);
     }
     public void setDistancePerRotation(double d){
         distancePerRotation = d;
@@ -52,11 +57,11 @@ public class SimEncoder extends SimNode{
     public double getDistancePerRotation() {
         return distancePerRotation;
     }
+   
     public double getDistance() {
-        if(!enabled)
-            return 0;
-        else
-            return sign*distancePerRotation*pos_node.getDouble(0.0);
+        if(resetting)
+          zero=pos_node.getDouble(0.0);
+        return sign*distancePerRotation*(pos_node.getDouble(0.0)-zero);
     }
     public double getRate() {
         if(!enabled)

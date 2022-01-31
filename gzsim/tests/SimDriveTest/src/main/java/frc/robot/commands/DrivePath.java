@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
+import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Drivetrain;
 import utils.PathData;
 import utils.PlotUtils;
@@ -32,7 +32,7 @@ import utils.PlotUtils;
 // =================================================
 public class DrivePath extends CommandBase {
   /** Creates a new AutoTest. */
-  ArrayList<PathData> pathdata = new ArrayList<PathData>();
+  private final ArrayList<PathData> pathdata = new ArrayList<PathData>();
   private final RamseteController m_ramsete = new RamseteController();
   private final Timer m_timer = new Timer();
   private final Drivetrain m_drive;
@@ -50,19 +50,13 @@ public class DrivePath extends CommandBase {
   boolean reversed = false;
 
   int plot_type = utils.PlotUtils.PLOT_NONE;
-  int trajectory_option = RobotContainer.PROGRAM;
+  int trajectory_option = Autonomous.PROGRAM;
 
-  public DrivePath(Drivetrain drive) {
+  public DrivePath(Drivetrain drive, int opt,boolean rev) {
+    reversed=rev;
+    trajectory_option=opt;
     m_drive = drive;
     addRequirements(drive);
-    SmartDashboard.putNumber("xPath", xPath);
-    SmartDashboard.putNumber("yPath", yPath);
-    SmartDashboard.putNumber("rPath", rPath);
-    SmartDashboard.putBoolean("reversed", reversed);
-  }
-
-  public void setProgram(int i) {
-    trajectory_option = i;
   }
 
   // =================================================
@@ -71,14 +65,17 @@ public class DrivePath extends CommandBase {
   @Override
   public void initialize() {
     plot_type = PlotUtils.auto_plot_option;
+    System.out.println("DRIVEPATH_INIT");
+
     xPath = SmartDashboard.getNumber("xPath", xPath);
     yPath = SmartDashboard.getNumber("yPath", yPath);
     rPath = SmartDashboard.getNumber("rPath", rPath);
-    reversed = SmartDashboard.getBoolean("reversed", reversed);
 
     PlotUtils.initPlot();
 
     m_trajectory=getTrajectory();
+    if(m_trajectory==null)
+      return;
 
     PlotUtils.setInitialPose(m_trajectory.sample(0).poseMeters, Drivetrain.kTrackWidth);
     // PlotUtils.setDistanceUnits(PlotUtils.UnitType.FEET);
@@ -96,6 +93,7 @@ public class DrivePath extends CommandBase {
 
     pathdata.clear();
     m_drive.startAuto();
+    elapsed=0;
 
     System.out.println("runtime:" + runtime + " states:" + states + " intervals:" + intervals);
   }
@@ -105,7 +103,7 @@ public class DrivePath extends CommandBase {
   // =================================================
   @Override
   public void execute() {
-    // elapsed = m_timer.get();
+    //elapsed = m_timer.get();
     elapsed = m_drive.getTime();
     if (elapsed < 0.02)
       return;
@@ -128,6 +126,7 @@ public class DrivePath extends CommandBase {
   // =================================================
   @Override
   public void end(boolean interrupted) {
+    System.out.println("DRIVEPATH_END");
     if (m_trajectory == null)
       return;
     m_drive.reset();
@@ -138,7 +137,7 @@ public class DrivePath extends CommandBase {
   }
 
   // =================================================
-  // end: Returns true when the command should end
+  // isFinished: Returns true when the command should end
   // =================================================
   @Override
   public boolean isFinished() {
@@ -152,11 +151,9 @@ public class DrivePath extends CommandBase {
   // =================================================
   Trajectory getTrajectory() {
     switch (trajectory_option) {
-      case RobotContainer.PROGRAM:
+      case Autonomous.PROGRAM:
         return programPath();
-      case RobotContainer.PATHWEAVER:
-        return pathWeaverTest();
-      case RobotContainer.AUTOTEST:
+      case Autonomous.PATHWEAVER:
         return pathWeaverTest();
     }
     return null;
@@ -195,29 +192,11 @@ public class DrivePath extends CommandBase {
   }
 
   // =================================================
-  // autoTest: build a trajectory from fixed waypoints
-  // =================================================
-  Trajectory autoTest(double xVal, double yVal, double rVal, boolean reversed) {
-    double angle1=Math.atan2(0.607,1.053);
-    double angle2=Math.atan2(1.36,0.027);
-    Pose2d pos1 = new Pose2d(7.95,-7.149, new Rotation2d(angle1));
-    Pose2d pos2 = new Pose2d(5.61,-6.88, new Rotation2d(angle2));
-
-    List<Pose2d> points = new ArrayList<Pose2d>();
-
-    points.add(pos1);
-    points.add(pos2);
-    // points.add(pos3);
-    // points.add(pos4);
-    return makeTrajectory(points, reversed);
-  }
-
-  // =================================================
   // makeTrajectory: build a trajectory from a list of poses
   // =================================================
   // - lots of magic done when reverse is set in config
   // - inverts coordinate system from p.o.v. of robot's last pose
-  // (but facing in reverse direction)
+  //   (but facing in reverse direction)
   // - just need to reverse order of points to drive backwards
   // =================================================
   Trajectory makeTrajectory(List<Pose2d> points, boolean reversed) {

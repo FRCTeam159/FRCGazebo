@@ -13,7 +13,7 @@
       <uri>model://2022-Field</uri>
       <pose>-10.2 -3.35 0.01 0 -0 0</pose>
     </include>
-   
+    
     <include>
       <uri>model://Hanger</uri>
       <name>Blue-Hanger</name>

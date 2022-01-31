@@ -24,7 +24,7 @@ void Gyro::Load(gazebo::physics::ModelPtr model, sdf::ElementPtr sdf) {
   if (axisString == "pitch") axis = Pitch;
   if (axisString == "yaw") axis = Yaw;
 
-  zero = GetAngle();
+  //zero = GetAngle();
   stopped = false;
 
   std::cout << "Initializing gyro: " << topic << " link=" << link->GetName()
@@ -45,13 +45,10 @@ void Gyro::Load(gazebo::physics::ModelPtr model, sdf::ElementPtr sdf) {
 void Gyro::Update(const gazebo::common::UpdateInfo& info) {
   gazebo::msgs::Vector3d msg;
   double p=0,v=0;
-  if (stopped){
-    p=stop_value;
-    zero= GetAngle();
-  }else{
-    p = GetAngle() - zero;
+ 
+    p = GetAngle();
     v = GetVelocity();
-  }
+
   gazebo::msgs::Set(&msg, ignition::math::Vector3d(p, v, 0));
   pub->Publish(msg);
 }
@@ -59,6 +56,7 @@ void Gyro::Update(const gazebo::common::UpdateInfo& info) {
 void Gyro::Callback(ConstGzStringPtr& msg) {
   std::string command = msg->data();
   std::cout << "Gyro plugin received command:" << command << std::endl;
+  /*
   if (command == "reset") {
     zero = GetAngle();
     stopped = false;
@@ -72,6 +70,7 @@ void Gyro::Callback(ConstGzStringPtr& msg) {
     gzerr << "WARNING: Gyro got unknown command '" << command << "'."
           << std::endl;
   }
+  */
 }
 
 double Gyro::GetAngle() {

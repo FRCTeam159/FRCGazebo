@@ -6,14 +6,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.DrivePath;
-import frc.robot.commands.Calibrate;
 import frc.robot.commands.DriveWithGamepad;
+import frc.robot.subsystems.Autonomous;
+import frc.robot.subsystems.Cameras;
 import frc.robot.subsystems.Drivetrain;
-import utils.PlotUtils;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -24,47 +21,16 @@ import utils.PlotUtils;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain m_drivetrain = new Drivetrain();
+  private final Autonomous m_autonomous = new Autonomous(m_drivetrain);
   private final XboxController m_controller = new XboxController(0);
+  private final Cameras m_cameras = new Cameras();
 
   private DriveWithGamepad m_driveCommand = null; // TODO
-  public static boolean calibrate = false;
-
-  SendableChooser<Command> m_chooser = new SendableChooser<>();
-  SendableChooser<Integer> m_auto_plot_option = new SendableChooser<>();
-
-  Calibrate m_calibrate = new Calibrate(m_drivetrain);
-  DrivePath m_autopath  = new DrivePath(m_drivetrain);
-
-  public static final int CALIBRATE = 0;
-  public static final int PROGRAM = 1;
-  public static final int AUTOTEST = 2;
-  public static final int PATHWEAVER = 3;
  
-  public int selected_path=PROGRAM;
-
-  SendableChooser<Integer> m_path_chooser = new SendableChooser<Integer>();
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure the button bindings
     m_driveCommand=new DriveWithGamepad(m_drivetrain, m_controller);
     m_drivetrain.setDefaultCommand(m_driveCommand);
-
-    m_auto_plot_option.setDefaultOption("No Plot", PlotUtils.PLOT_NONE);
-    m_auto_plot_option.addOption("Plot Distance", PlotUtils.PLOT_DISTANCE);
-    m_auto_plot_option.addOption("Plot Dynamics", PlotUtils.PLOT_DYNAMICS);
-    m_auto_plot_option.addOption("Plot Position", PlotUtils.PLOT_POSITION);
-
-    m_path_chooser.setDefaultOption("Program", PROGRAM);
-	  m_path_chooser.addOption("AutoTest", AUTOTEST);
-    m_path_chooser.addOption("PathWeaver", PATHWEAVER);
-    m_path_chooser.addOption("Calibrate", CALIBRATE);
-   
-		SmartDashboard.putData(m_path_chooser);
-
-    //SmartDashboard.putData(m_chooser);
-    SmartDashboard.putData(m_auto_plot_option);
-
     configureButtonBindings();
   }
 
@@ -82,14 +48,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-      PlotUtils.auto_plot_option=m_auto_plot_option.getSelected();
-      selected_path=m_path_chooser.getSelected();
-      if(selected_path==CALIBRATE)
-        return m_calibrate;
-      else{
-        m_autopath.setProgram(selected_path);
-        return m_autopath;
-      }
+    return m_autonomous.getCommand();
   }
   public void teleopInit(){
    //m_drivetrain.enable();

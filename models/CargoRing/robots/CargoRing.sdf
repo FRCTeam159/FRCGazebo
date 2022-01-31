@@ -23,28 +23,7 @@
           <izz>597.757102051632</izz>
         </inertia>
       </inertial>
-      <!--
-      <collision name="Center_collision">
-        <pose>1.52601665374591E-14 -0.12463145 1.20275152534648E-14 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>model://CargoRing/meshes/Center_col.STL</uri>
-          </mesh>
-        </geometry>
-        <surface>
-          <contact>
-            <ode />
-          </contact>
-          <friction>
-            <ode>
-              <mu>0</mu>
-              <mu2>0</mu2>
-            </ode>
-          </friction>
-        </surface>
-      </collision>
-      -->
+     
       <visual name="Center_visual">
         <pose>1.52601665374591E-14 -0.12463145 1.20275152534648E-14 0 0 0</pose>
         <material>

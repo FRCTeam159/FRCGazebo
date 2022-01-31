@@ -2,34 +2,33 @@
 <sdf version="1.5">
   <model name="TapeRing">
     <pose>0 0 0 0 0 0</pose>
-    <link name="TapeStrips">
+    <link name="Ring">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>2.63038067965995E-15 2.60746875 -3.06282637209273E-15 0 0 0</pose>
+      <pose>3.76507957461273E-15 2.6061448335911 1.89433843499839E-15 0 0 0</pose>
       <must_be_base_link>1</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
         <angular>0</angular>
       </velocity_decay>
-      <!--
       <inertial>
-        <mass>0.0819834991090512</mass>
+        <mass>1.32324582370025</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
-          <ixx>0.0186604195565645</ixx>
-          <ixy>6.51461423748627E-17</ixy>
-          <ixz>1.11672823766007E-16</ixz>
-          <iyy>0.037320839113129</iyy>
-          <iyz>5.33582990607919E-17</iyz>
-          <izz>0.0186604195565645</izz>
+          <ixx>0.308849390655462</ixx>
+          <ixy>1.10680914103785E-16</ixy>
+          <ixz>3.42347677984023E-15</ixz>
+          <iyy>0.617698781310923</iyy>
+          <iyz>5.25508497748423E-16</iyz>
+          <izz>0.308849390655462</izz>
         </inertia>
       </inertial>
-      <collision name="TapeStrips_collision">
-        <pose>-2.63038067965995E-15 -2.60746875 3.06282637209273E-15 0 0 0</pose>
+      <collision name="Ring_collision">
+        <pose>-3.76507957461273E-15 -2.6061448335911 -1.89433843499839E-15 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://TapeRing/meshes/TapeStrips_col.STL</uri>
+            <uri>model://TapeRing/meshes/Ring_col.STL</uri>
           </mesh>
         </geometry>
         <surface>
@@ -44,23 +43,19 @@
           </friction>
         </surface>
       </collision>
-      -->
-      <visual name="TapeStrips_visual">
-        <pose>-2.63038067965995E-15 -2.60746875 3.06282637209273E-15 0 0 0</pose>
+      <visual name="Ring_visual">
+        <pose>-3.76507957461273E-15 -2.6061448335911 -1.89433843499839E-15 0 0 0</pose>
         <material>
-          <emissive>0 1 1 1</emissive>
+          <ambient>0 1 1 1</ambient>
+          <diffuse>0 1 1 1</diffuse>
         </material>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://TapeRing/meshes/TapeStrips.STL</uri>
+            <uri>model://TapeRing/meshes/Ring.STL</uri>
           </mesh>
         </geometry>
       </visual>
     </link>
-    <joint name="TapeRing-World" type="fixed">
-      <parent>Hub</parent>
-      <child>TapeStrips</child>
-   </joint>
   </model>
 </sdf>

@@ -9,25 +9,19 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import gazebo.SimCamera;
 import gazebo.SimEncMotor;
-
 import gazebo.SimGyro;
 
 public class Drivetrain extends SubsystemBase {
-
-	private SimCamera front_camera;
-	private SimCamera back_camera;
-	private int camera;
 	private SimEncMotor leftMotor;
 	private SimEncMotor rightMotor;
 
@@ -39,7 +33,7 @@ public class Drivetrain extends SubsystemBase {
 	public static final double kWheelDiameter = i2M(7.8); // wheel diameter in tank model
 	
 	public static double kMaxVelocity = 1.5; // meters per second
-	public static double kMaxAcceleration = 1.0; //  meters/second/second
+	public static double kMaxAcceleration = 4.0; //  meters/second/second
 	public static double kMaxAngularSpeed = 180; // degrees per second
 
 	private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(2*kTrackWidth);
@@ -57,15 +51,12 @@ public class Drivetrain extends SubsystemBase {
 	public static final int FRONT_LEFT = 1;
     public static final int FRONT_RIGHT = 2;
 
-	public static final int FRONT_CAMERA = 1;
-	public static final int BACK_CAMERA = 2;
-	
-	private final Field2d m_fieldSim = new Field2d();
 	public boolean enable_gyro = false;
-	public boolean reversed=false;
+
 	private double last_heading=0;
 	public boolean arcade_mode=false;
 
+	private Pose2d field_pose;
 	
 	// For Gazebo simulation use "Calibrate" auto routine to determine where 
 	// model velocity stops increasing with input power
@@ -80,14 +71,6 @@ public class Drivetrain extends SubsystemBase {
 	public Drivetrain() {
 		simulation = new Simulation(this);
 
-		front_camera=new SimCamera(FRONT_CAMERA);
-		simulation.addCamera(front_camera);
-
-		back_camera=new SimCamera(BACK_CAMERA);
-		simulation.addCamera(back_camera);
-
-		camera=FRONT_CAMERA;
-
 		leftMotor = new SimEncMotor(FRONT_LEFT);
 		rightMotor = new SimEncMotor(FRONT_RIGHT);
 		leftMotor.setDistancePerRotation(distancePerRotation);
@@ -99,21 +82,13 @@ public class Drivetrain extends SubsystemBase {
 		rightMotor.setInverted();
 	
 		odometry = new DifferentialDriveOdometry(getRotation2d());
-		SmartDashboard.putData("Field", m_fieldSim);
-		SmartDashboard.putBoolean("record", false);
-		SmartDashboard.putBoolean("front", true);
+		
 		SmartDashboard.putBoolean("Enable gyro", enable_gyro);
 		SmartDashboard.putBoolean("Arcade mode", arcade_mode);
 	}
 
 	private static double i2M(double inches) {
 		return inches * 0.0254;
-	}
-	private static double m2I(double meters) {
-		return meters / 0.0254;
-	}
-	private double r2M(double rotations) {
-		return  Math.PI * kWheelDiameter*rotations;
 	}
 	private double r2D(double radians) {
 		return  180*radians/Math.PI;
@@ -131,6 +106,7 @@ public class Drivetrain extends SubsystemBase {
 	}
 	public void init(){
 		System.out.println("Drivetrain.init");
+		field_pose=getPose();
 		simulation.init();
 		enable();
 	}
@@ -148,23 +124,26 @@ public class Drivetrain extends SubsystemBase {
 		rightMotor.enable();
 		gyro.enable();
 	}
-	public void resetAll(){
-		//simulation.reset();
-		System.out.println("Drivetrain.reseAll");
-		leftMotor.reset();
-		rightMotor.reset();
-		gyro.clear();
-		last_heading = 0;
-
-	}
 	public void reset(){
-		//simulation.reset();
+		field_pose=add(field_pose,getPose());
 		System.out.println("Drivetrain.reset");
 		leftMotor.reset();
 		rightMotor.reset();
-		//last_heading = gyro.getHeading();
 		gyro.reset();
-		reversed=false;
+		last_heading =0;
+	}
+	public void resetPose() {
+		resetOdometry(new Pose2d(0,0,new Rotation2d(0)));
+		field_pose=getPose();
+    }
+	// get transform from pose
+	public static Transform2d getTransform(Pose2d pose){
+		return new Transform2d(pose.getTranslation(), pose.getRotation());
+	}
+	// add two poses
+	public static Pose2d add(Pose2d p1,Pose2d p2){
+		Transform2d td=getTransform(p2);
+		return p1.plus(td);
 	}
 	public double getHeading(){
 		return getRotation2d().getDegrees();
@@ -184,8 +163,7 @@ public class Drivetrain extends SubsystemBase {
 			angle=gyroHeading();
 		else
 			angle=calcHeading();
-		if(reversed)
-			angle+=180;
+
 		angle=unwrap(last_heading,angle);
 		last_heading=angle;
 		return Rotation2d.fromDegrees(angle);
@@ -210,31 +188,19 @@ public class Drivetrain extends SubsystemBase {
 	}
 	public void log(){
 		SmartDashboard.putNumber("Heading", getHeading());
-		SmartDashboard.putNumber("Left distance", getLeftDistance());
-		SmartDashboard.putNumber("Right distance", getRightDistance());
-		SmartDashboard.putNumber("Left speed", getLeftVelocity());
-		SmartDashboard.putNumber("Right speed", getRightVelocity());
+		SmartDashboard.putNumber("Distance", getDistance());
+		SmartDashboard.putNumber("Velocity", getVelocity());
 		enable_gyro=SmartDashboard.getBoolean("Enable gyro", enable_gyro); 
 		arcade_mode=SmartDashboard.getBoolean("Arcade mode", arcade_mode);	
 	}
 	@Override
 	public void periodic() {
 		updateOdometry();
-        m_fieldSim.setRobotPose(odometry.getPoseMeters());
 	}
 
 	@Override
 	public void simulationPeriodic() {
 		updateOdometry();
-		// capture a movie from the Gazebo camera (gztest/c++/tmp/test_0.avi)
-		
-		int which_camera=SmartDashboard.getBoolean("front", true)?FRONT_CAMERA:BACK_CAMERA;
-		if(SmartDashboard.getBoolean("record", false)){
-			camera=which_camera;
-			simulation.startCamera(camera);
-		}
-		else
-			simulation.stopCamera(camera);
 		log();
 	}
 	
@@ -273,9 +239,11 @@ public class Drivetrain extends SubsystemBase {
 		gyro.reset();
 		odometry.resetPosition(pose, getRotation2d());
 	}
-
     public Pose2d getPose() {
         return odometry.getPoseMeters();
+    }
+	public Pose2d getFieldPose() {
+        return field_pose;
     }
 	public void set(double value) {
 		leftMotor.set(value);
