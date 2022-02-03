@@ -39,6 +39,8 @@ public class MJpegClient {
     InputStream stream;
     ByteArrayOutputStream imageBuffer = new ByteArrayOutputStream();
 
+    Mat mat=null;
+
     public MJpegClient(String url) {
         input_url = url;
         stream = getCameraStream();
@@ -75,8 +77,9 @@ public class MJpegClient {
             readUntil(stream, END_BYTES, imageBuffer);
             ByteArrayInputStream  tmpStream = new ByteArrayInputStream(imageBuffer.toByteArray());
             BufferedImage im = ImageIO.read(tmpStream);
-            byte[] bytes = ((DataBufferByte) im.getRaster().getDataBuffer()).getData(); 
-            Mat mat = new Mat(im.getHeight(), im.getWidth(), CvType.CV_8UC3);
+            byte[] bytes = ((DataBufferByte) im.getRaster().getDataBuffer()).getData();
+            if(mat==null)
+                mat = new Mat(im.getHeight(), im.getWidth(), CvType.CV_8UC3);
             mat.put(0, 0, bytes);
             return mat;
         } catch (Exception ex) {

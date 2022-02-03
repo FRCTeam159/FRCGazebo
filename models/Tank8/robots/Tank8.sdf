@@ -61,7 +61,7 @@
        <sensor name="FrameCamera1" type="camera">
         <visualize>1</visualize>
         <always_on>1</always_on>
-        <update_rate>20</update_rate>
+        <update_rate>30</update_rate>
         <!--
         <pose>-0.000573275356463565 0.3 -0.392489921187236 0 0.9 1.5707963267949</pose>
         -->
@@ -79,9 +79,9 @@
           </clip>
         </camera>
         <plugin name="camera1" filename="sim_camera.dll">
-          <topic>~/gazebo/frc/simulator/camera/1</topic>
+          <topic>~/gazebo/frc/simulator/camera/0</topic>
           <port>9000</port>
-          <fps>10</fps>
+          <fps>20</fps>
           <enabled>true</enabled>
           <savepath>tmp</savepath>
           <maxframes>0</maxframes>
@@ -107,9 +107,9 @@
           </clip>
         </camera>
         <plugin name="camera2" filename="sim_camera.dll">
-          <topic>~/gazebo/frc/simulator/camera/2</topic>
+          <topic>~/gazebo/frc/simulator/camera/1</topic>
           <port>9001</port>
-          <fps>10</fps>
+          <fps>20</fps>
           <enabled>true</enabled>
           <savepath>tmp</savepath>
           <maxframes>0</maxframes>
@@ -148,16 +148,16 @@
           </mesh>
         </geometry>
         <surface>
-		  <contact>
-			<ode>
-			  <max_vel>0.1</max_vel>
-			  <soft_cfm>0.8</soft_cfm>
-			  <soft_erp>0.8</soft_erp>
-			  <kd>200</kd>
-			  <kp>50000</kp>
-			  <min_depth>0.0001</min_depth>
-			</ode>
-		  </contact>
+          <contact>
+          <ode>
+            <max_vel>0.1</max_vel>
+            <soft_cfm>0.8</soft_cfm>
+            <soft_erp>0.8</soft_erp>
+            <kd>200</kd>
+            <kp>50000</kp>
+            <min_depth>0.0001</min_depth>
+          </ode>
+          </contact>
           <friction>
             <ode>
               <mu>2</mu>

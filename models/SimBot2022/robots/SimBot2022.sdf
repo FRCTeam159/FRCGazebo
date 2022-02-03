@@ -1,0 +1,837 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.5">
+  <model name="SimBot2022">
+    <pose>0 0 -0.00634999999999991 0 0 0</pose>
+    <link name="Frame">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.444404132234015 0.349249998947296 -0.0121442437482689 1.5707963267949 0 -1.5707963267949</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>6.21135152696499</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0.53568702779828</ixx>
+          <ixy>0.00141729760900026</ixy>
+          <ixz>0.0015637144490817</ixz>
+          <iyy>0.763662622156092</iyy>
+          <iyz>2.755962000102E-05</iyz>
+          <izz>0.237195905553374</izz>
+        </inertia>
+      </inertial>
+      <collision name="Frame_collision">
+        <pose>-1.05270421256708E-09 -0.115673035146501 0.0380041322340155 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2022/meshes/Frame_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="Frame_visual">
+        <pose>-1.05270421256708E-09 -0.115673035146501 0.0380041322340155 0 0 0</pose>
+        <material>
+          <ambient>0.501960784313725 1 0.501960784313725 1</ambient>
+          <diffuse>0.501960784313725 1 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2022/meshes/Frame.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <link name="shooter">
+      <self_collide>0</self_collide>
+      <pose>0.156314850280517 0.359475305225637 0.179838492854923 1.5707963267949 0 -1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+     
+      <gravity>1</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.53013812705772</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      
+      <!---->
+      <collision name="shooter_collision">
+        <pose>0.0102253052256366 -0.307655771749693 -0.250085149719483 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2022/meshes/shooter_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="shooter_visual">
+        <pose>0.0102253052256366 -0.307655771749693 -0.250085149719483 0 0 0</pose>
+        <material>
+          <ambient>0 0 0.250980392156863 1</ambient>
+          <diffuse>0 0 0.250980392156863 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2022/meshes/shooter.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <sensor name="ShooterCamera" type="camera">
+        <visualize>1</visualize>
+        <always_on>1</always_on>
+        <pose>0.0104563713437767 0.279066737993733 0.0931638028200657 0 0.819943496172562 2.0</pose>
+        <camera name="shootercamera">
+          <horizontal_fov>1.5707963267949</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+        </camera>
+        <plugin name="camera1" filename="sim_camera.dll">
+          <topic>~/gazebo/frc/simulator/camera/0</topic>
+          <port>9000</port>
+          <fps>20</fps>
+          <enabled>true</enabled>
+          <savepath>tmp</savepath>
+          <maxframes>0</maxframes>
+          <video>front.avi</video>
+      </plugin>
+      </sensor>
+      <sensor name="IntakeCamera" type="camera">
+        <visualize>1</visualize>
+        <always_on>1</always_on>
+        <pose>0.0104563713437772 0.114878062181823 0.0771053248601615 0 4.71238898038469 4.71238898038469</pose>
+        <camera name="intakecamera">
+          <horizontal_fov>1.5707963267949</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+        </camera>
+        <plugin name="camera2" filename="sim_camera.dll">
+          <topic>~/gazebo/frc/simulator/camera/1</topic>
+          <port>9001</port>
+          <fps>20</fps>
+          <enabled>true</enabled>
+          <savepath>tmp</savepath>
+          <maxframes>0</maxframes>
+          <video>back.avi</video>
+      </plugin>
+      </sensor>
+    </link>
+   
+    <joint name="Frame-shooter" type="fixed">
+      <parent>Frame</parent>
+      <child>shooter</child>
+    </joint>
+    
+    <link name="IntakeWheels">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.0635991330417208 0.345706329943442 0.17565755976897 1.5707963267949 0 -1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.163527673829499</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <collision name="IntakeWheels_collision">
+        <pose>-0.00354367005655759 -0.30347483866374 -0.342800866958279 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2022/meshes/IntakeWheels_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="IntakeWheels_visual">
+        <pose>-0.00354367005655759 -0.30347483866374 -0.342800866958279 0 0 0</pose>
+        <material>
+          <ambient>0 0.250980392156863 1 1</ambient>
+          <diffuse>0 0.250980392156863 1 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2022/meshes/IntakeWheels.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    
+    <joint name="shooter-IntakeWheels" type="revolute">
+      <parent>shooter</parent>
+      <child>IntakeWheels</child>
+      <pose>0 0 0 0 0 0</pose>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <dynamics>
+          <damping>2</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>0</effort>
+        </limit>
+      </axis>
+    </joint>
+    <!---->
+    
+    <link name="ShooterWheels">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.354572546541651 0.348528163787237 0.250951615137794 1.5707963267949 0 -1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.178595631528389</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <collision name="ShooterWheels_collision">
+        <pose>-0.000721836212762695 -0.378768894032564 -0.0518274534583495 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2022/meshes/ShooterWheels_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="ShooterWheels_visual">
+        <pose>-0.000721836212762695 -0.378768894032564 -0.0518274534583495 0 0 0</pose>
+        <material>
+          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2022/meshes/ShooterWheels.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <!---->
+    <joint name="shooter-ShooterWheels" type="revolute">
+      <parent>shooter</parent>
+      <child>ShooterWheels</child>
+      
+      <pose>0 0 0 0 6.28318530717958 3.14159265358979</pose>
+      <axis>
+        <xyz>1 0 0</xyz>   
+        <dynamics>
+          <damping>2</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>0</effort>
+        </limit>
+      </axis>
+    </joint>
+     
+    <link name="LFWheel">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.660444300197691 0.665149209940693 -0.0238760000000006 1.5707963267949 0 -1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.255325203825891</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <collision name="LFWheel_collision">
+        <pose>0.315899209940693 -0.10394127889477 0.254044300197691 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2022/meshes/LFWheel_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+          <ode>
+            <max_vel>0.1</max_vel>
+            <soft_cfm>0.8</soft_cfm>
+            <soft_erp>0.8</soft_erp>
+            <kd>200</kd>
+            <kp>50000</kp>
+            <min_depth>0.0001</min_depth>
+          </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>2</mu>
+              <mu2>2</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="LFWheel_visual">
+        <pose>0.315899209940693 -0.10394127889477 0.254044300197691 0 0 0</pose>
+        <material>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2022/meshes/LFWheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Frame-LFWheel" type="revolute">
+      <parent>Frame</parent>
+      <child>LFWheel</child>
+      <pose>0 0 0 0 0 0</pose>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <dynamics>
+          <damping>2</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>50</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="LCWheel">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.406444300197691 0.660386709940693 -0.0238760000000001 1.5707963267949 0 -1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.255325203825891</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <collision name="LCWheel_collision">
+        <pose>0.311136709940693 -0.10394127889477 4.43001976909582E-05 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2022/meshes/LCWheel_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+          <ode>
+            <max_vel>0.1</max_vel>
+            <soft_cfm>0.8</soft_cfm>
+            <soft_erp>0.8</soft_erp>
+            <kd>200</kd>
+            <kp>50000</kp>
+            <min_depth>0.0001</min_depth>
+          </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>2</mu>
+              <mu2>2</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="LCWheel_visual">
+        <pose>0.311136709940693 -0.10394127889477 4.43001976909582E-05 0 0 0</pose>
+        <material>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2022/meshes/LCWheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Frame-LCWheel" type="revolute">
+      <parent>Frame</parent>
+      <child>LCWheel</child>
+      <pose>-2.22044604925031E-16 1.38777878078145E-17 4.43001976909582E-05 0 0 0</pose>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <dynamics>
+          <damping>2</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>50</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="LBWheel">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.152444300197691 0.665149209940693 -0.0238759999999991 1.5707963267949 0 -1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.255325203825891</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <collision name="LBWheel_collision">
+        <pose>0.315899209940693 -0.103941278894771 -0.253955699802309 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2022/meshes/LBWheel_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+          <ode>
+            <max_vel>0.1</max_vel>
+            <soft_cfm>0.8</soft_cfm>
+            <soft_erp>0.8</soft_erp>
+            <kd>200</kd>
+            <kp>50000</kp>
+            <min_depth>0.0001</min_depth>
+          </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>2</mu>
+              <mu2>2</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="LBWheel_visual">
+        <pose>0.315899209940693 -0.103941278894771 -0.253955699802309 0 0 0</pose>
+        <material>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2022/meshes/LBWheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Frame-LBWheel" type="revolute">
+      <parent>Frame</parent>
+      <child>LBWheel</child>
+      <pose>-2.22044604925031E-16 -1.04083408558608E-15 4.43001976915269E-05 0 0 0</pose>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <dynamics>
+          <damping>2</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>50</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="RFWheel">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.660355699802309 0.0333507900593075 -0.0238760000000013 1.5707963267949 0 -1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.255325203825891</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <collision name="RFWheel_collision">
+        <pose>-0.315899209940693 -0.103941278894769 0.253955699802309 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2022/meshes/RFWheel_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+          <ode>
+            <max_vel>0.1</max_vel>
+            <soft_cfm>0.8</soft_cfm>
+            <soft_erp>0.8</soft_erp>
+            <kd>200</kd>
+            <kp>50000</kp>
+            <min_depth>0.0001</min_depth>
+          </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>2</mu>
+              <mu2>2</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="RFWheel_visual">
+        <pose>-0.315899209940693 -0.103941278894769 0.253955699802309 0 0 0</pose>
+        <material>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2022/meshes/RFWheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Frame-RFWheel" type="revolute">
+      <parent>Frame</parent>
+      <child>RFWheel</child>
+      <pose>0 0 0 0 0 0</pose>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <dynamics>
+          <damping>2</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>50</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="RCWheel">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.406355699802309 0.0381132900593072 -0.0238760000000001 1.5707963267949 0 -1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.255325203825891</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <collision name="RCWheel_collision">
+        <pose>-0.311136709940693 -0.10394127889477 -4.43001976909449E-05 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2022/meshes/RCWheel_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+          <ode>
+            <max_vel>0.1</max_vel>
+            <soft_cfm>0.8</soft_cfm>
+            <soft_erp>0.8</soft_erp>
+            <kd>200</kd>
+            <kp>50000</kp>
+            <min_depth>0.0001</min_depth>
+          </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>2</mu>
+              <mu2>2</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="RCWheel_visual">
+        <pose>-0.311136709940693 -0.10394127889477 -4.43001976909449E-05 0 0 0</pose>
+        <material>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2022/meshes/RCWheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Frame-RCWheel" type="revolute">
+      <parent>Frame</parent>
+      <child>RCWheel</child>
+      <pose>0 0 0 0 0 0</pose>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <dynamics>
+          <damping>2</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>50</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="RBWheel">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.15235569980231 0.0333507900593071 -0.0238759999999991 1.5707963267949 0 -1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.255325203825891</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <collision name="RBWheel_collision">
+        <pose>-0.315899209940693 -0.103941278894771 -0.25404430019769 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2022/meshes/RBWheel_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+          <ode>
+            <max_vel>0.1</max_vel>
+            <soft_cfm>0.8</soft_cfm>
+            <soft_erp>0.8</soft_erp>
+            <kd>200</kd>
+            <kp>50000</kp>
+            <min_depth>0.0001</min_depth>
+          </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>2</mu>
+              <mu2>2</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="RBWheel_visual">
+        <pose>-0.315899209940693 -0.103941278894771 -0.25404430019769 0 0 0</pose>
+        <material>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2022/meshes/RBWheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Frame-RBWheel" type="revolute">
+      <parent>Frame</parent>
+      <child>RBWheel</child>
+      <pose>0 0 0 0 0 0</pose>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <dynamics>
+          <damping>2</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>50</effort>
+        </limit>
+      </axis>
+    </joint>
+    <plugin name="shooter-IntakeWheels_motor" filename="sim_motor.dll">
+      <joint>shooter-IntakeWheels</joint>
+      <topic>~/gazebo/frc/simulator/motor/7</topic>
+      <multiplier>50</multiplier>
+    </plugin>
+    <plugin name="shooter-ShooterWheels_motor" filename="sim_motor.dll">
+      <joint>shooter-ShooterWheels</joint>
+      <topic>~/gazebo/frc/simulator/motor/8</topic>
+      <multiplier>50</multiplier>
+    </plugin>
+
+    <plugin name="clock" filename="sim_clock.dll">
+      <topic>~/gazebo/frc/simulator/clock</topic>
+    </plugin>
+    
+    <plugin name="Body_gyro" filename="sim_gyro.dll">
+      <link>Frame</link>
+      <topic>~/gazebo/frc/simulator/gyro</topic>
+      <units>degrees</units>
+      <axis>yaw</axis>
+    </plugin>
+
+    <plugin name="Frame-LFWheel_motor" filename="sim_motor.dll">
+      <joint>Frame-LFWheel</joint>
+      <topic>~/gazebo/frc/simulator/motor/1</topic>
+      <multiplier>50</multiplier>
+    </plugin>
+    <plugin name="Frame-LCWheel_motor" filename="sim_motor.dll">
+      <joint>Frame-LCWheel</joint>
+      <topic>~/gazebo/frc/simulator/motor/1</topic>
+      <multiplier>50</multiplier>
+    </plugin>
+    <plugin name="Frame-LBWheel_motor" filename="sim_motor.dll">
+      <joint>Frame-LBWheel</joint>
+      <topic>~/gazebo/frc/simulator/motor/1</topic>
+      <multiplier>50</multiplier>
+    </plugin>
+    <plugin name="Frame-RFWheel_motor" filename="sim_motor.dll">
+      <joint>Frame-RFWheel</joint>
+      <topic>~/gazebo/frc/simulator/motor/2</topic>
+      <multiplier>50</multiplier>
+    </plugin>
+    <plugin name="Frame-RCWheel_motor" filename="sim_motor.dll">
+      <joint>Frame-RCWheel</joint>
+      <topic>~/gazebo/frc/simulator/motor/2</topic>
+      <multiplier>50</multiplier>
+    </plugin>
+    <plugin name="Frame-RBWheel_motor" filename="sim_motor.dll">
+      <joint>Frame-RBWheel</joint>
+      <topic>~/gazebo/frc/simulator/motor/2</topic>
+      <multiplier>50</multiplier>
+    </plugin>
+  </model>
+</sdf>
