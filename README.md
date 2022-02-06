@@ -20,6 +20,7 @@ Run-time support is currenly provided for VSCode projects written in the Java pr
 I. You will need to first download and install the following applications:
 1) miniconda3
    https://docs.conda.io/en/latest/miniconda.html
+   <ul><li>note: ok to accept the option to add miniconda to path (may get Ogre installation errors otherwise)</li></ul>
    
 2) git-bash for Windows
    https://gitforwindows.org/
@@ -31,13 +32,17 @@ II. Install Gazebo-11 from conda-forge
    $ conda install gazebo -c conda-forge
    (The installation usually takes about 10-15 minutes)
    
-2) That's it ! to test just enter the following in the bash shell
+2) That's it ! to test just enter the following in the bash shell *
 
    gazebo --verbose
    
    If all goes well you should see the Gazebo application on the desktop displaying an empty world
    
-
+<h4>* Bug 2/4/22</h4>
+ <ul><li>As of at least this date the conda-forge gazebo installation fails to allow gazebo to run (just fails silently with no error message)
+   <li> A work-around (until the problem is fixed) is to use a conda environment file to install a known-to-work version which is available in the "docs" directory of this project (base-env.txt)
+      <li> After installing miniconda3 to install gazebo in the base directory download the file and the enter from a command shell: conda install --name base --file base-env.txt
+         </ul>
 <h2>FRCGazebo Installation</h2>
 
 This repository contains a number of tools that should allow you to connect a robot program to Gazebo in simulation mode. It should be noted however that this is just one approach that can be followed and no promises are made that it will work for you without at least a bit of tweeking !
@@ -49,8 +54,8 @@ $ git clone https://github.com/FRCTeam159/FRCGazebo
 <h3> configure a "bash" environment to use the libraries, models and other utilities provided</h3>
    Create a ".bashrc" file (text) in your home directory that contains environment variables etc. that will allow you to more easilly access the models and plugins provided by this project (an example .bashrc file is provided in the "docs" directory)
 <pre>
-export MY_GAZEBO=/c/Users/Alpiner/Robotics/FRCTeam159Repos/FRCGazebo
-export GAZEBO_LIBRARY=/c/Users/Alpiner/miniconda3/Library
+export MY_GAZEBO=$HOME/Robotics/FRCTeam159Repos/FRCGazebo
+export GAZEBO_LIBRARY=$HOME/miniconda3/Library
 export GAZEBO_TOOLS=$GAZEBO_LIBRARY/share/gazebo-11
 export GAZEBO_MASTER_URI=${GAZEBO_MASTER_URI:-http://localhost:11345}   
 export GAZEBO_MODEL_DATABASE_URI=http://models.gazebosim.org  
