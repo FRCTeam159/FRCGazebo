@@ -5,22 +5,22 @@
     <link name="Ball">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>0 0.12065 4.56002916448565E-16 0 0 0</pose>
+      <pose>0 0 0 0 0 0</pose>
       <must_be_base_link>1</must_be_base_link>
       <velocity_decay>
-        <linear>0</linear>
-        <angular>0</angular>
+        <linear>0.1</linear>
+        <angular>0.1</angular>
       </velocity_decay>
       <inertial>
-        <mass>7.35648896815794</mass>
+        <mass>0.5</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
-          <ixx>0</ixx>
+          <ixx>0.01</ixx>
           <ixy>0</ixy>
           <ixz>0</ixz>
-          <iyy>0</iyy>
+          <iyy>0.01</iyy>
           <iyz>0</iyz>
-          <izz>0</izz>
+          <izz>0.01</izz>
         </inertia>
       </inertial>
       <collision name="Ball_collision">
@@ -32,13 +32,16 @@
           </mesh>
         </geometry>
         <surface>
-          <contact>
-            <ode />
+         <contact>
+            <ode>
+              <kp>5000000</kp>
+              <kd>0.01</kd>
+            </ode>
           </contact>
           <friction>
             <ode>
-              <mu>0</mu>
-              <mu2>0</mu2>
+              <mu>1</mu>
+              <mu2>1</mu2>
             </ode>
           </friction>
         </surface>
