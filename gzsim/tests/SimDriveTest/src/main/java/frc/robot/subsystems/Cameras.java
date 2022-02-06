@@ -58,4 +58,8 @@ public class Cameras extends SubsystemBase {
 			recording_camera.stop();
     // This method will be called once per scheduler run
   }
+  @Override
+  public void simulationPeriodic(){
+
+  }
 }

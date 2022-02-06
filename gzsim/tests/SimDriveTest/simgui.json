@@ -28,7 +28,6 @@
     },
     "windows": {
       "/SmartDashboard/Field": {
-        "image": "C:\\Users\\Alpiner\\PathWeaver\\Games\\RapidReact\\2022-field.png",
         "window": {
           "visible": true
         }
@@ -36,6 +35,9 @@
     }
   },
   "NetworkTables": {
+    "SmartDashboard": {
+      "open": true
+    },
     "gazebo": {
       "camera": {
         "1": {
