@@ -10,7 +10,7 @@ Recently however, a number of factors have combined to open up the possibility o
 2) wpilib's new "Simulate on Desktop" option which provides a driver-station selection box that can be used to switch between disabled,auto and teleop modes
 
 <h2>Hardware Requirements</h2>
-Testing has only been done on a single Windows laptop (a Dell Inspison 7000 series with an Nvidia GTX 960M graphics card) but any similarly equiped laptop or desktop computer would probably be adequate.
+Testing has only been done on a Windows 10 laptop (a Dell Inspison 7000 series with a Nvidia GTX 960M graphics card) and a Windows 11 desktop (2070 Nvidia gpu) but any similarly equiped laptop or desktop computer will probably be adequate.
 
 <h2>Software Requirements</h2>
 Run-time support is currenly provided for VSCode projects written in the Java programming lanquage targeting the 2022.1.1 FRC release. In order to build the non-java components of this project you will also need to download and install Visual Studio Community edition 2015-2019 (with c++ support)
