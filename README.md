@@ -3,7 +3,7 @@
 
 <h1>Overview</h1>
 
-The Gazebo Simulator (also called Ignition) provides the ability to test robot behavior in an environment that includes real-world emulation of physical properties like gravity, friction, momentum, inertia, collisions etc. In past years this test-bed was supported by First but was dropped more recently, presumbably because it was only fully provided on Linux platforms which were difficult to come by for most FRC teams. 
+The Gazebo Simulator provides the ability to test robot behavior in an environment that includes real-world emulation of physical properties like gravity, friction, momentum, inertia, collisions etc. In past years this test-bed was supported by First but was dropped more recently, presumbably because it was only fully provided on Linux platforms which were difficult to come by for most FRC teams. 
 
 Recently however, a number of factors have combined to open up the possibility of running Gazebo simulations natively on Windows. Most notably:
 1) A simple python installation of gazebo-11 for Windows available from conda-forge
@@ -74,7 +74,7 @@ Note: set "MY_GAZEBO" to the directory that this repo was cloned to and "GAZEBO_
 <dt>docs</dt><dd>documents</dd>
 <dt>gzsim</dt><dd>build and test</dd>
 <dt>models</dt><dd>gazebo models</dd>
-<dt>plugins</dt><dd>gazebo plugins (build by project)</dd>
+<dt>plugins</dt><dd>gazebo plugins (built by project)</dd>
 <dt>worlds</dt><dd>gazebo worlds</dd>
 <dt>wpilib</dt><dd>wpilib c++ includes and libraries</dd>
 </dl>
@@ -167,6 +167,6 @@ It's possible to get around this problem and to generate the expected ".jpg" fil
 
 The solution to this problem was to use Wpilib's Camera Server API (cscore) instead. This has a nice advantage in that it allows images to be sent directly from memory to a cs::MjpegServer class without having to be written out to an intermediate jpeg file at all.
    
-<h3> Project Implentation Method</h3>
+<h3> Project Implentation Method [TODO] </h3>
 
-<h2> Building This Project
+<h2> Building This Project [TODO]
