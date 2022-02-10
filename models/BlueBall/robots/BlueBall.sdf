@@ -38,7 +38,7 @@
          <contact>
          
             <ode>
-             <max_vel>15</max_vel>
+              <max_vel>15</max_vel>
               <min_depth>0.002</min_depth>
               <!-- -->
               <kp>10000000</kp>

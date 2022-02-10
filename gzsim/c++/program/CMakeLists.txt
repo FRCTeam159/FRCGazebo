@@ -9,12 +9,12 @@ add_compile_definitions(GZ_TEST=1)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
 set(NT_LIBS 
-    $ENV{MY_GAZEBO}/wpilib/libs/ntcore.lib;
-    $ENV{MY_GAZEBO}/wpilib/libs/wpiutil.lib;
+    $ENV{GAZEBO_SIM}/wpilib/libs/ntcore.lib;
+    $ENV{GAZEBO_SIM}/wpilib/libs/wpiutil.lib;
 )
-include_directories(${GAZEBO_INCLUDE_DIRS} $ENV{MY_GAZEBO}/wpilib/includes)
+include_directories(${GAZEBO_INCLUDE_DIRS} $ENV{GAZEBO_SIM}/wpilib/includes)
 
-link_directories(${GAZEBO_LIBRARY_DIRS} $ENV{MY_GAZEBO}/wpilib/libs)
+link_directories(${GAZEBO_LIBRARY_DIRS} $ENV{GAZEBO_SIM}/wpilib/libs)
 
 add_executable(
     GzProgram 
@@ -25,6 +25,7 @@ add_executable(
 ../src/GzGyro.cpp
 ../src/GzClock.cpp
 ../src/GzCamera.cpp
+../src/GzContact.cpp
 )
 target_link_libraries(GzProgram ${GAZEBO_LIBRARIES} ${NT_LIBS})
 
