@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<sdf version="1.5">
+<sdf version="1.7">
   <model name="2022-Field">
     <pose>0 0 -0.0519747499997509 0 0 0</pose>
     <link name="Field">
@@ -13,12 +13,13 @@
       </velocity_decay>
      
       <!-- Lost solidworks 2022-Field model - so now using sides only model for collisions -->
+      <!---->
       <collision name="Field_collision">
         <pose>0.00606682331500135 -0.696635081374032 0.00525352273594806 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://2022-Field-Border/meshes/Field_col.STL</uri>
+            <uri>model://2022-Field/meshes/Field_col.STL</uri>
           </mesh>
         </geometry>
         <surface>
