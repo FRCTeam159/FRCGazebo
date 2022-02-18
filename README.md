@@ -167,6 +167,6 @@ It's possible to get around this problem and to generate the expected ".jpg" fil
 
 The solution to this problem was to use Wpilib's Camera Server API (cscore) instead. This has a nice advantage in that it allows images to be sent directly from memory to a cs::MjpegServer class without having to be written out to an intermediate jpeg file at all.
    
-<h3> Project Implentation Method [TODO] </h3>
+<h3> Project Implementation Details [TODO] </h3>
 
 <h2> Building This Project [TODO]
