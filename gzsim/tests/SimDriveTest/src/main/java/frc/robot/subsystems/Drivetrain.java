@@ -27,7 +27,7 @@ public class Drivetrain extends SubsystemBase {
 
 	private Simulation simulation;
 	
-	public SimGyro gyro = new SimGyro();
+	public SimGyro gyro = new SimGyro(0);
 
 	public static final double kTrackWidth = i2M(2*23); // bug? need to double actual value for geometry to work
 	public static final double kWheelDiameter = i2M(7.8); // wheel diameter in tank model
@@ -40,8 +40,8 @@ public class Drivetrain extends SubsystemBase {
 	private final DifferentialDriveOdometry odometry;
 
 	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.1,1);
-	private final PIDController leftPIDController = new PIDController(0.25, 0.0, 0.0);
-	private final PIDController rightPIDController = new PIDController(0.25, 0.0, 0.0);
+	private final PIDController leftPIDController = new PIDController(0.1, 0.0, 0.0);
+	private final PIDController rightPIDController = new PIDController(0.1, 0.0, 0.0);
 
 	private final SlewRateLimiter speedLimiter = new SlewRateLimiter(kMaxVelocity);
 	private final SlewRateLimiter rotLimiter = new SlewRateLimiter(kMaxAngularSpeed);
@@ -76,8 +76,8 @@ public class Drivetrain extends SubsystemBase {
 		leftMotor.setDistancePerRotation(distancePerRotation);
 		rightMotor.setDistancePerRotation(distancePerRotation);
 
-		leftMotor.setScale(scale);
-		rightMotor.setScale(scale);
+		//leftMotor.setScale(scale);
+		//rightMotor.setScale(scale);
 	
 		rightMotor.setInverted();
 	

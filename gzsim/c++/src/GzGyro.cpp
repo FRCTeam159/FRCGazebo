@@ -1,17 +1,20 @@
 #include "GzGyro.h"
 
-std::string GzGyro::topic_base= "~/gazebo/frc/simulator/gyro";
-GzGyro::GzGyro(std::shared_ptr<nt::NetworkTable> t) :  GzNode(topic_base,t) 
+std::string GzGyro::topic_base= "~/gazebo/frc/simulator/gyro/";
+GzGyro::GzGyro(int i,std::shared_ptr<nt::NetworkTable> t) : chnl(i),
+ GzNode(topic_base+std::to_string(i),t) 
 {
-    std::cout<<"GzGyro::GzGyro() gztopic:"<<gz_topic<<std::endl;
+    std::cout<<"GzGyro::GzGyro("<<i<<") gztopic:"<<gz_topic<<std::endl;
 }
 GzGyro::~GzGyro(){
-    std::cout<<"GzGyro::~GzGyro()"<<std::endl;
+    std::cout<<"GzGyro::~GzGyro("<<chnl<<")"<<std::endl;
 }
 
 void GzGyro::callback(const ConstVector3dPtr &msg){
-    table->PutNumber("heading",msg->x());
-    table->PutNumber("rate",msg->y());
+    table->PutNumber("yaw",msg->x());      // heading 
+    table->PutNumber("roll",msg->y()-90);
+    table->PutNumber("pitch",msg->z());     // z could be either pitch or velocity
+    table->PutNumber("velocity",msg->z());
 }
 
 bool GzGyro::connect(){

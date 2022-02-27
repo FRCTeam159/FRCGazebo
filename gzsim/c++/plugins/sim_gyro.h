@@ -73,11 +73,13 @@ class Gyro : public gazebo::ModelPlugin {
 
   /// \brief Gets the current angle, taking into account whether to
   ///        return radians or degrees.
-  double GetAngle();
+  double GetAngle(ROTATION a);
+
+  int num_axis;
 
   /// \brief Gets the current velocity, taking into account whether to
   ///        return radians/second or degrees/second.
-  double GetVelocity();
+  double GetVelocity(ROTATION a);
 
   /// \brief Limit the value to either [-180,180] or [-PI,PI]
   ///       depending on whether or radians or degrees are being used.

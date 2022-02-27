@@ -10,6 +10,7 @@ public class SimEncMotor {
     }
     public void setInverted(){
         encoder.setInverted();
+        motor.setInverted();
     }
     public void enable(){
         motor.enable();
@@ -25,9 +26,6 @@ public class SimEncMotor {
     }
     public void set(double v){
         motor.set(v);
-    }
-    public void setScale(double v){
-        motor.setScale(v);
     }
     public void setDistancePerRotation(double d){
         motor.setDistancePerRotation(d);

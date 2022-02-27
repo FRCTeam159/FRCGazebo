@@ -23,7 +23,7 @@
           <izz>182.220226765704</izz>
         </inertia>
       </inertial>
-      <!---->
+      <!--
       <collision name="Hanger_collision">
         <pose>-0.167265109085238 -1.47673580997936 2.04343317332631E-06 0 0 0</pose>
         <geometry>
@@ -44,7 +44,7 @@
           </friction>
         </surface>
       </collision>
-      
+      -->
       <visual name="Hanger_visual">
         <pose>-0.167265109085238 -1.47673580997936 2.04343317332631E-06 0 0 0</pose>
         <material>

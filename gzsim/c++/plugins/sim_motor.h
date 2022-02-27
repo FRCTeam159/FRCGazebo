@@ -23,8 +23,8 @@ class MotorPlugin : public gazebo::ModelPlugin {
   /// \brief A PID controller for the joint.
   gazebo::common::PID pid;
   double multiplier;
-  double scale;
   bool debug;
+  bool set_velocity;
   double last_vel;
   /// \brief Constructor
  public:

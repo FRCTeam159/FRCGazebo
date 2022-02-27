@@ -19,6 +19,7 @@ link_directories(${GAZEBO_LIBRARY_DIRS} $ENV{GAZEBO_SIM}/wpilib/libs)
 add_executable(
     GzProgram 
 ../src/GzMain.cpp 
+../src/GzPiston.cpp 
 ../src/GzMotor.cpp 
 ../src/GzNode.cpp 
 ../src/GzEncoder.cpp 

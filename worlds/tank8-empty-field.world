@@ -11,7 +11,7 @@
     </include>
 
     <include>
-      <uri>model://SimBot2022</uri>
+      <uri>model://Tank8</uri>
     </include>
 
   </world>

@@ -6,6 +6,7 @@
 #include "GzClock.h"
 #include "GzCamera.h"
 #include "GzContact.h"
+#include "GzPiston.h"
 
 #include <condition_variable>
 #include <mutex>
@@ -117,9 +118,29 @@ void GzMain::genNodes() {
     nodes.emplace_back(new GzContact(j, tbl));
   }
 
-  // build gyro
-  gyro=table->GetSubTable("gyro");
-  nodes.emplace_back(new GzGyro(gyro));
+  // build gyros
+  keys.clear();
+  gyros=table->GetSubTable("gyro");
+  keys = gyros->GetSubTables();
+  sortKeys(keys);
+  std::cout << "gyros:" << keys.size() << std::endl;
+  for (int i = 0; i < keys.size(); i++) {
+    std::shared_ptr<nt::NetworkTable> tbl = gyros->GetSubTable(keys[i]);
+    int j = std::stoi(keys[i]);
+    nodes.emplace_back(new GzGyro(j, tbl));
+  }
+
+// build pistons
+  keys.clear();
+  pistons=table->GetSubTable("piston");
+  keys = pistons->GetSubTables();
+  sortKeys(keys);
+  std::cout << "piston:" << keys.size() << std::endl;
+  for (int i = 0; i < keys.size(); i++) {
+    std::shared_ptr<nt::NetworkTable> tbl = pistons->GetSubTable(keys[i]);
+    int j = std::stoi(keys[i]);
+    nodes.emplace_back(new GzPiston(j, tbl));
+  }
 
    // build clock
   clock=table->GetSubTable("clock");
