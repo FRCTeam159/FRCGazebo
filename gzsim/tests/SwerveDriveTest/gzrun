@@ -1,0 +1,4 @@
+#!/bin/bash
+start_gazebo
+#gazebo --verbose tank8-empty-field.world &
+GzProgram.exe;

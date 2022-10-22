@@ -12,7 +12,7 @@ GzGyro::~GzGyro(){
 
 void GzGyro::callback(const ConstVector3dPtr &msg){
     table->PutNumber("yaw",msg->x());      // heading 
-    table->PutNumber("roll",msg->y()-90);
+    table->PutNumber("roll",msg->y());
     table->PutNumber("pitch",msg->z());     // z could be either pitch or velocity
     table->PutNumber("velocity",msg->z());
 }

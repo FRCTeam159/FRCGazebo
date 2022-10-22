@@ -57,6 +57,78 @@
         </geometry>
       </visual>
     </link>
+    <link name="Funnel">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.00272955178177228 2.33750322204657 0.00311011181305488 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>7.32736012762001</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0.585851491205282</ixx>
+          <ixy>2.40016479299968E-12</ixy>
+          <ixz>1.49405922339864E-13</ixz>
+          <iyy>1.17170298241307</iyy>
+          <iyz>2.23822879872522E-14</iyz>
+          <izz>0.585851491207785</izz>
+        </inertia>
+      </inertial>
+      <collision name="Funnel_collision">
+        <pose>-0.00272955178177228 -2.33750322204657 -0.00311011181305488 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Hub/meshes/Funnel_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="Funnel_visual">
+        <pose>-0.00272955178177228 -2.33750322204657 -0.00311011181305488 0 0 0</pose>
+        <material>
+          <ambient>1 1 1 0.5</ambient>
+          <diffuse>1 1 1 0.5</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Hub/meshes/Funnel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Hub-Funnel" type="fixed">
+      <parent>Hub</parent>
+      <child>Funnel</child>
+      <pose>-0.00272955178177228 -2.33750322204657 -0.00311011181305488 0 0 0</pose>
+      <axis>
+        <xyz>0 0 0</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+        </dynamics>
+        <limit>
+          <upper>0</upper>
+          <lower>0</lower>
+          <effort>1</effort>
+        </limit>
+      </axis>
+    </joint>
     <!---->
     <link name="TapeStrips">
       <gravity>1</gravity>

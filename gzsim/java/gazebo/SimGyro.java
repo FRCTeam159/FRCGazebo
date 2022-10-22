@@ -1,5 +1,6 @@
 package gazebo;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 
@@ -55,6 +56,9 @@ public class SimGyro extends SimNode {
           zero=yaw_node.getDouble(0.0);  
         return -(yaw_node.getDouble(0.0)-zero);
     }
+    public double getRadians() {
+        return -Math.PI*(yaw_node.getDouble(0.0))/180.0;
+    }
     public double getYaw() {
         return -yaw_node.getDouble(0.0); 
     }
@@ -64,8 +68,18 @@ public class SimGyro extends SimNode {
     public double getRoll() {
         return roll_node.getDouble(0.0); 
     }
+    public double getY() {
+        return pitch_node.getDouble(0.0); 
+    }
+    public double getX() {
+        return roll_node.getDouble(0.0); 
+    }
     public double getRate() {
         return vel_node.getDouble(0.0); 
+    }
+
+    public Rotation2d getRotation2d() {
+        return Rotation2d.fromDegrees(getHeading());
     }
     
 }

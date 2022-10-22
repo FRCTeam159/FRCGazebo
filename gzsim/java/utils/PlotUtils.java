@@ -3,6 +3,8 @@ package utils;
 
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
@@ -14,12 +16,12 @@ public class PlotUtils {
         FEET, METERS, INCHES, DEGREES, RADIANS
     }
 
-    public static int PLOT_NONE = 0;
-    public static int PLOT_DISTANCE = 1;
-    public static int PLOT_DYNAMICS = 2;
-    public static int PLOT_POSITION = 3;
-    public static int PLOT_CALIBRATE  = 4;
-    public static int PLOT_GENERIC  = 5;
+    public static final int PLOT_NONE = 0;
+    public static final int PLOT_DISTANCE = 1;
+    public static final int PLOT_DYNAMICS = 2;
+    public static final int PLOT_POSITION = 3;
+    public static final int PLOT_CALIBRATE  = 4;
+    public static final int PLOT_GENERIC  = 5;
 
     public static int auto_plot_option = PLOT_NONE;
 
@@ -290,7 +292,7 @@ public class PlotUtils {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
-  */  
+*/
     // publish plot data to NetworkTables
     public static void publish(ArrayList<PathData> dataList, int traces, int type) {
         if (table == null) {

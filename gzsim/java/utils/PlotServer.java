@@ -10,7 +10,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.networktables.TableEntryListener;
 
-public class PlotServer implements TableEntryListener {
+public class PlotServer extends Thread implements TableEntryListener {
 	ArrayList<PathData> list = new ArrayList<PathData>();
 	int traces = 0;
 	int index = 0;
@@ -37,6 +37,9 @@ public class PlotServer implements TableEntryListener {
 
 	public PlotServer(String h) {
 		mode=h;
+	}
+	public PlotServer() {
+		mode="client";
 	}
 
 	public void run() {

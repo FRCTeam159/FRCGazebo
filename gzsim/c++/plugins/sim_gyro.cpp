@@ -57,8 +57,11 @@ void Gyro::Update(const gazebo::common::UpdateInfo& info) {
   double p1=0,p2=0,p3=0;
   if(num_axis==1){
     p1 = GetAngle(axis);
-    p2 = GetAngle(Roll);
-    p3 = GetVelocity(axis); 
+    ignition::math::Pose3d pose = link->WorldCoGPose();
+    ignition::math::Vector3<double> position = pose.Pos();
+    p2 =position.X();
+    p3 =position.Y();
+    //p3 = GetVelocity(axis); 
   }
   else{
     p1=GetAngle(Yaw);
