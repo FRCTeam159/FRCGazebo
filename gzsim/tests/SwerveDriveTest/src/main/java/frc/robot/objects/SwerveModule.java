@@ -10,7 +10,6 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import frc.robot.subsystems.Drivetrain;
 import gazebo.SimEncMotor;
 
 public class SwerveModule {
@@ -18,17 +17,14 @@ public class SwerveModule {
 
   private double distancePerRotation=2*kWheelRadius*Math.PI;
 
-  private static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed;
-  private static final double kModuleMaxAngularAcceleration = Drivetrain.kMaxAngularAcceleration;
+  private static final double kModuleMaxAngularVelocity = Math.toRadians(0); //degrees per second;
+  private static final double kModuleMaxAngularAcceleration = Math.toRadians(0);// degrees per second per second
 
   private SimEncMotor m_driveMotor;
 	private SimEncMotor m_turnMotor;
 
   // Gains are for example purposes only - must be determined for your own robot!
-  private final PIDController m_drivePIDController = new PIDController(0.1, 0, 0);
-  //private final PIDController m_turningPIDController = new PIDController(0.2, 0, 0);
-
-  private final PIDController simpleTurnPIDController=new PIDController(1, 0, 0);
+  private final PIDController m_drivePIDController = new PIDController(0.5, 0, 0);
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final ProfiledPIDController m_turningPIDController =
@@ -37,10 +33,9 @@ public class SwerveModule {
               kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
 
   // Gains are for example purposes only - must be determined for your own robot!
- // private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(1, 3);
- // private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
   private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(1, 1);
   private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(1, 1);
+
   public int m_drive_chnl;
   public int m_turn_chnl;
 
@@ -56,21 +51,11 @@ public class SwerveModule {
     m_turnMotor=new SimEncMotor(turningMotorChannel);
 
     m_driveMotor.setDistancePerRotation(distancePerRotation);
-		m_turnMotor.setDistancePerRotation(360.0);
-    // Set the distance per pulse for the drive encoder. We can simply use the
-    // distance traveled for one rotation of the wheel divided by the encoder
-    // resolution.
-    //m_driveEncoder.setDistancePerPulse(2 * Math.PI * kWheelRadius / kEncoderResolution);
-
-    // Set the distance (in this case, angle) per pulse for the turning encoder.
-    // This is the the angle through an entire rotation (2 * pi) divided by the
-    // encoder resolution.
-   // m_turningEncoder.setDistancePerPulse(2 * Math.PI / kEncoderResolution);
+		m_turnMotor.setDistancePerRotation(360.0); // getDistance will return degrees*rotations
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
-     //m_turningPIDController.enableContinuousInput(-180, 180);
-     simpleTurnPIDController.enableContinuousInput(-Math.PI, Math.PI);
+     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
   }
 
   public void enable(){
@@ -101,60 +86,46 @@ public class SwerveModule {
    */
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
-    double angle=m_turnMotor.getDistance();
-    //angle=angle%360.0;
+    double angle=m_turnMotor.getDistance(); // rotations in degrees
+    angle=angle%360.0;
     angle=Math.toRadians(angle);
 
-    //SwerveModuleState state = new SwerveModuleState(desiredState.speedMetersPerSecond, desiredState.angle);
-
      SwerveModuleState state =SwerveModuleState.optimize(desiredState, new Rotation2d(angle));
-    //SwerveModuleState state =SwerveModuleState.optimize(desiredState, new Rotation2d(0));
 
-    //var delta = desiredState.angle.minus(new Rotation2d(angle));
-    //System.out.println(delta);
     // Calculate the drive output from the drive PID controller.
     final double driveOutput = m_drivePIDController.calculate(m_driveMotor.getRate(), state.speedMetersPerSecond);
-
     final double driveFeedforward = m_driveFeedforward.calculate(state.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
-    //final double turnOutput = simpleTurnPIDController.calculate(angle,state.angle.getDegrees());
     //System.out.println(m_drive_chnl/2+" "+angle+" "+state.angle.getDegrees()+" "+(-state.speedMetersPerSecond>0?"+":"-")+" "+turnOutput);
 
-    double turnOutput = simpleTurnPIDController.calculate(angle,state.angle.getRadians());
-    //setAngle(state.angle.getDegrees(),driveOutput + driveFeedforward);
-
-    m_driveMotor.set(driveOutput + driveFeedforward);
-
+    final double turnOutput = m_turningPIDController.calculate(angle,state.angle.getRadians());
     final double turnFeedforward =m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
 
-    m_turnMotor.set(turnOutput); 
+    m_turnMotor.set(turnOutput+turnFeedforward); 
+    m_driveMotor.set(driveOutput + driveFeedforward);
 
-    //m_driveMotor.set(driveOutput + driveFeedforward);
-   // m_turnMotor.set(turnOutput + turnFeedforward); 
-    //m_turnMotor.set(turnOutput); 
+  }
 
-    }
-
-// 0 45.0 0.3323947409004224 22.33380262954979 1.0
-// 1 -45.0 0.00563591450841582 -22.50281795725421 -1.0
-// 2 -45.0 -0.055179341753442204 -22.472410329123278 1.0
-// 3 45.0 0.41032534622191336 22.294837326889045 -1.0
-    
-   public void turn(double value){
+  // just apply a voltage to the turn motor
+  public void turn(double value){
     m_turnMotor.set(value);
   }
-  public void setAngle(double angle, double d){
-    double current=m_turnMotor.getDistance();
-    current=current%360;
-    double turnOutput = simpleTurnPIDController.calculate(current,angle );
-    //System.out.println(m_drive_chnl/2+" "+angle+" "+current+" "+turnOutput+" "+d);
-    m_driveMotor.set(d);
-    m_turnMotor.set(turnOutput); 
-  }
+
+  // just apply a voltage to the wheel motor
   public void move(double value){
     m_driveMotor.set(value);
   }
+  // use a PID controller to set an explicit turn angle
+  public void setAngle(double a, double d){
+    double current=m_turnMotor.getDistance();
+    current=current%360;
+    double turnOutput = m_turningPIDController.calculate(Math.toRadians(current),Math.toRadians(a) );
+    //System.out.println(m_drive_chnl/2+" "+a+" "+current+" "+turnOutput+" "+d);
+    m_driveMotor.set(d);
+    m_turnMotor.set(turnOutput); 
+  }
+  
   public double getDistance(){
     return  m_driveMotor.getDistance();
   }

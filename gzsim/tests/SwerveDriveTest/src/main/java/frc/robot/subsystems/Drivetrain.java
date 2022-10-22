@@ -19,6 +19,7 @@ import gazebo.SimGyro;
 
 public class Drivetrain extends SubsystemBase {
 
+    // square frame geometry
 	private final Translation2d m_frontLeftLocation = new Translation2d(0.381, -0.381);
 	private final Translation2d m_frontRightLocation = new Translation2d(0.381, 0.381);
 	private final Translation2d m_backLeftLocation = new Translation2d(-0.381, -0.381);
@@ -43,14 +44,12 @@ public class Drivetrain extends SubsystemBase {
 	public static final double kTrackWidth = i2M(2*23); // bug? need to double actual value for geometry to work
 	public static final double kWheelDiameter = i2M(4); // wheel diameter in tank model
 	
-	public static double kMaxVelocity = 1; // meters per second
-	public static double kMaxAcceleration = 0.5; //  meters/second/second
-	public static double kMaxAngularSpeed =  Math.toRadians(180); //degrees per second
-	public static double kMaxAngularAcceleration = Math.toRadians(40);// degrees per second per second
+	public static double kMaxVelocity = 4; // meters per second
+	public static double kMaxAcceleration = 1; //  meters/second/second
+	public static double kMaxAngularSpeed =  Math.toRadians(90); //degrees per second
+	public static double kMaxAngularAcceleration = Math.toRadians(10);// degrees per second per second
 
 	private final DifferentialDriveOdometry odometry;
-
-	private double distancePerRotation=kWheelDiameter*Math.PI;
 
 	public boolean enable_gyro = true;
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<sdf version="1.7">
+  <world name="default">
+    <!-- A global light source -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <!-- A ground plane -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <include>
+      <uri>model://SimSwerveBotSqr</uri>
+      <pose>0 0 0.069993 1.57078 -8.3e-05 1.5512</pose>
+    </include>
+
+  </world>
+</sdf>
