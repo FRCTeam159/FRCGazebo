@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DriveWithGamepad;
 import frc.robot.subsystems.Autonomous;
-import frc.robot.subsystems.Cameras;
 import frc.robot.subsystems.Drivetrain;
 
 /**
@@ -23,7 +22,6 @@ public class RobotContainer {
   private final Drivetrain m_drivetrain = new Drivetrain();
   private final Autonomous m_autonomous = new Autonomous(m_drivetrain);
   private final XboxController m_controller = new XboxController(0);
-  private final Cameras m_cameras = new Cameras();
 
   private DriveWithGamepad m_driveCommand = null; // TODO
  

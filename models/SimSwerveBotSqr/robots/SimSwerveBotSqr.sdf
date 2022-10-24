@@ -24,12 +24,9 @@
           <iyz>0</iyz>
           <izz>20</izz>
         </inertia>
-        
       </inertial>
       <collision name="Body_collision">
-      <!--
-        <pose>0.751642401990572 -0.0956742983746156 0.183415226520529 0 0 0</pose>
-        -->
+      <!-- <pose>0.751642401990572 -0.0956742983746156 0.183415226520529 0 0 0</pose> -->
          <pose>0.858117059242039 -0.0379327891243082 0.366644041537595 0 0 0</pose>
         <geometry>
           <mesh>
@@ -76,7 +73,7 @@
       
       <inertial>
       
-        <mass>0.100976546506173</mass>
+        <mass>1</mass>
         <pose>0 0 0 0 0 0</pose>
         <!--
         <inertia>
@@ -123,7 +120,6 @@
       <self_collide>0</self_collide>
       <pose>-0.0666751053477767 -0.0200407782960009 0.296484631380306 0 0 0</pose>
       <must_be_base_link>0</must_be_base_link>
-      <!---->
       <velocity_decay>
         <linear>0</linear>
         <angular>0.001</angular>
@@ -210,7 +206,7 @@
       
       <inertial>
       
-        <mass>0.100976546483737</mass>
+        <mass>1</mass>
         <pose>0 0 0 0 0 0</pose>
         <!--
         <inertia>
@@ -257,7 +253,6 @@
       <self_collide>0</self_collide>
       <pose>-0.0666500588503373 -0.0200363391768113 -0.293176256117941 0 0 0</pose>
       <must_be_base_link>0</must_be_base_link>
-      <!---->
       <velocity_decay>
         <linear>0</linear>
         <angular>0.001</angular>
@@ -344,7 +339,7 @@
       
       <inertial>
       
-        <mass>0.100976547280499</mass>
+        <mass>1</mass>
         <pose>0 0 0 0 0 0</pose>
         <!--
         <inertia>
@@ -391,7 +386,6 @@
       <self_collide>0</self_collide>
       <pose>-0.656516755128661 -0.0200407782968191 0.293176370684932 0 0 0</pose>
       <must_be_base_link>0</must_be_base_link>
-      <!-- -->
       <velocity_decay>
         <linear>0</linear>
         <angular>0.001</angular>
@@ -478,7 +472,7 @@
        
       <inertial>
      
-        <mass>0.100976547285612</mass>
+        <mass>1</mass>
         <pose>0 0 0 0 0 0</pose>
         <!--
         <inertia>
@@ -525,7 +519,6 @@
       <self_collide>0</self_collide>
       <pose>-0.656519150986405 -0.0200407782960008 -0.296865631380304 0 0 0</pose>
       <must_be_base_link>0</must_be_base_link>
-      <!---->
       <velocity_decay>
         <linear>0</linear>
         <angular>0.001</angular>
@@ -599,7 +592,11 @@
         </dynamics>
       </axis>
     </joint>
-        <!---->
+
+    <plugin name="clock" filename="sim_clock.dll">
+      <topic>~/gazebo/frc/simulator/clock</topic>
+    </plugin>
+
     <plugin name="Body_gyro" filename="sim_gyro.dll">
       <link>Body</link>
       <topic>~/gazebo/frc/simulator/gyro/0</topic>

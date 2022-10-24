@@ -68,9 +68,10 @@ public class Autonomous extends SubsystemBase {
     case PROGRAM:
       return new SequentialCommandGroup(new DrivePath(m_drive,PROGRAM,reversed));
     case AUTOTEST:
+     //return new SequentialCommandGroup(new TurnToAngle(m_drive,45.0));
       return new SequentialCommandGroup(
         new TurnToAngle(m_drive,90.0)
-       , new DrivePath(m_drive,PROGRAM,reversed)
+       //, new DrivePath(m_drive,PROGRAM,reversed)
         );
     }
     return null;

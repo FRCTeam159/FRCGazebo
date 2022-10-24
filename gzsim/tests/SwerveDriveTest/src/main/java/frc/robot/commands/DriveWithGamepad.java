@@ -19,7 +19,7 @@ public class DriveWithGamepad extends CommandBase {
 
   private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(1);
   private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(1);
-  private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(1);
+  private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(2);
 
   /**
    * Creates a new ExampleCommand.
@@ -68,7 +68,7 @@ public class DriveWithGamepad extends CommandBase {
     //m_drive.testDrive(xSpeed, rot);
     //m_drive.turnInPlace(xSpeed);
 
-    m_drive.drive(xSpeed, ySpeed,rot,false);
+    m_drive.drive(xSpeed, ySpeed,rot,true);
 
   }
 

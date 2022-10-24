@@ -3,7 +3,6 @@ package frc.robot.commands;
 import java.util.ArrayList;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 import utils.PathData;
@@ -29,8 +28,9 @@ public class Calibrate extends CommandBase {
   double elapsed=0;
 
   public static int vel_steps=8;
-  public static double vel_start=0.5;
-  public static double vel_delta=0.1;
+  public static int step=0;
+  public static double vel_start=0;
+  public static double vel_delta=1;
 
   public static double warmup_time = 0.25;
   public static double run_time = 0.5;
@@ -43,10 +43,7 @@ public class Calibrate extends CommandBase {
   private final Drivetrain m_drive;
 
   public Calibrate(Drivetrain drive) {
-    SmartDashboard.putNumber("Max Power", max_power);
-    SmartDashboard.putNumber("Max Speed", max_vel); 
-    m_drive = drive;
-    //m_simulation=m_drive.simulation;
+     m_drive = drive;
     addRequirements(drive);
     m_timer = new Timer();
     m_timer.start();
@@ -70,6 +67,7 @@ public class Calibrate extends CommandBase {
     next_step=warmup_time;
     max_vel=0;
     max_power=0;
+    step=0;
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -78,14 +76,15 @@ public class Calibrate extends CommandBase {
     if (elapsed > next_step) {
       if (max_vel > 0.1 && (max_vel - last_max_vel) / (max_vel) > 0.05)
         max_power = set_value;
+      double delta=max_vel-last_max_vel;
+      System.out.format("step %d:%d power:%1.1f speed:%1.2f delta:%1.3f\n",step,vel_steps,set_value,max_vel,delta);
       set_value += vel_delta;
       next_step += run_time;
       last_max_vel = max_vel;
-      SmartDashboard.putNumber("Max Power", max_power);
-      SmartDashboard.putNumber("Max Speed", max_vel); 
+      step++;
     }
     if (next_step <= end_time) {
-      m_drive.move(set_value);
+      m_drive.driveForward(set_value);
       execute_step();
     }
   }
@@ -130,9 +129,7 @@ public class Calibrate extends CommandBase {
     double a=Math.sqrt(max_acc);
     System.out.println("Calibrate.end()");
     System.out.format("max power=%f max velocity=%f\n", max_power,max_vel); 
-    SmartDashboard.putNumber("Max Power", max_power);
-    SmartDashboard.putNumber("Max Speed", max_vel); 
-
+  
     if (PlotUtils.auto_plot_option!=PlotUtils.PLOT_NONE) {
       utils.PlotUtils.publish(plotdata,3,PlotUtils.PLOT_CALIBRATE);
     }

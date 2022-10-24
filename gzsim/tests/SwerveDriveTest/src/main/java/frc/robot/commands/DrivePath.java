@@ -89,11 +89,11 @@ public class DrivePath extends CommandBase {
 
     m_timer.reset();
     m_timer.start();
-    m_drive.enable();
-
+    
     pathdata.clear();
     m_drive.startAuto();
     elapsed=0;
+    //m_drive.disable();
 
     System.out.println("runtime:" + runtime + " states:" + states + " intervals:" + intervals);
   }
@@ -105,13 +105,14 @@ public class DrivePath extends CommandBase {
   public void execute() {
     //elapsed = m_timer.get();
     elapsed = m_drive.getTime();
-    if (elapsed < 0.02)
-      return;
-
+  
     Trajectory.State reference = m_trajectory.sample(elapsed);
 
     ChassisSpeeds speeds = m_ramsete.calculate(m_drive.getPose(), reference);
-    //m_drive.odometryDrive(speeds.vxMetersPerSecond, speeds.omegaRadiansPerSecond);
+    m_drive.odometryDrive(speeds.vxMetersPerSecond, speeds.omegaRadiansPerSecond);
+
+   // if (elapsed < 0.05)
+   //   return;
 
     if (plot_type == PlotUtils.PLOT_DISTANCE)
       plotDistance(reference);
@@ -129,9 +130,9 @@ public class DrivePath extends CommandBase {
     System.out.println("DRIVEPATH_END");
     if (m_trajectory == null)
       return;
+    m_drive.endAuto();
     m_drive.reset();
     // m_drive.enable();
-
     if (plot_type != utils.PlotUtils.PLOT_NONE)
       utils.PlotUtils.publish(pathdata, 6, plot_type);
   }
@@ -200,7 +201,7 @@ public class DrivePath extends CommandBase {
   // - just need to reverse order of points to drive backwards
   // =================================================
   Trajectory makeTrajectory(List<Pose2d> points, boolean reversed) {
-    TrajectoryConfig config = new TrajectoryConfig(Drivetrain.kMaxVelocity, Drivetrain.kMaxAcceleration);
+    TrajectoryConfig config = new TrajectoryConfig(0.5*Drivetrain.kMaxVelocity, 0.2*Drivetrain.kMaxAcceleration);
     config.setReversed(reversed);
     if (reversed)
       Collections.reverse(points); // reverse order of waypoints first point=orig last point

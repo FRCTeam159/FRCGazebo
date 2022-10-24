@@ -180,7 +180,7 @@ public class Simulation extends SubsystemBase {
           SmartDashboard.putBoolean("Reset", false);
           resetting = false;
           disabling = false;
-          m_drive.enable();
+          m_drive.disable();
           run();
           running = true;
         }

@@ -28,7 +28,7 @@ public class SwerveModule {
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final ProfiledPIDController m_turningPIDController =
-      new ProfiledPIDController(1,0,0,
+      new ProfiledPIDController(2,0,0,
           new TrapezoidProfile.Constraints(
               kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
 
@@ -38,7 +38,8 @@ public class SwerveModule {
 
   public int m_drive_chnl;
   public int m_turn_chnl;
-
+  
+  boolean m_enabled=false;
   /**
    * Constructs a SwerveModule with a drive motor, turning motor, drive encoder and turning encoder.
    *
@@ -59,14 +60,17 @@ public class SwerveModule {
   }
 
   public void enable(){
+    m_enabled=true;
     m_driveMotor.enable();
     m_turnMotor.enable();
   }
   public void disable(){
+    m_enabled=false;
     m_driveMotor.disable();
     m_turnMotor.disable();
   }
   public void reset(){
+    m_enabled=false;
     m_driveMotor.reset();
     m_turnMotor.reset();
   }
@@ -102,8 +106,10 @@ public class SwerveModule {
     final double turnOutput = m_turningPIDController.calculate(angle,state.angle.getRadians());
     final double turnFeedforward =m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
 
-    m_turnMotor.set(turnOutput+turnFeedforward); 
-    m_driveMotor.set(driveOutput + driveFeedforward);
+    if(m_enabled){
+      m_turnMotor.set(turnOutput+turnFeedforward); 
+      m_driveMotor.set(driveOutput + driveFeedforward);
+    }
 
   }
 
