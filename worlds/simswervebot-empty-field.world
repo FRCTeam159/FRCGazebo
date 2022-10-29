@@ -11,8 +11,8 @@
     </include>
 
     <include>
-      <uri>model://SimSwerveBotSqr</uri>
-      <pose>0 0 0.069993 1.57078 -8.3e-05 1.5512</pose>
+      <uri>model://SimSwerveBot</uri>
+      <pose>0 0 0.092 1.57078 -8.3e-05 1.5512</pose>
     </include>
 
   </world>

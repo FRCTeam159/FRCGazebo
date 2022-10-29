@@ -15,11 +15,10 @@ public class DriveWithGamepad extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Drivetrain m_drive;
   private final XboxController m_controller;
-  private boolean started=false;
 
-  private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(1);
-  private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(1);
-  private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(2);
+  private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(0.5);
+  private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(0.5);
+  private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(0.5);
 
   /**
    * Creates a new ExampleCommand.
@@ -38,7 +37,6 @@ public class DriveWithGamepad extends CommandBase {
   @Override
   public void initialize() {
     System.out.println("DriveWithGampad started");
-    started=false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -47,28 +45,30 @@ public class DriveWithGamepad extends CommandBase {
 
     // Get the x speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.
-    final var xSpeed =
-        -m_xspeedLimiter.calculate(MathUtil.applyDeadband(m_controller.getLeftY(), 0.1))
+    double vx=m_controller.getLeftY();
+    double vy=m_controller.getLeftX();
+    double vr=m_controller.getRightX();
+    final var xSpeed = -m_xspeedLimiter.calculate(MathUtil.applyDeadband(vx, 0.1))
             * Drivetrain.kMaxVelocity;
 
     // Get the y speed or sideways/strafe speed. 
-    final var ySpeed =
-        m_yspeedLimiter.calculate(MathUtil.applyDeadband(m_controller.getLeftX(), 0.1))
+    final var ySpeed = m_yspeedLimiter.calculate(MathUtil.applyDeadband(vy, 0.1))
             * Drivetrain.kMaxVelocity;
 
     // Get the rate of angular rotation. 
-    final var rot =
-        m_rotLimiter.calculate(MathUtil.applyDeadband(m_controller.getRightX(), 0.1))
+    final var rot = m_rotLimiter.calculate(MathUtil.applyDeadband(vr, 0.1))
             * Drivetrain.kMaxAngularSpeed;
    
-    if(!started && (Math.abs(xSpeed)>0 || Math.abs(ySpeed)>0) ||  Math.abs(rot)>0){
-      m_drive.enable();
-      started=true;
+    if(m_drive.disabled()){
+   //   if(m_drive.disabled() && (Math.abs(vx)>0 |System,out.print(".| Math.abs(vy)>0) ||  Math.abs(vr)>0){
+        m_drive.enable();
     }
+  //System.out.print(".");
     //m_drive.testDrive(xSpeed, rot);
     //m_drive.turnInPlace(xSpeed);
 
     m_drive.drive(xSpeed, ySpeed,rot,true);
+    //m_drive.drive(xSpeed, 0,0,true);
 
   }
 

@@ -10,9 +10,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPoint;
+import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
+//import com.pathplanner.lib.PathPlannerTrajectory.Waypoint;
+
+import com.pathplanner.lib.controllers.*;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
@@ -33,7 +43,15 @@ import utils.PlotUtils;
 public class DrivePath extends CommandBase {
   /** Creates a new AutoTest. */
   private final ArrayList<PathData> pathdata = new ArrayList<PathData>();
+
+  public boolean holotest=true;
   private final RamseteController m_ramsete = new RamseteController();
+  private final PPHolonomicDriveController m_ppcontroller=new PPHolonomicDriveController(
+      new PIDController(1, 0, 0), new PIDController(1, 0, 0), new PIDController(1, 0, 0));
+
+// Here, our rotation profile constraints were a max velocity
+// of 1 rotation per second and a max acceleration of 180 degrees
+// per second squared.
   private final Timer m_timer = new Timer();
   private final Drivetrain m_drive;
   static public boolean plot_trajectory_motion = false;
@@ -49,6 +67,11 @@ public class DrivePath extends CommandBase {
   double rPath = 90;
   boolean reversed = false;
 
+  double maxV;
+  double maxA;
+  double last_time;
+  double angle;
+
   int plot_type = utils.PlotUtils.PLOT_NONE;
   int trajectory_option = Autonomous.PROGRAM;
 
@@ -57,6 +80,8 @@ public class DrivePath extends CommandBase {
     trajectory_option=opt;
     m_drive = drive;
     addRequirements(drive);
+    maxV=Drivetrain.kMaxVelocity;
+    maxA=Drivetrain.kMaxAcceleration;
   }
 
   // =================================================
@@ -70,6 +95,10 @@ public class DrivePath extends CommandBase {
     xPath = SmartDashboard.getNumber("xPath", xPath);
     yPath = SmartDashboard.getNumber("yPath", yPath);
     rPath = SmartDashboard.getNumber("rPath", rPath);
+
+    holotest=SmartDashboard.getBoolean("test", false);
+
+    angle=m_drive.getHeading();
 
     PlotUtils.initPlot();
 
@@ -93,8 +122,7 @@ public class DrivePath extends CommandBase {
     pathdata.clear();
     m_drive.startAuto();
     elapsed=0;
-    //m_drive.disable();
-
+  
     System.out.println("runtime:" + runtime + " states:" + states + " intervals:" + intervals);
   }
 
@@ -108,12 +136,17 @@ public class DrivePath extends CommandBase {
   
     Trajectory.State reference = m_trajectory.sample(elapsed);
 
-    ChassisSpeeds speeds = m_ramsete.calculate(m_drive.getPose(), reference);
-    m_drive.odometryDrive(speeds.vxMetersPerSecond, speeds.omegaRadiansPerSecond);
+    ChassisSpeeds speeds;
 
-   // if (elapsed < 0.05)
-   //   return;
-
+    if (trajectory_option == Autonomous.PATHPLANNER || holotest) {  // use pathplanner api
+      speeds = m_ppcontroller.calculate(m_drive.getPose(), (PathPlannerState) reference);
+      m_drive.drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, false);
+    }
+    else { // differential drive mode - no side drift
+      speeds = m_ramsete.calculate(m_drive.getPose(), reference);
+      m_drive.drive(speeds.vxMetersPerSecond, 0, speeds.omegaRadiansPerSecond, false);
+    }
+  
     if (plot_type == PlotUtils.PLOT_DISTANCE)
       plotDistance(reference);
     else if (plot_type == PlotUtils.PLOT_DYNAMICS)
@@ -131,7 +164,7 @@ public class DrivePath extends CommandBase {
     if (m_trajectory == null)
       return;
     m_drive.endAuto();
-    m_drive.reset();
+    //m_drive.reset();
     // m_drive.enable();
     if (plot_type != utils.PlotUtils.PLOT_NONE)
       utils.PlotUtils.publish(pathdata, 6, plot_type);
@@ -142,7 +175,7 @@ public class DrivePath extends CommandBase {
   // =================================================
   @Override
   public boolean isFinished() {
-    return elapsed >= 1.001 * runtime || m_trajectory == null;
+    return (elapsed >= 1.001 * runtime || m_trajectory == null)||m_drive.disabled();
   }
 
   // *********************** trajectory functions *******************/
@@ -156,26 +189,54 @@ public class DrivePath extends CommandBase {
         return programPath();
       case Autonomous.PATHWEAVER:
         return pathWeaverTest();
+      case Autonomous.PATHPLANNER:
+        return pathPlannerTest();
     }
     return null;
   }
 
+  Trajectory programPath(){
+    if(holotest)
+      return programPathPP();
+    else
+      return programPathPW();
+  }
   // =================================================
   // programPath: build a multi-point trajectory from variables
   // =================================================
-  Trajectory programPath() {
-    Pose2d pos1 = new Pose2d(0, 0, new Rotation2d(0));
+  // - lots of magic done when reverse is set in config
+  // - inverts coordinate system from p.o.v. of robot's last pose
+  //   (but facing in reverse direction)
+  // - just need to reverse order of points to drive backwards
+  // =================================================
+  Trajectory programPathPW() {
+    Pose2d pos1 = new Pose2d(0, 0, new Rotation2d(angle));
     Pose2d pos2 = new Pose2d(xPath, yPath, Rotation2d.fromDegrees(rPath));
-    // Pose2d pos3=new Pose2d(2*xVal, 2*yVal, Rotation2d.fromDegrees(rVal));
-    // Pose2d pos4=new Pose2d(3*xVal, 3*yVal, Rotation2d.fromDegrees(rVal));
-
+   
     List<Pose2d> points = new ArrayList<Pose2d>();
 
     points.add(pos1);
     points.add(pos2);
-    // points.add(pos3);
-    // points.add(pos4);
-    return makeTrajectory(points, reversed);
+
+    TrajectoryConfig config = new TrajectoryConfig(maxV, maxA);
+
+    config.setReversed(reversed);
+    if (reversed)
+      Collections.reverse(points); // reverse order of waypoints first point=orig last point
+
+    return TrajectoryGenerator.generateTrajectory(points, config);
+  }
+
+  // =================================================
+  // programPathPP: build a PathBuilder trajectory from variables
+  // =================================================
+  Trajectory programPathPP() {
+    PathPoint p1 = new PathPoint(new Translation2d(0.0, 0.0), new Rotation2d(0));
+    PathPoint p2 = new PathPoint(new Translation2d(xPath, yPath), Rotation2d.fromDegrees(rPath), Rotation2d.fromDegrees(rPath));
+
+    PathConstraints constraints= new PathConstraints(maxV, maxA);
+    // reversal not supported for swerve drive 
+    return PathPlanner.generatePath(constraints, reversed, p1, p2); 
   }
 
   // =================================================
@@ -193,22 +254,19 @@ public class DrivePath extends CommandBase {
   }
 
   // =================================================
-  // makeTrajectory: build a trajectory from a list of poses
+  // pathPlannerTest: build a trajectory from PathPlanner data
   // =================================================
-  // - lots of magic done when reverse is set in config
-  // - inverts coordinate system from p.o.v. of robot's last pose
-  //   (but facing in reverse direction)
-  // - just need to reverse order of points to drive backwards
-  // =================================================
-  Trajectory makeTrajectory(List<Pose2d> points, boolean reversed) {
-    TrajectoryConfig config = new TrajectoryConfig(0.5*Drivetrain.kMaxVelocity, 0.2*Drivetrain.kMaxAcceleration);
-    config.setReversed(reversed);
-    if (reversed)
-      Collections.reverse(points); // reverse order of waypoints first point=orig last point
-
-    return TrajectoryGenerator.generateTrajectory(points, config);
+  Trajectory pathPlannerTest() {
+    try {
+      Trajectory trajectory = PathPlanner.loadPath("swervetest", 
+        new PathConstraints(Drivetrain.kMaxVelocity,Drivetrain.kMaxAcceleration)); // max vel & accel
+      return trajectory;
+    } catch (Exception ex) {
+      System.out.println("failed to create pathweaver trajectory");
+      return null;
+    }
   }
-
+  
   // *********************** plotting methods *******************/
 
   // =================================================

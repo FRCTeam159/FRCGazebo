@@ -42,6 +42,13 @@ public class SimGyro extends SimNode {
         resetting=true;
         zero=yaw_node.getDouble(0.0);
     }
+    public void setEnabled(boolean t){
+        enabled=t;
+    }
+    public boolean isEnabled(){
+        return enabled;
+    }
+
     public void enable(){
         ctrl_node.setString("run");
         enabled=true;
@@ -52,6 +59,8 @@ public class SimGyro extends SimNode {
     }
    
     public double getHeading() {
+        if(!enabled)
+            return 0;
         if(resetting)
           zero=yaw_node.getDouble(0.0);  
         return -(yaw_node.getDouble(0.0)-zero);

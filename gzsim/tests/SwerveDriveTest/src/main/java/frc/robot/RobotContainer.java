@@ -49,7 +49,10 @@ public class RobotContainer {
     return m_autonomous.getCommand();
   }
   public void teleopInit(){
-   //m_drivetrain.enable();
+    m_drivetrain.setFieldOriented(m_drivetrain.isGyroEnabled());
+  }
+  public void autonomousInit(){
+    m_drivetrain.setFieldOriented(true);
   }
   public void disabledInit(){
     m_drivetrain.disable();

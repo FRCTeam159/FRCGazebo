@@ -127,7 +127,6 @@ public class Calibrate extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    double a=Math.sqrt(max_acc);
     System.out.println("Calibrate.end()");
     System.out.format("max power=%f max velocity=%f\n", max_power,max_vel); 
     SmartDashboard.putNumber("Max Power", max_power);

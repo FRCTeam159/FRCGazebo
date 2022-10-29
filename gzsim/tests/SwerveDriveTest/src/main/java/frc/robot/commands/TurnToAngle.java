@@ -12,11 +12,14 @@ public class TurnToAngle extends CommandBase {
   Drivetrain m_drive;
   double m_angle;
   double last_time;
-  final PIDController m_controller=new PIDController(0.17,1.0,0.07);
+  
+ //final PIDController m_controller=new PIDController(0.17,1.0,0.07);
+ final PIDController m_controller=new PIDController(0.1,0.0,0.0);
 
   public TurnToAngle(Drivetrain drive, double angle) { 
     m_drive=drive;
     m_angle=angle;
+    addRequirements(drive);
   }
   // =================================================
   // initialize: Called when the command is initially scheduled.
@@ -25,10 +28,12 @@ public class TurnToAngle extends CommandBase {
   public void initialize() {
     System.out.println("TurnToAngle.initialize");
     //m_controller.enableContinuousInput(-180, 180);
-    m_controller.setTolerance(0.5, 5); // TurnToleranceDeg, TurnRateToleranceDegPerS 
+    m_controller.setTolerance(0.5, 1); // TurnToleranceDeg, TurnRateToleranceDegPerS 
     m_drive.startAuto();
-    m_drive.move(0);
-    last_time=0;
+   //m_drive.driveForward(0);
+    last_time=m_drive.getTime();
+    // need a dummy read from controller to avoid bad first correction (looks like a bug
+    m_controller.calculate(0,m_angle);
   }
   // =================================================
   // execute: Called every time the scheduler runs while the command is scheduled
@@ -37,12 +42,10 @@ public class TurnToAngle extends CommandBase {
   public void execute() {
     double heading=m_drive.getHeading();
     double tm=m_drive.getTime();
-    double correction=m_controller.calculate(heading,m_angle);
 
-     // need a dummy read from controller to avoid bad first correction (looks like a bug)
-    if(tm<0.05)
-      return;
-    if (tm>last_time){
+    if ((tm-last_time)>0.015){
+      double correction=m_controller.calculate(heading,m_angle);
+
       System.out.format("time:%f dt:%d gain:%g pos:%g pos error:%g vel error:%g\n",
         tm,(int)(1000*(tm-last_time)),correction,heading,m_controller.getPositionError(),m_controller.getVelocityError());
       m_drive.turnInPlace(correction);
@@ -55,7 +58,7 @@ public class TurnToAngle extends CommandBase {
   @Override
   public boolean isFinished() {
     // End when the controller is at the reference.
-    return last_time>0.05 && m_controller.atSetpoint();
+    return (last_time>0.05 && m_controller.atSetpoint()) || m_drive.disabled();
   }
   // =================================================
   // end: Called once the command ends or is interrupted.

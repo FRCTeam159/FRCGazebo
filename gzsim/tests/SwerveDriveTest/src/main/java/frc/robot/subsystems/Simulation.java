@@ -170,7 +170,7 @@ public class Simulation extends SubsystemBase {
         resetting = true;
         if (m)
           clear();       
-        m_drive.reset();    
+       // m_drive.reset();    
         m_timer.reset();
       } else if (m_timer.get() > 0.1) {
         if (!disabling) {
@@ -180,6 +180,7 @@ public class Simulation extends SubsystemBase {
           SmartDashboard.putBoolean("Reset", false);
           resetting = false;
           disabling = false;
+          m_drive.reset();
           m_drive.disable();
           run();
           running = true;

@@ -25,6 +25,7 @@ public class Autonomous extends SubsystemBase {
   public static final int PROGRAM = 1;
   public static final int AUTOTEST = 2;
   public static final int PATHWEAVER = 3;
+  public static final int PATHPLANNER = 4;
 
   boolean reversed=false;
  
@@ -42,10 +43,13 @@ public class Autonomous extends SubsystemBase {
 
     m_path_chooser.setDefaultOption("Program", PROGRAM);
 	  m_path_chooser.addOption("AutoTest", AUTOTEST);
-    m_path_chooser.addOption("PathWeaver", PATHWEAVER);
+    //m_path_chooser.addOption("PathWeaver", PATHWEAVER);
+    m_path_chooser.addOption("PathPlanner", PATHPLANNER);
     m_path_chooser.addOption("Calibrate", CALIBRATE);
 
     SmartDashboard.putBoolean("reversed", reversed);
+    SmartDashboard.putBoolean("test", false);
+
     SmartDashboard.putNumber("xPath", 4);
     SmartDashboard.putNumber("yPath", 0);
     SmartDashboard.putNumber("rPath", 0);
@@ -63,11 +67,13 @@ public class Autonomous extends SubsystemBase {
     switch (selected_path){
     case CALIBRATE:
       return new SequentialCommandGroup(new Calibrate(m_drive));
-    case PATHWEAVER:
-      return new SequentialCommandGroup(new DrivePath(m_drive,PATHWEAVER,reversed));
     case PROGRAM:
       return new SequentialCommandGroup(new DrivePath(m_drive,PROGRAM,reversed));
-    case AUTOTEST:
+    case PATHWEAVER:
+      return new SequentialCommandGroup(new DrivePath(m_drive,PATHWEAVER,reversed));
+    case PATHPLANNER:
+      return new SequentialCommandGroup(new DrivePath(m_drive,PATHPLANNER,reversed));
+   case AUTOTEST:
      //return new SequentialCommandGroup(new TurnToAngle(m_drive,45.0));
       return new SequentialCommandGroup(
         new TurnToAngle(m_drive,90.0)

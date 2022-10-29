@@ -15,7 +15,8 @@ import gazebo.SimEncMotor;
 public class SwerveModule {
   private static final double kWheelRadius = 0.0508; // 2 inches
 
-  private double distancePerRotation=2*kWheelRadius*Math.PI;
+  private double gazebo_scale=0.8;  // not sure why but grid marks in gazebo are somewhat larger than a meter ?
+  private double distancePerRotation=gazebo_scale*2*kWheelRadius*Math.PI;
 
   private static final double kModuleMaxAngularVelocity = Math.toRadians(0); //degrees per second;
   private static final double kModuleMaxAngularAcceleration = Math.toRadians(0);// degrees per second per second

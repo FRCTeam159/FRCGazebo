@@ -30,7 +30,7 @@ public class Calibrate extends CommandBase {
   public static int vel_steps=8;
   public static int step=0;
   public static double vel_start=0;
-  public static double vel_delta=1;
+  public static double vel_delta=0.5;
 
   public static double warmup_time = 0.25;
   public static double run_time = 0.5;
@@ -126,7 +126,6 @@ public class Calibrate extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    double a=Math.sqrt(max_acc);
     System.out.println("Calibrate.end()");
     System.out.format("max power=%f max velocity=%f\n", max_power,max_vel); 
   

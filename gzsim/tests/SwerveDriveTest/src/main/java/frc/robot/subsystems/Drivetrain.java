@@ -49,7 +49,7 @@ public class Drivetrain extends SubsystemBase {
 	public static final double kWheelDiameter = i2M(4); // wheel diameter in tank model
 
 	public static double kMaxVelocity = 3; // meters per second
-	public static double kMaxAcceleration = 2; // meters/second/second
+	public static double kMaxAcceleration = 1; // meters/second/second
 	public static double kMaxAngularSpeed = Math.toRadians(360); // degrees per second
 	public static double kMaxAngularAcceleration = Math.toRadians(20);// degrees per second per second
 
@@ -64,7 +64,9 @@ public class Drivetrain extends SubsystemBase {
 	/** Creates a new Subsystem. */
 	public Drivetrain() {
 		simulation = new Simulation(this);
-		SmartDashboard.putBoolean("Enable gyro", enable_gyro);
+		SmartDashboard.putBoolean("Field Oriented", enable_gyro);
+		SmartDashboard.putNumber("maxV", kMaxVelocity);
+		SmartDashboard.putNumber("maxA", kMaxAcceleration);
 	}
 
 	private static double i2M(double inches) {
@@ -131,9 +133,14 @@ public class Drivetrain extends SubsystemBase {
 
 		m_gyro.reset();
 		last_heading = 0;
+		//Pose2d pose=new Pose2d(0,0,new Rotation2d(0));
+		//m_odometry.resetPosition(pose, new Rotation2d(0));
 	}
 
 	public void resetPose() {
+		//m_gyro.reset();
+
+		last_heading = 0;
 		resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
 		field_pose = getPose();
 	}
@@ -149,6 +156,13 @@ public class Drivetrain extends SubsystemBase {
 		return p1.plus(td);
 	}
 
+	public void setFieldOriented(boolean t){
+		m_gyro.setEnabled(t);
+	}
+
+	public boolean isGyroEnabled(){
+		return enable_gyro;
+	}
 	public double getHeading() {
 		return getRotation2d().getDegrees();
 	}
@@ -199,18 +213,23 @@ public class Drivetrain extends SubsystemBase {
 		SmartDashboard.putNumber("Y:", y);
 
 		//SmartDashboard.putString("Location", getPose().getTranslation().toString());
-		enable_gyro = SmartDashboard.getBoolean("Enable gyro", enable_gyro);
+		enable_gyro = SmartDashboard.getBoolean("Field Oriented", enable_gyro);
+		kMaxVelocity=SmartDashboard.getNumber("maxV", kMaxVelocity);
+		kMaxAcceleration=SmartDashboard.getNumber("maxA", kMaxAcceleration);
 	}
 
 	@Override
 	public void periodic() {
-		updateOdometry();
+		//updateOdometry();
 	}
 
 	@Override
 	public void simulationPeriodic() {
-		if(!enabled())
+		if(!enabled()){
+			//move(0);
+			//turn(0);
 			drive(0.0,0.0,0.0,false); // stay in place
+		}
 		updateOdometry();
 		log();
 	}
@@ -240,6 +259,7 @@ public class Drivetrain extends SubsystemBase {
 		m_backLeft.setAngle(-45, value);
 		m_backRight.setAngle(45, -value);
 		updateOdometry();
+		//drive(0, 0, value, true);
 	}
 
 	public void driveForward(double value) {

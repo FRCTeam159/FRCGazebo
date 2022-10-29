@@ -3,8 +3,6 @@ package utils;
 
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
@@ -37,8 +35,8 @@ public class PlotUtils {
 
     private static PathData data_sum;
 
-    private static Averager acc_average = new Averager(20);
-    private static Averager vel_average = new Averager(10);
+    private static Averager acc_average = new Averager(5);
+    private static Averager vel_average = new Averager(2);
 
     static ArrayList<PathData> data = new ArrayList<>();
 
