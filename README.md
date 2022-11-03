@@ -43,6 +43,7 @@ II. Install Gazebo-11 from conda-forge
    <li> A work-around (until the problem is fixed) is to use a conda environment file to install a known-to-work version which is available in the "docs" directory of this project (base-env.txt)
       <li> After installing miniconda3 to install gazebo in the base directory download the file and the enter from a command shell: conda install --name base --file base-env.txt
          </ul>
+<ul>As of 11/1/22 the latest conda-forge gazebo build seems to work again (The gazebo window at least appears, but the version hasn't yet been fully tested)
 <h2>FRCGazebo Installation</h2>
 
 This repository contains a number of tools that should allow you to connect a robot program to Gazebo in simulation mode. It should be noted however that this is just one approach that can be followed and no promises are made that it will work for you without at least a bit of tweeking !
@@ -131,6 +132,7 @@ This project uses a simple command-based program to demonstate Gazebo teleop and
    </ol>
    <h4>Trajectory Plot options</h4>
    <ol>
+   <li> In a command shell start the plot server in the background by executing the script ("start_plot_server") located in the project bin directory
    <li> to plot certain features of an autonomous run choose one on the options from the selections on the right side of the smartdashboard window (Plot Distance etc.)
    <li> plotting support and other utilities is provided by the java files in [root]/gztest/java/utils directory.
    </ol>
