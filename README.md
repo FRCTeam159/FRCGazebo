@@ -43,9 +43,6 @@ II. Install Gazebo-11 from conda-forge
    <li> A work-around (until the problem is fixed) is to use a conda environment file to install a known-to-work version which is available in the "docs" directory of this project (base-env.txt)
       <li> After installing miniconda3 to install gazebo in the base directory download the file and the enter from a command shell: conda install --name base --file base-env.txt
          </ul>
-<ul>As of 11/1/22 the latest conda-forge gazebo build seems to work again (The gazebo window at least appears, but the version hasn't yet been fully tested)
-<h2>FRCGazebo Installation</h2>
-
 This repository contains a number of tools that should allow you to connect a robot program to Gazebo in simulation mode. It should be noted however that this is just one approach that can be followed and no promises are made that it will work for you without at least a bit of tweeking !
 
 In any case, to Install just clone the current repository into a Windows folder of your choosing by entering the following in a bash shell:
