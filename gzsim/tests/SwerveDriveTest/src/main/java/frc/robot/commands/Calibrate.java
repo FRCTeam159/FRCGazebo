@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DriveTrain;
 import utils.PathData;
 import utils.PlotUtils;
 
@@ -40,9 +40,9 @@ public class Calibrate extends CommandBase {
   double last_max_vel=0;
   double max_power=0;
 
-  private final Drivetrain m_drive;
+  private final DriveTrain m_drive;
 
-  public Calibrate(Drivetrain drive) {
+  public Calibrate(DriveTrain drive) {
      m_drive = drive;
     addRequirements(drive);
     m_timer = new Timer();

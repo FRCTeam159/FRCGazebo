@@ -20,7 +20,7 @@ import gazebo.SimCamera;
 public class Simulation extends SubsystemBase {
   /** Creates a new SimulationControl. */
   private SimControl m_simcontrol = new SimControl();
-  private Drivetrain m_drive;
+  private DriveTrain m_drive;
   private boolean resetting = false;
 
   private final Field2d m_fieldSim = new Field2d();
@@ -34,7 +34,7 @@ public class Simulation extends SubsystemBase {
   private SimClock m_simclock = new SimClock();
   private ArrayList<SimCamera> m_cameras;
 
-  public Simulation(Drivetrain drivetrain) {
+  public Simulation(DriveTrain drivetrain) {
     m_drive = drivetrain;
     SmartDashboard.putBoolean("Reset", false);
     SmartDashboard.putBoolean("Gazebo", false);
@@ -146,13 +146,13 @@ public class Simulation extends SubsystemBase {
     Pose2d field_offset= new Pose2d(7.3,2,Rotation2d.fromDegrees(90));
 
     Pose2d field_pose = m_drive.getFieldPose();
-    Pose2d p1 = Drivetrain.add(field_offset, field_pose);
+    Pose2d p1 = DriveTrain.add(field_offset, field_pose);
 
     Pose2d robot_pose = m_drive.getPose();
     Translation2d t1 = robot_pose.getTranslation();
     t1 = t1.times(0.9);
     robot_pose = new Pose2d(t1, robot_pose.getRotation());
-    Pose2d sim_pose = Drivetrain.add(p1, robot_pose);
+    Pose2d sim_pose = DriveTrain.add(p1, robot_pose);
 
     m_fieldSim.setRobotPose(sim_pose);
   }

@@ -8,8 +8,9 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DriveWithGamepad;
+import frc.robot.subsystems.AprilTagDetector;
 import frc.robot.subsystems.Autonomous;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DriveTrain;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -19,9 +20,10 @@ import frc.robot.subsystems.Drivetrain;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final Drivetrain m_drivetrain = new Drivetrain();
+  private final DriveTrain m_drivetrain = new DriveTrain();
   private final Autonomous m_autonomous = new Autonomous(m_drivetrain);
   private final XboxController m_controller = new XboxController(0);
+  private final AprilTagDetector m_detector= new AprilTagDetector();
 
   private DriveWithGamepad m_driveCommand = null; // TODO
  
@@ -59,5 +61,6 @@ public class RobotContainer {
   }
   public void robotInit(){
     m_drivetrain.init();
+    m_detector.start();
   }
 }

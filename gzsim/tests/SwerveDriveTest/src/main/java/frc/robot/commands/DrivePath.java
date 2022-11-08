@@ -33,7 +33,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Autonomous;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DriveTrain;
 import utils.PathData;
 import utils.PlotUtils;
 
@@ -53,7 +53,7 @@ public class DrivePath extends CommandBase {
 // of 1 rotation per second and a max acceleration of 180 degrees
 // per second squared.
   private final Timer m_timer = new Timer();
-  private final Drivetrain m_drive;
+  private final DriveTrain m_drive;
   static public boolean plot_trajectory_motion = false;
   static public boolean plot_trajectory_dynamics = false;
 
@@ -75,13 +75,13 @@ public class DrivePath extends CommandBase {
   int plot_type = utils.PlotUtils.PLOT_NONE;
   int trajectory_option = Autonomous.PROGRAM;
 
-  public DrivePath(Drivetrain drive, int opt,boolean rev) {
+  public DrivePath(DriveTrain drive, int opt,boolean rev) {
     reversed=rev;
     trajectory_option=opt;
     m_drive = drive;
     addRequirements(drive);
-    maxV=Drivetrain.kMaxVelocity;
-    maxA=Drivetrain.kMaxAcceleration;
+    maxV=DriveTrain.kMaxVelocity;
+    maxA=DriveTrain.kMaxAcceleration;
   }
 
   // =================================================
@@ -106,7 +106,7 @@ public class DrivePath extends CommandBase {
     if(m_trajectory==null)
       return;
 
-    PlotUtils.setInitialPose(m_trajectory.sample(0).poseMeters, Drivetrain.kTrackWidth);
+    PlotUtils.setInitialPose(m_trajectory.sample(0).poseMeters, DriveTrain.kTrackWidth);
     // PlotUtils.setDistanceUnits(PlotUtils.UnitType.FEET);
 
     runtime = m_trajectory.getTotalTimeSeconds();
@@ -259,7 +259,7 @@ public class DrivePath extends CommandBase {
   Trajectory pathPlannerTest() {
     try {
       Trajectory trajectory = PathPlanner.loadPath("swervetest", 
-        new PathConstraints(Drivetrain.kMaxVelocity,Drivetrain.kMaxAcceleration)); // max vel & accel
+        new PathConstraints(DriveTrain.kMaxVelocity,DriveTrain.kMaxAcceleration)); // max vel & accel
       return trajectory;
     } catch (Exception ex) {
       System.out.println("failed to create pathweaver trajectory");
@@ -282,7 +282,7 @@ public class DrivePath extends CommandBase {
         state.timeSeconds,
         state.poseMeters,
         m_drive.getPose(),
-        Drivetrain.kTrackWidth);
+        DriveTrain.kTrackWidth);
     pathdata.add(pd);
   }
 
@@ -307,7 +307,7 @@ public class DrivePath extends CommandBase {
         h * m_drive.getRightDistance(),
         m_drive.getHeading(),
 
-        Drivetrain.kTrackWidth);
+        DriveTrain.kTrackWidth);
     pathdata.add(pd);
   }
 

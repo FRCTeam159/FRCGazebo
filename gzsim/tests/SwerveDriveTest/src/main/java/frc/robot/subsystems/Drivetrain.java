@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.objects.SwerveModule;
 import gazebo.SimGyro;
 
-public class Drivetrain extends SubsystemBase {
+public class DriveTrain extends SubsystemBase {
 
 	// square frame geometry
 
@@ -62,7 +62,7 @@ public class Drivetrain extends SubsystemBase {
 	boolean m_disabled = true;
 
 	/** Creates a new Subsystem. */
-	public Drivetrain() {
+	public DriveTrain() {
 		simulation = new Simulation(this);
 		SmartDashboard.putBoolean("Field Oriented", enable_gyro);
 		SmartDashboard.putNumber("maxV", kMaxVelocity);

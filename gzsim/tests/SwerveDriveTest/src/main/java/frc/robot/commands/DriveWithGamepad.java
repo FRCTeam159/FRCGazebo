@@ -4,7 +4,7 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.XboxController;
@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 /** An example command that uses an example subsystem. */
 public class DriveWithGamepad extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final Drivetrain m_drive;
+  private final DriveTrain m_drive;
   private final XboxController m_controller;
 
   private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(0.5);
@@ -26,7 +26,7 @@ public class DriveWithGamepad extends CommandBase {
    * @param subsystem The subsystem used by this command.
    * @param m_Controller
    */
-  public DriveWithGamepad(Drivetrain subsystem, XboxController controller) {
+  public DriveWithGamepad(DriveTrain subsystem, XboxController controller) {
     m_drive = subsystem;
     m_controller = controller;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -49,15 +49,15 @@ public class DriveWithGamepad extends CommandBase {
     double vy=m_controller.getLeftX();
     double vr=m_controller.getRightX();
     final var xSpeed = -m_xspeedLimiter.calculate(MathUtil.applyDeadband(vx, 0.1))
-            * Drivetrain.kMaxVelocity;
+            * DriveTrain.kMaxVelocity;
 
     // Get the y speed or sideways/strafe speed. 
     final var ySpeed = m_yspeedLimiter.calculate(MathUtil.applyDeadband(vy, 0.1))
-            * Drivetrain.kMaxVelocity;
+            * DriveTrain.kMaxVelocity;
 
     // Get the rate of angular rotation. 
     final var rot = m_rotLimiter.calculate(MathUtil.applyDeadband(vr, 0.1))
-            * Drivetrain.kMaxAngularSpeed;
+            * DriveTrain.kMaxAngularSpeed;
    
     if(m_drive.disabled()){
    //   if(m_drive.disabled() && (Math.abs(vx)>0 |System,out.print(".| Math.abs(vy)>0) ||  Math.abs(vr)>0){

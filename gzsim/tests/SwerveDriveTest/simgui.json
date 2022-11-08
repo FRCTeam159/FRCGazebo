@@ -4,6 +4,7 @@
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/Autonomous": "Subsystem",
       "/LiveWindow/Cameras": "Subsystem",
+      "/LiveWindow/DriveTrain": "Subsystem",
       "/LiveWindow/Drivetrain": "Subsystem",
       "/LiveWindow/Simulation": "Subsystem",
       "/LiveWindow/Ungrouped/PIDController[100]": "PIDController",

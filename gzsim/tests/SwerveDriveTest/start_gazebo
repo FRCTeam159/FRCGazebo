@@ -3,5 +3,7 @@ rm -f tmp/*;
 #gazebo --verbose tank8-empty-field.world &
 #gazebo --verbose tank8-2018-field.world &
 #gazebo --verbose tank8-2022-field.world &
-gazebo --verbose simswervebot-empty-field.world &
+#gazebo --verbose simswervebot-empty-field.world &
+gazebo --verbose simswervebot-with-tags.world &
+
 
