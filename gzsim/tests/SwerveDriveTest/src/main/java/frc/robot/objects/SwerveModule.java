@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
+//import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import gazebo.SimEncMotor;
@@ -83,6 +84,10 @@ public class SwerveModule {
   public SwerveModuleState getState() {
     return new SwerveModuleState(m_driveMotor.getRate(), new Rotation2d(Math.toRadians(m_turnMotor.getDistance())));
   }
+
+  // public SwerveModulePosition getPosition() {
+  //   return new SwerveModulePosition(m_driveMotor.getDistance(), new Rotation2d(Math.toRadians(m_turnMotor.getDistance())));
+  // }
 
   /**
    * Sets the desired state for the module.

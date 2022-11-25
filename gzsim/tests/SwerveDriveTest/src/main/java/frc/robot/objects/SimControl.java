@@ -1,5 +1,5 @@
 
-package gazebo;
+package frc.robot.objects;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;

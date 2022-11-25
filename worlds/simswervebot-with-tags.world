@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<sdf version="1.7">
+  <world name="default">
+    <!-- A global light source -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <!-- A ground plane -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <include>
+      <uri>model://SimSwerveBot</uri>
+      <pose>0 0 0.092 1.57078 -8.3e-05 1.5512</pose>
+    </include>
+
+    <include>
+      <uri>model://Apriltag36_11_00000</uri>
+      <pose>-1.33999 8.41624 -1e-06 1e-06 -2e-06 -0</pose>
+    </include>
+
+     <include>
+      <uri>model://Apriltag36_11_00001</uri>
+      <pose>1.24335 8.29246 -1e-06 -1e-06 2e-06 -0</pose>
+    </include>
+
+  </world>
+</sdf>

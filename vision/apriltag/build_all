@@ -1,0 +1,3 @@
+#!/bin/bash
+cmake --build build --target INSTALL --config Release
+cp lib/apriltagjni.dll ../../wpilib/libs

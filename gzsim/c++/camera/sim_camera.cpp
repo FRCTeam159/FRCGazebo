@@ -103,7 +103,7 @@ void CameraPlugin::Load(sensors::SensorPtr _sensor, sdf::ElementPtr sdf) {
   }
   video_index=0;
   
-  gzmsg << "Initializing sim_camera"<<" port="<<port<<" video=" << record_video << " fps=" << fps<<"\n";
+  gzmsg << "Initializing sim_camera"<<" port="<<port<<" movie=" << record_video << " fps=" << fps<<"\n";
 
   stream.SetVideoMode(cs::VideoMode::PixelFormat::kMJPEG, width, height,fps);
   server.SetSource(stream);
@@ -142,6 +142,8 @@ if (!record_video && !stopped && (saveCount < saveMax)) {
     memcpy(FreeImage_GetBits(bitmap), _image, _width * _height * 3);
     FreeImage_FlipVertical(bitmap);
     FreeImage_Save(FIF_JPEG, bitmap, tmp);
+    //  std::cout << "saving image:" << saveCount << " "<<tmp<<std::endl;
+
     saveCount++;
   }
   // Instead of using mjpeg-streamer (which isn't supported on Windows) 

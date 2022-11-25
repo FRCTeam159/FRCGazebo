@@ -1,0 +1,3 @@
+#!/bin/bash
+#cd test
+bin/apriltag_test -p images/frame_0000.jpg

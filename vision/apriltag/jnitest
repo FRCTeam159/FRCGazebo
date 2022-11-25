@@ -1,0 +1,4 @@
+#!/bin/bash
+javac apriltag/TagDetectorJNI.java  
+java -Xlog:nmethod* -Djava.library.path=$GZ_SIM/wpilib/libs apriltag/TagDetectorJNI
+#java  apriltag/TagDetectorJNI

@@ -226,8 +226,6 @@ public class DriveTrain extends SubsystemBase {
 	@Override
 	public void simulationPeriodic() {
 		if(!enabled()){
-			//move(0);
-			//turn(0);
 			drive(0.0,0.0,0.0,false); // stay in place
 		}
 		updateOdometry();

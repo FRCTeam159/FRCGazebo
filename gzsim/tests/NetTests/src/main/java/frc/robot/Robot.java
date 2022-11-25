@@ -5,7 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.RobotBase;
-import utils.PlotServer;
+import frc.robot.utils.PlotServer;
 
 /**
  * The VM is configured to automatically run this class. If you change the name of this class or the
@@ -14,7 +14,7 @@ import utils.PlotServer;
 public class Robot extends RobotBase {
   //NTServerTest nt_server= new NTServerTest();
   //NTClientTest nt_client= new NTClientTest();
-  utils.PlotServer plot_server= new PlotServer();
+  frc.robot.utils.PlotServer plot_server= new PlotServer();
   PlotTest plot_test= new PlotTest();
   MJpegTest mjpg_test;
   public void robotInit() {
