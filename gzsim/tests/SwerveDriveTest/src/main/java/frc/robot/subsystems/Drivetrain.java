@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.objects.SwerveModule;
@@ -36,6 +37,10 @@ public class DriveTrain extends SubsystemBase {
 	private final SwerveModule m_backLeft = new SwerveModule(5, 6);
 	private final SwerveModule m_backRight = new SwerveModule(7, 8);
 
+	private final SwerveModulePosition[] m_positions={
+		new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition()
+	};
+
 	private Simulation simulation;
 
 	public SimGyro m_gyro = new SimGyro(0);
@@ -43,7 +48,8 @@ public class DriveTrain extends SubsystemBase {
 	private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
 			m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
-	private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(m_kinematics, m_gyro.getRotation2d());
+	private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(m_kinematics, m_gyro.getRotation2d()
+	,m_positions);
 
 	public static final double kTrackWidth = i2M(2 * front_wheel_base); // bug? need to double actual value for geometry to work
 	public static final double kWheelDiameter = i2M(4); // wheel diameter in tank model
@@ -288,20 +294,25 @@ public class DriveTrain extends SubsystemBase {
 	}
 	/** Updates the field relative position of the robot. */
 	public void updateOdometry() {
-		field_pose = m_odometry.update(
-				m_gyro.getRotation2d(),
-				m_frontLeft.getState(),
-				m_frontRight.getState(),
-				m_backLeft.getState(),
-				m_backRight.getState());
+		updatePositions();
+		field_pose = m_odometry.update(m_gyro.getRotation2d(),m_positions);
 		log();
 	}
 
+	public void updatePositions(){
+		m_positions[0]=m_frontLeft.getPosition();
+		m_positions[1]=m_frontRight.getPosition();
+		m_positions[2]=m_backLeft.getPosition();
+		m_positions[3]=m_backRight.getPosition();
+
+	}
 	public void resetOdometry(Pose2d pose) {
 		reset();
 		last_heading = 0;
 		m_gyro.reset();
-		m_odometry.resetPosition(pose, getRotation2d());
+		updatePositions();
+		m_odometry.resetPosition(m_gyro.getRotation2d(), m_positions,pose	
+		);
 	}
 
 	public Pose2d getPose() {

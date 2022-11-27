@@ -9,8 +9,6 @@ import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
-import java.io.File;
-
 import org.opencv.core.Core;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSource;
@@ -31,7 +29,6 @@ public class AprilTagDetector extends Thread{
 
   public AprilTagDetector() {
     camera=new Camera(0);
-   
     //detector.test(System.getenv("GZ_SIM")+"/docs/apriltag_test.jpg");
     ouputStream = CameraServer.putVideo("testCamera", image_width, image_height);
   }
@@ -43,7 +40,14 @@ public class AprilTagDetector extends Thread{
       try {
         Thread.sleep(50);
         Mat mat = camera.getFrame();
+
+        //long startTime = System.nanoTime();
         TagResult[] tags=detector.detect(mat);
+       //long endTime = System.nanoTime();
+
+        //long duration = (endTime - startTime)/1000;  //divide by 1000000 to get milliseconds.
+       // System.out.println("tag detect time="+duration);
+
         for(int i=0;i<tags.length;i++){
             TagResult tag=tags[i];
             Point c= tag.center();
@@ -66,13 +70,7 @@ public class AprilTagDetector extends Thread{
               new Scalar(255, 0, 0),             // Scalar object for color
               2                                // Thickness
             );
-            //System.out.println(tag);
         }
-     
-        // TODO:
-        // - label tag id
-        // - determine and show fps
-        // - publish result to targeting subsystem using network tables
         
         ouputStream.putFrame(mat);
       } catch (Exception ex) {

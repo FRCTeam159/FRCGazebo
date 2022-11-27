@@ -32,14 +32,21 @@ TagDetector::TagDetector(){
 }
 TagDetector::TagDetector(int t) : type(t){
     td=apriltag_detector_create();
-    tf=tag36h11_create();
+    switch(type){
+        case 0: tf=tag16h5_create(); break;
+        case 1: tf=tag36h11_create(); break;
+    }
     apriltag_detector_add_family_bits(td, tf, 1);
 
     cout<<"TagDetector::TagDetector("<<type<<")"<<endl;
 }
 TagDetector::~TagDetector(){
     cout<<"TagDetector::~TagDetector("<<type<<")"<<endl;
-    tag36h11_destroy(tf);
+    switch(type){
+        case 0: tag16h5_destroy(tf); break;
+        case 1: tag36h11_destroy(tf); break;
+    }
+    
     apriltag_detector_destroy(td);
 }
 

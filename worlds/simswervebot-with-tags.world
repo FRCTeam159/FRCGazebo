@@ -16,12 +16,12 @@
     </include>
 
     <include>
-      <uri>model://Apriltag36_11_00000</uri>
+      <uri>model://Apriltag16_05_00000</uri>
       <pose>-1.33999 8.41624 -1e-06 1e-06 -2e-06 -0</pose>
     </include>
 
      <include>
-      <uri>model://Apriltag36_11_00001</uri>
+      <uri>model://Apriltag16_05_00001</uri>
       <pose>1.24335 8.29246 -1e-06 -1e-06 2e-06 -0</pose>
     </include>
 

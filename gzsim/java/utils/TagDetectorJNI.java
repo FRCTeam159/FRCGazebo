@@ -39,11 +39,10 @@ public class TagDetectorJNI {
         detector_destroy();
     }
     public TagResult[] detect(Mat mat) {
-         // Creating the empty destination matrix
         graymat=new Mat();
         Imgproc.cvtColor(mat, graymat, Imgproc.COLOR_RGB2GRAY);
-        Object[] result = detector_detect(graymat.dataAddr(), graymat.rows(),  graymat.cols());
-        return (TagResult[]) result;
+        TagResult[] result = detector_detect(graymat.dataAddr(), graymat.rows(),  graymat.cols());
+        return result;
     }
     
     public void test(String path){
