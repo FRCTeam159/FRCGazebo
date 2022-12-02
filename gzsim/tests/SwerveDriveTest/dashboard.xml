@@ -1,7 +1,10 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="Detect" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="282" y="147"/>
+	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
-		<location x="27" y="133"/>
+		<location x="15" y="128"/>
 		<width>397</width>
 		<height>297</height>
 		<property name="Camera Choice" value="testCamera"/>
@@ -44,7 +47,7 @@
 		<width>90</width>
 	</widget>
 	<widget field="reversed" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="450" y="77"/>
+		<location x="452" y="81"/>
 	</widget>
 	<widget field="yPath" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="419" y="32"/>
@@ -65,7 +68,7 @@
 		<width>95</width>
 	</widget>
 	<widget field="SendableChooser[1]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
-		<location x="420" y="131"/>
+		<location x="417" y="123"/>
 	</widget>
 	<widget field="SimTime" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="128" y="71"/>

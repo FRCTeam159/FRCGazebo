@@ -1,13 +1,30 @@
 {
+  "Clients": {
+    "open": true
+  },
   "Connections": {
     "open": true
   },
   "NetworkTables Settings": {
     "dsClient": false,
-    "mode": "Client",
+    "mode": "Client (NT4)",
     "serverTeam": "localhost"
   },
+  "Server": {
+    "Publishers": {
+      "open": true
+    },
+    "Subscribers": {
+      "open": true
+    },
+    "open": true
+  },
   "connections": true,
+  "example client": {
+    "Publishers": {
+      "open": true
+    }
+  },
   "flags": true,
   "gazebo": {
     "motor": {
@@ -20,5 +37,13 @@
   },
   "plotdata": {
     "open": true
+  },
+  "transitory": {
+    "datatable": {
+      "open": true
+    },
+    "plotdata": {
+      "open": true
+    }
   }
 }

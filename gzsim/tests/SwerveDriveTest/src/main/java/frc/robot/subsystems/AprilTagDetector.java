@@ -12,17 +12,20 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.core.Core;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.objects.Camera;
 import utils.TagDetectorJNI;
 import utils.TagResult;
 
 public class AprilTagDetector extends Thread{
- static {
+  static {
 	  System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 	}
   Camera camera;
   public int image_width = 640;
   public int image_height = 480;
+
+  private final boolean time_detection = true;
 
   protected static CvSource ouputStream;
   protected TagDetectorJNI detector=new TagDetectorJNI(0);
@@ -41,12 +44,17 @@ public class AprilTagDetector extends Thread{
         Thread.sleep(50);
         Mat mat = camera.getFrame();
 
-        //long startTime = System.nanoTime();
+        long startTime = System.nanoTime();
         TagResult[] tags=detector.detect(mat);
-       //long endTime = System.nanoTime();
+        long endTime = System.nanoTime();
 
-        //long duration = (endTime - startTime)/1000;  //divide by 1000000 to get milliseconds.
-       // System.out.println("tag detect time="+duration);
+        double duration = (endTime - startTime)/1.0e6;  //divide by 1000000 to get milliseconds.
+        if(time_detection){
+          String s=String.format(" %2.1f ms",duration);
+          SmartDashboard.putString("Detect", s);
+        }
+
+        //System.out.println("tag detect time="+duration);
 
         for(int i=0;i<tags.length;i++){
             TagResult tag=tags[i];
@@ -60,15 +68,15 @@ public class AprilTagDetector extends Thread{
            
             //Imgproc.rectangle(mat, tl, br, new Scalar(255.0, 255.0, 0.0), 2);
             Imgproc.drawMarker(mat, c, new Scalar(0, 0, 255), Imgproc.MARKER_CROSS, 35, 2, 8);
-            Point p=new Point(tag.bl().x-10,tag.bl().y-10);;
+            Point p=new Point(tag.bl().x-10,tag.bl().y-10);
             Imgproc.putText (
-              mat,                          // Matrix obj of the image
+              mat,                             // Matrix obj of the image
               "["+tag.getTagId()+"]",          // Text to be added
               p,               // point
-              Imgproc.FONT_HERSHEY_SIMPLEX,      // front face
-              1,                               // front scale
-              new Scalar(255, 0, 0),             // Scalar object for color
-              2                                // Thickness
+              Imgproc.FONT_HERSHEY_SIMPLEX,    // front face
+              1,                     // front scale
+              new Scalar(255, 0, 0), // Scalar object for color
+              2                      // Thickness
             );
         }
         

@@ -18,6 +18,7 @@ class TagResult {
     double margin;
     double centerX, centerY;
     double corners[4][2];
+    
     TagResult(int n,apriltag_detection_t *det);
     double getWidth();
     double getHeight();

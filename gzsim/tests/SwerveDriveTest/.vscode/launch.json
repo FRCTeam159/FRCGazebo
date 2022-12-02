@@ -13,17 +13,14 @@
     },
     {
       "type": "java",
-      "name": "PlotServer",
+      "name": "Launch Simulation",
       "request": "launch",
-      "cwd": "../../../gzsim/java",
-      "console": "internalConsole",
-      "stopOnEntry": false,
-      "mainClass": "PlotServer",
-      "projectName": "FRCGazebo",
-      "vmargs": [ "-Djava.library.path=../../../wpilib/libs" ],
+      "mainClass": "frc.robot.Main",
+      "projectName": "SwerveDriveTest",
       "env": {
-        "LD_LIBRARY_PATH": "../../../wpilib/libs" ,
-        "DYLD_LIBRARY_PATH": "../../../wpilib/libs"
+        "PATH":"build/jni/release:$PATH",
+        "LD_LIBRARY_PATH": "build/jni/release;$PATH",
+        "DYLD_LIBRARY_PATH": "build/jni/release;$PATH"
       }
     }
   ]
