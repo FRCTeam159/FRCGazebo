@@ -126,7 +126,7 @@ void CameraPlugin::OnNewFrame(const unsigned char *_image, unsigned int _width,
   
 if(!enabled)
   return;
-if (!record_video && !stopped && (saveCount < saveMax)) {  
+if (!record_video && saveMax && (saveCount < saveMax)) {  
   // note: save jpeg frames into a directory
   // - no longer needed for mjpeg streamer
   // - but could be used to capture frames for generating a video
@@ -142,7 +142,7 @@ if (!record_video && !stopped && (saveCount < saveMax)) {
     memcpy(FreeImage_GetBits(bitmap), _image, _width * _height * 3);
     FreeImage_FlipVertical(bitmap);
     FreeImage_Save(FIF_JPEG, bitmap, tmp);
-    //  std::cout << "saving image:" << saveCount << " "<<tmp<<std::endl;
+    std::cout << "saving image:" << saveCount << " "<<tmp<<std::endl;
 
     saveCount++;
   }
@@ -166,7 +166,7 @@ void CameraPlugin::Callback(ConstGzStringPtr  & msg) {
   } 
   else if (command == "enable") {
     enabled=true;
-  } 
+  }
   else if (command == "reset") {
     this->saveCount=0; // should also clear the tmp directory if saving jpegs
     stopped=true;

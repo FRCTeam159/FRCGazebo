@@ -9,6 +9,7 @@ import org.opencv.core.Mat;
 /** Add your docs here. */
 public interface CameraInterface {
     void record();
+    void start();
     void stop();
     boolean isRecording();
     boolean isConnected();

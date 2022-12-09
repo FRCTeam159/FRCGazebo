@@ -4,14 +4,20 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.numbers.N5;
+import edu.wpi.first.math.numbers.N7;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.objects.SwerveModule;
@@ -48,9 +54,6 @@ public class DriveTrain extends SubsystemBase {
 	private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
 			m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
-	private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(m_kinematics, m_gyro.getRotation2d()
-	,m_positions);
-
 	public static final double kTrackWidth = i2M(2 * front_wheel_base); // bug? need to double actual value for geometry to work
 	public static final double kWheelDiameter = i2M(4); // wheel diameter in tank model
 
@@ -66,6 +69,19 @@ public class DriveTrain extends SubsystemBase {
 	private Pose2d field_pose;
 
 	boolean m_disabled = true;
+
+	private final SwerveDrivePoseEstimator<N7, N7, N5> m_poseEstimator =
+      new SwerveDrivePoseEstimator<N7, N7, N5>(
+          Nat.N7(),
+          Nat.N7(),
+          Nat.N5(),
+          m_gyro.getRotation2d(),
+          m_positions,
+          new Pose2d(),
+          m_kinematics,
+          VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5), 0.05, 0.05, 0.05, 0.05),
+          VecBuilder.fill(Units.degreesToRadians(0.01), 0.01, 0.01, 0.01, 0.01),
+          VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
 
 	/** Creates a new Subsystem. */
 	public DriveTrain() {
@@ -213,10 +229,9 @@ public class DriveTrain extends SubsystemBase {
 		SmartDashboard.putNumber("Distance", getDistance());
 		SmartDashboard.putNumber("Velocity", getVelocity());
 		Translation2d t=  getPose().getTranslation();
-		double x=t.getX();
-		double y=t.getY();
-		SmartDashboard.putNumber("X:", x);
-		SmartDashboard.putNumber("Y:", y);
+		
+		SmartDashboard.putNumber("X:", t.getX());
+		SmartDashboard.putNumber("Y:", t.getY());
 
 		//SmartDashboard.putString("Location", getPose().getTranslation().toString());
 		enable_gyro = SmartDashboard.getBoolean("Field Oriented", enable_gyro);
@@ -263,7 +278,6 @@ public class DriveTrain extends SubsystemBase {
 		m_backLeft.setAngle(-45, value);
 		m_backRight.setAngle(45, -value);
 		updateOdometry();
-		//drive(0, 0, value, true);
 	}
 
 	public void driveForward(double value) {
@@ -295,7 +309,27 @@ public class DriveTrain extends SubsystemBase {
 	/** Updates the field relative position of the robot. */
 	public void updateOdometry() {
 		updatePositions();
-		field_pose = m_odometry.update(m_gyro.getRotation2d(),m_positions);
+		field_pose = m_poseEstimator.update(
+        m_gyro.getRotation2d(),
+        new SwerveModuleState[] {
+          m_frontLeft.getState(),
+          m_frontRight.getState(),
+          m_backLeft.getState(),
+          m_backRight.getState()
+        },
+        new SwerveModulePosition[] {
+          m_frontLeft.getPosition(),
+          m_frontRight.getPosition(),
+          m_backLeft.getPosition(),
+          m_backRight.getPosition()
+        });
+
+		 // Also apply vision measurements. We use 0.3 seconds in the past as an example -- on
+		// a real robot, this must be calculated based either on latency or timestamps.
+		// m_poseEstimator.addVisionMeasurement(
+        // ExampleGlobalMeasurementSensor.getEstimatedGlobalPose(
+        //     m_poseEstimator.getEstimatedPosition()),
+        // Timer.getFPGATimestamp() - 0.3);
 		log();
 	}
 
@@ -311,18 +345,17 @@ public class DriveTrain extends SubsystemBase {
 		last_heading = 0;
 		m_gyro.reset();
 		updatePositions();
-		m_odometry.resetPosition(m_gyro.getRotation2d(), m_positions,pose	
-		);
+		m_poseEstimator.resetPosition(m_gyro.getRotation2d(), m_positions,pose);
 	}
 
 	public Pose2d getPose() {
-		return m_odometry.getPoseMeters();
+		return m_poseEstimator.getEstimatedPosition();
 	}
 
 	public Pose2d getFieldPose() {
 		return field_pose;
 	}
-
+	
 	// removes heading discontinuity at 180 degrees
 	public static double unwrap(double previous_angle, double new_angle) {
 		double d = new_angle - previous_angle;

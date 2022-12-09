@@ -25,6 +25,16 @@ public class AprilTagDetector extends Thread{
   public int image_width = 640;
   public int image_height = 480;
 
+  // parametes for sim camera and 0.5 m targets
+  public double tw=0.4;
+  public double hFOV=40;
+  public double aspect=((double)image_width)/image_height;
+  public double vFOV=hFOV/aspect;
+  double cx=image_width/2.0;
+  double cy=image_height/2.0;
+  double fx=cx/Math.tan(0.5*Math.toRadians(hFOV));
+  double fy=cy/Math.tan(0.5*Math.toRadians(vFOV));
+
   private final boolean time_detection = true;
 
   protected static CvSource ouputStream;
@@ -32,20 +42,24 @@ public class AprilTagDetector extends Thread{
 
   public AprilTagDetector() {
     camera=new Camera(0);
-    //detector.test(System.getenv("GZ_SIM")+"/docs/apriltag_test.jpg");
+    //detector.test(System.getenv("GZ_SIM")+"/docs/apriltag_0_test.jpg",true);
+    //detector.test("tmp/frame_0000.jpg",true);
+
     ouputStream = CameraServer.putVideo("testCamera", image_width, image_height);
+    System.out.println(hFOV+" "+vFOV+" "+fx+" "+fy);
   }
 
   @Override
   public void run() {
-
+    boolean first=true;
+    camera.start();
     while (true) {
       try {
         Thread.sleep(50);
         Mat mat = camera.getFrame();
 
         long startTime = System.nanoTime();
-        TagResult[] tags=detector.detect(mat);
+        TagResult[] tags=detector.detect(mat,tw,fx,fy,cx,cy);
         long endTime = System.nanoTime();
 
         double duration = (endTime - startTime)/1.0e6;  //divide by 1000000 to get milliseconds.
@@ -58,6 +72,8 @@ public class AprilTagDetector extends Thread{
 
         for(int i=0;i<tags.length;i++){
             TagResult tag=tags[i];
+            if(first)
+              tag.print();
             Point c= tag.center();
            
             Scalar lns=new Scalar(255.0, 255.0, 0.0);
@@ -81,6 +97,7 @@ public class AprilTagDetector extends Thread{
         }
         
         ouputStream.putFrame(mat);
+        first=false;
       } catch (Exception ex) {
         System.out.println("exception:"+ex);
       }

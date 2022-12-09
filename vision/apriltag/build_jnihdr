@@ -1,6 +1,9 @@
 #!/bin/bash
 #pushd ../../gzsim/java
 #javac --source-path "../../gzsim/java" -cp "../../bin/opencv-java-4.5.2-1.jar;." -h ../../vision/apriltag/include utils/TagDetectorJNI.java
-javac --source-path "$GZ_SIM/gzsim/java" -cp "$GZ_SIM/bin/opencv-java-4.5.2-1.jar;$GZ_SIM/gzsim/java" -h include $GZ_SIM/gzsim/java/utils/TagDetectorJNI.java
+export GZ_BIN=$GZ_SIM/bin
+javac --source-path "$GZ_SIM/gzsim/java" \
+-cp "$GZ_BIN/opencv-java-4.5.2-1.jar;$GZ_BIN/wpimath-java-2023.1.1-beta-4.jar;$GZ_BIN/ejml-ddense-0.41.jar;$GZ_BIN/ejml-simple-0.41.jar;$GZ_BIN/ejml-core-0.41.jar;$GZ_SIM/gzsim/java" \
+-h include $GZ_SIM/gzsim/java/utils/TagDetectorJNI.java
 
 #popd

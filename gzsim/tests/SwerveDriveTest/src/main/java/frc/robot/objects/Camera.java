@@ -23,6 +23,7 @@ public class Camera implements CameraInterface {
         String url=new String("http://localhost:900"+chnl+"/?action=stream");
         video_source=new MJpegReader(url);
         System.out.println("new SimCamera("+chnl+")");
+        sim_camera.start();
     }
     @Override
     public void record() {
@@ -33,6 +34,10 @@ public class Camera implements CameraInterface {
     public void stop() {
         sim_camera.stop();
         recording=false;
+    }
+    @Override
+    public void start() {
+        sim_camera.start();
     }
     @Override
     public boolean isRecording() {

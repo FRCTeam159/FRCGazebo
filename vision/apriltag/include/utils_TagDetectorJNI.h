@@ -26,18 +26,18 @@ JNIEXPORT void JNICALL Java_utils_TagDetectorJNI_detector_1destroy
 /*
  * Class:     utils_TagDetectorJNI
  * Method:    detector_detect
- * Signature: (JII)[Ljava/lang/Object;
+ * Signature: (JIIDDDDD)[Lutils/TagResult;
  */
 JNIEXPORT jobjectArray JNICALL Java_utils_TagDetectorJNI_detector_1detect
-  (JNIEnv *, jobject, jlong, jint, jint);
+  (JNIEnv *, jobject, jlong, jint, jint, jdouble, jdouble, jdouble, jdouble, jdouble);
 
 /*
  * Class:     utils_TagDetectorJNI
- * Method:    detector_test
- * Signature: (Ljava/lang/String;)V
+ * Method:    detector_image_test
+ * Signature: (Ljava/lang/String;Z)V
  */
-JNIEXPORT void JNICALL Java_utils_TagDetectorJNI_detector_1test
-  (JNIEnv *, jobject, jstring);
+JNIEXPORT void JNICALL Java_utils_TagDetectorJNI_detector_1image_1test
+  (JNIEnv *, jobject, jstring, jboolean);
 
 #ifdef __cplusplus
 }

@@ -80,7 +80,7 @@
           <fps>20</fps>
           <enabled>true</enabled>
           <savepath>tmp</savepath>
-          <maxframes>20</maxframes>
+          <maxframes>10</maxframes>
           <!--<video>front.avi</video>-->
       </plugin>
       </sensor>
