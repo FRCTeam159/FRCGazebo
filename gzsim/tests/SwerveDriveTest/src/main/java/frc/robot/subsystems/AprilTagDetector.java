@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
+import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import org.opencv.core.Core;
@@ -40,15 +41,22 @@ public class AprilTagDetector extends Thread{
   protected static CvSource ouputStream;
   protected TagDetectorJNI detector=new TagDetectorJNI(0);
 
+  static String  test_image=System.getenv("GZ_SIM")+"/docs/apriltag_0_test.jpg";
   public AprilTagDetector() {
     camera=new Camera(0);
-    //detector.test(System.getenv("GZ_SIM")+"/docs/apriltag_0_test.jpg",true);
-    //detector.test("tmp/frame_0000.jpg",true);
-
+    detector.test(test_image,true,false);
     ouputStream = CameraServer.putVideo("testCamera", image_width, image_height);
     System.out.println(hFOV+" "+vFOV+" "+fx+" "+fy);
+    test();
   }
 
+  public void test(){
+    Mat mat = Imgcodecs.imread(test_image);
+    TagResult[] tags=detector.detect(mat,tw,fx,fy,cx,cy);
+    for(int i=0;i<tags.length;i++){
+      tags[i].print();
+    }
+  }
   @Override
   public void run() {
     boolean first=true;
@@ -57,7 +65,6 @@ public class AprilTagDetector extends Thread{
       try {
         Thread.sleep(50);
         Mat mat = camera.getFrame();
-
         long startTime = System.nanoTime();
         TagResult[] tags=detector.detect(mat,tw,fx,fy,cx,cy);
         long endTime = System.nanoTime();

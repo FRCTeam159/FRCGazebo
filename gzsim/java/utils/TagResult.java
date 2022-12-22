@@ -5,7 +5,11 @@ import org.opencv.core.Point;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.CoordinateSystem;
 import edu.wpi.first.math.geometry.Quaternion;
+import edu.wpi.first.math.geometry.Pose2d;
+
 import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
@@ -64,68 +68,18 @@ public class TagResult {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 rmat.set(i, j, rdata[dcnt++]);
-                // rotation[i][j]=rdata[dcnt++];
             }
         }
-        // normalize(rmat);
-
+        //System.out.println(rmat);
+        //System.out.format("dpata: %-1.2f,%-1.2f,%-1.2f\n", pdata[0], pdata[1],pdata[2]);
         pose_err = perr;
-        Matrix<N3, N3> R = orthogonalizeRotationMatrix(rmat);
-        Translation3d trans = new Translation3d(pdata[0], pdata[1], pdata[2]);
-        // Matrix<N3,N3> rmat=orthogonalizeRotationMatrix(new MatBuilder<>(Nat.N3(),
-        // Nat.N3()).fill(rdata));
-
-        if (R==null) {
-            System.out.println("rotation matrix is not orthoganal");
-        } else {     
-            Quaternion q = getQuaternion(R);
-            Rotation3d rot = new Rotation3d(q);
-            poseResult = new Transform3d(trans, rot);
-        }
-        //System.out.println(this);
+        poseResult=new Transform3d(
+            new Translation3d(pdata[0], pdata[1], pdata[2]),
+            new Rotation3d(orthogonalizeRotationMatrix(new MatBuilder<>(Nat.N3(), Nat.N3()).fill(rdata))));
+        //System.out.println(poseResult);
+        
     }
-    // work around for bug in Rotation3d(Matrix) constructor
-    // Turn rotation matrix into a quaternion
-    // https://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/
-    public static Quaternion getQuaternion(Matrix<N3,N3>  R){
-        Quaternion m_q = new Quaternion();
-        double trace = R.get(0, 0) + R.get(1, 1) + R.get(2, 2);
-        double w;
-        double x;
-        double y;
-        double z;
-
-        if (trace > 0.0) {
-            double s = 0.5 / Math.sqrt(trace + 1.0);
-            w = 0.25 / s;
-            x = (R.get(2, 1) - R.get(1, 2)) * s;
-            y = (R.get(0, 2) - R.get(2, 0)) * s;
-            z = (R.get(1, 0) - R.get(0, 1)) * s;
-            } 
-        else {
-            if (R.get(0, 0) > R.get(1, 1) && R.get(0, 0) > R.get(2, 2)) {
-                double s = 2.0 * Math.sqrt(1.0 + R.get(0, 0) - R.get(1, 1) - R.get(2, 2));
-                w = (R.get(2, 1) - R.get(1, 2)) / s;
-                x = 0.25 * s;
-                y = (R.get(0, 1) + R.get(1, 0)) / s;
-                z = (R.get(0, 2) + R.get(2, 0)) / s;
-            } else if (R.get(1, 1) > R.get(2, 2)) {
-                double s = 2.0 * Math.sqrt(1.0 + R.get(1, 1) - R.get(0, 0) - R.get(2, 2));
-                w = (R.get(0, 2) - R.get(2, 0)) / s;
-                x = (R.get(0, 1) + R.get(1, 0)) / s;
-                y = 0.25 * s;
-                z = (R.get(1, 2) + R.get(2, 1)) / s;
-            } else {
-                double s = 2.0 * Math.sqrt(1.0 + R.get(2, 2) - R.get(0, 0) - R.get(1, 1));
-                w = (R.get(1, 0) - R.get(0, 1)) / s;
-                x = (R.get(0, 2) + R.get(2, 0)) / s;
-                y = (R.get(1, 2) + R.get(2, 1)) / s;
-                z = 0.25 * s;
-            }
-        }
-        return new Quaternion(w, x, y, z);
-    }
-
+    
     /**
      * from: org.photonvision.common.util.math
      * Orthogonalize an input matrix using a QR decomposition. QR decompositions
@@ -159,6 +113,20 @@ public class TagResult {
         if (!MatrixFeatures_DDRM.isOrthogonal(Q, 1e-9)) // added this test
             return null;
         return new Matrix<>(new SimpleMatrix(Q));
+    }
+
+    /**
+     * Photonvision: All our solvepnp code returns a tag with X left, Y up, and Z out of the tag To better match
+     * wpilib, we want to apply another rotation so that we get Z up, X out of the tag, and Y to the
+     * right. We apply the following change of basis: X -> Y Y -> Z Z -> X
+     */
+    private static final Rotation3d WPILIB_BASE_ROTATION = new Rotation3d(
+        new MatBuilder<>(Nat.N3(), Nat.N3()).fill(0, 1, 0, 0, 0, 1, 1, 0, 0));
+
+    public static Pose3d convertOpenCVtoWPIlib(Transform3d cameraToTarget3d) {
+        Pose3d p=new Pose3d(cameraToTarget3d.getTranslation(),cameraToTarget3d.getRotation());
+        var nwu = CoordinateSystem.convert(p, CoordinateSystem.EDN(), CoordinateSystem.NWU());
+        return new Pose3d(nwu.getTranslation(), WPILIB_BASE_ROTATION.rotateBy(nwu.getRotation()));
     }
 
     public int getId() {
@@ -222,8 +190,11 @@ public class TagResult {
         return homog;
     }
 
-    public Transform3d getPoseResult() {
+    public Transform3d getPoseTransform() {
         return poseResult;
+    }
+    public Pose3d getPose() {
+        return convertOpenCVtoWPIlib(poseResult);
     }
     public double getPoseError() {
         return pose_err;
@@ -238,16 +209,16 @@ public class TagResult {
     public void print() {
         String str = toString();
         System.out.println(str);
-        if(poseResult !=null)
-           System.out.println(poseResult);
-        
-        // if (homog != null) {
-        //     for (int k = 0; k < 3; k++) {
-        //         for (int l = 0; l < 3; l++) {
-        //             System.out.format("%-8.2f ", homog[k][l]);
-        //         }
-        //         System.out.println();
-        //     }
-        // }
+        //System.out.println(getPoseTransform());
+        //if(poseResult !=null){
+        Pose3d pose=getPose();
+        System.out.println(getPose());
+            // var objX = new Translation3d(1, 0, 0).rotateBy(pose.getRotation()).getY();
+            // var objY = new Translation3d(0, 1, 0).rotateBy(pose.getRotation()).getZ();
+            // var objZ = new Translation3d(0, 0, 1).rotateBy(pose.getRotation()).getX();
+            // System.out.printf("Object x %.2f y %.2f z %.2f\n", objX, objY, objZ);
+        //}
     }
+
+   
 }

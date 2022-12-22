@@ -33,14 +33,13 @@ JNIEXPORT void JNICALL Java_utils_TagDetectorJNI_detector_1create
     env->SetLongField(obj, fld, (jlong) cobj); 
   }
 
-
 /*
  * Class:     utils_TagDetectorJNI
  * Method:    detector_detect
  * Signature: (JIIDDDDD)[Lutils/TagResult;
  */
 JNIEXPORT jobjectArray JNICALL Java_utils_TagDetectorJNI_detector_1detect
-  (JNIEnv *env, jobject obj, jlong a, jint r, jint c, jdouble tw, jdouble fx, jdouble fy, jdouble cx, jdouble cy)
+  (JNIEnv *env, jobject obj, jlong data, jint rows, jint cols, jdouble tw, jdouble fx, jdouble fy, jdouble cx, jdouble cy)
   {
     TagDetector *detector = (TagDetector *)env->GetLongField(obj, getPtrFieldId(env, obj));
 
@@ -48,18 +47,14 @@ JNIEXPORT jobjectArray JNICALL Java_utils_TagDetectorJNI_detector_1detect
         std::cout<<"error: couldn't obtain detector in java class"<<std::endl;
         return 0;
     }
-    uint8_t *ptr=(uint8_t*)a;
-    //std::vector<TagResult> tags = detector->detect(ptr, r, c);
 
-    zarray_t *detections = detector->detect(ptr, r, c);
+    zarray_t *detections = detector->detect((uint8_t *)data, rows, cols);
 
-    
     jclass jcls = env->FindClass("utils/TagResult");
     if(!jcls){
       std::cout<<"error: could not find TagResult class"<<std::endl;
       return 0;
     }
-    //int ntags=tags.size();
     int ntags=zarray_size(detections);
 
     jobjectArray ret = env->NewObjectArray( ntags, jcls, NULL);
@@ -96,31 +91,29 @@ JNIEXPORT jobjectArray JNICALL Java_utils_TagDetectorJNI_detector_1detect
 
       jdouble pose[3]={0};
       jdouble rot[9]={1,0,0,0,1,0,0,0,1};
-      jdouble perr=0;
-      matd_t *R=0;
+      jdouble perr=HUGE_VAL;
       if(tw>0){
         apriltag_pose_t pose1 = { 0 };
         apriltag_pose_t pose2 = { 0 };
-        double err1 = 0; //Should get overwritten if pose estimation is happening
-        double err2 = 0;
+        apriltag_pose_t *best_pose=0;
+        double err1 = HUGE_VAL; //Should get overwritten if pose estimation is happening
+        double err2 = HUGE_VAL;
         apriltag_detection_info_t info {detect, tw, fx, fy, cx, cy };
-        estimate_tag_pose_orthogonal_iteration(&info, &err1, &pose1, &err2, &pose2, 1);
 
-        if (err1 < err2){
-          pose[0] = pose1.t->data[2];
-          pose[1] = -pose1.t->data[0];
-          pose[2] = -pose1.t->data[1];
-          perr = err1;
-          R=pose1.R;
-          for(int i=0;i<9;i++) rot[i]=pose1.R->data[i];
-        }
-        else { 
-          pose[0] = pose2.t->data[2];
-          pose[1] = -pose2.t->data[0];
-          pose[2] = -pose2.t->data[1];
-          perr = err2;
-          R=pose2.R;
-          for(int i=0;i<9;i++) rot[i]=pose2.R->data[i]; 
+        estimate_tag_pose_orthogonal_iteration(&info, &err1, &pose1, &err2, &pose2, 1);
+        double err=err1<err2?err1:err2;
+
+        if (pose1.t && !pose2.t)
+          best_pose = &pose1;
+        else if (!pose1.t && pose2.t)
+          best_pose = &pose2;
+        else
+          best_pose = err1 < err2 ? &pose1 : &pose2;
+        if (best_pose){
+          for (int i = 0; i < 3; i++)
+            pose[i] = best_pose->t->data[i];
+          for (int i = 0; i < 9; i++)
+            rot[i] = best_pose->R->data[i];
         }
       }
       
@@ -128,7 +121,7 @@ JNIEXPORT jobjectArray JNICALL Java_utils_TagDetectorJNI_detector_1detect
       env->SetDoubleArrayRegion( parr, 0, 3, &pose[0] );
 
       jdoubleArray rarr = env->NewDoubleArray(9);
-      env->SetDoubleArrayRegion( rarr, 0, 9, rot );
+      env->SetDoubleArrayRegion( rarr, 0, 9, &rot[0] );
 
       int tag_id = detect->id;
       double margin = detect->decision_margin;
@@ -146,15 +139,47 @@ JNIEXPORT jobjectArray JNICALL Java_utils_TagDetectorJNI_detector_1detect
        harr,    // homog   (3x3)
        parr,    // pose-translation (3x1)
        rarr,    // pose-rotation (3x3)
-       perr
+       perr     // pose error
       ); 
        env->SetObjectArrayElement( ret, t, obj);     
      }
-     //std::cout<<std::endl;
+    apriltag_detections_destroy(detections);
     return ret;
   }
+
+ /*
+ * Class:     utils_TagDetectorJNI
+ * Method:    detector_image_test
+ * Signature: (JIIZZ)V
+ */
+JNIEXPORT void JNICALL Java_utils_TagDetectorJNI_detector_1image_1test
+  (JNIEnv *env, jobject obj, jlong data, jint rows, jint cols, jboolean pose, jboolean timing){
+
+  TagDetector * detector = (TagDetector *) env->GetLongField(obj, getPtrFieldId(env, obj));
+  if(detector){
+      image_u8_t im = {static_cast<int32_t>(cols), static_cast<int32_t>(rows),
+                   static_cast<int32_t>(cols),
+                   reinterpret_cast<uint8_t*>(data)};
+      detector->test_image(&im,pose,timing);
+    }
+  }
   
- 
+ /*
+ * Class:     utils_TagDetectorJNI
+ * Method:    detector_image_test
+ * Signature: (Ljava/lang/String;)V
+ */
+/*
+JNIEXPORT void JNICALL Java_utils_TagDetectorJNI_detector_1test
+  (JNIEnv *env, jobject obj, jstring inJNIStr, jboolean pose, jboolean timing){
+    const char *inCStr = env->GetStringUTFChars(inJNIStr, NULL);
+    TagDetector * detector = (TagDetector *) env->GetLongField(obj, getPtrFieldId(env, obj));
+    if(detector){
+        detector->test(inCStr,pose,timing);
+    }
+    env->ReleaseStringUTFChars(inJNIStr, inCStr);  // release resources
+  }
+*/
 /*
  * Class:     TagDetectorJNI
  * Method:    detector_destroy
@@ -167,23 +192,5 @@ JNIEXPORT void JNICALL Java_utils_TagDetectorJNI_detector_1destroy
   TagDetector * detector = (TagDetector *) env->GetLongField(obj, getPtrFieldId(env, obj));
   if(detector)
      delete detector;
-  }
-
-/*
- * Class:     utils_TagDetectorJNI
- * Method:    detector_image_test
- * Signature: (Ljava/lang/String;)V
- */
-JNIEXPORT void JNICALL Java_utils_TagDetectorJNI_detector_1image_1test
-  (JNIEnv *env, jobject obj, jstring inJNIStr, jboolean pose){
-
-    const char *inCStr = env->GetStringUTFChars(inJNIStr, NULL);
-
-    TagDetector * detector = (TagDetector *) env->GetLongField(obj, getPtrFieldId(env, obj));
-     if(detector)
-        detector->test(inCStr,pose);
-
-    env->ReleaseStringUTFChars(inJNIStr, inCStr);  // release resources
-
   }
 

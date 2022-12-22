@@ -1,10 +1,9 @@
 #!/bin/bash
-#javac --source-path "$GZ_SIM/gzsim/java" -cp "$GZ_SIM/bin/opencv-java-4.5.2-1.jar;$GZ_SIM/gzsim/java" -h include $GZ_SIM/gzsim/java/utils/TagDetectorJNI.java
 build_jnihdr
 cmake -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --target INSTALL --config Release
-cp lib/apriltagjni.dll ../../wpilib/libs
-cp lib/apriltag.dll ../../wpilib/libs
-cp lib/apriltag.lib ../../wpilib/libs
+#cp lib/apriltagsim.dll ../../wpilib/libs2
+#cp lib/apriltag.dll ../../wpilib/libs
+#cp lib/apriltag.lib ../../wpilib/libs
 
 

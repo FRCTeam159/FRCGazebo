@@ -64,7 +64,7 @@
         <always_on>1</always_on>
         <pose>0.34536304706968 0.0228946996039372 0.00266897987941073 4.7124 0 0</pose>
         <camera name="Bodycamera">
-          <horizontal_fov>0.7</horizontal_fov>
+          <horizontal_fov>1.0</horizontal_fov>
           <image>
              <width>640</width>
             <height>480</height>
@@ -80,7 +80,7 @@
           <fps>20</fps>
           <enabled>true</enabled>
           <savepath>tmp</savepath>
-          <maxframes>10</maxframes>
+          <maxframes>1</maxframes>
           <!--<video>front.avi</video>-->
       </plugin>
       </sensor>

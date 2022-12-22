@@ -1,5 +1,0 @@
-#!/bin/bash
-#cd test
-#bin/apriltag_test.exe -p images/frame_0000.jpg 
-bin/apriltag_test.exe images/frame_0000.jpg 
-

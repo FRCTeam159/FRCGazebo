@@ -21,7 +21,7 @@
     </include>
 
      <include>
-      <uri>model://Apriltag16_05_00001</uri>
+      <uri>model://Apriltag16_05_00002</uri>
       <pose>2 8 0 0 0 0</pose>
     </include>
 

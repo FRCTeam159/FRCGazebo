@@ -1,7 +1,13 @@
 #!/bin/bash
 gradlew extractReleaseNative 
-cp $GZ_SIM/wpilib/libs/apriltag.dll build/jni/release/
-cp $GZ_SIM/wpilib/libs/apriltagjni.dll build/jni/release/
+#cp $GZ_SIM/wpilib/libs/apriltag.dll build/jni/release/
+#cp $GZ_SIM/wpilib/libs/apriltagsim.dll build/jni/release/
+cp $GZ_SIM/vision/apriltag/lib/apriltagsim.dll build/jni/release/
 
-export PATH="build/jni/release;$PATH"
-gradlew simulateJavaRelease
+# copy of all .dll files in build/jni/release EXCEPT for apriltag.dll 
+# - needed at runtime (otherwise apriltag.dll causes linking errors)
+export PATH="$GZ_SIM/wpilib/libs-beta-7;$PATH"
+# hard-coded to set classpath to build/jni/release 
+# - needed for loadlibrary (apriltagsim)
+
+./gradlew simulateJavaRelease

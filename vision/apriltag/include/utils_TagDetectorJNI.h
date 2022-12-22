@@ -34,10 +34,10 @@ JNIEXPORT jobjectArray JNICALL Java_utils_TagDetectorJNI_detector_1detect
 /*
  * Class:     utils_TagDetectorJNI
  * Method:    detector_image_test
- * Signature: (Ljava/lang/String;Z)V
+ * Signature: (JIIZZ)V
  */
 JNIEXPORT void JNICALL Java_utils_TagDetectorJNI_detector_1image_1test
-  (JNIEnv *, jobject, jstring, jboolean);
+  (JNIEnv *, jobject, jlong, jint, jint, jboolean, jboolean);
 
 #ifdef __cplusplus
 }

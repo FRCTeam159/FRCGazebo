@@ -7,15 +7,13 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandGroupBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.Calibrate;
 import frc.robot.commands.DrivePath;
 import frc.robot.commands.TurnToAngle;
 import utils.PlotUtils;
 
-public class Autonomous extends SubsystemBase {
+public class Autonomous extends SequentialCommandGroup  {
   SendableChooser<Command> m_chooser = new SendableChooser<>();
   SendableChooser<Integer> m_auto_plot_option = new SendableChooser<>();
 
@@ -57,12 +55,12 @@ public class Autonomous extends SubsystemBase {
 		SmartDashboard.putData(m_path_chooser);
     SmartDashboard.putData(m_auto_plot_option);
   }
-  public CommandGroupBase getCommand(){
+  public SequentialCommandGroup  getCommand(){
     PlotUtils.auto_plot_option=m_auto_plot_option.getSelected();
     selected_path=m_path_chooser.getSelected();
     reversed = SmartDashboard.getBoolean("reversed", reversed);
     
-    CommandGroupBase.clearGroupedCommands();
+    //clearGroupedCommands();
       
     switch (selected_path){
     case CALIBRATE:

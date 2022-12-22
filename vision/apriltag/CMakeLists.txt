@@ -11,21 +11,17 @@ option(BUILD_SHARED_LIBS "BUILD_SHARED_LIBS" TRUE)
 
 set(CMAKE_CXX_STANDARD 20)
 
-project(apriltagjni VERSION 3.3.0 LANGUAGES C CXX)
+project(apriltagsim VERSION 3.3.0 LANGUAGES C CXX)
 
 # Library
 
+aux_source_directory(native JNI_FILES)
+
+set(LIB_DIRS $ENV{GZ_SIM}\\vision\\apriltag\\lib)
+set(SOURCE ${JNI_FILES} ${APRILTAG_FILES})
 set(INCLUDES include $ENV{JAVA_HOME}/include $ENV{JAVA_HOME}/include/win32)
 
 include_directories(${INCLUDES})
-
-#aux_source_directory(apriltag_src APRILTAG_FILES)
-#aux_source_directory(common COMMON_SRC)
-aux_source_directory(native JNI_FILES)
-
-set(LIB_DIRS $ENV{GZ_SIM}\\wpilib\\libs)
-
-set(SOURCE ${APRILTAG_FILES} ${COMMON_SRC} ${JNI_FILES})
 
 message(STATUS "Include Dirs: '${INCLUDES}' ")
 message(STATUS "Source files: '${SOURCE}' ")
@@ -33,13 +29,8 @@ message(STATUS "lib dirs: '${LIB_DIRS}' ")
 
 set(LIB_SRCS ${SOURCE})
 
-#link_directories(${LIB_SRCS})
-
 add_library(${PROJECT_NAME} SHARED ${LIB_SRCS})
-
 target_link_directories(${PROJECT_NAME} PUBLIC ${LIB_SRCS})
-
-target_link_libraries(${PROJECT_NAME} ${LIB_DIRS}\\apriltag.lib)
 
 add_compile_definitions("_CRT_SECURE_NO_WARNINGS")
 
@@ -52,4 +43,3 @@ install(TARGETS ${PROJECT_NAME} EXPORT ${targets_export_name}
         RUNTIME DESTINATION ${CMAKE_INSTALL_LIBDIR}
         )
 
-add_subdirectory(test)

@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -14,9 +13,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.numbers.N5;
-import edu.wpi.first.math.numbers.N7;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -69,8 +65,18 @@ public class DriveTrain extends SubsystemBase {
 	private Pose2d field_pose;
 
 	boolean m_disabled = true;
+	private final SwerveDrivePoseEstimator m_poseEstimator =
+      new SwerveDrivePoseEstimator (
+          m_kinematics,
+          m_gyro.getRotation2d(),
+          m_positions,
+          new Pose2d(),
+          VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
+          VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
 
+/*
 	private final SwerveDrivePoseEstimator<N7, N7, N5> m_poseEstimator =
+	 
       new SwerveDrivePoseEstimator<N7, N7, N5>(
           Nat.N7(),
           Nat.N7(),
@@ -82,7 +88,7 @@ public class DriveTrain extends SubsystemBase {
           VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5), 0.05, 0.05, 0.05, 0.05),
           VecBuilder.fill(Units.degreesToRadians(0.01), 0.01, 0.01, 0.01, 0.01),
           VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
-
+*/
 	/** Creates a new Subsystem. */
 	public DriveTrain() {
 		simulation = new Simulation(this);
@@ -225,11 +231,11 @@ public class DriveTrain extends SubsystemBase {
 	}
 
 	public void log() {
-		SmartDashboard.putNumber("Heading", getHeading());
 		SmartDashboard.putNumber("Distance", getDistance());
 		SmartDashboard.putNumber("Velocity", getVelocity());
 		Translation2d t=  getPose().getTranslation();
 		
+		SmartDashboard.putNumber("H", getHeading());
 		SmartDashboard.putNumber("X:", t.getX());
 		SmartDashboard.putNumber("Y:", t.getY());
 
@@ -311,18 +317,13 @@ public class DriveTrain extends SubsystemBase {
 		updatePositions();
 		field_pose = m_poseEstimator.update(
         m_gyro.getRotation2d(),
-        new SwerveModuleState[] {
-          m_frontLeft.getState(),
-          m_frontRight.getState(),
-          m_backLeft.getState(),
-          m_backRight.getState()
-        },
-        new SwerveModulePosition[] {
-          m_frontLeft.getPosition(),
-          m_frontRight.getPosition(),
-          m_backLeft.getPosition(),
-          m_backRight.getPosition()
-        });
+        // new SwerveModuleState[] {
+        //   m_frontLeft.getState(),
+        //   m_frontRight.getState(),
+        //   m_backLeft.getState(),
+        //   m_backRight.getState()
+        // },
+        m_positions);
 
 		 // Also apply vision measurements. We use 0.3 seconds in the past as an example -- on
 		// a real robot, this must be calculated based either on latency or timestamps.
