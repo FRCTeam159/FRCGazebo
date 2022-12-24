@@ -13,16 +13,29 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.core.Core;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.objects.Camera;
 import utils.TagDetectorJNI;
 import utils.TagResult;
+import utils.TagTarget;
+import utils.SimTargetMgr;
+
+import org.photonvision.PhotonUtils;
+
 
 public class AprilTagDetector extends Thread{
   static {
 	  System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 	}
-  Camera camera;
+  Camera cam;
+  /* 
   public int image_width = 640;
   public int image_height = 480;
 
@@ -35,24 +48,29 @@ public class AprilTagDetector extends Thread{
   double cy=image_height/2.0;
   double fx=cx/Math.tan(0.5*Math.toRadians(hFOV));
   double fy=cy/Math.tan(0.5*Math.toRadians(vFOV));
-
+*/
   private final boolean time_detection = true;
 
   protected static CvSource ouputStream;
   protected TagDetectorJNI detector=new TagDetectorJNI(0);
 
+   //System.out.println("tag detect time="+duration);
+   Translation2d cameraToRobotOffset=new Translation2d(-0.2,0);
+   Transform2d cameraToRobot=new Transform2d(cameraToRobotOffset,new Rotation2d());
+
   static String  test_image=System.getenv("GZ_SIM")+"/docs/apriltag_0_test.jpg";
   public AprilTagDetector() {
-    camera=new Camera(0);
-    detector.test(test_image,true,false);
-    ouputStream = CameraServer.putVideo("testCamera", image_width, image_height);
-    System.out.println(hFOV+" "+vFOV+" "+fx+" "+fy);
-    test();
+    SimTargetMgr.setPerimTargets();
+    cam=new Camera(0,640,480,40); // specs for Gazebo camera
+    //detector.test(test_image,true,false);
+    ouputStream = CameraServer.putVideo("testCamera", cam.image_width, cam.image_height);
+    //System.out.println(hFOV+" "+vFOV+" "+fx+" "+fy);
+    //test();
   }
 
   public void test(){
     Mat mat = Imgcodecs.imread(test_image);
-    TagResult[] tags=detector.detect(mat,tw,fx,fy,cx,cy);
+    TagResult[] tags=detector.detect(mat,TagTarget.targetSize,cam.fx,cam.fy,cam.cx,cam.cy);
     for(int i=0;i<tags.length;i++){
       tags[i].print();
     }
@@ -60,13 +78,13 @@ public class AprilTagDetector extends Thread{
   @Override
   public void run() {
     boolean first=true;
-    camera.start();
+    cam.start();
     while (true) {
       try {
         Thread.sleep(50);
-        Mat mat = camera.getFrame();
+        Mat mat = cam.getFrame();
         long startTime = System.nanoTime();
-        TagResult[] tags=detector.detect(mat,tw,fx,fy,cx,cy);
+        TagResult[] tags=detector.detect(mat,TagTarget.targetSize,cam.fx,cam.fy,cam.cx,cam.cy);
         long endTime = System.nanoTime();
 
         double duration = (endTime - startTime)/1.0e6;  //divide by 1000000 to get milliseconds.
@@ -75,12 +93,39 @@ public class AprilTagDetector extends Thread{
           SmartDashboard.putString("Detect", s);
         }
 
-        //System.out.println("tag detect time="+duration);
+        double heading=SmartDashboard.getNumber("H", 0.0);
+        Rotation2d gyroAngle=new Rotation2d(Math.toRadians(-heading));
+        double best_err=1e6;
+        TagResult best_tag=null;
+        for(int i=0;i<tags.length;i++){
+          TagResult tag=tags[i];
+          double err=tag.getPoseError();
+          if(err<best_err){
+            best_tag=tag;
+            best_err=err;
+          }
+        }
+        if (best_tag != null) {
+          TagResult tag = best_tag;
+          Pose3d pose = tag.getPose();
 
+          TagTarget target = SimTargetMgr.getPerimTarget(tag.getTagId());
+
+          Rotation2d poseYaw = pose.getRotation().toRotation2d().unaryMinus();
+          Pose2d fieldToTarget = target.getPose().toPose2d();
+
+          double distance = pose.getTranslation().toTranslation2d().getNorm();
+          Translation2d camToTargetTranslation = PhotonUtils.estimateCameraToTargetTranslation(distance, poseYaw);
+
+          Transform2d cameraToTarget = new Transform2d(camToTargetTranslation, gyroAngle);
+          Pose2d fieldToRobot = PhotonUtils.estimateFieldToRobot(cameraToTarget, fieldToTarget, cameraToRobot);
+
+          SmartDashboard.putString("BestTag ", String.format("id:%d x:%-6.2f y:%-6.2f err:%1.2f",
+              tag.getTagId(), fieldToRobot.getX(), fieldToRobot.getY(), 1e5 * tag.getPoseError()));
+        }
         for(int i=0;i<tags.length;i++){
             TagResult tag=tags[i];
-            if(first)
-              tag.print();
+          
             Point c= tag.center();
            
             Scalar lns=new Scalar(255.0, 255.0, 0.0);

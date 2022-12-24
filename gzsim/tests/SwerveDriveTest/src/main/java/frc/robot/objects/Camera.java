@@ -11,6 +11,20 @@ import gazebo.SimCamera;
 
 /** Add your docs here. */
 public class Camera implements CameraInterface {
+
+    public int image_width = 640;
+    public int image_height = 480;
+
+    // parametes for sim camera and 0.5 m targets
+    public double tw=0.4;
+    public double hFOV=40;
+    public double aspect=((double)image_width)/image_height;
+    public double vFOV=hFOV/aspect;
+    public double cx=image_width/2.0;
+    public double cy=image_height/2.0;
+    public double fx=cx/Math.tan(0.5*Math.toRadians(hFOV));
+    public double fy=cy/Math.tan(0.5*Math.toRadians(vFOV));
+    
     int chnl=0;
     boolean recording=false;
     SimCamera sim_camera;
@@ -18,12 +32,31 @@ public class Camera implements CameraInterface {
     CvSink cvSink;
     protected Mat mat=new Mat();
     public Camera(int id){
+        setChannel(id);
+    }
+    public Camera(int id,int w, int h, double f){
+        setParams(w,h,f);
+        setChannel(id);
+    }
+    void setChannel(int id){
         chnl=id;
         sim_camera=new SimCamera(id);
         String url=new String("http://localhost:900"+chnl+"/?action=stream");
         video_source=new MJpegReader(url);
         System.out.println("new SimCamera("+chnl+")");
         sim_camera.start();
+    }
+   
+    public void setParams(int w, int h, double f){
+        image_width=w;
+        image_height=h;
+        hFOV=f;
+        aspect=((double)image_width)/image_height;
+        vFOV=hFOV/aspect;
+        cx=image_width/2.0;
+        cy=image_height/2.0;
+        fx=cx/Math.tan(0.5*Math.toRadians(hFOV));
+        fy=cy/Math.tan(0.5*Math.toRadians(vFOV));
     }
     @Override
     public void record() {

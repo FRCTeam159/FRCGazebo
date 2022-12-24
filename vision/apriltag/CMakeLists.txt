@@ -31,6 +31,7 @@ set(LIB_SRCS ${SOURCE})
 
 add_library(${PROJECT_NAME} SHARED ${LIB_SRCS})
 target_link_directories(${PROJECT_NAME} PUBLIC ${LIB_SRCS})
+target_link_libraries(${PROJECT_NAME} ${LIB_DIRS}\\apriltag.lib)
 
 add_compile_definitions("_CRT_SECURE_NO_WARNINGS")
 

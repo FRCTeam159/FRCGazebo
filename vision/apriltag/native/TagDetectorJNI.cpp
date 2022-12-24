@@ -101,7 +101,7 @@ JNIEXPORT jobjectArray JNICALL Java_utils_TagDetectorJNI_detector_1detect
         apriltag_detection_info_t info {detect, tw, fx, fy, cx, cy };
 
         estimate_tag_pose_orthogonal_iteration(&info, &err1, &pose1, &err2, &pose2, 1);
-        double err=err1<err2?err1:err2;
+        perr=err1<err2?err1:err2;
 
         if (pose1.t && !pose2.t)
           best_pose = &pose1;

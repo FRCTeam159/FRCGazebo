@@ -74,21 +74,6 @@ public class DriveTrain extends SubsystemBase {
           VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
           VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
 
-/*
-	private final SwerveDrivePoseEstimator<N7, N7, N5> m_poseEstimator =
-	 
-      new SwerveDrivePoseEstimator<N7, N7, N5>(
-          Nat.N7(),
-          Nat.N7(),
-          Nat.N5(),
-          m_gyro.getRotation2d(),
-          m_positions,
-          new Pose2d(),
-          m_kinematics,
-          VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5), 0.05, 0.05, 0.05, 0.05),
-          VecBuilder.fill(Units.degreesToRadians(0.01), 0.01, 0.01, 0.01, 0.01),
-          VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
-*/
 	/** Creates a new Subsystem. */
 	public DriveTrain() {
 		simulation = new Simulation(this);
@@ -316,21 +301,8 @@ public class DriveTrain extends SubsystemBase {
 	public void updateOdometry() {
 		updatePositions();
 		field_pose = m_poseEstimator.update(
-        m_gyro.getRotation2d(),
-        // new SwerveModuleState[] {
-        //   m_frontLeft.getState(),
-        //   m_frontRight.getState(),
-        //   m_backLeft.getState(),
-        //   m_backRight.getState()
-        // },
+        m_gyro.getRotation2d(), 
         m_positions);
-
-		 // Also apply vision measurements. We use 0.3 seconds in the past as an example -- on
-		// a real robot, this must be calculated based either on latency or timestamps.
-		// m_poseEstimator.addVisionMeasurement(
-        // ExampleGlobalMeasurementSensor.getEstimatedGlobalPose(
-        //     m_poseEstimator.getEstimatedPosition()),
-        // Timer.getFPGATimestamp() - 0.3);
 		log();
 	}
 

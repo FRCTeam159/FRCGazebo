@@ -70,14 +70,12 @@ public class TagResult {
                 rmat.set(i, j, rdata[dcnt++]);
             }
         }
-        //System.out.println(rmat);
-        //System.out.format("dpata: %-1.2f,%-1.2f,%-1.2f\n", pdata[0], pdata[1],pdata[2]);
+      
         pose_err = perr;
         poseResult=new Transform3d(
             new Translation3d(pdata[0], pdata[1], pdata[2]),
             new Rotation3d(orthogonalizeRotationMatrix(new MatBuilder<>(Nat.N3(), Nat.N3()).fill(rdata))));
-        //System.out.println(poseResult);
-        
+        //System.out.println(poseResult);   
     }
     
     /**

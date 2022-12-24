@@ -92,14 +92,13 @@ static inline void timeprofile_display(timeprofile_t *tp)
         struct timeprofile_entry *stamp;
 
         zarray_get_volatile(tp->stamps, i, &stamp);
+
         double cumtime = (stamp->utime - tp->utime)/1000000.0;
+
         double parttime = (stamp->utime - lastutime)/1000000.0;
 
-#ifdef _WIN32
-        printf("%2d %32s %15f us %15f us\n", i, stamp->name, parttime*1000, cumtime*1000);
-#else
         printf("%2d %32s %15f ms %15f ms\n", i, stamp->name, parttime*1000, cumtime*1000);
-#endif
+
         lastutime = stamp->utime;
     }
 }
