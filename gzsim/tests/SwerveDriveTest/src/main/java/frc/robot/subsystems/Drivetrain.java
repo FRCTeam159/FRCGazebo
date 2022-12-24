@@ -180,6 +180,9 @@ public class DriveTrain extends SubsystemBase {
 		return getRotation2d().getDegrees();
 	}
 
+	public Rotation2d gyroRotation2d() {
+		return m_gyro.getRotation2d();
+	}
 	public double gyroHeading() {
 		return m_gyro.getHeading();
 	}
@@ -303,6 +306,12 @@ public class DriveTrain extends SubsystemBase {
 		field_pose = m_poseEstimator.update(
         m_gyro.getRotation2d(), 
         m_positions);
+		// Also apply vision measurements. We use 0.3 seconds in the past as an example -- on
+		// a real robot, this must be calculated based either on latency or timestamps.
+		// m_poseEstimator.addVisionMeasurement(
+        // ExampleGlobalMeasurementSensor.getEstimatedGlobalPose(
+        //     m_poseEstimator.getEstimatedPosition()),
+        // Timer.getFPGATimestamp() - 0.3);
 		log();
 	}
 
@@ -311,7 +320,6 @@ public class DriveTrain extends SubsystemBase {
 		m_positions[1]=m_frontRight.getPosition();
 		m_positions[2]=m_backLeft.getPosition();
 		m_positions[3]=m_backRight.getPosition();
-
 	}
 	public void resetOdometry(Pose2d pose) {
 		reset();

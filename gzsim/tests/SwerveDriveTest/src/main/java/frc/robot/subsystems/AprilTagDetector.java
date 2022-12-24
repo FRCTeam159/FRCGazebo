@@ -55,16 +55,18 @@ public class AprilTagDetector extends Thread{
   protected TagDetectorJNI detector=new TagDetectorJNI(0);
 
    //System.out.println("tag detect time="+duration);
-   Translation2d cameraToRobotOffset=new Translation2d(-0.2,0);
-   Transform2d cameraToRobot=new Transform2d(cameraToRobotOffset,new Rotation2d());
+  Translation2d cameraToRobotOffset=new Translation2d(-0.2,0);
+  Transform2d cameraToRobot=new Transform2d(cameraToRobotOffset,new Rotation2d());
+
+  DriveTrain m_drivetrain;
 
   static String  test_image=System.getenv("GZ_SIM")+"/docs/apriltag_0_test.jpg";
-  public AprilTagDetector() {
+  public AprilTagDetector(DriveTrain drivetrain) {
+    m_drivetrain=drivetrain;
     SimTargetMgr.setPerimTargets();
     cam=new Camera(0,640,480,40); // specs for Gazebo camera
     //detector.test(test_image,true,false);
     ouputStream = CameraServer.putVideo("testCamera", cam.image_width, cam.image_height);
-    //System.out.println(hFOV+" "+vFOV+" "+fx+" "+fy);
     //test();
   }
 
@@ -93,8 +95,10 @@ public class AprilTagDetector extends Thread{
           SmartDashboard.putString("Detect", s);
         }
 
-        double heading=SmartDashboard.getNumber("H", 0.0);
-        Rotation2d gyroAngle=new Rotation2d(Math.toRadians(-heading));
+        //double heading=SmartDashboard.getNumber("H", 0.0);
+        Rotation2d gyroAngle=m_drivetrain.gyroRotation2d();
+        //double heading=SmartDashboard.getNumber("H", 0.0);
+        //Rotation2d gyroAngle=new Rotation2d(Math.toRadians(-heading));
         double best_err=1e6;
         TagResult best_tag=null;
         for(int i=0;i<tags.length;i++){

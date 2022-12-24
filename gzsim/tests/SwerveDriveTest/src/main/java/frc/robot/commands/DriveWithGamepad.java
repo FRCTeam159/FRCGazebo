@@ -67,7 +67,7 @@ public class DriveWithGamepad extends CommandBase {
     //m_drive.testDrive(xSpeed, rot);
     //m_drive.turnInPlace(xSpeed);
 
-    m_drive.drive(xSpeed, ySpeed,rot,true);
+    m_drive.drive(xSpeed, ySpeed,rot,m_drive.isGyroEnabled());
     //m_drive.drive(xSpeed, 0,0,true);
 
   }

@@ -23,7 +23,7 @@ public class RobotContainer {
   private final DriveTrain m_drivetrain = new DriveTrain();
   private final Autonomous m_autonomous = new Autonomous(m_drivetrain);
   private final XboxController m_controller = new XboxController(0);
-  private final AprilTagDetector m_detector= new AprilTagDetector();
+  private final AprilTagDetector m_detector= new AprilTagDetector(m_drivetrain);
 
   private DriveWithGamepad m_driveCommand = null; // TODO
  
