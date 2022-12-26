@@ -17,7 +17,7 @@ public class Camera implements CameraInterface {
 
     // parametes for sim camera and 0.5 m targets
     public double tw=0.4;
-    public double hFOV=40;
+    public double hFOV=40.107;
     public double aspect=((double)image_width)/image_height;
     public double vFOV=hFOV/aspect;
     public double cx=image_width/2.0;

@@ -12,6 +12,7 @@ import java.util.List;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPoint;
 import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 //import com.pathplanner.lib.PathPlannerTrajectory.Waypoint;
@@ -22,12 +23,14 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -49,9 +52,6 @@ public class DrivePath extends CommandBase {
   private final PPHolonomicDriveController m_ppcontroller=new PPHolonomicDriveController(
       new PIDController(1, 0, 0), new PIDController(1, 0, 0), new PIDController(1, 0, 0));
 
-// Here, our rotation profile constraints were a max velocity
-// of 1 rotation per second and a max acceleration of 180 degrees
-// per second squared.
   private final Timer m_timer = new Timer();
   private final DriveTrain m_drive;
   static public boolean plot_trajectory_motion = false;
@@ -103,9 +103,11 @@ public class DrivePath extends CommandBase {
     PlotUtils.initPlot();
 
     m_trajectory=getTrajectory();
-    if(m_trajectory==null)
+    if(m_trajectory ==null){
+      System.out.println("failed to create Trajectory");
       return;
-
+    }
+    
     PlotUtils.setInitialPose(m_trajectory.sample(0).poseMeters, DriveTrain.kTrackWidth);
     // PlotUtils.setDistanceUnits(PlotUtils.UnitType.FEET);
 
@@ -115,6 +117,8 @@ public class DrivePath extends CommandBase {
     Pose2d p = m_trajectory.getInitialPose();
 
     m_drive.resetOdometry(p);
+
+    //System.out.println(p);
 
     m_timer.reset();
     m_timer.start();
@@ -132,6 +136,10 @@ public class DrivePath extends CommandBase {
   @Override
   public void execute() {
     //elapsed = m_timer.get();
+    if(m_trajectory==null){
+      System.out.print("ERROR DrivePath.execute - trajectory is null");
+       return;
+    }
     elapsed = m_drive.getTime();
   
     Trajectory.State reference = m_trajectory.sample(elapsed);
@@ -191,6 +199,8 @@ public class DrivePath extends CommandBase {
         return pathWeaverTest();
       case Autonomous.PATHPLANNER:
         return pathPlannerTest();
+      default:
+        System.out.println("ERROR unknown trajectory type:"+trajectory_option);
     }
     return null;
   }
@@ -258,8 +268,21 @@ public class DrivePath extends CommandBase {
   // =================================================
   Trajectory pathPlannerTest() {
     try {
-      Trajectory trajectory = PathPlanner.loadPath("swervetest", 
+      PathPlannerTrajectory trajectory = PathPlanner.loadPath("swervetest", 
         new PathConstraints(DriveTrain.kMaxVelocity,DriveTrain.kMaxAcceleration)); // max vel & accel
+
+      Pose2d p0 = trajectory.getInitialPose();
+
+      // Pathplanner sets 0,0 as the lower left hand corner (FRC field coord system) 
+      // for Gazebo, need to subtract intitial pose from each state so that 0,0 is 
+      // in the center of the field 
+
+      List<State> states = trajectory.getStates();
+      for(int i=0;i<states.size();i++){
+        State state=states.get(i);
+        Pose2d psi=state.poseMeters.relativeTo(p0);
+        state.poseMeters=psi;
+      }
       return trajectory;
     } catch (Exception ex) {
       System.out.println("failed to create pathweaver trajectory");

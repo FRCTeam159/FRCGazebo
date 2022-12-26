@@ -33,10 +33,6 @@ public class AprilTagDetector extends Thread{
   protected static CvSource ouputStream;
   protected TagDetectorJNI detector=new TagDetectorJNI(0);
 
-   //System.out.println("tag detect time="+duration);
-  Translation2d cameraToRobotOffset=new Translation2d(-0.2,0);
-  Transform2d cameraToRobot=new Transform2d(cameraToRobotOffset,new Rotation2d());
-
   DriveTrain m_drivetrain;
 
   static String  test_image=System.getenv("GZ_SIM")+"/docs/apriltag_0_test.jpg";

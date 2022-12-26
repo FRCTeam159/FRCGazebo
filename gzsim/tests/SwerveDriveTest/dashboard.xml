@@ -148,4 +148,6 @@
 	</widget>
 </live-window>
 	<hidden field="Field"/>
+	<hidden field="absurdlylongnamewhichshouldneveractuallyhappenbuteehwelltestitanywaysohowsyourdaygoingihopegoodhaveagreatrestofyourlife! Sim Field"/>
+	<hidden field="Test Sim Field"/>
 </xml>

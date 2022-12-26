@@ -22,7 +22,7 @@ using namespace gazebo;
 GZ_REGISTER_SENSOR_PLUGIN(CameraPlugin)
 
 /////////////////////////////////////////////////
-CameraPlugin::CameraPlugin() : SensorPlugin(), width(0), height(0), depth(0),
+CameraPlugin::gradleCameraPlugin() : SensorPlugin(), width(0), height(0), depth(0),
 stream("sim-frames", cs::VideoMode::PixelFormat::kMJPEG, 320,240, 10)
 {
   FreeImage_Initialise();

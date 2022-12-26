@@ -329,7 +329,7 @@ public class DriveTrain extends SubsystemBase {
 		// Also apply vision measurements. We use 0.1 seconds in the past as an example -- on
 		// a real robot, this must be calculated based either on latency or timestamps.
 		tag_pose=null;
-		field_pose = getPose();
+		//field_pose = getPose();
 		if(visiontag!=null && visiontag.getPoseError()<3.0e-5){
 			tag_pose=getVisionPose();
 			if(use_tags && tag_pose !=null){
@@ -394,6 +394,9 @@ public class DriveTrain extends SubsystemBase {
 		m_gyro.reset();
 		updatePositions();
 		m_poseEstimator.resetPosition(gyroRotation2d(), m_positions,pose);
+
+		System.out.println(getPose());
+		//updateOdometry();
 	}
 
 	public Pose2d getPose() {

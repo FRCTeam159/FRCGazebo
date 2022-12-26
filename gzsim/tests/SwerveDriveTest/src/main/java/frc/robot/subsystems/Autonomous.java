@@ -29,6 +29,8 @@ public class Autonomous extends SequentialCommandGroup  {
  
   public int selected_path=PROGRAM;
 
+  public static boolean debug_commands=false;
+
   SendableChooser<Integer> m_path_chooser = new SendableChooser<Integer>();
   /** Creates a new AutoCommands. */
   public Autonomous(DriveTrain drive) {
