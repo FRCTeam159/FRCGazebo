@@ -150,11 +150,13 @@ public class Simulation extends SubsystemBase {
 
     Pose2d robot_pose = m_drive.getPose();
     Translation2d t1 = robot_pose.getTranslation();
-    t1 = t1.times(0.9);
+    t1 = t1.times(0.5);
     robot_pose = new Pose2d(t1, robot_pose.getRotation());
     Pose2d sim_pose = DriveTrain.add(p1, robot_pose);
 
     m_fieldSim.setRobotPose(sim_pose);
+    //m_fieldSim.setRobotPose(field_pose);
+
   }
   public void simulationPeriodic() {
     setFieldPose(); 

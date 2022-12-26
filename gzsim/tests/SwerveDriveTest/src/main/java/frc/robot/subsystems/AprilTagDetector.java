@@ -13,42 +13,21 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.core.Core;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSource;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.objects.Camera;
 import utils.TagDetectorJNI;
 import utils.TagResult;
 import utils.TagTarget;
-import utils.SimTargetMgr;
-
-import org.photonvision.PhotonUtils;
-
 
 public class AprilTagDetector extends Thread{
   static {
 	  System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 	}
   Camera cam;
-  /* 
-  public int image_width = 640;
-  public int image_height = 480;
-
-  // parametes for sim camera and 0.5 m targets
-  public double tw=0.4;
-  public double hFOV=40;
-  public double aspect=((double)image_width)/image_height;
-  public double vFOV=hFOV/aspect;
-  double cx=image_width/2.0;
-  double cy=image_height/2.0;
-  double fx=cx/Math.tan(0.5*Math.toRadians(hFOV));
-  double fy=cy/Math.tan(0.5*Math.toRadians(vFOV));
-*/
+  
   private final boolean time_detection = true;
 
   protected static CvSource ouputStream;
@@ -63,7 +42,6 @@ public class AprilTagDetector extends Thread{
   static String  test_image=System.getenv("GZ_SIM")+"/docs/apriltag_0_test.jpg";
   public AprilTagDetector(DriveTrain drivetrain) {
     m_drivetrain=drivetrain;
-    SimTargetMgr.setPerimTargets();
     cam=new Camera(0,640,480,40); // specs for Gazebo camera
     //detector.test(test_image,true,false);
     ouputStream = CameraServer.putVideo("testCamera", cam.image_width, cam.image_height);
@@ -79,11 +57,10 @@ public class AprilTagDetector extends Thread{
   }
   @Override
   public void run() {
-    boolean first=true;
     cam.start();
     while (true) {
       try {
-        Thread.sleep(50);
+        Thread.sleep(20);
         Mat mat = cam.getFrame();
         long startTime = System.nanoTime();
         TagResult[] tags=detector.detect(mat,TagTarget.targetSize,cam.fx,cam.fy,cam.cx,cam.cy);
@@ -95,10 +72,6 @@ public class AprilTagDetector extends Thread{
           SmartDashboard.putString("Detect", s);
         }
 
-        //double heading=SmartDashboard.getNumber("H", 0.0);
-        Rotation2d gyroAngle=m_drivetrain.gyroRotation2d();
-        //double heading=SmartDashboard.getNumber("H", 0.0);
-        //Rotation2d gyroAngle=new Rotation2d(Math.toRadians(-heading));
         double best_err=1e6;
         TagResult best_tag=null;
         for(int i=0;i<tags.length;i++){
@@ -109,24 +82,8 @@ public class AprilTagDetector extends Thread{
             best_err=err;
           }
         }
-        if (best_tag != null) {
-          TagResult tag = best_tag;
-          Pose3d pose = tag.getPose();
-
-          TagTarget target = SimTargetMgr.getPerimTarget(tag.getTagId());
-
-          Rotation2d poseYaw = pose.getRotation().toRotation2d().unaryMinus();
-          Pose2d fieldToTarget = target.getPose().toPose2d();
-
-          double distance = pose.getTranslation().toTranslation2d().getNorm();
-          Translation2d camToTargetTranslation = PhotonUtils.estimateCameraToTargetTranslation(distance, poseYaw);
-
-          Transform2d cameraToTarget = new Transform2d(camToTargetTranslation, gyroAngle);
-          Pose2d fieldToRobot = PhotonUtils.estimateFieldToRobot(cameraToTarget, fieldToTarget, cameraToRobot);
-
-          SmartDashboard.putString("BestTag ", String.format("id:%d x:%-6.2f y:%-6.2f err:%1.2f",
-              tag.getTagId(), fieldToRobot.getX(), fieldToRobot.getY(), 1e5 * tag.getPoseError()));
-        }
+       
+        m_drivetrain.setTag(best_tag);
         for(int i=0;i<tags.length;i++){
             TagResult tag=tags[i];
           
@@ -153,7 +110,6 @@ public class AprilTagDetector extends Thread{
         }
         
         ouputStream.putFrame(mat);
-        first=false;
       } catch (Exception ex) {
         System.out.println("exception:"+ex);
       }

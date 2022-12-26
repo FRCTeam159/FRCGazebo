@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -18,6 +19,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.objects.SwerveModule;
 import gazebo.SimGyro;
+import utils.SimTargetMgr;
+import utils.TagResult;
+import utils.TagTarget;
 
 public class DriveTrain extends SubsystemBase {
 
@@ -26,8 +30,8 @@ public class DriveTrain extends SubsystemBase {
 	public static double front_wheel_base = 23.22; // distance beteen front wheels
 	public static double side_wheel_base = 23.22; // distance beteen side wheels
 
-	public static double dely = i2M(0.5 * side_wheel_base); // 0.2949 metters
-	public static double delx = i2M(0.5 * front_wheel_base);
+	public static double dely = Units.inchesToMeters(0.5 * side_wheel_base); // 0.2949 metters
+	public static double delx = Units.inchesToMeters(0.5 * front_wheel_base);
 
 	private final Translation2d m_frontLeftLocation = new Translation2d(dely, -delx);
 	private final Translation2d m_frontRightLocation = new Translation2d(dely, delx);
@@ -43,6 +47,8 @@ public class DriveTrain extends SubsystemBase {
 		new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition()
 	};
 
+	Translation2d cameraToRobotOffset=new Translation2d(Units.inchesToMeters(12.0),0);
+    Transform2d cameraToRobot=new Transform2d(cameraToRobotOffset,new Rotation2d());
 	private Simulation simulation;
 
 	public SimGyro m_gyro = new SimGyro(0);
@@ -50,8 +56,7 @@ public class DriveTrain extends SubsystemBase {
 	private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
 			m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
-	public static final double kTrackWidth = i2M(2 * front_wheel_base); // bug? need to double actual value for geometry to work
-	public static final double kWheelDiameter = i2M(4); // wheel diameter in tank model
+	public static final double kTrackWidth = Units.inchesToMeters(2 * front_wheel_base); // bug? need to double actual value for geometry to work
 
 	public static double kMaxVelocity = 3; // meters per second
 	public static double kMaxAcceleration = 1; // meters/second/second
@@ -59,10 +64,14 @@ public class DriveTrain extends SubsystemBase {
 	public static double kMaxAngularAcceleration = Math.toRadians(20);// degrees per second per second
 
 	public boolean enable_gyro = true;
-
 	private double last_heading = 0;
-
 	private Pose2d field_pose;
+	private Pose2d tag_pose=null;
+	private double distance=0;
+
+	private TagResult visiontag=null;
+
+	private boolean use_tags=false;
 
 	boolean m_disabled = true;
 	private final SwerveDrivePoseEstimator m_poseEstimator =
@@ -71,25 +80,26 @@ public class DriveTrain extends SubsystemBase {
           m_gyro.getRotation2d(),
           m_positions,
           new Pose2d(),
-          VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
-          VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
+          VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)), // encoder accuracy
+          VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30))); // vision accuracy
 
 	/** Creates a new Subsystem. */
 	public DriveTrain() {
+		SimTargetMgr.init();
 		simulation = new Simulation(this);
 		SmartDashboard.putBoolean("Field Oriented", enable_gyro);
 		SmartDashboard.putNumber("maxV", kMaxVelocity);
 		SmartDashboard.putNumber("maxA", kMaxAcceleration);
-	}
-
-	private static double i2M(double inches) {
-		return inches * 0.0254;
+		SmartDashboard.putBoolean("Use Tags", use_tags);
 	}
 
 	public double getTime() {
 		return simulation.getSimTime();
 	}
 
+	public double getClockTime() {
+		return simulation.getClockTime();
+	}
 	public void startAuto() {
 		simulation.reset();
 		simulation.start();
@@ -218,12 +228,17 @@ public class DriveTrain extends SubsystemBase {
 		return 0.5 * (getLeftDistance() + getRightDistance());
 	}
 
+	public void setTag(TagResult tag){
+		visiontag=tag;
+	}
 	public void log() {
+		use_tags = SmartDashboard.getBoolean("Use Tags", use_tags);
+
 		SmartDashboard.putNumber("Distance", getDistance());
 		SmartDashboard.putNumber("Velocity", getVelocity());
 		Translation2d t=  getPose().getTranslation();
 		
-		SmartDashboard.putNumber("H", getHeading());
+		SmartDashboard.putNumber("H:", getHeading());
 		SmartDashboard.putNumber("X:", t.getX());
 		SmartDashboard.putNumber("Y:", t.getY());
 
@@ -231,6 +246,13 @@ public class DriveTrain extends SubsystemBase {
 		enable_gyro = SmartDashboard.getBoolean("Field Oriented", enable_gyro);
 		kMaxVelocity=SmartDashboard.getNumber("maxV", kMaxVelocity);
 		kMaxAcceleration=SmartDashboard.getNumber("maxA", kMaxAcceleration);
+		if(tag_pose !=null && visiontag !=null){
+			SmartDashboard.putString("AprilTag", String.format("id:%d x:%-6.2f y:%-6.2f d:%1.2f",
+			visiontag.getTagId(), tag_pose.getX(), tag_pose.getY(),distance));
+		}
+		else if(visiontag==null){
+			SmartDashboard.putString("AprilTag", "no valid tags visible");
+		}			
 	}
 
 	@Override
@@ -303,18 +325,63 @@ public class DriveTrain extends SubsystemBase {
 	/** Updates the field relative position of the robot. */
 	public void updateOdometry() {
 		updatePositions();
-		field_pose = m_poseEstimator.update(
-        m_gyro.getRotation2d(), 
-        m_positions);
-		// Also apply vision measurements. We use 0.3 seconds in the past as an example -- on
+		m_poseEstimator.updateWithTime(getClockTime(),m_gyro.getRotation2d(), m_positions);
+		// Also apply vision measurements. We use 0.1 seconds in the past as an example -- on
 		// a real robot, this must be calculated based either on latency or timestamps.
-		// m_poseEstimator.addVisionMeasurement(
-        // ExampleGlobalMeasurementSensor.getEstimatedGlobalPose(
-        //     m_poseEstimator.getEstimatedPosition()),
-        // Timer.getFPGATimestamp() - 0.3);
+		tag_pose=null;
+		field_pose = getPose();
+		if(visiontag!=null && visiontag.getPoseError()<3.0e-5){
+			tag_pose=getVisionPose();
+			if(use_tags && tag_pose !=null){
+				//m_poseEstimator.addVisionMeasurement(tpose,getTime()-0.01);
+				double latency=0.0;
+				m_poseEstimator.addVisionMeasurement(tag_pose,getClockTime()-latency);
+				// TODO: determine actual latency from camera pose
+			}
+		}
+			
+		field_pose = getPose();
 		log();
 	}
 
+	Pose2d getVisionPose() {
+		TagResult tag = visiontag; // best result if multiple tags visible
+		
+		TagTarget target = SimTargetMgr.getTarget(tag.getTagId());
+		if(target==null){ // sometime bad tag id is returned (e.g. 13 vs 0)
+			System.out.println("null target:"+tag.getTagId());
+			return null;
+		}
+		Rotation2d gyroAngle = gyroRotation2d();
+		Pose3d pose = tag.getPose();
+		Translation2d target_trans=target.getPose().getTranslation().toTranslation2d();
+		// camera to target distance along the ground
+		Translation2d trans=pose.getTranslation().toTranslation2d();
+		distance = trans.getNorm(); 
+        // convert x,y, coords in camera space to camera angle
+		double cam_angle=Math.atan2(trans.getY(), trans.getX());
+
+	    // robot pose angle on field = gyro angle - camera angle
+		Rotation2d camrot=new Rotation2d(cam_angle);
+		Rotation2d rot=gyroAngle.minus(camrot);  
+        // project camera posion to target onto the field
+		Translation2d camToTargetTranslation=project(distance,rot);
+		// convert robot position to field zero coords from known target position
+		Translation2d camToFieldTranslation=target_trans.minus(camToTargetTranslation);
+        // use robot position determined from tag and current gyro angle to create robot pose 
+		Pose2d fieldToRobot=new Pose2d(camToFieldTranslation,gyroRotation2d());
+
+		// TODO: compensate for camera position on robot
+		
+		return fieldToRobot;
+
+	}
+
+	public static Translation2d project(
+			double radius, Rotation2d angle) {
+		return new Translation2d(angle.getCos() * radius, angle.getSin() * radius);
+	}
+   
 	public void updatePositions(){
 		m_positions[0]=m_frontLeft.getPosition();
 		m_positions[1]=m_frontRight.getPosition();
@@ -326,7 +393,7 @@ public class DriveTrain extends SubsystemBase {
 		last_heading = 0;
 		m_gyro.reset();
 		updatePositions();
-		m_poseEstimator.resetPosition(m_gyro.getRotation2d(), m_positions,pose);
+		m_poseEstimator.resetPosition(gyroRotation2d(), m_positions,pose);
 	}
 
 	public Pose2d getPose() {
