@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DriveWithGamepad;
+import frc.robot.objects.PlotServer;
 import frc.robot.subsystems.AprilTagDetector;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.DriveTrain;
@@ -24,6 +25,8 @@ public class RobotContainer {
   private final Autonomous m_autonomous = new Autonomous(m_drivetrain);
   private final XboxController m_controller = new XboxController(0);
   private final AprilTagDetector m_detector= new AprilTagDetector(m_drivetrain);
+  PlotServer m_plotsub=new PlotServer();
+
 
   private DriveWithGamepad m_driveCommand = null; // TODO
  
@@ -62,5 +65,6 @@ public class RobotContainer {
   public void robotInit(){
     m_drivetrain.init();
     m_detector.start();
+    m_plotsub.start();
   }
 }

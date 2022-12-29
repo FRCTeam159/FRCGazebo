@@ -3,6 +3,7 @@ package utils;
 
 import org.opencv.core.Point;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -198,9 +199,38 @@ public class TagResult {
         return pose_err;
     }
 
+    public double getDistance() {
+		// camera to target distance along the ground
+		Translation2d trans=getPose().getTranslation().toTranslation2d();
+		double distance = trans.getNorm(); 
+        return distance;
+    }
+    public double getYaw() {
+        Pose3d pose=getPose();
+        double angle=Math.atan2(pose.getTranslation().getY(), pose.getTranslation().getX());
+		return Math.toDegrees(angle);	
+    }
+    public double getPitch() {
+        Pose3d pose=getPose();
+        double angle=Math.atan2(pose.getTranslation().getZ(), pose.getTranslation().getX());
+		return Math.toDegrees(angle);	
+    }
+    
+    public double getX(){
+        return getPose().getTranslation().getX();
+    }
+    public double getY(){
+        return getPose().getTranslation().getY();
+    }
+    public double getZ(){
+        return getPose().getTranslation().getZ();
+    }
     public String toString() {
-        String str = String.format("id:%d tag_id:%d conf:%f cX:%-2.1f cY:%-2.1f w:%d h:%d",
-                id, tag_id, margin, centerX, centerY, (int) width(), (int) height());
+        String str=null;
+        Pose3d pose=getPose();
+        if(pose !=null)
+          str = String.format("id:%d err:%-2.1f X:%-2.1f Y:%-2.1f Z:%-2.1f H:%-2.1f P:%-2.1f",
+                tag_id, pose_err*1e5, getX(), getY(), getZ(), getYaw(), getPitch());
         return str;
     }
 
@@ -209,14 +239,7 @@ public class TagResult {
         System.out.println(str);
         //System.out.println(getPoseTransform());
         //if(poseResult !=null){
-        Pose3d pose=getPose();
-        System.out.println(getPose());
-            // var objX = new Translation3d(1, 0, 0).rotateBy(pose.getRotation()).getY();
-            // var objY = new Translation3d(0, 1, 0).rotateBy(pose.getRotation()).getZ();
-            // var objZ = new Translation3d(0, 0, 1).rotateBy(pose.getRotation()).getX();
-            // System.out.printf("Object x %.2f y %.2f z %.2f\n", objX, objY, objZ);
-        //}
+        //Pose3d pose=getPose();
+        //System.out.println(getPose()); 
     }
-
-   
 }

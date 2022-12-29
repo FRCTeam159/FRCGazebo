@@ -35,6 +35,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.objects.PlotServer;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.DriveTrain;
 import utils.PathData;
@@ -45,7 +46,7 @@ import utils.PlotUtils;
 // =================================================
 public class DrivePath extends CommandBase {
   /** Creates a new AutoTest. */
-  private final ArrayList<PathData> pathdata = new ArrayList<PathData>();
+  private ArrayList<PathData> pathdata = new ArrayList<PathData>();
 
   public boolean holotest=true;
   private final RamseteController m_ramsete = new RamseteController();
@@ -123,7 +124,7 @@ public class DrivePath extends CommandBase {
     m_timer.reset();
     m_timer.start();
     
-    pathdata.clear();
+    pathdata= new ArrayList<PathData>();
     m_drive.startAuto();
     elapsed=0;
   
@@ -175,7 +176,9 @@ public class DrivePath extends CommandBase {
     //m_drive.reset();
     // m_drive.enable();
     if (plot_type != utils.PlotUtils.PLOT_NONE)
-      utils.PlotUtils.publish(pathdata, 6, plot_type);
+      PlotServer.publish(pathdata, 6, plot_type);
+
+      //utils.PlotUtils.publish(pathdata, 6, plot_type);
   }
 
   // =================================================

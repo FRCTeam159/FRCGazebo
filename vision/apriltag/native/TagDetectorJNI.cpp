@@ -164,22 +164,6 @@ JNIEXPORT void JNICALL Java_utils_TagDetectorJNI_detector_1image_1test
     }
   }
   
- /*
- * Class:     utils_TagDetectorJNI
- * Method:    detector_image_test
- * Signature: (Ljava/lang/String;)V
- */
-/*
-JNIEXPORT void JNICALL Java_utils_TagDetectorJNI_detector_1test
-  (JNIEnv *env, jobject obj, jstring inJNIStr, jboolean pose, jboolean timing){
-    const char *inCStr = env->GetStringUTFChars(inJNIStr, NULL);
-    TagDetector * detector = (TagDetector *) env->GetLongField(obj, getPtrFieldId(env, obj));
-    if(detector){
-        detector->test(inCStr,pose,timing);
-    }
-    env->ReleaseStringUTFChars(inJNIStr, inCStr);  // release resources
-  }
-*/
 /*
  * Class:     TagDetectorJNI
  * Method:    detector_destroy

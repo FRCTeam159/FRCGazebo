@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.Calibrate;
 import frc.robot.commands.DrivePath;
 import frc.robot.commands.TurnToAngle;
+import frc.robot.objects.PlotServer;
 import utils.PlotUtils;
 
 public class Autonomous extends SequentialCommandGroup  {
