@@ -121,7 +121,7 @@ public class PlotUtils {
         pd.d[2] = Math.abs(t_data.d[0]);
         pd.d[3] = t_data.d[1];
 
-        //System.out.println(pd.d[0]+" "+pd.d[1]+" "+pd.d[2]+" "+pd.d[3]);
+        System.out.println(pd.d[0]+" "+pd.d[1]+" "+pd.d[2]+" "+pd.d[3]);
 
         pd.d[4] = Math.abs(d_data.d[2]);
         pd.d[5] = d_data.d[3];
@@ -291,7 +291,7 @@ public class PlotUtils {
         frame.setVisible(true);
     }
 */
-    // publish plot data to NetworkTables
+    // publish plot data to NetworkTables (works for NT3 only)
     public static void publish(ArrayList<PathData> dataList, int traces, int type) {
         if (table == null) {
             NetworkTableInstance inst = NetworkTableInstance.getDefault();
