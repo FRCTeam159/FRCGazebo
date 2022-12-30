@@ -49,7 +49,9 @@ public class Autonomous extends SequentialCommandGroup  {
     m_path_chooser.addOption("Calibrate", CALIBRATE);
 
     SmartDashboard.putBoolean("reversed", reversed);
-    SmartDashboard.putBoolean("test", false);
+    SmartDashboard.putBoolean("holographic", true);
+    //SmartDashboard.putBoolean("debug", false);
+
 
     SmartDashboard.putNumber("xPath", 4);
     SmartDashboard.putNumber("yPath", 0);

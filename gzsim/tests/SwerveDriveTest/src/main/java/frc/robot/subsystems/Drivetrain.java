@@ -56,14 +56,16 @@ public class DriveTrain extends SubsystemBase {
 	public static final double kTrackWidth = Units.inchesToMeters(2 * front_wheel_base); // bug? need to double actual value for geometry to work
 
 	public static double kMaxVelocity = 3; // meters per second
-	public static double kMaxAcceleration = 1; // meters/second/second
-	public static double kMaxAngularSpeed = Math.toRadians(360); // degrees per second
-	public static double kMaxAngularAcceleration = Math.toRadians(20);// degrees per second per second
+	public static double kMaxAcceleration = 1.0; // meters/second/second
+	public static double kMaxAngularSpeed = Math.toRadians(90); // degrees per second
+	public static double kMaxAngularAcceleration = Math.toRadians(10);// degrees per second per second
 
 	public boolean enable_gyro = true;
 	private double last_heading = 0;
 	private Pose2d field_pose;
 	private Pose2d vision_pose=null;
+
+	double latency=0.05;
 
 	private boolean use_tags=false;
 
@@ -85,6 +87,8 @@ public class DriveTrain extends SubsystemBase {
 		SmartDashboard.putNumber("maxV", kMaxVelocity);
 		SmartDashboard.putNumber("maxA", kMaxAcceleration);
 		SmartDashboard.putBoolean("Use Tags", use_tags);
+		//SmartDashboard.putNumber("latency", 0);
+
 	}
 
 	public double getTime() {
@@ -198,6 +202,9 @@ public class DriveTrain extends SubsystemBase {
 		return Rotation2d.fromDegrees(angle);
 	}
 
+	public double getAngle() {
+		return m_frontLeft.getAngle();
+	}
 	public double getLeftDistance() {
 		return 0.5*(m_frontLeft.getDistance()+m_backLeft.getDistance());
 	}
@@ -239,7 +246,9 @@ public class DriveTrain extends SubsystemBase {
 		enable_gyro = SmartDashboard.getBoolean("Field Oriented", enable_gyro);
 		kMaxVelocity=SmartDashboard.getNumber("maxV", kMaxVelocity);
 		kMaxAcceleration=SmartDashboard.getNumber("maxA", kMaxAcceleration);
-		
+
+		//latency=SmartDashboard.getNumber("latency", 0);
+
 	}
 
 	@Override
@@ -317,7 +326,6 @@ public class DriveTrain extends SubsystemBase {
 		// a real robot, this must be calculated based either on latency or timestamps.
 		
 		if(use_tags && vision_pose !=null){
-			double latency=0.0;
 			m_poseEstimator.addVisionMeasurement(vision_pose,getClockTime()-latency);
 			// TODO: determine actual latency from camera pose
 		}

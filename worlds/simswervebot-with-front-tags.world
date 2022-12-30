@@ -17,12 +17,12 @@
 
     <include>
       <uri>model://Apriltag16_05_00000</uri>
-      <pose>-2 8 0 0 0 0</pose>
+      <pose>-2 8 0.25 0 0 0</pose>
     </include>
 
      <include>
       <uri>model://Apriltag16_05_00001</uri>
-      <pose>2 8 0 0 0 0</pose>
+      <pose>2 8 0.25 0 0 0</pose>
     </include>
 
   </world>

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.objects.PlotServer;
 import frc.robot.subsystems.DriveTrain;
 import utils.PathData;
 import utils.PlotUtils;
@@ -27,7 +28,7 @@ public class Calibrate extends CommandBase {
   int plot_type=PlotUtils.PLOT_DYNAMICS;
   double elapsed=0;
 
-  public static int vel_steps=8;
+  public static int vel_steps=10;
   public static int step=0;
   public static double vel_start=0;
   public static double vel_delta=0.5;
@@ -130,7 +131,7 @@ public class Calibrate extends CommandBase {
     System.out.format("max power=%f max velocity=%f\n", max_power,max_vel); 
   
     if (PlotUtils.auto_plot_option!=PlotUtils.PLOT_NONE) {
-      utils.PlotUtils.publish(plotdata,3,PlotUtils.PLOT_CALIBRATE);
+      PlotServer.publish(plotdata,3,PlotUtils.PLOT_CALIBRATE);
     }
   }
 }
