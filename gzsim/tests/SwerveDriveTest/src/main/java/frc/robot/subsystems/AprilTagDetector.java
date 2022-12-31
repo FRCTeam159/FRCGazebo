@@ -136,9 +136,12 @@ public class AprilTagDetector extends Thread{
         }
         
         if(best_tag !=null && best_tag.getPoseError()<maxPoseError){
-          String s=best_tag.toString();
-          SmartDashboard.putString("Tag", s);
-          m_drivetrain.setVisionPose(getRobotPoseFromTag(best_tag,m_drivetrain.gyroRotation2d()));
+          Pose2d pose=getRobotPoseFromTag(best_tag,m_drivetrain.gyroRotation2d());
+          String str = String.format("id:%d X:%-2.1f Y:%-2.1f H:%-2.1f P:%-2.1f",
+               best_tag.getTagId(), pose.getX(), pose.getY(), best_tag.getYaw(),best_tag.getPitch());
+          //String s=best_tag.toString();
+          SmartDashboard.putString("Tag", str);
+          m_drivetrain.setVisionPose(pose);
         }
         else {
           SmartDashboard.putString("Tag", "no valid tags visible");
