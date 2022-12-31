@@ -33,7 +33,7 @@ public class AprilTagDetector extends Thread{
   
   private final boolean time_detection = true;
 
-  public static double maxPoseError=6e-5;
+  public static double maxPoseError=10e-5;
 
   protected static CvSource ouputStream;
   protected TagDetectorJNI detector=new TagDetectorJNI(0);

@@ -18,8 +18,9 @@ public class PlotUtils {
     public static final int PLOT_DISTANCE = 1;
     public static final int PLOT_DYNAMICS = 2;
     public static final int PLOT_POSITION = 3;
-    public static final int PLOT_CALIBRATE  = 4;
-    public static final int PLOT_GENERIC  = 5;
+    public static final int PLOT_LOCATION = 4;
+    public static final int PLOT_CALIBRATE  = 5;
+    public static final int PLOT_GENERIC  = 6;
 
     public static int auto_plot_option = PLOT_NONE;
 

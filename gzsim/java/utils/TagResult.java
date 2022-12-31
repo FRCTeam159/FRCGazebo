@@ -228,6 +228,7 @@ public class TagResult {
     public String toString() {
         String str=null;
         Pose3d pose=getPose();
+        
         if(pose !=null)
           str = String.format("id:%d err:%-2.1f X:%-2.1f Y:%-2.1f Z:%-2.1f H:%-2.1f P:%-2.1f",
                 tag_id, pose_err*1e5, getX(), getY(), getZ(), getYaw(), getPitch());

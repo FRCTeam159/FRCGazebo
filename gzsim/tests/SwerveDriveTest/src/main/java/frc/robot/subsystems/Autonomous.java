@@ -38,20 +38,17 @@ public class Autonomous extends SequentialCommandGroup  {
     m_drive=drive;
    
     m_auto_plot_option.setDefaultOption("No Plot", PlotUtils.PLOT_NONE);
-    m_auto_plot_option.addOption("Plot Distance", PlotUtils.PLOT_DISTANCE);
     m_auto_plot_option.addOption("Plot Dynamics", PlotUtils.PLOT_DYNAMICS);
+    m_auto_plot_option.addOption("Plot Location", PlotUtils.PLOT_LOCATION);
     m_auto_plot_option.addOption("Plot Position", PlotUtils.PLOT_POSITION);
 
     m_path_chooser.setDefaultOption("Program", PROGRAM);
 	  m_path_chooser.addOption("AutoTest", AUTOTEST);
-    //m_path_chooser.addOption("PathWeaver", PATHWEAVER);
     m_path_chooser.addOption("PathPlanner", PATHPLANNER);
     m_path_chooser.addOption("Calibrate", CALIBRATE);
 
-    SmartDashboard.putBoolean("reversed", reversed);
-    SmartDashboard.putBoolean("holographic", true);
+    //SmartDashboard.putBoolean("reversed", reversed);
     //SmartDashboard.putBoolean("debug", false);
-
 
     SmartDashboard.putNumber("xPath", 4);
     SmartDashboard.putNumber("yPath", 0);
@@ -63,7 +60,7 @@ public class Autonomous extends SequentialCommandGroup  {
   public SequentialCommandGroup  getCommand(){
     PlotUtils.auto_plot_option=m_auto_plot_option.getSelected();
     selected_path=m_path_chooser.getSelected();
-    reversed = SmartDashboard.getBoolean("reversed", reversed);
+    //reversed = SmartDashboard.getBoolean("reversed", reversed);
     
     //clearGroupedCommands();
       
@@ -72,8 +69,6 @@ public class Autonomous extends SequentialCommandGroup  {
       return new SequentialCommandGroup(new Calibrate(m_drive));
     case PROGRAM:
       return new SequentialCommandGroup(new DrivePath(m_drive,PROGRAM,reversed));
-    case PATHWEAVER:
-      return new SequentialCommandGroup(new DrivePath(m_drive,PATHWEAVER,reversed));
     case PATHPLANNER:
       return new SequentialCommandGroup(new DrivePath(m_drive,PATHPLANNER,reversed));
    case AUTOTEST:
