@@ -8,9 +8,6 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.CoordinateSystem;
-import edu.wpi.first.math.geometry.Quaternion;
-import edu.wpi.first.math.geometry.Pose2d;
-
 import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
@@ -189,6 +186,9 @@ public class TagResult {
         return homog;
     }
 
+    public double[][] getRotation() {
+        return rotation;
+    }
     public Transform3d getPoseTransform() {
         return poseResult;
     }
@@ -230,8 +230,8 @@ public class TagResult {
         Pose3d pose=getPose();
         
         if(pose !=null)
-          str = String.format("id:%d err:%-2.1f X:%-2.1f Y:%-2.1f Z:%-2.1f H:%-2.1f P:%-2.1f",
-                tag_id, pose_err*1e5, getX(), getY(), getZ(), getYaw(), getPitch());
+          str = String.format("id:%d err:%-2.3f X:%-2.1f Y:%-2.1f Z:%-2.1f H:%-2.1f P:%-2.1f",
+                tag_id, pose_err, getX(), getY(), getZ(), getYaw(), getPitch());
         return str;
     }
 

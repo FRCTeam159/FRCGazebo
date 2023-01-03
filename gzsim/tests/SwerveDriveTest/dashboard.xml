@@ -1,11 +1,19 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="Conf" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="437" y="322"/>
+		<width>80</width>
+	</widget>
+	<widget field="Latency" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="423" y="293"/>
+		<width>95</width>
+	</widget>
 	<widget field="Tag" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="30" y="376"/>
 		<width>267</width>
 	</widget>
 	<widget field="H:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="440" y="184"/>
+		<location x="440" y="189"/>
 		<width>66</width>
 	</widget>
 	<widget field="Use Tags" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
@@ -93,5 +101,6 @@
 	<hidden field="Field"/>
 	<hidden field="debug"/>
 	<hidden field="test"/>
+	<hidden field="latency"/>
 	<hidden field="holographic"/>
 </xml>

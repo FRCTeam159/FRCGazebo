@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.objects.PlotServer;
+import frc.robot.subsystems.AprilTagDetector;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.DriveTrain;
 import utils.PathData;
@@ -159,6 +160,8 @@ public class DrivePath extends CommandBase {
     if (m_trajectory == null)
       return;
     m_drive.endAuto();
+    AprilTagDetector.setBestTarget();
+
     //m_drive.reset();
     // m_drive.enable();
     if (plot_type != utils.PlotUtils.PLOT_NONE)
@@ -200,6 +203,8 @@ public class DrivePath extends CommandBase {
     PathConstraints constraints= new PathConstraints(maxV, maxA);
     // reversal not supported for swerve drive 
     PathPlannerTrajectory traj=PathPlanner.generatePath(constraints, reversed, p1, p2);
+
+    AprilTagDetector.setTargetId(0);
   
     return traj; 
   }
@@ -294,8 +299,8 @@ public class DrivePath extends CommandBase {
     pd.d[1] = current_pose.getX();
     pd.d[2] = target_pose.getY();
     pd.d[3] = current_pose.getY();
-    pd.d[4] = ((PathPlannerState)state).holonomicRotation.getRadians();
-    pd.d[5] = current_pose.getRotation().getRadians();
+    pd.d[4] = 2*((PathPlannerState)state).holonomicRotation.getRadians();
+    pd.d[5] = 2*current_pose.getRotation().getRadians();
 
     pathdata.add(pd);
   }

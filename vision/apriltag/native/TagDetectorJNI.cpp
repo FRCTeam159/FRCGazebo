@@ -96,19 +96,23 @@ JNIEXPORT jobjectArray JNICALL Java_utils_TagDetectorJNI_detector_1detect
         apriltag_pose_t pose1 = { 0 };
         apriltag_pose_t pose2 = { 0 };
         apriltag_pose_t *best_pose=0;
-        double err1 = HUGE_VAL; //Should get overwritten if pose estimation is happening
-        double err2 = HUGE_VAL;
+        double err1 = 1; //Should get overwritten if pose estimation is happening
+        double err2 = 1;
         apriltag_detection_info_t info {detect, tw, fx, fy, cx, cy };
 
         estimate_tag_pose_orthogonal_iteration(&info, &err1, &pose1, &err2, &pose2, 1);
-        perr=err1<err2?err1:err2;
+        perr=1;//err1<err2?err1:err2;
 
         if (pose1.t && !pose2.t)
           best_pose = &pose1;
         else if (!pose1.t && pose2.t)
           best_pose = &pose2;
-        else
+        else if(pose1.t && pose2.t){
           best_pose = err1 < err2 ? &pose1 : &pose2;
+          double emin = err1<err2?err1:err2;
+          double emax = err1>err2?err1:err2;
+          perr=emax>0?emin/emax:0;       
+        }
         if (best_pose){
           for (int i = 0; i < 3; i++)
             pose[i] = best_pose->t->data[i];

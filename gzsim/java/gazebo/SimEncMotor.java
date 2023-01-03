@@ -4,6 +4,7 @@ package gazebo;
 public class SimEncMotor {
     SimMotor motor;
     SimEncoder encoder;
+    double setval=0;
     public SimEncMotor(int id){
         motor=new SimMotor(id);
         encoder=new SimEncoder(id);
@@ -25,7 +26,11 @@ public class SimEncMotor {
         encoder.reset();
     }
     public void set(double v){
+        setval=v;
         motor.set(v);
+    }
+    public double get(){
+        return setval;
     }
     public void setDistancePerRotation(double d){
         motor.setDistancePerRotation(d);

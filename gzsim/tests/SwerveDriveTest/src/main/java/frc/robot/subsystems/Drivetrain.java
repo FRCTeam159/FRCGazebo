@@ -18,11 +18,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.objects.SwerveModule;
 import gazebo.SimGyro;
-import utils.SimTargetMgr;
 
 public class DriveTrain extends SubsystemBase {
 
 	// square frame geometry
+
+	static public boolean debug=false;
 
 	public static double front_wheel_base = 23.22; // distance beteen front wheels
 	public static double side_wheel_base = 23.22; // distance beteen side wheels
@@ -56,41 +57,57 @@ public class DriveTrain extends SubsystemBase {
 	public static final double kTrackWidth = Units.inchesToMeters(2 * front_wheel_base); // bug? need to double actual value for geometry to work
 
 	public static double kMaxVelocity = 3; // meters per second
-	public static double kMaxAcceleration = 1.0; // meters/second/second
+	public static double kMaxAcceleration = 0.5; // meters/second/second
 	public static double kMaxAngularSpeed = Math.toRadians(90); // degrees per second
 	public static double kMaxAngularAcceleration = Math.toRadians(10);// degrees per second per second
 
 	public boolean enable_gyro = true;
 	private double last_heading = 0;
 	private Pose2d field_pose;
-	private Pose2d vision_pose=null;
 
-	double latency=0.05;
+	double x_std=0.05;
+	double y_std=0.05;
+	double h_std=3.0;
+
+	double latency=0.4;
+	private double vision_confidence=0.1;
+	private double pose_error=0;
+
 
 	private boolean use_tags=false;
 
 	boolean m_disabled = true;
-	private final SwerveDrivePoseEstimator m_poseEstimator =
-      new SwerveDrivePoseEstimator (
-          m_kinematics,
-          m_gyro.getRotation2d(),
-          m_positions,
-          new Pose2d(),
-          VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)), // encoder accuracy
-          VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30))); // vision accuracy
+	private SwerveDrivePoseEstimator m_poseEstimator;
+    
 
 	/** Creates a new Subsystem. */
 	public DriveTrain() {
-		SimTargetMgr.init();
+		makeEstimator();
+
+		TargetMgr.init();
 		simulation = new Simulation(this);
 		SmartDashboard.putBoolean("Field Oriented", enable_gyro);
 		SmartDashboard.putNumber("maxV", kMaxVelocity);
 		SmartDashboard.putNumber("maxA", kMaxAcceleration);
 		SmartDashboard.putBoolean("Use Tags", use_tags);
-		//SmartDashboard.putNumber("latency", 0);
-
+		SmartDashboard.putNumber("Latency", latency);
+		SmartDashboard.putNumber("Conf", vision_confidence);
+		SmartDashboard.putNumber("Error", pose_error);
 	}
 
+	void makeEstimator(){
+		double vmult=1.0/vision_confidence;
+		SwerveModulePosition[] positions={
+			new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition()
+		};
+		m_poseEstimator=new SwerveDrivePoseEstimator (
+          m_kinematics,
+          new Rotation2d(),
+          positions,
+          new Pose2d(),
+          VecBuilder.fill(x_std, y_std, Units.degreesToRadians(h_std)), // encoder accuracy
+          VecBuilder.fill(vmult*x_std, vmult*y_std, Units.degreesToRadians(vmult*h_std))); // encoder accuracy
+	}
 	public double getTime() {
 		return simulation.getSimTime();
 	}
@@ -109,6 +126,7 @@ public class DriveTrain extends SubsystemBase {
 		disable();
 	}
 	public void init() {
+		if(debug)
 		System.out.println("Drivetrain.init");
 		field_pose = getPose();
 		simulation.init();
@@ -123,6 +141,7 @@ public class DriveTrain extends SubsystemBase {
 	}
 	public void disable() {
 		m_disabled = true;
+		if(debug)
 		System.out.println("Drivetrain.disable");
 		m_frontLeft.disable();
 		m_frontRight.disable();
@@ -135,6 +154,7 @@ public class DriveTrain extends SubsystemBase {
 	public void enable() {
 		m_disabled = false;
 		simulation.run();
+		if(debug)
 		System.out.println("Drivetrain.enable");
 		m_frontLeft.enable();
 		m_frontRight.enable();
@@ -146,6 +166,7 @@ public class DriveTrain extends SubsystemBase {
 	public void reset() {
 		m_disabled = true;
 		field_pose = add(field_pose, getPose());
+		if(debug)
 		System.out.println("Drivetrain.reset");
 		m_frontLeft.reset();
 		m_frontRight.reset();
@@ -200,6 +221,7 @@ public class DriveTrain extends SubsystemBase {
 		angle = unwrap(last_heading, angle);
 		last_heading = angle;
 		return Rotation2d.fromDegrees(angle);
+		//return gyroRotation2d();
 	}
 
 	public double getAngle() {
@@ -229,11 +251,10 @@ public class DriveTrain extends SubsystemBase {
 		return 0.5 * (getLeftDistance() + getRightDistance());
 	}
 
-	public void setVisionPose(Pose2d pose){
-		vision_pose=pose;
-	}
+	// public void setVisionPose(Pose2d pose){
+	// 	vision_pose=pose;
+	// }
 	public void log() {
-		use_tags = SmartDashboard.getBoolean("Use Tags", use_tags);
 
 		SmartDashboard.putNumber("Distance", getDistance());
 		SmartDashboard.putNumber("Velocity", getVelocity());
@@ -247,8 +268,16 @@ public class DriveTrain extends SubsystemBase {
 		kMaxVelocity=SmartDashboard.getNumber("maxV", kMaxVelocity);
 		kMaxAcceleration=SmartDashboard.getNumber("maxA", kMaxAcceleration);
 
-		//latency=SmartDashboard.getNumber("latency", 0);
+		use_tags = SmartDashboard.getBoolean("Use Tags", use_tags);
+		SmartDashboard.putNumber("Error", pose_error);
 
+		latency=SmartDashboard.getNumber("Latency", 0);
+		double conf=SmartDashboard.getNumber("Conf", vision_confidence);
+		if(Math.abs(conf-vision_confidence)>0.001){
+			vision_confidence=conf;
+			double vmult=1.0/vision_confidence;
+			m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(vmult*x_std, vmult*y_std, Units.degreesToRadians(vmult*h_std)));
+		}
 	}
 
 	@Override
@@ -299,6 +328,12 @@ public class DriveTrain extends SubsystemBase {
 		m_backRight.setAngle(0, value);
 		updateOdometry();
 	}
+	public double getXVoltage(){
+		return 0.5*(m_frontLeft.getXVoltage()+m_frontRight.getXVoltage());
+	}
+	public double getYVoltage(){
+		return 0.5*(m_frontLeft.getYVoltage()+m_backLeft.getYVoltage());
+	}
 	@SuppressWarnings("ParameterName")
 	public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
 		var swerveModuleStates = m_kinematics.toSwerveModuleStates(
@@ -322,12 +357,17 @@ public class DriveTrain extends SubsystemBase {
 	public void updateOdometry() {
 		updatePositions();
 		m_poseEstimator.updateWithTime(getClockTime(),m_gyro.getRotation2d(), m_positions);
-		// Also apply vision measurements. We use 0.1 seconds in the past as an example -- on
-		// a real robot, this must be calculated based either on latency or timestamps.
-		
-		if(use_tags && vision_pose !=null){
-			m_poseEstimator.addVisionMeasurement(vision_pose,getClockTime()-latency);
-			// TODO: determine actual latency from camera pose
+		// Also apply vision measurements - this must be calculated based either on latency or timestamps.
+		Pose2d vision_pose=AprilTagDetector.getLastPose();
+		pose_error=AprilTagDetector.getPoseError();
+		if(vision_pose !=null){		
+			if(use_tags && vision_confidence>0){
+				m_poseEstimator.addVisionMeasurement(vision_pose,getClockTime()-latency);
+				// TODO: determine actual latency from camera pose 
+				// For Gazebo
+				// - includes processing time in the simulator and camera frame grab latency
+				// - 0.4s seems to work the best
+			}
 		}
 					
 		field_pose = getPose();

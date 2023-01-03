@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.Calibrate;
 import frc.robot.commands.DrivePath;
 import frc.robot.commands.TurnToAngle;
-import frc.robot.objects.PlotServer;
 import utils.PlotUtils;
 
 public class Autonomous extends SequentialCommandGroup  {
@@ -50,9 +49,9 @@ public class Autonomous extends SequentialCommandGroup  {
     //SmartDashboard.putBoolean("reversed", reversed);
     //SmartDashboard.putBoolean("debug", false);
 
-    SmartDashboard.putNumber("xPath", 4);
-    SmartDashboard.putNumber("yPath", 0);
-    SmartDashboard.putNumber("rPath", 0);
+    SmartDashboard.putNumber("xPath", 5);
+    SmartDashboard.putNumber("yPath", -3);
+    SmartDashboard.putNumber("rPath", 30.0);
    
 		SmartDashboard.putData(m_path_chooser);
     SmartDashboard.putData(m_auto_plot_option);

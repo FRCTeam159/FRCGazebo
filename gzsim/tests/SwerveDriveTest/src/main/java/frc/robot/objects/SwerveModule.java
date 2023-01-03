@@ -125,6 +125,12 @@ public class SwerveModule {
     m_turnMotor.set(value);
   }
 
+  public double getXVoltage(){
+    return  m_driveMotor.get();
+  }
+  public double getYVoltage(){
+    return  m_turnMotor.get();
+  }
   // just apply a voltage to the wheel motor
   public void move(double value){
     m_driveMotor.set(value);

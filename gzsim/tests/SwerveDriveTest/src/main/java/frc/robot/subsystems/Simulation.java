@@ -18,6 +18,7 @@ import frc.robot.objects.SimControl;
 import gazebo.SimCamera;
 
 public class Simulation extends SubsystemBase {
+  static public boolean debug=false;
   /** Creates a new SimulationControl. */
   private SimControl m_simcontrol = new SimControl();
   private DriveTrain m_drive;
@@ -54,6 +55,7 @@ public class Simulation extends SubsystemBase {
   }
 
   public void reset() {
+    if(debug)
     System.out.println("Simulation.reset");
     m_simclock.reset();
     m_timer.reset();
@@ -61,6 +63,7 @@ public class Simulation extends SubsystemBase {
    // running = false;
   }
   public void clear() {
+    if(debug)
     System.out.println("Simulation.clear");
     m_simclock.clear();
     m_timer.reset();
@@ -114,6 +117,7 @@ public class Simulation extends SubsystemBase {
   }
 
   public void start() {
+    if(debug)
     System.out.println("Simulation.start");
     m_simclock.reset();
     m_simclock.enable();
@@ -121,11 +125,13 @@ public class Simulation extends SubsystemBase {
   }
 
   public void enable() {
+    if(debug)
     System.out.println("Simulation.enable");
     m_drive.enable();
   }
 
   public void end() {
+    if(debug)
     System.out.println("Simulation.end");
     SmartDashboard.putNumber("SimTime", m_simclock.getTime());
     m_simclock.disable();

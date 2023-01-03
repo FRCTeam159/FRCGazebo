@@ -77,7 +77,7 @@
         <plugin name="camera1" filename="sim_camera.dll">
           <topic>~/gazebo/frc/simulator/camera/0</topic>
           <port>9000</port>
-          <fps>20</fps>
+          <fps>50</fps>
           <enabled>true</enabled>
           <savepath>tmp</savepath>
           <maxframes>1</maxframes>
