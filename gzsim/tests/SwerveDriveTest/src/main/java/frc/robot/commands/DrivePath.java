@@ -29,6 +29,7 @@ import frc.robot.objects.PlotServer;
 import frc.robot.subsystems.AprilTagDetector;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.TargetMgr;
 import utils.PathData;
 import utils.PlotUtils;
 
@@ -45,7 +46,7 @@ public class DrivePath extends CommandBase {
   public boolean holotest=true;
   //private final RamseteController m_ramsete = new RamseteController();
   private final PPHolonomicDriveController m_ppcontroller=new PPHolonomicDriveController(
-      new PIDController(1, 0, 0), new PIDController(1, 0, 0), new PIDController(1, 0, 0));
+      new PIDController(1, 0, 0), new PIDController(1, 0, 0), new PIDController(0.5, 0, 0));
 
   private final Timer m_timer = new Timer();
   private final DriveTrain m_drive;
@@ -203,9 +204,10 @@ public class DrivePath extends CommandBase {
     PathConstraints constraints= new PathConstraints(maxV, maxA);
     // reversal not supported for swerve drive 
     PathPlannerTrajectory traj=PathPlanner.generatePath(constraints, reversed, p1, p2);
-
-    AprilTagDetector.setTargetId(0);
-  
+    if(yPath>0 && TargetMgr.numTargets()>1)
+      AprilTagDetector.setTargetId(1);
+    else
+      AprilTagDetector.setTargetId(0);
     return traj; 
   }
 

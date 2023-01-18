@@ -54,15 +54,19 @@ public class RobotContainer {
     return m_autonomous.getCommand();
   }
   public void teleopInit(){
+    m_drivetrain.setRobotDisabled(false);
     m_drivetrain.setFieldOriented(m_drivetrain.isGyroEnabled());
   }
   public void autonomousInit(){
+    m_drivetrain.setRobotDisabled(false);
     m_drivetrain.setFieldOriented(true);
   }
   public void disabledInit(){
+    m_drivetrain.setRobotDisabled(true);
     m_drivetrain.disable();
   }
   public void robotInit(){
+    m_drivetrain.setRobotDisabled(true);
     m_drivetrain.init();
     m_detector.start();
     m_plotsub.start();

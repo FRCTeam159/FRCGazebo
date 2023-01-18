@@ -9,7 +9,12 @@
     <include>
       <uri>model://ground_plane</uri>
     </include>
-
+<!--
+    <include>
+      <uri>model://2023-Field</uri>
+      <pose>0 0 0 0 0 0</pose>
+    </include>
+-->
     <include>
       <uri>model://SimSwerveBot</uri>
       <pose>0 0 0.092 1.57078 0 1.57</pose>

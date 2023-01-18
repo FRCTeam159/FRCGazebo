@@ -54,6 +54,9 @@ public class AprilTagDetector extends Thread{
   static Pose2d last_pose=null;
   static int target_id=BEST;
 
+  static double maxtime=0;
+  static double avetime=0;
+  static int count=0;
   static String  test_image=System.getenv("GZ_SIM")+"/docs/apriltag_0_test.jpg";
   public AprilTagDetector(DriveTrain drivetrain) {
     m_drivetrain=drivetrain;
@@ -80,7 +83,8 @@ public class AprilTagDetector extends Thread{
     else
       jni_detector=new TagDetectorJNI(0);
   }
-  AprilTag[] getTags(Mat mat){
+  // return an array of tag info structures from an image
+  private AprilTag[] getTags(Mat mat){
     AprilTag[] atags;
     if(use_wpi_detector){
       Mat graymat=new Mat();
@@ -104,6 +108,11 @@ public class AprilTagDetector extends Thread{
     return atags;
   }
   
+  static public void reset(){
+    maxtime=0;
+    avetime=0;
+    count=0;
+  }
   static public void setTargetId(int i){
     target_id=i;
   }
@@ -131,6 +140,7 @@ public class AprilTagDetector extends Thread{
   }
   
   // Calculate the position of a robot on the field given a visible tag
+  // 
   public static Pose2d getRobotPoseFromTag(AprilTag tag, Rotation2d gyroAngle) {
 		
 		TargetMgr.TagTarget target = TargetMgr.getTarget(tag.getTagId());
@@ -140,7 +150,7 @@ public class AprilTagDetector extends Thread{
 		}
 		Pose3d pose = tag.getPose();
 
-    double distance=tag.getDistance();
+    double distance=tag.getDistance(); // distance to camera
 		Translation2d target_trans=target.getPose().getTranslation().toTranslation2d();
 		
     // convert x,y, coords in camera space to camera angle
@@ -165,39 +175,42 @@ public class AprilTagDetector extends Thread{
   public void run() {
     cam.start();
     SmartDashboard.putString("Tag", "no valid tags visible");
-    double maxtime=0;
-    double avetime=0;
-    int count=0;
+  
     while (true) {
       try {
-        Thread.sleep(20);
+        Thread.sleep(50);
+       
         long startTime = System.nanoTime();
+        long endtime=0;
         Mat mat = cam.getFrame();
+        AprilTag[] tags=null;
+        if(m_drivetrain.useTags())
+          tags=getTags(mat);
         
-        //TagResult[] tags=detector.detect(mat,TargetMgr.targetSize,cam.fx,cam.fy,cam.cx,cam.cy);
-        AprilTag[] tags=getTags(mat);
-
-        long endTime = System.nanoTime();
-        if(time_detection){
-          double duration = (endTime - startTime)/1.0e6;  //divide by 1000000 to get milliseconds.
-          avetime+=duration;
-          count++;
-          if(count>1)
-            maxtime=duration>maxtime?duration:maxtime;               
-          String s=String.format("%-3.1f max:%-3.1f ave:%-2.1f ms",duration,maxtime,avetime/count);
-          SmartDashboard.putString("Detect", s);
+        endtime = System.nanoTime();
+        double duration = (endtime - startTime)/1.0e6;  //divide by 1000000 to get milliseconds.
+        avetime+=duration;
+        count++;
+        if(count>1)
+          maxtime=duration>maxtime?duration:maxtime;               
+        String s=String.format("%-3.1f max:%-3.1f ave:%-2.1f ms",duration,maxtime,avetime/count);
+        SmartDashboard.putString("Detect", s);
+        if(!m_drivetrain.useTags()){
+            ouputStream.putFrame(mat);
+            continue;
         }
+        
         target_tag=null;
-        pose_err=2;
-        double max_err=2;
+        pose_err=4;
+        double min_err=4;
         for(int i=0;i<tags.length;i++){
           AprilTag tag=tags[i];
           double err=tag.getPoseError();
 
           if(target_id==BEST){
-            if(err<max_err){
+            if(err<min_err){
               target_tag=tag;
-              max_err=err;
+              min_err=err;
               pose_err=err;
             }
           }
@@ -213,8 +226,11 @@ public class AprilTagDetector extends Thread{
         if(target_tag !=null){
           last_pose=getRobotPoseFromTag(target_tag,m_drivetrain.gyroRotation2d());
           if(last_pose !=null){ // could be an incorrect tag identifier (index out of bounds for expected tag_id range)
-            String str = String.format("id:%d X:%-2.1f Y:%-2.1f H:%-2.1f P:%-2.1f D:%-2.2f E:%-2.2f",
-               target_tag.getTagId(), last_pose.getX(), last_pose.getY(), target_tag.getYaw(),target_tag.getPitch(),target_tag.getDistance(),pose_err);
+            Translation2d show=last_pose.getTranslation();
+            if(TargetMgr.fieldRelative())
+              show=TargetMgr.robotToFRC(show);
+            String str = String.format("id:%d D:%-2.2f P:%-2.1f H:%-2.1f Err:%-2.2f Robot: X:%-2.1f Y:%-2.1f",
+               target_tag.getTagId(), target_tag.getDistance(),target_tag.getPitch(),target_tag.getYaw(),pose_err,show.getX(), show.getY());
             //String str=best_tag.toString();
             SmartDashboard.putString("Tag", str);
           }

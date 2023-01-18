@@ -7,6 +7,7 @@ package frc.robot.commands;
 import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -36,6 +37,11 @@ public class DriveWithGamepad extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    double now=0;//WPIUtilJNI.now() * 1e-6;
+    m_xspeedLimiter.reset(now);
+    m_yspeedLimiter.reset(now);
+    m_rotLimiter.reset(now);
+
     System.out.println("DriveWithGampad started");
   }
 
@@ -48,15 +54,15 @@ public class DriveWithGamepad extends CommandBase {
     double vx=m_controller.getLeftY();
     double vy=m_controller.getLeftX();
     double vr=m_controller.getRightX();
-    final var xSpeed = -m_xspeedLimiter.calculate(MathUtil.applyDeadband(vx, 0.1))
+    final var xSpeed = -m_xspeedLimiter.calculate(MathUtil.applyDeadband(vx, 0.2))
             * DriveTrain.kMaxVelocity;
 
     // Get the y speed or sideways/strafe speed. 
-    final var ySpeed = m_yspeedLimiter.calculate(MathUtil.applyDeadband(vy, 0.1))
+    final var ySpeed = m_yspeedLimiter.calculate(MathUtil.applyDeadband(vy, 0.2))
             * DriveTrain.kMaxVelocity;
 
     // Get the rate of angular rotation. 
-    final var rot = m_rotLimiter.calculate(MathUtil.applyDeadband(vr, 0.1))
+    final var rot = m_rotLimiter.calculate(MathUtil.applyDeadband(vr, 0.2))
             * DriveTrain.kMaxAngularSpeed;
    
     if(m_drive.disabled()){
@@ -66,7 +72,7 @@ public class DriveWithGamepad extends CommandBase {
   //System.out.print(".");
     //m_drive.testDrive(xSpeed, rot);
     //m_drive.turnInPlace(xSpeed);
-
+    //System.out.println("x:"+xSpeed+" y:"+ySpeed+" rot:"+rot);
     m_drive.drive(xSpeed, ySpeed,rot,m_drive.isGyroEnabled());
     //m_drive.drive(xSpeed, 0,0,true);
 

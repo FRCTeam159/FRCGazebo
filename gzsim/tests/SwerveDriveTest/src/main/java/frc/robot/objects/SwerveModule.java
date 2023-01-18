@@ -12,6 +12,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.robot.subsystems.DriveTrain;
 import gazebo.SimEncMotor;
 
 public class SwerveModule {
@@ -20,29 +21,31 @@ public class SwerveModule {
   private double gazebo_scale=1;  // not sure why but grid marks in gazebo are somewhat larger than a meter ?
   private double distancePerRotation=gazebo_scale*2*kWheelRadius*Math.PI;
 
-  private static final double kModuleMaxAngularVelocity = Math.toRadians(0); //degrees per second;
-  private static final double kModuleMaxAngularAcceleration = Math.toRadians(0);// degrees per second per second
+  private static final double kModuleMaxAngularVelocity = DriveTrain.kMaxAngularSpeed; //degrees per second;
+  private static final double kModuleMaxAngularAcceleration = DriveTrain.kMaxAngularAcceleration;// degrees per second per second
 
   private SimEncMotor m_driveMotor;
 	private SimEncMotor m_turnMotor;
 
   // Gains are for example purposes only - must be determined for your own robot!
-  private final PIDController m_drivePIDController = new PIDController(0.5, 0, 0);
-
+  private final PIDController m_drivePIDController = new PIDController(10, 0.0, 0);
+  //private final PIDController m_turningPIDController = new PIDController(3, 0.05, 0);
   // Gains are for example purposes only - must be determined for your own robot!
   private final ProfiledPIDController m_turningPIDController =
-      new ProfiledPIDController(2,0,0,
+      new ProfiledPIDController(5,0.0,0,
           new TrapezoidProfile.Constraints(
               kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
 
   // Gains are for example purposes only - must be determined for your own robot!
-  private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(1, 1);
-  private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(1, 1);
+  private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(0.1, 0.1);
+  private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(0.1, 0.1);
 
   public int m_drive_chnl;
   public int m_turn_chnl;
   
   boolean m_enabled=false;
+  int cnt=0;
+  static boolean debug=false;
   /**
    * Constructs a SwerveModule with a drive motor, turning motor, drive encoder and turning encoder.
    *
@@ -68,14 +71,20 @@ public class SwerveModule {
     m_turnMotor.enable();
   }
   public void disable(){
+   // m_turningPIDController.reset(0.0);
+
     m_enabled=false;
     m_driveMotor.disable();
     m_turnMotor.disable();
   }
   public void reset(){
+    //m_turningPIDController.reset(0.0);
+    m_drivePIDController.reset();
+    m_turningPIDController.reset(0.0);
     m_enabled=false;
     m_driveMotor.reset();
     m_turnMotor.reset();
+  
   }
   /**
    * Returns the current state of the module.
@@ -101,7 +110,9 @@ public class SwerveModule {
     angle=angle%360.0;
     angle=Math.toRadians(angle);
 
-     SwerveModuleState state =SwerveModuleState.optimize(desiredState, new Rotation2d(angle));
+     SwerveModuleState state =desiredState;
+     if(m_enabled)
+      state=SwerveModuleState.optimize(desiredState, new Rotation2d(angle));
 
     // Calculate the drive output from the drive PID controller.
     final double driveOutput = m_drivePIDController.calculate(m_driveMotor.getRate(), state.speedMetersPerSecond);
@@ -111,12 +122,24 @@ public class SwerveModule {
     //System.out.println(m_drive_chnl/2+" "+angle+" "+state.angle.getDegrees()+" "+(-state.speedMetersPerSecond>0?"+":"-")+" "+turnOutput);
 
     final double turnOutput = m_turningPIDController.calculate(angle,state.angle.getRadians());
-    final double turnFeedforward =m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
+    final double turnFeedforward = 0;//m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
+    //final double turnFeedforward = m_turnFeedforward.calculate(state.angle.getRadians());
 
-    if(m_enabled){
-      m_turnMotor.set(turnOutput+turnFeedforward); 
+    //System.out.format("%d drive:%-4f out:%-4.1f ff:%-4.1f turn angle:%-4.1f rate:%-4.1f out:%-4.2f ff:%-3.2f\n",
+    //     m_drive_chnl/2,m_driveMotor.getRate(),driveOutput,driveFeedforward,angle,turn_rate,turnOutput,turnFeedforward);
+     if((debug && (cnt%100)==0)){
+     System.out.format("%d drive:%-4.2f state:%-4.2f out:%-4.2f\n",
+          m_drive_chnl/2,m_driveMotor.getRate(),state.speedMetersPerSecond,driveOutput);
+     System.out.format("%d turn:%-4.2f state:%-4.2f out:%-4.2f\n",
+          m_drive_chnl/2,angle,state.angle.getRadians(),turnOutput);
+     }
+    //if(m_enabled){
+      //m_turnMotor.set(turnOutput); 
+      //m_driveMotor.set(driveOutput);
+      m_turnMotor.set(turnOutput + turnFeedforward); 
       m_driveMotor.set(driveOutput + driveFeedforward);
-    }
+   // }
+   cnt++;
 
   }
 

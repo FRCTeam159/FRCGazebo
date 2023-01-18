@@ -12,9 +12,10 @@ public class TurnToAngle extends CommandBase {
   DriveTrain m_drive;
   double m_angle;
   double last_time;
+  static boolean debug=false;
   
  //final PIDController m_controller=new PIDController(0.17,1.0,0.07);
- final PIDController m_controller=new PIDController(0.1,0.0,0.0);
+ final PIDController m_controller=new PIDController(0.1,0.05,0.05);
 
   public TurnToAngle(DriveTrain drive, double angle) { 
     m_drive=drive;
@@ -28,10 +29,10 @@ public class TurnToAngle extends CommandBase {
   public void initialize() {
     System.out.println("TurnToAngle.initialize");
     //m_controller.enableContinuousInput(-180, 180);
-    m_controller.setTolerance(0.5, 1); // TurnToleranceDeg, TurnRateToleranceDegPerS 
+    m_controller.setTolerance(0.5, 0.2); // TurnToleranceDeg, TurnRateToleranceDegPerS 
     m_drive.startAuto();
    //m_drive.driveForward(0);
-    last_time=m_drive.getTime();
+    last_time=m_drive.getClockTime();
     // need a dummy read from controller to avoid bad first correction (looks like a bug
     m_controller.calculate(0,m_angle);
   }
@@ -41,11 +42,11 @@ public class TurnToAngle extends CommandBase {
   @Override
   public void execute() {
     double heading=m_drive.getHeading();
-    double tm=m_drive.getTime();
+    double tm=m_drive.getClockTime();
 
     if ((tm-last_time)>0.015){
       double correction=m_controller.calculate(heading,m_angle);
-
+      if(debug)
       System.out.format("time:%f dt:%d gain:%g pos:%g pos error:%g vel error:%g\n",
         tm,(int)(1000*(tm-last_time)),correction,heading,m_controller.getPositionError(),m_controller.getVelocityError());
       m_drive.turnInPlace(correction);

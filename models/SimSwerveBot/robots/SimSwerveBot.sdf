@@ -46,6 +46,7 @@
           </friction>
         </surface>
       </collision>
+      <!---->
       <visual name="Body_visual">
       <pose>0.892994123738397 0.372009620808783 0.40364125979582 0 0 0</pose>
         <material>
@@ -59,10 +60,11 @@
           </mesh>
         </geometry>
       </visual>
+      
       <sensor name="BodyCamera" type="camera">
         <visualize>1</visualize>
         <always_on>1</always_on>
-        <pose>0.0 0.1 0.00266897987941073 4.7124 0 0</pose>
+        <pose>0.0 0.4 0 4.7124 0 0</pose>
         <camera name="Bodycamera">
           <horizontal_fov>0.7</horizontal_fov>
           <image>
@@ -77,7 +79,7 @@
         <plugin name="camera1" filename="sim_camera.dll">
           <topic>~/gazebo/frc/simulator/camera/0</topic>
           <port>9000</port>
-          <fps>50</fps>
+          <fps>20</fps>
           <enabled>true</enabled>
           <savepath>tmp</savepath>
           <maxframes>1</maxframes>
@@ -98,6 +100,7 @@
         <mass>1</mass>
         <pose>0 0 0 0 0 0</pose>
        </inertial>
+       <!---->
       <visual name="FRdrive_visual">
         <pose>0.599628463681001 0.373181798466416 0.108109304250646 0 0 0</pose>
         <material>
@@ -111,6 +114,7 @@
           </mesh>
         </geometry>
       </visual>
+      
     </link>
     <joint name="Body-FRdrive" type="revolute">
       <parent>Body</parent>
@@ -122,6 +126,12 @@
           <damping>1</damping>
           <friction>1</friction>
         </dynamics>
+        <!--
+        <limit>
+          <upper>1.57</upper>
+          <lower>-1.57</lower>
+        </limit>
+        -->
       </axis>
     </joint>
     <link name="FRwheel">
@@ -162,8 +172,7 @@
               <mu>1</mu>
               <mu2>1</mu2>
             </ode>
-          </friction>
-          
+          </friction>         
         </surface>
       </collision>
       <visual name="FRwheel_visual">
@@ -205,6 +214,7 @@
         <mass>1</mass>
         <pose>0 0 0 0 0 0</pose>
        </inertial>
+       <!---->
       <visual name="FLdrive_visual">
         <pose>0.599636371210317 0.373181797190707 0.6977702941153 0 0 0</pose>
         <material>
@@ -218,6 +228,7 @@
           </mesh>
         </geometry>
       </visual>
+      
     </link>
     <joint name="Body-FLdrive" type="revolute">
       <parent>Body</parent>
@@ -229,6 +240,12 @@
           <damping>1</damping>
           <friction>1</friction>
         </dynamics>
+        <!--
+        <limit>
+          <upper>1.57</upper>
+          <lower>-1.57</lower>
+        </limit>
+        -->
       </axis>
     </joint>
     <link name="FLwheel">
@@ -269,8 +286,7 @@
               <mu>1</mu>
               <mu2>1</mu2>
             </ode>
-          </friction>
-          
+          </friction>          
         </surface>
       </collision>
       <visual name="FLwheel_visual">
@@ -312,6 +328,7 @@
         <mass>1</mass>
         <pose>0 0 0 0 0 0</pose>
       </inertial>
+      <!---->
       <visual name="BRdrive_visual">
         <pose>1.1894810229398 0.373181797387641 0.10932778119649 0 0 0</pose>
         <material>
@@ -325,6 +342,7 @@
           </mesh>
         </geometry>
       </visual>
+      
     </link>
     <joint name="Body-BRdrive" type="revolute">
       <parent>Body</parent>
@@ -336,7 +354,13 @@
           <damping>1</damping>
           <friction>1</friction>
         </dynamics>
-       </axis>
+        <!--
+        <limit>
+          <upper>1.57</upper>
+          <lower>-1.57</lower>
+        </limit>
+        -->
+      </axis>
     </joint>
     <link name="BRwheel">
       <gravity>1</gravity>
@@ -377,7 +401,6 @@
               <mu2>1</mu2>
             </ode>
           </friction>
-         
         </surface>
       </collision>
       <visual name="BRwheel_visual">
@@ -419,6 +442,7 @@
         <mass>1</mass>
         <pose>0 0 0 0 0 0</pose>
        </inertial>
+       <!--
       <visual name="BLdrive_visual">
         <pose>1.18948190536721 0.37318179738922 0.699369775183744 0 0 0</pose>
         <material>
@@ -432,6 +456,7 @@
           </mesh>
         </geometry>
       </visual>
+      -->
     </link>
     <joint name="Body-BLdrive" type="revolute">
       <parent>Body</parent>
@@ -443,7 +468,13 @@
           <damping>1</damping>
           <friction>1</friction>
         </dynamics>
-        </axis>
+        <!--
+        <limit>
+          <upper>1.57</upper>
+          <lower>-1.57</lower>
+        </limit>
+        -->
+      </axis>
     </joint>
     <link name="BLwheel">
       <gravity>1</gravity>

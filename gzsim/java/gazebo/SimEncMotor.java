@@ -5,6 +5,7 @@ public class SimEncMotor {
     SimMotor motor;
     SimEncoder encoder;
     double setval=0;
+    boolean enabled=false;
     public SimEncMotor(int id){
         motor=new SimMotor(id);
         encoder=new SimEncoder(id);
@@ -14,10 +15,12 @@ public class SimEncMotor {
         motor.setInverted();
     }
     public void enable(){
+        enabled=true;
         motor.enable();
         encoder.enable();
     }
     public void disable(){
+        enabled=false;
         motor.disable();
         encoder.disable();
     }

@@ -74,7 +74,8 @@ JNIEXPORT jobjectArray JNICALL Java_utils_TagDetectorJNI_detector_1detect
       apriltag_detection_t *detect;
       zarray_get(detections, t, &detect);
 
-      jdouble corners[8]; // = new jdouble[8]{};
+      jdouble corners[8]={0}; // = new jdouble[8]{};
+      if(detect->H && detect->H->data)
       for (int i = 0; i < 4; i++){
         corners[i * 2] = detect->p[i][0];
         corners[i * 2 + 1] = detect->p[i][1];
@@ -82,7 +83,8 @@ JNIEXPORT jobjectArray JNICALL Java_utils_TagDetectorJNI_detector_1detect
       jdoubleArray carr = env->NewDoubleArray(8);
       env->SetDoubleArrayRegion( carr, 0, 8, &corners[0] );
 
-      jdouble h[9];
+      jdouble h[9]={0};
+      if(detect->H && detect->H->data)
       for (int i = 0; i < 9; i++) {
         h[i] = detect->H->data[i];
       }
@@ -91,8 +93,8 @@ JNIEXPORT jobjectArray JNICALL Java_utils_TagDetectorJNI_detector_1detect
 
       jdouble pose[3]={0};
       jdouble rot[9]={1,0,0,0,1,0,0,0,1};
-      jdouble perr=HUGE_VAL;
-      if(tw>0){
+      jdouble perr=1e6;
+      if(tw>0 && detect->H && detect->H->data){
         apriltag_pose_t pose1 = { 0 };
         apriltag_pose_t pose2 = { 0 };
         apriltag_pose_t *best_pose=0;
@@ -103,15 +105,20 @@ JNIEXPORT jobjectArray JNICALL Java_utils_TagDetectorJNI_detector_1detect
         estimate_tag_pose_orthogonal_iteration(&info, &err1, &pose1, &err2, &pose2, 1);
         perr=1;//err1<err2?err1:err2;
 
-        if (pose1.t && !pose2.t)
+        if (pose1.t && !pose2.t){
           best_pose = &pose1;
-        else if (!pose1.t && pose2.t)
+          perr=err1;
+        }
+        else if (!pose1.t && pose2.t){
           best_pose = &pose2;
+          perr=err2;
+        }
         else if(pose1.t && pose2.t){
           best_pose = err1 < err2 ? &pose1 : &pose2;
-          double emin = err1<err2?err1:err2;
-          double emax = err1>err2?err1:err2;
-          perr=emax>0?emin/emax:0;       
+          //double emin = err1<err2?err1:err2;
+          //double emax = err1>err2?err1:err2;
+          //perr=emax>0?emin/emax:0;
+          perr=err1 < err2 ? err1:err2; 
         }
         if (best_pose){
           for (int i = 0; i < 3; i++)
@@ -143,7 +150,7 @@ JNIEXPORT jobjectArray JNICALL Java_utils_TagDetectorJNI_detector_1detect
        harr,    // homog   (3x3)
        parr,    // pose-translation (3x1)
        rarr,    // pose-rotation (3x3)
-       perr     // pose error
+       1e4*perr     // pose error
       ); 
        env->SetObjectArrayElement( ret, t, obj);     
      }
