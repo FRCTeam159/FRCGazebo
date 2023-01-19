@@ -28,13 +28,13 @@
       <uri>model://SimSwerveBot</uri>
       <pose>-6.0 -1.24 0.091698 1.57159 -0.000147 3.12701</pose>
     </include>
-    <!--
+    
     <include>
       <name>RedPlatform</name>
       <uri>model://Platform</uri>
       <pose>-4.83815 -2.37108 0.01 0 0 1.57227</pose>
     </include>
-
+<!--
     <include>
       <name>BluePlatform</name>
       <uri>model://Platform</uri>
@@ -45,12 +45,12 @@
       <uri>model://RedGrid</uri>
       <pose>-7.60138 -3.98271 0.001024 1.57227 9e-06 1.57</pose>
     </include>
-<!--
+<!---->
    <include>
       <uri>model://BlueGrid</uri>
       <pose>7.5654 1.37908 0.001017 -1.57227 -6e-06 1.57</pose>
     </include>
--->
+
     <!-- Red side -->
      <include>
       <uri>model://Apriltag16_05_00001</uri>

@@ -127,12 +127,12 @@
       <axis>
         <xyz>-1 0 0</xyz>
         <dynamics>
-          <damping>0</damping>
+          <damping>1</damping>
           <friction>2</friction>
         </dynamics>
         <limit>
-          <upper>0.1</upper>
-          <lower>-0.1</lower>
+          <upper>0.2</upper>
+          <lower>-0.2</lower>
         </limit>
       </axis>
     </joint>
@@ -172,8 +172,8 @@
           </contact>
           <friction>
             <ode>
-              <mu>0</mu>
-              <mu2>0</mu2>
+              <mu>1</mu>
+              <mu2>1</mu2>
             </ode>
           </friction>
         </surface>
@@ -200,12 +200,12 @@
       <axis>
         <xyz>-1 0 0</xyz>
         <dynamics>
-          <damping>0</damping>
+          <damping>1</damping>
           <friction>2</friction>
         </dynamics>
         <limit>
-          <upper>0.1</upper>
-          <lower>-0.1</lower>
+          <upper>0.2</upper>
+          <lower>-0.2</lower>
         </limit>
       </axis>
     </joint>
@@ -244,8 +244,8 @@
           </contact>
           <friction>
             <ode>
-              <mu>0</mu>
-              <mu2>0</mu2>
+              <mu>1</mu>
+              <mu2>1</mu2>
             </ode>
           </friction>
         </surface>
@@ -271,12 +271,12 @@
       <axis>
         <xyz>0 0 1</xyz>
         <dynamics>
-          <damping>0</damping>
-          <friction>0</friction>
+          <damping>1</damping>
+          <friction>1</friction>
         </dynamics>
         <limit>
-          <upper>0.1</upper>
-          <lower>-0.1</lower>
+          <upper>0.2</upper>
+          <lower>-0.2</lower>
         </limit>
       </axis>
     </joint>
@@ -315,8 +315,8 @@
           </contact>
           <friction>
             <ode>
-              <mu>0</mu>
-              <mu2>0</mu2>
+              <mu>1</mu>
+              <mu2>1</mu2>
             </ode>
           </friction>
         </surface>
@@ -342,12 +342,12 @@
       <axis>
         <xyz>1 0 0</xyz>
         <dynamics>
-          <damping>0</damping>
-          <friction>0</friction>
+          <damping>1</damping>
+          <friction>1</friction>
         </dynamics>
         <limit>
-          <upper>0.1</upper>
-          <lower>-0.10</lower>
+          <upper>0.2</upper>
+          <lower>-0.2</lower>
         </limit>
       </axis>
     </joint>
@@ -356,5 +356,6 @@
       <parent>world</parent>
       <child>Base</child>
    </joint>
+   
   </model>
 </sdf>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sdf version="1.5">
   <model name="RedGrid">
-    <pose>0 0 -8.85402862138562E-15 0 0 0</pose>
+    <pose>0 0 0 0 0 0</pose>
    
     <link name="Body">
       <gravity>1</gravity>

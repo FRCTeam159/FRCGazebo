@@ -381,16 +381,18 @@ public class Drivetrain extends SubsystemBase {
 		//m_poseEstimator.update(m_gyro.getRotation2d(), m_positions);
 
 		// Also apply vision measurements - this must be calculated based either on latency or timestamps.
-		Pose2d vision_pose=AprilTagDetector.getLastPose();
-		pose_error=AprilTagDetector.getPoseError();
-		if(vision_pose !=null){		
-			if(use_tags && vision_confidence>0){
-				try{
-					m_poseEstimator.addVisionMeasurement(vision_pose,getClockTime()-latency);
-				}catch(Exception e){
-					System.out.println("exception caught in addVisionMeasurement:"+e);
+		if(TargetMgr.tagsPresent()){
+			Pose2d vision_pose=AprilTagDetector.getLastPose();
+			pose_error=AprilTagDetector.getPoseError();
+			if(vision_pose !=null){		
+				if(use_tags && vision_confidence>0){
+					try{
+						m_poseEstimator.addVisionMeasurement(vision_pose,getClockTime()-latency);
+					}catch(Exception e){
+						System.out.println("exception caught in addVisionMeasurement:"+e);
+					}
+					// TODO: determine actual latency from camera pose 
 				}
-				// TODO: determine actual latency from camera pose 
 			}
 		}			
 		field_pose = getPose();

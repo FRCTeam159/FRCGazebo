@@ -195,7 +195,7 @@ public class AprilTagDetector extends Thread{
           maxtime=duration>maxtime?duration:maxtime;               
         String s=String.format("%-3.1f max:%-3.1f ave:%-2.1f ms",duration,maxtime,avetime/count);
         SmartDashboard.putString("Detect", s);
-        if(!m_drivetrain.useTags()){
+        if(!TargetMgr.tagsPresent() || !m_drivetrain.useTags()){
             ouputStream.putFrame(mat);
             continue;
         }

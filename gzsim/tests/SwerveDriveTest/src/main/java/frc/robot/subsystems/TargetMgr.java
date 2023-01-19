@@ -12,7 +12,7 @@ import edu.wpi.first.math.util.Units;
 public class TargetMgr {
     static ArrayList<TagTarget> targets=new ArrayList<>();
 
-    static final public  int UNKNOWN=0;
+    static final public  int NO_TAGS=0;
     static final public  int SINGLE_TAG=1;
     static final public  int FRONT_TAGS=2;
     static final public  int PERIMETER_TAGS=3;
@@ -26,13 +26,27 @@ public class TargetMgr {
     public static Translation3d robot_offset=new Translation3d(0,0,0);
     public static Translation3d field_center=field_center_offset.times(Units.inchesToMeters(1));
 
-    static public int type=UNKNOWN;  // changed by init function
+    static public int type=FIELD_TAGS;  // changed by init function
     
     // note: MUST set init function based on "start_gazebo" script
 
     static boolean field_relative=true;
     static public void init(){
         //setFieldTargets();
+        switch(type){
+            case SINGLE_TAG:
+                setSingleTarget();
+            break;
+            case FRONT_TAGS:
+                setFrontTargets();
+            break;
+            case PERIMETER_TAGS:
+                setPerimTargets();
+            break;
+            case FIELD_TAGS:
+                setFieldTargets();
+            break;
+        }
         setSingleTarget();
     }
     static public void setFieldRelative(){
@@ -155,6 +169,7 @@ public class TargetMgr {
 
     static public int numTargets(){
         switch(type){
+            case NO_TAGS: return 0;
             case SINGLE_TAG: return 1;
             case FRONT_TAGS: return 2;
             case PERIMETER_TAGS: return 8;
@@ -169,7 +184,9 @@ public class TargetMgr {
         return targets.get(id);
     }
 
-   
+    static boolean tagsPresent(){
+        return type == NO_TAGS ?false:true;
+    }
     static public class TagTarget {
         Pose3d targetPose;
         int targetID=0;
