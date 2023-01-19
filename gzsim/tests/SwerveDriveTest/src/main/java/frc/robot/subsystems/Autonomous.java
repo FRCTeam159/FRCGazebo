@@ -17,7 +17,7 @@ public class Autonomous extends SequentialCommandGroup  {
   SendableChooser<Command> m_chooser = new SendableChooser<>();
   SendableChooser<Integer> m_auto_plot_option = new SendableChooser<>();
 
-  DriveTrain m_drive;
+  Drivetrain m_drive;
 
   public static final int CALIBRATE = 0;
   public static final int PROGRAM = 1;
@@ -33,7 +33,7 @@ public class Autonomous extends SequentialCommandGroup  {
 
   SendableChooser<Integer> m_path_chooser = new SendableChooser<Integer>();
   /** Creates a new AutoCommands. */
-  public Autonomous(DriveTrain drive) {
+  public Autonomous(Drivetrain drive) {
     m_drive=drive;
    
     m_auto_plot_option.setDefaultOption("No Plot", PlotUtils.PLOT_NONE);

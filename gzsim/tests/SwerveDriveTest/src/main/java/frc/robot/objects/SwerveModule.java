@@ -12,7 +12,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Drivetrain;
 import gazebo.SimEncMotor;
 
 public class SwerveModule {
@@ -21,8 +21,8 @@ public class SwerveModule {
   private double gazebo_scale=1;  // not sure why but grid marks in gazebo are somewhat larger than a meter ?
   private double distancePerRotation=gazebo_scale*2*kWheelRadius*Math.PI;
 
-  private static final double kModuleMaxAngularVelocity = DriveTrain.kMaxAngularSpeed; //degrees per second;
-  private static final double kModuleMaxAngularAcceleration = DriveTrain.kMaxAngularAcceleration;// degrees per second per second
+  private static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed; //degrees per second;
+  private static final double kModuleMaxAngularAcceleration = Drivetrain.kMaxAngularAcceleration;// degrees per second per second
 
   private SimEncMotor m_driveMotor;
 	private SimEncMotor m_turnMotor;

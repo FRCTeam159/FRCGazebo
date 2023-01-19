@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.objects.SwerveModule;
 import gazebo.SimGyro;
 
-public class DriveTrain extends SubsystemBase {
+public class Drivetrain extends SubsystemBase {
 
 	// square frame geometry
 
@@ -88,7 +88,7 @@ public class DriveTrain extends SubsystemBase {
 	private int cnt=0;
 
     /** Creates a new Subsystem. */
-	public DriveTrain() {
+	public Drivetrain() {
 		m_timer.start();
 		makeEstimator();
 

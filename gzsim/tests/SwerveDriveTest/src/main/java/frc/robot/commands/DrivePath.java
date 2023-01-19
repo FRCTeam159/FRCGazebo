@@ -28,7 +28,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.objects.PlotServer;
 import frc.robot.subsystems.AprilTagDetector;
 import frc.robot.subsystems.Autonomous;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.TargetMgr;
 import utils.PathData;
 import utils.PlotUtils;
@@ -49,7 +49,7 @@ public class DrivePath extends CommandBase {
       new PIDController(1, 0, 0), new PIDController(1, 0, 0), new PIDController(0.5, 0, 0));
 
   private final Timer m_timer = new Timer();
-  private final DriveTrain m_drive;
+  private final Drivetrain m_drive;
   static public boolean plot_trajectory_motion = false;
   static public boolean plot_trajectory_dynamics = false;
 
@@ -70,7 +70,7 @@ public class DrivePath extends CommandBase {
   int plot_type = utils.PlotUtils.PLOT_NONE;
   int trajectory_option = Autonomous.PROGRAM;
 
-  public DrivePath(DriveTrain drive, int opt,boolean rev) {
+  public DrivePath(Drivetrain drive, int opt,boolean rev) {
     reversed=rev;
     trajectory_option=opt;
     m_drive = drive;
@@ -86,8 +86,8 @@ public class DrivePath extends CommandBase {
     plot_type = PlotUtils.auto_plot_option;
     System.out.println("DRIVEPATH_INIT");
 
-    maxV=DriveTrain.kMaxVelocity;
-    maxA=DriveTrain.kMaxAcceleration;
+    maxV=Drivetrain.kMaxVelocity;
+    maxA=Drivetrain.kMaxAcceleration;
 
     xPath = SmartDashboard.getNumber("xPath", xPath);
     yPath = SmartDashboard.getNumber("yPath", yPath);
@@ -105,7 +105,7 @@ public class DrivePath extends CommandBase {
       return;
     }
     
-    PlotUtils.setInitialPose(m_trajectory.sample(0).poseMeters, DriveTrain.kTrackWidth);
+    PlotUtils.setInitialPose(m_trajectory.sample(0).poseMeters, Drivetrain.kTrackWidth);
     // PlotUtils.setDistanceUnits(PlotUtils.UnitType.FEET);
 
     runtime = m_trajectory.getTotalTimeSeconds();
@@ -217,7 +217,7 @@ public class DrivePath extends CommandBase {
   Trajectory pathPlannerTest() {
     try {
       PathPlannerTrajectory trajectory = PathPlanner.loadPath("swervetest", 
-        new PathConstraints(DriveTrain.kMaxVelocity,DriveTrain.kMaxAcceleration)); // max vel & accel
+        new PathConstraints(Drivetrain.kMaxVelocity,Drivetrain.kMaxAcceleration)); // max vel & accel
 
       Pose2d p0 = trajectory.getInitialPose();
 
@@ -258,7 +258,7 @@ public class DrivePath extends CommandBase {
         state.timeSeconds,
         state.poseMeters,
         m_drive.getPose(),
-        DriveTrain.kTrackWidth);
+        Drivetrain.kTrackWidth);
     pathdata.add(pd);
   }
 

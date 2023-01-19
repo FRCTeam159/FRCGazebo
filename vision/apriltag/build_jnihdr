@@ -13,8 +13,10 @@ export EJML_SIMPLE="$WPI_EJML/ejml-simple/0.41/ejml-simple-0.41.jar"
 export EJML_CORE="$WPI_EJML/ejml-core/0.41/ejml-core-0.41.jar"
 
 export GZ_BIN=$GZ_SIM/bin
-javac --source-path "$GZ_SIM/gzsim/java" \
--cp "$OPENCV_JAVA;$WPI_MATH;$EJML_DENSE;$EJML_SIMPLE;$EJML_CORE;$GZ_SIM/gzsim/java" \
--h include $GZ_SIM/gzsim/java/utils/TagDetectorJNI.java
+export APRILTAG_JAVA="$GZ_SIM/vision" 
+javac --source-path "$APRILTAG_JAVA" \
+-cp "$OPENCV_JAVA;$WPI_MATH;$EJML_DENSE;$EJML_SIMPLE;$EJML_CORE;$APRILTAG_JAVA" \
+-h include $APRILTAG_JAVA/apriltag/jni/TagDetectorJNI.java
 
 #popd
+#-h include $GZ_SIM/gzsim/java/utils/TagDetectorJNI.java

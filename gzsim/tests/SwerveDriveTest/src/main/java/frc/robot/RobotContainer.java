@@ -11,7 +11,7 @@ import frc.robot.commands.DriveWithGamepad;
 import frc.robot.objects.PlotServer;
 import frc.robot.subsystems.AprilTagDetector;
 import frc.robot.subsystems.Autonomous;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Drivetrain;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -21,7 +21,7 @@ import frc.robot.subsystems.DriveTrain;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final DriveTrain m_drivetrain = new DriveTrain();
+  private final Drivetrain m_drivetrain = new Drivetrain();
   private final Autonomous m_autonomous = new Autonomous(m_drivetrain);
   private final XboxController m_controller = new XboxController(0);
   private final AprilTagDetector m_detector= new AprilTagDetector(m_drivetrain);

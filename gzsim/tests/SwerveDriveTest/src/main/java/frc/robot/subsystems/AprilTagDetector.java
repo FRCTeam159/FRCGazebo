@@ -22,8 +22,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.objects.Camera;
-import utils.TagDetectorJNI;
-import utils.TagResult;
+import apriltag.jni.TagDetectorJNI;
+import apriltag.jni.TagResult;
 import frc.robot.objects.AprilTag;
 
 public class AprilTagDetector extends Thread{
@@ -43,7 +43,7 @@ public class AprilTagDetector extends Thread{
 
   protected long wpi_detector=0;
 
-  DriveTrain m_drivetrain;
+  Drivetrain m_drivetrain;
 
   static double pose_err=2;
   static AprilTag target_tag=null;
@@ -58,7 +58,7 @@ public class AprilTagDetector extends Thread{
   static double avetime=0;
   static int count=0;
   static String  test_image=System.getenv("GZ_SIM")+"/docs/apriltag_0_test.jpg";
-  public AprilTagDetector(DriveTrain drivetrain) {
+  public AprilTagDetector(Drivetrain drivetrain) {
     m_drivetrain=drivetrain;
     makeDetector();
 

@@ -1,6 +1,6 @@
 // AprilTag Detector
 
-#include "utils_TagDetectorJNI.h"
+#include "apriltag_jni_TagDetectorJNI.h"
 #include "TagDetector.h"
 
 jfieldID getPtrFieldId(JNIEnv * env, jobject obj){
@@ -22,11 +22,11 @@ jfieldID getPtrFieldId(JNIEnv * env, jobject obj){
 }
 
 /*
- * Class:     TagDetectorJNI
+ * Class:     apriltag_jni_TagDetectorJNI
  * Method:    detector_create
  * Signature: ()J
  */
-JNIEXPORT void JNICALL Java_utils_TagDetectorJNI_detector_1create
+JNIEXPORT void JNICALL Java_apriltag_jni_TagDetectorJNI_detector_1create
   (JNIEnv *env, jobject obj, jint type){
     jfieldID fld=getPtrFieldId(env, obj);
     TagDetector *cobj= new TagDetector(type);
@@ -34,11 +34,11 @@ JNIEXPORT void JNICALL Java_utils_TagDetectorJNI_detector_1create
   }
 
 /*
- * Class:     utils_TagDetectorJNI
+ * Class:     apriltag_jni_TagDetectorJNI
  * Method:    detector_detect
- * Signature: (JIIDDDDD)[Lutils/TagResult;
+ * Signature: (JIIDDDDD)[Lapriltag/jni/TagResult;
  */
-JNIEXPORT jobjectArray JNICALL Java_utils_TagDetectorJNI_detector_1detect
+JNIEXPORT jobjectArray JNICALL Java_apriltag_jni_TagDetectorJNI_detector_1detect
   (JNIEnv *env, jobject obj, jlong data, jint rows, jint cols, jdouble tw, jdouble fx, jdouble fy, jdouble cx, jdouble cy)
   {
     TagDetector *detector = (TagDetector *)env->GetLongField(obj, getPtrFieldId(env, obj));
@@ -50,7 +50,7 @@ JNIEXPORT jobjectArray JNICALL Java_utils_TagDetectorJNI_detector_1detect
 
     zarray_t *detections = detector->detect((uint8_t *)data, rows, cols);
 
-    jclass jcls = env->FindClass("utils/TagResult");
+    jclass jcls = env->FindClass("apriltag/jni/TagResult");
     if(!jcls){
       std::cout<<"error: could not find TagResult class"<<std::endl;
       return 0;
@@ -159,11 +159,11 @@ JNIEXPORT jobjectArray JNICALL Java_utils_TagDetectorJNI_detector_1detect
   }
 
  /*
- * Class:     utils_TagDetectorJNI
+ * Class:     apriltag_jni_TagDetectorJNI
  * Method:    detector_image_test
  * Signature: (JIIZZ)V
  */
-JNIEXPORT void JNICALL Java_utils_TagDetectorJNI_detector_1image_1test
+JNIEXPORT void JNICALL Java_apriltag_jni_TagDetectorJNI_detector_1image_1test
   (JNIEnv *env, jobject obj, jlong data, jint rows, jint cols, jboolean pose, jboolean timing){
 
   TagDetector * detector = (TagDetector *) env->GetLongField(obj, getPtrFieldId(env, obj));
@@ -180,7 +180,7 @@ JNIEXPORT void JNICALL Java_utils_TagDetectorJNI_detector_1image_1test
  * Method:    detector_destroy
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_utils_TagDetectorJNI_detector_1destroy
+JNIEXPORT void JNICALL Java_apriltag_jni_TagDetectorJNI_detector_1destroy
   (JNIEnv *env, jobject obj){
   //std::cout<<"destroy called"<<std::endl;
 

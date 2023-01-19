@@ -11,7 +11,8 @@ def ROBOT_MAIN_CLASS = "frc.robot.Main"
 sourceSets {
     main {
         java{
-            srcDirs '../../java'           
+            srcDirs '../../java'
+            srcDirs '../../../vision'        
         }
     }
 }
