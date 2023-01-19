@@ -1,0 +1,16 @@
+material Apriltag16_05_00008
+{
+  technique
+  {
+    pass
+    {
+      lighting off
+      texture_unit
+      {
+        texture tag16_05_00008.png
+        scale 1.0 1.0
+      }
+    }
+  }
+}
+

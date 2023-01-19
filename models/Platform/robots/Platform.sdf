@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.5">
+  <model name="Platform">
+    <pose>0 0 0.01 0 0 0</pose>
+    
+    <link name="Base">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>1.09057560773066 -0.413783811962307 0.0567361417216285 1.5707963267949 0.00309160062577446 1.5707963267949</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>14.9822887719058</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>16.67617612462</ixx>
+          <ixy>0.0120106766561673</ixy>
+          <ixz>2.87072734987751E-05</ixz>
+          <iyy>17.7287649149448</iyy>
+          <iyz>6.09055635468897E-05</iyz>
+          <izz>1.08633287014025</izz>
+        </inertia>
+      </inertial>
+      <!--
+      <collision name="Base_collision">
+        <pose>2.64292440606782 -0.156089241339706 -0.700962643174423 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Platform/meshes/Base_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      -->
+      <visual name="Base_visual">
+        <pose>2.64292440606782 -0.156089241339706 -0.700962643174423 0 0 0</pose>
+        <material>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Platform/meshes/Base.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <link name="Hinge">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>1.0900817965929 -0.461103771278033 0.166757285630119 1.5707963267949 0.00309160062577446 1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <!--
+      <inertial>
+        <mass>1.25899603619787</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>1.05230278666619</ixx>
+          <ixy>7.75916213113059E-33</ixy>
+          <ixz>5.5597686120644E-17</ixz>
+          <iyy>1.05230278666619</iyy>
+          <iyz>4.85528915565139E-16</iyz>
+          <izz>7.86585061043365E-31</izz>
+        </inertia>
+      </inertial>
+      -->
+      <!--
+      <collision name="Hinge_collision">
+        <pose>2.69058428013728 -0.265963565275089 -0.700468832036663 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Platform/meshes/Hinge_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      -->
+      <visual name="Hinge_visual">
+        <pose>2.69058428013728 -0.265963565275089 -0.700468832036663 0 0 0</pose>
+        <material>
+          <ambient>1 0 0 1</ambient>
+          <diffuse>1 0 0 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Platform/meshes/Hinge.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <!---->
+    <joint name="Base-Hinge" type="revolute">
+      <parent>Base</parent>
+      <child>Hinge</child>
+      <pose>0.0772558846102913 0.000153975176363119 -0.913842503100611 0 1.56206968053491 3.14159265358979</pose>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>2</friction>
+        </dynamics>
+        <limit>
+          <upper>0.1</upper>
+          <lower>-0.1</lower>
+        </limit>
+      </axis>
+    </joint>
+    
+    <link name="Top">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>1.09008330005517 -0.458405938602505 0.213422383069409 1.5707963267949 0.00309160062577446 1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>50.2802640058629</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>10.7299363285689</ixx>
+          <ixy>0.00161282718868719</ixy>
+          <ixz>2.13660175040972E-06</ixz>
+          <iyy>10.7283958539726</iyy>
+          <iyz>3.53631584162906E-06</iyz>
+          <izz>0.0254618654690931</izz>
+        </inertia>
+      </inertial>
+      <collision name="Top_collision">
+        <pose>2.6880307299693 -0.312636780310088 -0.700470335498931 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Platform/meshes/Top_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="Top_visual">
+        <pose>2.6880307299693 -0.312636780310088 -0.700470335498931 0 0 0</pose>
+        <material>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Platform/meshes/Top.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <!---->
+    <joint name="Hinge-Top" type="revolute">
+      <parent>Hinge</parent>
+      <child>Top</child>
+      <pose>-0.059917096903956 -0.0469105249304237 -0.9138 0 1.56206968053494 3.14159265358979</pose>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>2</friction>
+        </dynamics>
+        <limit>
+          <upper>0.1</upper>
+          <lower>-0.1</lower>
+        </limit>
+      </axis>
+    </joint>
+    <link name="LeftRamp">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>1.13245202674839 0.312535764823756 0.114507074595894 1.5707963267949 0.00309160062577446 1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>10.5510844478969</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>4.04395846925381</ixx>
+          <ixy>0.00331116718255867</ixy>
+          <ixz>0.0126188036828614</ixz>
+          <iyy>4.03994896830127</iyy>
+          <iyz>0.0073172476715813</iyz>
+          <izz>0.00886414771550631</izz>
+        </inertia>
+      </inertial>
+      <collision name="LeftRamp_collision">
+        <pose>1.91678690472593 -0.216105384608107 -0.742839062192159 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Platform/meshes/LeftRamp_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="LeftRamp_visual">
+        <pose>1.91678690472593 -0.216105384608107 -0.742839062192159 0 0 0</pose>
+        <material>
+          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Platform/meshes/LeftRamp.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Top-LeftRamp" type="revolute">
+      <parent>Top</parent>
+      <child>LeftRamp</child>
+      <pose>-0.154653083485551 0.107971519839624 0.202522990910475 0 0 0</pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+        </dynamics>
+        <limit>
+          <upper>0.1</upper>
+          <lower>-0.1</lower>
+        </limit>
+      </axis>
+    </joint>
+    <link name="RightRamp">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>1.04771156678907 -1.22776216958356 0.112921427029095 1.5707963267949 0.00309160062577446 1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>10.5510844343956</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>4.04401277023075</ixx>
+          <ixy>0.00327767216370234</ixy>
+          <ixz>0.012558066039214</ixz>
+          <iyy>4.03989465520242</iyy>
+          <iyz>0.00742100324641464</iyz>
+          <izz>0.00886414766242897</izz>
+        </inertia>
+      </inertial>
+      <collision name="RightRamp_collision">
+        <pose>3.45707257587837 -0.20975776614705 -0.658098602232832 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Platform/meshes/RightRamp_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="RightRamp_visual">
+        <pose>3.45707257587837 -0.20975776614705 -0.658098602232832 0 0 0</pose>
+        <material>
+          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Platform/meshes/RightRamp.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Top-RightRamp" type="revolute">
+      <parent>Top</parent>
+      <child>RightRamp</child>
+      <pose>0.153754135614118 0.109242867751985 2.95811877781826E-06 0 4.71240772089214 6.28318458562932</pose>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+        </dynamics>
+        <limit>
+          <upper>0.1</upper>
+          <lower>-0.10</lower>
+        </limit>
+      </axis>
+    </joint>
+    <!---->
+    <joint name="Field-World" type="fixed">
+      <parent>world</parent>
+      <child>Base</child>
+   </joint>
+  </model>
+</sdf>
