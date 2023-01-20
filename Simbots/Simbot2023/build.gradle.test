@@ -1,0 +1,164 @@
+
+plugins {
+    id "java"
+    id "edu.wpi.first.GradleRIO" version "2022.1.1"
+
+    id "cpp"
+    //id "google-test-test-suite"
+    id 'edu.wpi.first.GradleVsCode' version '0.8.0'
+    id "edu.wpi.first.GradleJni" version "1.0.0"
+    //id "edu.wpi.first.GradleRIO" version "2023.1.1-beta-2"
+    //id "edu.wpi.first.GradleRIO" version "2022.4.1"
+}
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+def ROBOT_MAIN_CLASS = "frc.robot.Main"
+
+sourceSets {
+    main {
+        java{
+            srcDirs '../../java'           
+        }
+    }
+}
+
+ext {
+    wpilibVersion = "2022.1.1"
+    opencvVersion = "4.5.2-1"
+    joglVersion = "2.4.0-rc-20200307"
+    
+    //if(project.hasProperty('pionly')) {
+    //    jniPlatforms = ['linuxraspbian']
+    //} else if(project.hasProperty('winonly')) {
+        jniPlatforms = ['windowsx86-64']
+    //} else {
+    //    jniPlatforms = ['linuxaarch64bionic', 'linuxraspbian', 'linuxx86-64', 'osxx86-64', 'windowsx86-64']
+    //}
+
+    println("Building for archs " + jniPlatforms)
+}
+
+// Set up exports properly
+nativeUtils {
+    exportsConfigs {
+        // Main library is just default empty. This will export everything
+        apriltagjni {
+        }
+    }
+}
+model {
+    repositories {
+        libs(PrebuiltLibraries) {
+            apriltagjni {
+                binaries.withType(SharedLibraryBinary) {
+                    def DllPath = "../../../vision/apriltag/lib"
+                    sharedLibraryFile = file("${DllPath}")
+                }
+            }
+        }
+    }
+    components {
+        apriltagjni(JniNativeLibrarySpec) {
+            targetPlatform wpi.platforms.desktop
+            //javaCompileTasks << compileJava // set javaCompileTasks to any java compile tasks that contain your JNI classes. It is a list of tasks
+            nativeUtils.useRequiredLibrary(it, "wpilib_shared")
+           //binaries.all {
+                // Don't build static libraries
+            //    it.buildable = false
+            //   useLibrary(it, "wpilibjni_common")
+            //}
+        }
+    }
+}
+
+// Define my targets (RoboRIO) and artifacts (deployable files)
+// This is added by GradleRIO's backing project DeployUtils.
+deploy {
+    targets {
+        roborio(getTargetTypeClass('RoboRIO')) {
+            // Team number is loaded either from the .wpilib/wpilib_preferences.json
+            // or from command line. If not found an exception will be thrown.
+            // You can use getTeamOrDefault(team) instead of getTeamNumber if you
+            // want to store a team number in this file.
+            team = project.frc.getTeamNumber()
+            debug = project.frc.getDebugOrDefault(false)
+
+            artifacts {
+                // First part is artifact name, 2nd is artifact type
+                // getTargetTypeClass is a shortcut to get the class type using a string
+
+                frcJava(getArtifactTypeClass('FRCJavaArtifact')) {
+                }
+
+                // Static files artifact
+                frcStaticFileDeploy(getArtifactTypeClass('FileTreeArtifact')) {
+                    files = project.fileTree('src/main/deploy')
+                    directory = '/home/lvuser/deploy'
+                }
+            }
+        }
+    }
+}
+
+def deployArtifact = deploy.targets.roborio.artifacts.frcJava
+
+// Set to true to use debug for JNI.
+wpi.java.debugJni = true
+
+// Set this to true to enable desktop support.
+def includeDesktopSupport = true
+
+// Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
+// Also defines JUnit 4.
+dependencies {
+    implementation wpi.java.deps.wpilib()
+    implementation wpi.java.vendor.java()
+
+    roborioDebug wpi.java.deps.wpilibJniDebug(wpi.platforms.roborio)
+    roborioDebug wpi.java.vendor.jniDebug(wpi.platforms.roborio)
+
+    roborioRelease wpi.java.deps.wpilibJniRelease(wpi.platforms.roborio)
+    roborioRelease wpi.java.vendor.jniRelease(wpi.platforms.roborio)
+
+    nativeDebug wpi.java.deps.wpilibJniDebug(wpi.platforms.desktop)
+    nativeDebug wpi.java.vendor.jniDebug(wpi.platforms.desktop)
+    simulationDebug wpi.sim.enableDebug()
+
+    nativeRelease wpi.java.deps.wpilibJniRelease(wpi.platforms.desktop)
+    nativeRelease wpi.java.vendor.jniRelease(wpi.platforms.desktop)
+    simulationRelease wpi.sim.enableRelease()
+
+    //jniPlatforms.each { implementation "edu.wpi.first.ntcore:ntcore-jni:$wpilibVersion:$it" }
+    //jniPlatforms.each { implementation "edu.wpi.first.hal:hal-jni:$wpilibVersion:$it"}
+
+    //nativeRelease apriltagjni.dll
+
+    testImplementation 'junit:junit:4.13.1'
+
+    //testImplementation 'junit:junit:4.12'
+}
+
+// Simulation configuration (e.g. environment variables).
+wpi.sim.addGui().defaultEnabled = true
+wpi.sim.addDriverstation()
+
+// Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
+// in order to make them all available at runtime. Also adding the manifest so WPILib
+// knows where to look for our Robot Class.
+jar {
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+// Configure jar and deploy tasks
+deployArtifact.jarTask = jar
+wpi.java.configureExecutableTasks(jar)
+wpi.java.configureTestTasks(test)
+
+// Configure string concat to always inline compile
+tasks.withType(JavaCompile) {
+    options.compilerArgs.add '-XDstringConcat=inline'
+}

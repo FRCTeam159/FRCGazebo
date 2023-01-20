@@ -1,24 +1,18 @@
 
-package apriltag.jni;
+package frc.robot.objects;
 
 import org.opencv.core.Point;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.CoordinateSystem;
+import edu.wpi.first.apriltag.jni.DetectionResult;
 import edu.wpi.first.math.MatBuilder;
-import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
-import edu.wpi.first.math.numbers.N3;
+import apriltag.jni.TagResult;
 
-import org.ejml.data.DMatrixRMaj;
-import org.ejml.dense.row.MatrixFeatures_DDRM;
-import org.ejml.dense.row.factory.DecompositionFactory_DDRM;
-import org.ejml.simple.SimpleMatrix;
-
-public class TagResult {
+public class AprilTag {
     int id;
     int tag_id;
     double margin;
@@ -30,88 +24,47 @@ public class TagResult {
 
     Transform3d poseResult;
 
-    public TagResult(
-            int id,
-            int tag_id,
-            double margin,
-            double centerX,
-            double centerY,
-            double[] cdata,
-            double[] hdata,
-            double[] pdata,
-            double[] rdata,
-            double perr) {
-        this.id = id;
-        this.tag_id = tag_id;
-        this.margin = margin;
-        this.centerX = centerX;
-        this.centerY = centerY;
-        corners = new double[4][2];
-        homog = new double[3][3];
-        rotation = new double[3][3];
-        int dcnt = 0;
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 2; j++) {
-                corners[i][j] = cdata[dcnt++];
-            }
-        }
-        dcnt = 0;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                homog[i][j] = hdata[dcnt++];
-            }
-        }
-        Matrix<N3, N3> rmat = new Matrix<N3, N3>(Nat.N3(), Nat.N3());
-        dcnt = 0;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                rmat.set(i, j, rdata[dcnt++]);
-            }
-        }
-      
-        pose_err = perr;
-        Rotation3d pose_rotation=new Rotation3d(orthogonalizeRotationMatrix(new MatBuilder<>(Nat.N3(), Nat.N3()).fill(rdata)));
-        poseResult=new Transform3d(
-            new Translation3d(pdata[0], pdata[1], pdata[2]),
-            pose_rotation);
-        //System.out.println(poseResult);   
+    public AprilTag(DetectionResult det){
+        double[] c=det.getCorners();
+        int k=0;
+        corners=new double[4][2];
+        for(int i=0;i<4;i++)
+        for(int j=0;j<2;j++)
+            corners[i][j]=c[k++];
+        tag_id=det.getId();
+        margin=det.getDecisionMargin();
+        centerX=det.getCenterX();
+        centerY=det.getCenterY();
+        c=det.getHomography();
+        k=0;
+        homog=new double[3][3];
+        for(int i=0;i<3;i++)
+        for(int j=0;j<3;j++)
+          homog[i][j]=c[k++];
+
+        Transform3d pose1=det.getPoseResult1();
+        Transform3d pose2=det.getPoseResult2();
+        double perr1=det.getError1();
+        double perr2=det.getError2();
+
+        poseResult=perr1<perr2?pose1:pose2;
+
+        pose_err=det.getPoseAmbiguity();
+
+    }
+    public AprilTag(TagResult t){
+        corners=t.getCorners();
+        id=t.getId();
+        tag_id=t.getTagId();
+        margin=t.getDecisionMargin();
+        centerX=t.getCenterX();
+        centerY=t.getCenterY();
+        homog=t.getHomog();
+        //rotation=t.getRotation();
+        pose_err=t.getPoseError();
+        poseResult=t.getPoseTransform();
     }
     
-    /**
-     * from: org.photonvision.common.util.math
-     * Orthogonalize an input matrix using a QR decomposition. QR decompositions
-     * decompose a
-     * rectangular matrix 'A' such that 'A=QR', where Q is the closest orthogonal
-     * matrix to the input,
-     * and R is an upper triangular matrix.
-     */
-    public static Matrix<N3, N3> orthogonalizeRotationMatrix(Matrix<N3, N3> input) {
-        var a = DecompositionFactory_DDRM.qr(3, 3);
-        if (!a.decompose(input.getStorage().getDDRM())) {
-            // best we can do is return the input
-            return input;
-        }
-
-        // Grab results (thanks for this _great_ api, EJML)
-        var Q = new DMatrixRMaj(3, 3);
-        var R = new DMatrixRMaj(3, 3);
-        a.getQ(Q, false);
-        a.getR(R, false);
-
-        // Fix signs in R if they're < 0 so it's close to an identity matrix
-        // (our QR decomposition implementation sometimes flips the signs of columns)
-        for (int colR = 0; colR < 3; ++colR) {
-            if (R.get(colR, colR) < 0) {
-                for (int rowQ = 0; rowQ < 3; ++rowQ) {
-                    Q.set(rowQ, colR, -Q.get(rowQ, colR));
-                }
-            }
-        }
-        if (!MatrixFeatures_DDRM.isOrthogonal(Q, 1e-9)) // added this test
-            return input;
-        return new Matrix<>(new SimpleMatrix(Q));
-    }
-
     /**
      * Photonvision: All our solvepnp code returns a tag with X left, Y up, and Z out of the tag To better match
      * wpilib, we want to apply another rotation so that we get Z up, X out of the tag, and Y to the
@@ -187,9 +140,6 @@ public class TagResult {
         return homog;
     }
 
-    public double[][] getRotation() {
-        return rotation;
-    }
     public Transform3d getPoseTransform() {
         return poseResult;
     }
