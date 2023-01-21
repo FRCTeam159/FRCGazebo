@@ -22,17 +22,18 @@ public class TargetMgr {
 
     public static Translation3d field_center_offset=new Translation3d(325.4,157,0); 
     public static Translation3d robot_offset_tag_7=new Translation3d (89,108,15);
+    public static Rotation3d robot_rotation_tag7=new Rotation3d(0,0,Math.toRadians(180.0));
 
     public static Translation3d robot_offset=new Translation3d(0,0,0);
+    public static Rotation3d robot_rotation=new Rotation3d(0,0,0);
     public static Translation3d field_center=field_center_offset.times(Units.inchesToMeters(1));
 
-    static public int type=FIELD_TAGS;  // changed by init function
+    static int type=FIELD_TAGS;  // changed by init function
     
     // note: MUST set init function based on "start_gazebo" script
 
     static boolean field_relative=true;
     static public void init(){
-        //setFieldTargets();
         switch(type){
             case SINGLE_TAG:
                 setSingleTarget();
@@ -49,11 +50,8 @@ public class TargetMgr {
         }
         setSingleTarget();
     }
-    static public void setFieldRelative(){
-        field_relative=true;
-    }
-    static public void setRobotRelative(){
-        field_relative=false;
+    static public void setFieldRelative(boolean b){
+        field_relative=b;
     }
 
     static boolean fieldRelative(){
@@ -63,8 +61,7 @@ public class TargetMgr {
         //if(!field_relative)
             return robotpose;     
     }
-    static public void setFieldTargets(){
-        type=FIELD_TAGS;
+    static void setFieldTargets(){
         // data taken from inset in field drawing 5 of 7
 
         Translation3d tags[]={
@@ -85,6 +82,7 @@ public class TargetMgr {
         // for display and simulation translate tags to field center
        
         robot_offset=robot_offset_tag_7.times(Units.inchesToMeters(1));
+        robot_rotation=robot_rotation_tag7; // 180
 
         System.out.println("Robot:"+robot_offset);
 
@@ -93,9 +91,10 @@ public class TargetMgr {
             double x=tag.getX();
             double y=tag.getY();
             double z=tag.getZ();
-            double angle=i>3?90:270;
-            angle=Math.toRadians(angle);
-            TagTarget tt=new TagTarget(i+1,x,y,z,angle);
+            double tag_angle=i>3?Math.toRadians(180):0; // looking forward
+            Rotation3d tag_rotation=new Rotation3d(0,0,tag_angle);
+            Rotation3d robot_angle=robot_rotation.rotateBy(tag_rotation);
+            TagTarget tt=new TagTarget(i+1,x,y,z,robot_angle.getZ());
             targets.add(tt); 
         }
         System.out.println("tag offsets from FRC origin");
@@ -121,8 +120,13 @@ public class TargetMgr {
     static Translation3d robotToFRC(Translation3d loc){
         return robot_offset.minus(loc);
     }
-    static Translation2d robotToFRC(Translation2d loc){
-        return robot_offset.toTranslation2d().minus(loc);
+    static Translation2d robotToFRC(Translation2d loc, int tag_id){
+        TagTarget target=getTarget(tag_id);
+        Translation3d tag=robotToFRC(target.getTranslation());
+        Translation2d pos=tag.toTranslation2d().plus(loc);
+        //System.out.println(tag_id+" "+pos+" "+tag+" "+loc);
+
+        return pos;
     }
   
     static Translation3d fromField(Translation3d tt){
@@ -133,22 +137,19 @@ public class TargetMgr {
         //Translation3d atag = tt.times(Units.inchesToMeters(1));
         return tt.minus(field_center.toTranslation2d());
     }
-    static public void setSingleTarget(){
-        type=SINGLE_TAG;
+    static void setSingleTarget(){
         double dx=8;
         double dz=0.25;
         targets.add(new TagTarget(0,dx,0,dz,0));  // left
     }
-    static public void setFrontTargets(){
-        type=FRONT_TAGS;
+    static void setFrontTargets(){
         double dx=8;
         double dy=2;
         double dz=0.25;
         targets.add(new TagTarget(0,dx,-dy,dz,0));  // left
         targets.add(new TagTarget(0,dx,dy,dz,0));   // right
     }
-    static public void setPerimTargets(){
-        type=PERIMETER_TAGS;
+    static void setPerimTargets(){
         // set one target on all corners and sides of typical FRC field
         double dx=8.5;
         double dy=4.26;
@@ -181,6 +182,7 @@ public class TargetMgr {
         int id=(type==FIELD_TAGS)?i-1:i;
         if(id<0 || id >targets.size())
             return null;
+        //System.out.println(i+" "+id+" "+type);
         return targets.get(id);
     }
 

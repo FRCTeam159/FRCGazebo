@@ -1,13 +1,16 @@
 
 package frc.robot.objects;
 
+import javax.xml.crypto.dsig.Transform;
+
 import org.opencv.core.Point;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.CoordinateSystem;
-import edu.wpi.first.apriltag.jni.DetectionResult;
+import edu.wpi.first.apriltag.AprilTagDetection;
+
 import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Nat;
 import apriltag.jni.TagResult;
@@ -19,12 +22,11 @@ public class AprilTag {
     double centerX, centerY;
     double[][] corners;
     double[][] homog;
-    double[][] rotation;
     double pose_err;
 
     Transform3d poseResult;
 
-    public AprilTag(DetectionResult det){
+    public AprilTag(AprilTagDetection det,Transform3d pose){
         double[] c=det.getCorners();
         int k=0;
         corners=new double[4][2];
@@ -42,15 +44,8 @@ public class AprilTag {
         for(int j=0;j<3;j++)
           homog[i][j]=c[k++];
 
-        Transform3d pose1=det.getPoseResult1();
-        Transform3d pose2=det.getPoseResult2();
-        double perr1=det.getError1();
-        double perr2=det.getError2();
-
-        poseResult=perr1<perr2?pose1:pose2;
-
-        pose_err=det.getPoseAmbiguity();
-
+        poseResult=pose;
+        // pose_err=det.getPoseAmbiguity();
     }
     public AprilTag(TagResult t){
         corners=t.getCorners();
@@ -189,9 +184,6 @@ public class AprilTag {
     public void print() {
         String str = toString();
         System.out.println(str);
-        //System.out.println(getPoseTransform());
-        //if(poseResult !=null){
-        //Pose3d pose=getPose();
-        //System.out.println(getPose()); 
+    
     }
 }

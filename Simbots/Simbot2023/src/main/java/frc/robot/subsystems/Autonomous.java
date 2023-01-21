@@ -49,9 +49,9 @@ public class Autonomous extends SequentialCommandGroup  {
     //SmartDashboard.putBoolean("reversed", reversed);
     //SmartDashboard.putBoolean("debug", false);
 
-    SmartDashboard.putNumber("xPath", 5);
-    SmartDashboard.putNumber("yPath", -3);
-    SmartDashboard.putNumber("rPath", 30.0);
+    SmartDashboard.putNumber("xPath", -2);
+    SmartDashboard.putNumber("yPath", 0);
+    SmartDashboard.putNumber("rPath", 0);
    
 		SmartDashboard.putData(m_path_chooser);
     SmartDashboard.putData(m_auto_plot_option);

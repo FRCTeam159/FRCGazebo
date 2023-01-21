@@ -65,7 +65,7 @@ public class Drivetrain extends SubsystemBase {
 	public static double kMaxAngularSpeed = Math.toRadians(360); // degrees per second
 	public static double kMaxAngularAcceleration = Math.toRadians(90);// degrees per second per second
 
-	boolean enable_gyro = true;
+	boolean field_oriented = true;
 	double last_heading = 0;
 	Pose2d field_pose;
 
@@ -94,7 +94,7 @@ public class Drivetrain extends SubsystemBase {
 
 		TargetMgr.init();
 		simulation = new Simulation(this);
-		SmartDashboard.putBoolean("Field Oriented", enable_gyro);
+		SmartDashboard.putBoolean("Field Oriented", field_oriented);
 		SmartDashboard.putNumber("maxV", kMaxVelocity);
 		SmartDashboard.putNumber("maxA", kMaxAcceleration);
 		SmartDashboard.putBoolean("Use Tags", use_tags);
@@ -215,11 +215,12 @@ public class Drivetrain extends SubsystemBase {
 	}
 
 	public void setFieldOriented(boolean t){
-		m_gyro.setEnabled(t);
+		//m_gyro.setEnabled(t);
+		field_oriented=t;
 	}
 
-	public boolean isGyroEnabled(){
-		return enable_gyro;
+	public boolean isFieldOriented(){
+		return field_oriented;
 	}
 	public double getHeading() {
 		return getRotation2d().getDegrees();
@@ -276,7 +277,8 @@ public class Drivetrain extends SubsystemBase {
 		SmartDashboard.putNumber("X:", t.getX());
 		SmartDashboard.putNumber("Y:", t.getY());
 
-		enable_gyro = SmartDashboard.getBoolean("Field Oriented", enable_gyro);
+		field_oriented = SmartDashboard.getBoolean("Field Oriented", field_oriented);
+		TargetMgr.setFieldRelative(field_oriented);
 		kMaxVelocity=SmartDashboard.getNumber("maxV", kMaxVelocity);
 		kMaxAcceleration=SmartDashboard.getNumber("maxA", kMaxAcceleration);
 
@@ -382,8 +384,8 @@ public class Drivetrain extends SubsystemBase {
 
 		// Also apply vision measurements - this must be calculated based either on latency or timestamps.
 		if(TargetMgr.tagsPresent()){
-			Pose2d vision_pose=AprilTagDetector.getLastPose();
-			pose_error=AprilTagDetector.getPoseError();
+			Pose2d vision_pose=TagDetector.getLastPose();
+			pose_error=TagDetector.getPoseError();
 			if(vision_pose !=null){		
 				if(use_tags && vision_confidence>0){
 					try{
