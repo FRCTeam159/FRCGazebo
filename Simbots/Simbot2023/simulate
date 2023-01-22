@@ -11,7 +11,7 @@
 # - needed for loadlibrary (apriltagsim)
 
 export HALSIM_EXTENSIONS='build\jni\release\halsim_ds_socket.dll;build\jni\release\halsim_gui.dll;'
-export PATH='build\jni\release;C:\WINDOWS\system32\'
+export PATH='build\jni\release;C:\WINDOWS\system32\;/usr/bin/'
 
 #java.exe -agentlib:jdwp=transport=dt_socket,server=n,suspend=y,address=localhost:54289 @C:\\Users\\Alpiner\\AppData\\Local\\Temp\\cp_7ontt6dncyfq72iuzvf0r9mhf.argfile frc.robot.Main 
 

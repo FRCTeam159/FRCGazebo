@@ -1,4 +1,5 @@
 #!/bin/bash
+mkdir -p camera/build
 cd camera/build
 echo "configuring"
 cmake ..
