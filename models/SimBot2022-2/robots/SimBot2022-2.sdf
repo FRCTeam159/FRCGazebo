@@ -86,6 +86,10 @@
             <uri>model://SimBot2022-2/meshes/shooter_col.STL</uri>
           </mesh>
         </geometry>
+        <ode>
+            <max_vel>0</max_vel>
+            <min_depth>0.001</min_depth>
+       </ode>
         <!--
         <surface>
            <ode>       
@@ -185,10 +189,7 @@
       <self_collide>0</self_collide>
       <pose>-0.469753566757535 -0.0108552498965759 0.120727981986896 1.5707963267949 0 -1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
-      <velocity_decay>
-        <linear>0</linear>
-        <angular>0</angular>
-      </velocity_decay>
+     
       <inertial>
         <mass>0.185936472459736</mass>
         <pose>0 0 0 0 0 0</pose>
@@ -225,8 +226,8 @@
          -->
           <friction>
             <ode>
-              <mu>5</mu>
-              <mu2>5</mu2>
+              <mu>1</mu>
+              <mu2>1</mu2>
             </ode>
           </friction>
         </surface>
@@ -251,10 +252,15 @@
       <pose>0 0 0 0 0 0</pose>
       <axis>
         <xyz>1 0 0</xyz>
+        <!---->
         <dynamics>
-          <damping>1</damping>
-          <friction>1</friction>
+          <damping>0.5</damping>
+          <friction>0</friction>
         </dynamics>
+        
+        <limit>
+          <effort>200</effort>
+        </limit>
        
       </axis>
     </joint>
@@ -330,10 +336,15 @@
       <pose>0 0 0 0 0 0</pose>
       <axis>
         <xyz>1 0 0</xyz>
+        <!---->
         <dynamics>
-          <damping>1</damping>
-          <friction>1</friction>
+          <damping>0.5</damping>
+          <friction>0</friction>
         </dynamics>
+        
+          <limit>
+          <effort>400</effort>
+        </limit>
         
       </axis>
     </joint>
@@ -872,16 +883,16 @@
       <axis>
         <xyz>-1 0 0</xyz>
         <dynamics>
-          <damping>2</damping>
-          <friction>1</friction>
+          <damping>0.5</damping>
+          <friction>0</friction>
         </dynamics>
         
         <limit>
-          <upper>0.05</upper>
+          <upper>0.03</upper>
           <lower>0</lower>
-          <!--
+          <!---->
           <effort>80</effort>
-          -->
+          
         </limit>
         
       </axis>
