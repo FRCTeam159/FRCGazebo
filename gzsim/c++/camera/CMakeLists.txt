@@ -11,19 +11,19 @@ find_package(gazebo REQUIRED)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
 
 include_directories(${GAZEBO_INCLUDE_DIRS} . )
-include_directories($ENV{MY_GAZEBO}/wpilib/includes)
+include_directories($ENV{GZ_SIM}/wpilib/includes)
 
 set(CV_LIBS 
-    $ENV{MY_GAZEBO}/wpilib/libs/cameraserver.lib;
-    $ENV{MY_GAZEBO}/wpilib/libs/cscore.lib;
-    $ENV{MY_GAZEBO}/wpilib/libs/opencv_core452.lib;
-    $ENV{MY_GAZEBO}/wpilib/libs/opencv_imgcodecs452.lib;
-    $ENV{MY_GAZEBO}/wpilib/libs/opencv_imgproc452.lib;
-    $ENV{MY_GAZEBO}/wpilib/libs/opencv_videoio452.lib;
-    $ENV{MY_GAZEBO}/wpilib/libs/opencv_video452.lib;
+    $ENV{GZ_SIM}/wpilib/libs/cameraserver.lib;
+    $ENV{GZ_SIM}/wpilib/libs/cscore.lib;
+    $ENV{GZ_SIM}/wpilib/libs/opencv_core452.lib;
+    $ENV{GZ_SIM}/wpilib/libs/opencv_imgcodecs452.lib;
+    $ENV{GZ_SIM}/wpilib/libs/opencv_imgproc452.lib;
+    $ENV{GZ_SIM}/wpilib/libs/opencv_videoio452.lib;
+    $ENV{GZ_SIM}/wpilib/libs/opencv_video452.lib;
 )
 
-link_directories(${GAZEBO_LIBRARY_DIRS} $ENV{MY_GAZEBO}/wpilib/libs)
+link_directories(${GAZEBO_LIBRARY_DIRS} $ENV{GZ_SIM}/wpilib/libs)
 
 # Build plugins
 add_library(sim_camera SHARED sim_camera.cpp)

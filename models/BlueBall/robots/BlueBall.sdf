@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<sdf version="1.5">
+<sdf version="1.7">
   <model name="BlueBall">
     <pose>0 0 0 0 0 0</pose>
     <link name="Ball">
@@ -38,9 +38,9 @@
          <contact>
          
             <ode>
-             <max_vel>15</max_vel>
-              <min_depth>0.01</min_depth>
-              <!-- 
+              <max_vel>15</max_vel>
+              <min_depth>0.002</min_depth>
+              <!-- -->
               <kp>10000000</kp>
               <kd>0.02</kd>
                -->

@@ -8,7 +8,7 @@ public class SimNode {
     protected boolean enabled;
     public SimNode(){
         NetworkTableInstance inst = NetworkTableInstance.getDefault();
-        inst.setUpdateRate(0.02);
+        //inst.setUpdateRate(0.02);
         table = inst.getTable("gazebo");
         enabled=true;
     } 

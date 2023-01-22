@@ -14,8 +14,8 @@ void GzMotor::publish(){
         return;
     gazebo::msgs::Vector3d msg;
     double x = table->GetNumber("set", 0.0);
-    double y = table->GetNumber("scale", 1);
-    gazebo::msgs::Set(&msg, ignition::math::Vector3d(x, y, 0));
+
+    gazebo::msgs::Set(&msg, ignition::math::Vector3d(x, 0, 0));
     pub->Publish(msg);
 }
 bool GzMotor::connect(){

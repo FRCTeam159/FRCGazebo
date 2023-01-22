@@ -44,12 +44,15 @@ public class SimEncoder extends SimNode{
     public void disable(){
         enabled=false;
         pos_node.setNumber(0);
+        //resetting=false;
+
        // ctrl_node.setString("stop");
     }
    
     public void reset(){
         resetting=true;
         zero=pos_node.getDouble(0.0);
+        //System.out.println("Reset Encoder "+chnl+" zero:"+zero);
     }
     public void setDistancePerRotation(double d){
         distancePerRotation = d;
@@ -59,14 +62,17 @@ public class SimEncoder extends SimNode{
     }
    
     public double getDistance() {
-        if(resetting)
-          zero=pos_node.getDouble(0.0);
+        //if(resetting)
+        //  zero=pos_node.getDouble(0.0); 
+       // double rots=pos_node.getDouble(0.0);
+        //return sign*distancePerRotation*(rots)-zero;
         return sign*distancePerRotation*(pos_node.getDouble(0.0)-zero);
     }
     public double getRate() {
-        if(!enabled)
-            return 0;
-        else
+        //if(!enabled){
+         //   return 0;
+        //}
+       // else
             return sign*distancePerRotation*vel_node.getDouble(0.0); 
     }
 }

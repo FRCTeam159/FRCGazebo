@@ -3,14 +3,14 @@
 
 <h1>Overview</h1>
 
-The Gazebo Simulator (also called Ignition) provides the ability to test robot behavior in an environment that includes real-world emulation of physical properties like gravity, friction, momentum, inertia, collisions etc. In past years this test-bed was supported by First but was dropped more recently, presumbably because it was only fully provided on Linux platforms which were difficult to come by for most FRC teams. 
+The Gazebo Simulator provides the ability to test robot behavior in an environment that includes real-world emulation of physical properties like gravity, friction, momentum, inertia, collisions etc. In past years this test-bed was supported by First but was dropped more recently, presumbably because it was only fully provided on Linux platforms which were difficult to come by for most FRC teams. 
 
 Recently however, a number of factors have combined to open up the possibility of running Gazebo simulations natively on Windows. Most notably:
 1) A simple python installation of gazebo-11 for Windows available from conda-forge
 2) wpilib's new "Simulate on Desktop" option which provides a driver-station selection box that can be used to switch between disabled,auto and teleop modes
 
 <h2>Hardware Requirements</h2>
-Testing has only been done on a single Windows laptop (a Dell Inspison 7000 series with an Nvidia GTX 960M graphics card) but any similarly equiped laptop or desktop computer would probably be adequate.
+Testing has only been done on a Windows 10 laptop (a Dell Inspison 7000 series with a Nvidia GTX 960M graphics card) and a Windows 11 desktop (2070 Nvidia gpu) but any similarly equiped laptop or desktop computer will probably be adequate.
 
 <h2>Software Requirements</h2>
 Run-time support is currenly provided for VSCode projects written in the Java programming lanquage targeting the 2022.1.1 FRC release. In order to build the non-java components of this project you will also need to download and install Visual Studio Community edition 2015-2019 (with c++ support)
@@ -40,11 +40,9 @@ II. Install Gazebo-11 from conda-forge
    
 <h4>* Bug 2/4/22</h4>
  <ul><li>As of at least this date the conda-forge gazebo installation fails to allow gazebo to run (just fails silently with no error message)
-   <li> A work-around (until the problem is fixed) is to use a conda environment file to install a known-to-work version which is available in the "docs" directory of this project (base-env.txt)
-      <li> After installing miniconda3 to install gazebo in the base directory download the file and the enter from a command shell: conda install --name base --file base-env.txt
+   <li> A work-around (until the problem is fixed) is to use a conda environment file to install a known-to-work version which is available in the "docs" directory of this project (package-list-11-12.txt)
+      <li> After installing miniconda3 to install gazebo in the base directory download the file and the enter from a command shell: conda install --name base --file package-list-11-12.txt
          </ul>
-<h2>FRCGazebo Installation</h2>
-
 This repository contains a number of tools that should allow you to connect a robot program to Gazebo in simulation mode. It should be noted however that this is just one approach that can be followed and no promises are made that it will work for you without at least a bit of tweeking !
 
 In any case, to Install just clone the current repository into a Windows folder of your choosing by entering the following in a bash shell:
@@ -74,7 +72,7 @@ Note: set "MY_GAZEBO" to the directory that this repo was cloned to and "GAZEBO_
 <dt>docs</dt><dd>documents</dd>
 <dt>gzsim</dt><dd>build and test</dd>
 <dt>models</dt><dd>gazebo models</dd>
-<dt>plugins</dt><dd>gazebo plugins (build by project)</dd>
+<dt>plugins</dt><dd>gazebo plugins (built by project)</dd>
 <dt>worlds</dt><dd>gazebo worlds</dd>
 <dt>wpilib</dt><dd>wpilib c++ includes and libraries</dd>
 </dl>
@@ -131,6 +129,7 @@ This project uses a simple command-based program to demonstate Gazebo teleop and
    </ol>
    <h4>Trajectory Plot options</h4>
    <ol>
+   <li> In a command shell start the plot server in the background by executing the script ("start_plot_server") located in the project bin directory
    <li> to plot certain features of an autonomous run choose one on the options from the selections on the right side of the smartdashboard window (Plot Distance etc.)
    <li> plotting support and other utilities is provided by the java files in [root]/gztest/java/utils directory.
    </ol>
@@ -167,6 +166,6 @@ It's possible to get around this problem and to generate the expected ".jpg" fil
 
 The solution to this problem was to use Wpilib's Camera Server API (cscore) instead. This has a nice advantage in that it allows images to be sent directly from memory to a cs::MjpegServer class without having to be written out to an intermediate jpeg file at all.
    
-<h3> Project Implentation Method</h3>
+<h3> Project Implementation Details [TODO] </h3>
 
-<h2> Building This Project
+<h2> Building This Project [TODO]

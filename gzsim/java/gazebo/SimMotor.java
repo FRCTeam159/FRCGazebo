@@ -7,12 +7,12 @@ public class SimMotor extends SimNode {
     int chnl;
     public String idstr;
     private NetworkTableEntry set_node;
-    private NetworkTableEntry scale_node;
     private NetworkTableEntry ctrl_node;
     private static NetworkTable objects;
     private static NetworkTable channels;
     private double distancePerRotation = 1;
     boolean enabled=false;
+    private double sign=1;
 
     public SimMotor(int id){
         chnl=id;
@@ -24,10 +24,12 @@ public class SimMotor extends SimNode {
 
         set_node= channels.getEntry("set");
         set_node.setDouble(0.0);
-        scale_node= channels.getEntry("scale");
-        scale_node.setDouble(1.0);
+        
         System.out.println("SimMotor:"+id);
 
+    }
+    public void setInverted(){
+        sign=-1;
     }
     public void enable(){
         ctrl_node.setString("run");
@@ -43,13 +45,11 @@ public class SimMotor extends SimNode {
     }
     public void set(double v){
         if(enabled)
-            set_node.setDouble(v);
+            set_node.setDouble(sign*v);
         else 
             set_node.setDouble(0);
     }
-    public void setScale(double v){
-        scale_node.setDouble(v);
-    }
+    
     public void setDistancePerRotation(double d){
         distancePerRotation = d;
     }

@@ -1,0 +1,47 @@
+A. miniconda3 installation
+1) download from https://docs.conda.io/en/latest/miniconda.html 
+
+https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe
+
+2) run installer .exe file from downloads directory
+  - ok to add to path if not already there
+
+B) gazebo installation
+
+1) in a gitbash shell run:
+  $ conda install gazebo -c conda-forge
+
+C) problems and workarounds
+1) prior to  ~2/22 this was all that was needed but sometime after that date trying to start gazebo
+   by entering (e.g.)$ gazebo --verbose from a command shell just returned immediately without opening the client window
+
+   - a workaround was to first capture the library environment from a version of minicom that was previosly working
+     $ conda list --explicit > working_env.txt 
+
+     note text file name is arbitrary
+
+     this generates a file with a lot of lines like :
+     https://conda.anaconda.org/conda-forge/win-64/gazebo-11.9.1-h0acfcac_0.tar.bz2
+
+   - then, after a fresh miniconda3 install open a gitbash shell and cd to the directory containing that file and enter:
+
+     $ conda install --name base --file working_env.txt 
+
+ 2) around 11/1/22 it was discovered that running "conda install gazebo -c conda-forge"  from a non-base conda environment
+    (e.g. conda create --name test) resulted in a more recent version of gazebo (11.12) that could be started 
+    from a command shell (note: but still using the older "working" miniconda3 version)
+
+    - however, when trying to install the latest gazebo version in the latest conda version (e.g. after a fresh miniconda install)
+      in the base environment the gazebo install wouldn't complete (just hangs at the end)
+      o note: not sure if this would have worked in a non-base environment (didn't try it)
+
+    - a (unsatisfactory) workaround was found by capturing the https lines from the working gazebo-11-12 environment in the
+      older (working) minicom version (e.g. new_working_env.txt) and then using that in the newer (not-working) minicom
+      installation as described previously (e.g. conda install --name base --file new_working_env.txt)
+
+    - after this gazebo 11.12 could be started from the base environment via a command prompt using $gazebo --verbose etc.
+    - however, with the newer accompaning libraries all the binaries in the FRCGazebo project needed to be rebuilt
+      and re-installed (using build_program etc. in the project's ../gzsim/c++ directory)
+
+
+

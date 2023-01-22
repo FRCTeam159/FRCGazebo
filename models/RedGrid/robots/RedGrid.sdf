@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.5">
+  <model name="RedGrid">
+    <pose>0 0 0 0 0 0</pose>
+   
+    <link name="Body">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>2.58766437610333 0.373657256229708 -0.132157991348386 0 0 0</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>171.757554835826</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>9.13610706013795</ixx>
+          <ixy>2.27938493877244</ixy>
+          <ixz>0.977433511583546</ixz>
+          <iyy>450.556531174994</iyy>
+          <iyz>2.87991649996356</iyz>
+          <izz>451.900251698765</izz>
+        </inertia>
+      </inertial>
+      <collision name="Body_collision">
+        <pose>-3.32839104198053 -0.373657256229717 0.82890430125006 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://RedGrid/meshes/Body_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="Body_visual">
+        <pose>-3.32839104198053 -0.373657256229717 0.82890430125006 0 0 0</pose>
+        <material>
+          <ambient>0.9 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.9 0.752941176470588 0.752941176470588 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://RedGrid/meshes/Body.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Grid-World" type="fixed">
+      <parent>world</parent>
+      <child>Body</child>
+   </joint>
+  </model>
+</sdf>

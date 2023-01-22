@@ -1,0 +1,33 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Launch PublisherTest",
+      "request": "launch",
+      "mainClass": "frc.robot.PublisherTest",
+      "projectName": "NT4Tests",
+      "env": {
+        "PATH":"build/jni/release:$PATH",
+        "LD_LIBRARY_PATH": "build/jni/release;$PATH",
+        "DYLD_LIBRARY_PATH": "build/jni/release;$PATH"
+      }
+    },
+    {
+      "type": "java",
+      "name": "Launch SubscriberTest",
+      "request": "launch",
+      "mainClass": "frc.robot.SubscriberTest",
+      "projectName": "NT4Tests",
+      "env": {
+        "PATH":"build/jni/release:$PATH",
+        "LD_LIBRARY_PATH": "build/jni/release;$PATH",
+        "DYLD_LIBRARY_PATH": "build/jni/release;$PATH"
+      }
+    },
+    
+  ]
+}

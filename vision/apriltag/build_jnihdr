@@ -1,0 +1,22 @@
+#!/bin/bash
+#pushd ../../gzsim/java
+
+export WPI_MAVEN="C:\Users\Public\wpilib\2023\maven"
+
+export WPI_JAVA="$WPI_MAVEN/edu/wpi/first/wpimath/wpimath-java/2023.1.1-beta-6"
+export WPI_MATH="$WPI_JAVA/wpimath-java-2023.1.1-beta-6.jar"
+export WPI_3RD_PARTY="$WPI_MAVEN\edu\wpi\first\thirdparty\frc2023"
+export OPENCV_JAVA="$WPI_3RD_PARTY/opencv/opencv-java/4.6.0-4/opencv-java-4.6.0-4.jar"
+export WPI_EJML="$WPI_MAVEN\org\ejml"
+export EJML_DENSE="$WPI_EJML/ejml-ddense/0.41/ejml-ddense-0.41.jar"
+export EJML_SIMPLE="$WPI_EJML/ejml-simple/0.41/ejml-simple-0.41.jar"
+export EJML_CORE="$WPI_EJML/ejml-core/0.41/ejml-core-0.41.jar"
+
+export GZ_BIN=$GZ_SIM/bin
+export APRILTAG_JAVA="$GZ_SIM/vision" 
+javac --source-path "$APRILTAG_JAVA" \
+-cp "$OPENCV_JAVA;$WPI_MATH;$EJML_DENSE;$EJML_SIMPLE;$EJML_CORE;$APRILTAG_JAVA" \
+-h include $APRILTAG_JAVA/apriltag/jni/TagDetectorJNI.java
+
+#popd
+#-h include $GZ_SIM/gzsim/java/utils/TagDetectorJNI.java

@@ -62,16 +62,8 @@ if (model->GetJointCount() == 0) {
 void Encoder::Update(const gazebo::common::UpdateInfo& info) {
   gazebo::msgs::Vector3d msg;
   double p=0,v=0;
-  /*
-  if (stopped){
-    p=stop_value * multiplier;
-    zero = GetAngle();
-  }
-  else {
-    */
-    p = GetAngle() * multiplier;
-    v = GetVelocity() * multiplier;
-  //}
+  p = GetAngle() * multiplier;
+  v = GetVelocity() * multiplier;
   gazebo::msgs::Set(&msg, ignition::math::Vector3d(p, v, stopped));
   pub->Publish(msg);
 }

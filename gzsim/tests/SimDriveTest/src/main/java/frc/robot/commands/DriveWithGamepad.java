@@ -45,15 +45,15 @@ public class DriveWithGamepad extends CommandBase {
     double zs = -m_controller.getRawAxis(LEFT_JOYSTICK);
     double xs = m_controller.getRawAxis(RIGHT_JOYSTICK);
  
-    if (Math.abs(zs) < 0.1)
+    if (Math.abs(zs) < 0.2)
       zs = 0;
-    if (Math.abs(xs) < 0.1) 
+    if (Math.abs(xs) < 0.2) 
       xs = 0;
     if(!started && (Math.abs(zs)>0 || Math.abs(xs)>0)){
       m_drive.enable();
       started=true;
     }
-    xs*=zs>0?1:-1;
+   // xs*=zs>0?1:-1;
     if(m_drive.arcade_mode)
       m_drive.arcadeDrive(zs, xs);
     else

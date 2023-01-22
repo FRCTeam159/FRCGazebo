@@ -4,14 +4,9 @@
 
 package frc.robot;
 
-import java.util.Set;
-
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
-import gazebo.SimControl;
 import gazebo.SimMotor;
 
 /**

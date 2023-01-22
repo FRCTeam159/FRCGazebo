@@ -35,36 +35,35 @@
     }
   },
   "NetworkTables": {
-    "SmartDashboard": {
-      "open": true
-    },
     "gazebo": {
       "camera": {
         "1": {
           "open": true
         }
       },
-      "clock": {
-        "open": true
-      },
       "encoder": {
         "1": {
           "open": true
         },
-        "open": true
+        "2": {
+          "open": true
+        }
       },
       "gyro": {
+        "0": {
+          "open": true
+        },
         "open": true
       },
       "motor": {
         "1": {
           "open": true
         },
+        "2": {
+          "open": true
+        },
         "open": true
       },
-      "open": true
-    },
-    "plotdata": {
       "open": true
     }
   }

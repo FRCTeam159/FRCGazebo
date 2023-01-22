@@ -5,6 +5,8 @@
 #include "GzGyro.h"
 #include "GzClock.h"
 #include "GzCamera.h"
+#include "GzContact.h"
+#include "GzPiston.h"
 
 #include <condition_variable>
 #include <mutex>
@@ -59,7 +61,7 @@ void GzMain::init() {
 // for each node type {GzMotor,GzEncoder,GzGyro ..}
 //   look for a "type" SubTable in gazebo of the form:
 //     "motor", "encoder", ...
-//   for each type SubTable (encoder, motor)
+//   for each type SubTable (encoder, motor, ..)
 //   look for a "channel" SubTable in gazebo of the form:
 //      "1","2" ..
 //   each "channel" subtable may contain the following event types
@@ -73,7 +75,7 @@ void GzMain::genNodes() {
   // build motors
   motors = table->GetSubTable("motor");
   std::vector<std::string> keys = motors->GetSubTables();
-    sortKeys(keys);
+  sortKeys(keys);
   std::cout << "motors:" << keys.size() << std::endl;
   for (int i = 0; i < keys.size(); i++) {
     std::shared_ptr<nt::NetworkTable> tbl = motors->GetSubTable(keys[i]);
@@ -103,9 +105,42 @@ void GzMain::genNodes() {
     int j = std::stoi(keys[i]);
     nodes.emplace_back(new GzCamera(j, tbl));
   }
-  // build gyro
-  gyro=table->GetSubTable("gyro");
-  nodes.emplace_back(new GzGyro(gyro));
+
+  // build contacts
+  keys.clear();
+  contacts = table->GetSubTable("contact");
+  keys = contacts->GetSubTables();
+  sortKeys(keys);
+  std::cout << "contacts:" << keys.size() << std::endl;
+  for (int i = 0; i < keys.size(); i++) {
+    std::shared_ptr<nt::NetworkTable> tbl = contacts->GetSubTable(keys[i]);
+    int j = std::stoi(keys[i]);
+    nodes.emplace_back(new GzContact(j, tbl));
+  }
+
+  // build gyros
+  keys.clear();
+  gyros=table->GetSubTable("gyro");
+  keys = gyros->GetSubTables();
+  sortKeys(keys);
+  std::cout << "gyros:" << keys.size() << std::endl;
+  for (int i = 0; i < keys.size(); i++) {
+    std::shared_ptr<nt::NetworkTable> tbl = gyros->GetSubTable(keys[i]);
+    int j = std::stoi(keys[i]);
+    nodes.emplace_back(new GzGyro(j, tbl));
+  }
+
+// build pistons
+  keys.clear();
+  pistons=table->GetSubTable("piston");
+  keys = pistons->GetSubTables();
+  sortKeys(keys);
+  std::cout << "piston:" << keys.size() << std::endl;
+  for (int i = 0; i < keys.size(); i++) {
+    std::shared_ptr<nt::NetworkTable> tbl = pistons->GetSubTable(keys[i]);
+    int j = std::stoi(keys[i]);
+    nodes.emplace_back(new GzPiston(j, tbl));
+  }
 
    // build clock
   clock=table->GetSubTable("clock");
