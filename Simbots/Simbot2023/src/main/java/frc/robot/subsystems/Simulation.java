@@ -181,12 +181,12 @@ public class Simulation extends SubsystemBase {
        // m_drive.reset(); 
         //m_drive.disable();   
         m_timer.reset();
-      } else if (m_timer.get() > 1) {
+      } else if (m_timer.get() > 0.25) {
         if (!disabling) {
           m_drive.reset();
           //m_drive.disable();
           disabling = true;
-        } else if (m_timer.get() > 1.6) {
+        } else if (m_timer.get() > 0.5) {
           SmartDashboard.putBoolean("Reset", false);
           resetting = false;
           disabling = false;

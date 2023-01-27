@@ -73,7 +73,7 @@ public class Autonomous extends SequentialCommandGroup  {
    case AUTOTEST:
      //return new SequentialCommandGroup(new TurnToAngle(m_drive,45.0));
       return new SequentialCommandGroup(
-        new TurnToAngle(m_drive,90.0)
+        new TurnToAngle(m_drive,180.0)
        //, new DrivePath(m_drive,PROGRAM,reversed)
         );
     }

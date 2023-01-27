@@ -215,6 +215,9 @@
     }
   },
   "NetworkTables": {
+    "Retained Values": {
+      "open": false
+    },
     "gazebo": {
       "camera": {
         "1": {
@@ -259,6 +262,27 @@
         "open": true
       },
       "open": true
+    },
+    "retained": {
+      "gazebo": {
+        "open": true
+      }
+    },
+    "transitory": {
+      "Shuffleboard": {
+        "open": true
+      },
+      "SmartDashboard": {
+        "SendableChooser[1]": {
+          "open": true
+        },
+        "SendableChooser[2]": {
+          "open": true
+        }
+      },
+      "gazebo": {
+        "open": true
+      }
     }
   },
   "NetworkTables View": {

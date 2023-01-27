@@ -63,7 +63,7 @@ public class Drivetrain extends SubsystemBase {
 	public static double kMaxVelocity = 3; // meters per second
 	public static double kMaxAcceleration = 0.5; // meters/second/second
 	public static double kMaxAngularSpeed = Math.toRadians(360); // degrees per second
-	public static double kMaxAngularAcceleration = Math.toRadians(90);// degrees per second per second
+	public static double kMaxAngularAcceleration =Math.toRadians(720);// degrees per second per second
 
 	boolean field_oriented = true;
 	double last_heading = 0;
@@ -73,7 +73,7 @@ public class Drivetrain extends SubsystemBase {
 
 	double x_std=0.1;
 	double y_std=0.1;
-	double h_std=5.0;
+	double h_std=1.0;
 
 	double latency=0.05;
 	double vision_confidence=0.05;
@@ -223,7 +223,12 @@ public class Drivetrain extends SubsystemBase {
 		return field_oriented;
 	}
 	public double getHeading() {
-		return getRotation2d().getDegrees();
+		double angle=getRotation2d().getDegrees();
+		// if(angle>180)
+		// 	angle-=360;
+		// if(angle<-180)
+		// 	angle+=360;
+		return angle;
 	}
 
 	public Rotation2d gyroRotation2d() {
@@ -238,6 +243,9 @@ public class Drivetrain extends SubsystemBase {
 		angle = unwrap(last_heading, angle);
 		last_heading = angle;
 		return Rotation2d.fromDegrees(angle);
+	}
+	public double lastHeading(){
+		return last_heading;
 	}
 
 	public double getAngle() {
@@ -273,6 +281,7 @@ public class Drivetrain extends SubsystemBase {
 		SmartDashboard.putNumber("Velocity", getVelocity());
 		Translation2d t=  getPose().getTranslation();
 		
+		SmartDashboard.putNumber("G:", gyroHeading());
 		SmartDashboard.putNumber("H:", getHeading());
 		SmartDashboard.putNumber("X:", t.getX());
 		SmartDashboard.putNumber("Y:", t.getY());
@@ -436,7 +445,7 @@ public class Drivetrain extends SubsystemBase {
 	
 	// removes heading discontinuity at 180 degrees
 	public static double unwrap(double previous_angle, double new_angle) {
-		double d = new_angle - previous_angle;
+		double d = new_angle - previous_angle%360;
 		d = d >= 180 ? d - 360 : (d <= -180 ? d + 360 : d);
 		return previous_angle + d;
 	}

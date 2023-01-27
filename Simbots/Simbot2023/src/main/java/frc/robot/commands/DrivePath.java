@@ -45,7 +45,7 @@ public class DrivePath extends CommandBase {
   public boolean holotest=true;
   //private final RamseteController m_ramsete = new RamseteController();
   private final PPHolonomicDriveController m_ppcontroller=new PPHolonomicDriveController(
-      new PIDController(1, 0, 0), new PIDController(1, 0, 0), new PIDController(0.5, 0, 0));
+      new PIDController(4, 0, 0), new PIDController(4, 0, 0), new PIDController(2, 0, 0));
 
   private final Timer m_timer = new Timer();
   private final Drivetrain m_drive;
@@ -303,8 +303,10 @@ public class DrivePath extends CommandBase {
     pd.d[2] = target_pose.getY();
     pd.d[3] = current_pose.getY();
     pd.d[4] = 2*((PathPlannerState)state).holonomicRotation.getRadians();
-    pd.d[5] = 2*current_pose.getRotation().getRadians();
+    double r=Math.toRadians(m_drive.getHeading());
+    pd.d[5] = 2*r;
 
     pathdata.add(pd);
   }
+  
 }

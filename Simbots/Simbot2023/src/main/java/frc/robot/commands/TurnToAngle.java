@@ -12,10 +12,13 @@ public class TurnToAngle extends CommandBase {
   Drivetrain m_drive;
   double m_angle;
   double last_time;
-  static boolean debug=false;
+  double start_time;
+  double start_pos=0;
+  double last_pos=0;
+
+  static boolean debug=true;
   
- //final PIDController m_controller=new PIDController(0.17,1.0,0.07);
- final PIDController m_controller=new PIDController(0.1,0.05,0.05);
+ final PIDController m_controller=new PIDController(0.1,0.0,0.0);
 
   public TurnToAngle(Drivetrain drive, double angle) { 
     m_drive=drive;
@@ -29,11 +32,15 @@ public class TurnToAngle extends CommandBase {
   public void initialize() {
     System.out.println("TurnToAngle.initialize");
     //m_controller.enableContinuousInput(-180, 180);
-    m_controller.setTolerance(0.5, 0.2); // TurnToleranceDeg, TurnRateToleranceDegPerS 
+    m_controller.setTolerance(0.5, 1.0); // TurnToleranceDeg, TurnRateToleranceDegPerS 
     m_drive.startAuto();
+    start_pos=m_drive.getHeading();
+
    //m_drive.driveForward(0);
-    last_time=m_drive.getClockTime();
+    last_time=start_time=m_drive.getClockTime();
     // need a dummy read from controller to avoid bad first correction (looks like a bug
+    m_controller.setSetpoint(m_angle);
+
     m_controller.calculate(0,m_angle);
   }
   // =================================================
@@ -44,13 +51,18 @@ public class TurnToAngle extends CommandBase {
     double heading=m_drive.getHeading();
     double tm=m_drive.getClockTime();
 
-    if ((tm-last_time)>0.015){
-      double correction=m_controller.calculate(heading,m_angle);
+    if ((tm-last_time)>0.015 && heading !=last_pos){
+      double pos=heading-start_pos;
+      double correction=0.2*m_controller.calculate(pos,m_angle);
       if(debug)
       System.out.format("time:%f dt:%d gain:%g pos:%g pos error:%g vel error:%g\n",
-        tm,(int)(1000*(tm-last_time)),correction,heading,m_controller.getPositionError(),m_controller.getVelocityError());
-      m_drive.turnInPlace(correction);
+        tm-start_time,(int)(1000*(tm-last_time)),correction,pos,m_controller.getPositionError(),m_controller.getVelocityError());
+     //m_drive.turnInPlace(correction);
+      m_drive.drive(0.0, 0,correction,true);
+      //m_drive.turnInPlace(correction);
+
     }
+    last_pos=heading;
     last_time=tm;
   }
   // =================================================
@@ -69,4 +81,5 @@ public class TurnToAngle extends CommandBase {
     System.out.println("TurnToAngle.end");
     //m_drive.reset();
   }
+  
 }

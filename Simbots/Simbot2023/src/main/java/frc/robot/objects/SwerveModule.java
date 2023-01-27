@@ -28,9 +28,10 @@ public class SwerveModule {
 	private SimEncMotor m_turnMotor;
 
   // Gains are for example purposes only - must be determined for your own robot!
-  private final PIDController m_drivePIDController = new PIDController(10, 0.0, 0);
-  //private final PIDController m_turningPIDController = new PIDController(3, 0.05, 0);
+  private final PIDController m_drivePIDController = new PIDController(5, 0.0, 0);
+  //private final PIDController m_turningPIDController = new PIDController(5, 0.0, 0);
   // Gains are for example purposes only - must be determined for your own robot!
+   
   private final ProfiledPIDController m_turningPIDController =
       new ProfiledPIDController(5,0.0,0,
           new TrapezoidProfile.Constraints(
@@ -62,7 +63,7 @@ public class SwerveModule {
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
-     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+    // m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
   }
 
   public void enable(){
@@ -71,16 +72,16 @@ public class SwerveModule {
     m_turnMotor.enable();
   }
   public void disable(){
-   // m_turningPIDController.reset(0.0);
+    m_turningPIDController.reset(0.0);
 
     m_enabled=false;
     m_driveMotor.disable();
     m_turnMotor.disable();
   }
   public void reset(){
-    //m_turningPIDController.reset(0.0);
-    m_drivePIDController.reset();
     m_turningPIDController.reset(0.0);
+    m_drivePIDController.reset();
+    m_turningPIDController.reset(0);
     m_enabled=false;
     m_driveMotor.reset();
     m_turnMotor.reset();

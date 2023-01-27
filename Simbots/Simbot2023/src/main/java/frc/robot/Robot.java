@@ -96,4 +96,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {}
+  void printLoopOverrunMessage() {
+    //DriverStation.reportWarning("Loop time of " + m_period + "s overrun\n", false);
+  }
 }
