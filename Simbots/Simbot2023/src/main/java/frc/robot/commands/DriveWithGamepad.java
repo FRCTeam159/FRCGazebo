@@ -21,7 +21,7 @@ public class DriveWithGamepad extends CommandBase {
   private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(0.5);
   private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(0.5);
 
-  private TurnAround m_turnaround;
+  private TurnToAngle m_turnaround;
 
   /**
    * Creates a new DriveWithGamepad command.
@@ -71,7 +71,7 @@ public class DriveWithGamepad extends CommandBase {
     boolean rb = m_controller.getRightBumperPressed();
     boolean lb = m_controller.getLeftBumperPressed();
     if (rb || lb) {
-      m_turnaround = new TurnAround(m_drive, rb ? 1.0 : -1.0);
+      m_turnaround = new TurnToAngle(m_drive, rb ? 180.0 : -180.0);
       m_turnaround.initialize();
     }
 

@@ -4,82 +4,113 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
 public class TurnToAngle extends CommandBase {
+  boolean debug=false;
+  boolean turning=false;
+  double target_angle=0;
+  double heading=0;
   Drivetrain m_drive;
-  double m_angle;
-  double last_time;
-  double start_time;
-  double start_pos=0;
-  double last_pos=0;
+  double start_phase=0;
+  double last_heading;
+  double correction=0;
+  //double direction=1;
+  double start_time=0;
 
-  static boolean debug=true;
-  
- final PIDController m_controller=new PIDController(0.1,0.0,0.0);
+  final ProfiledPIDController m_turningPIDController= 
+  new ProfiledPIDController(0.25,0.05,0,
+    new TrapezoidProfile.Constraints(
+        Math.toDegrees(Drivetrain.kMaxAngularSpeed),Math.toDegrees(Drivetrain.kMaxAngularAcceleration)));
 
-  public TurnToAngle(Drivetrain drive, double angle) { 
+  public TurnToAngle(Drivetrain drive, double angle) {
     m_drive=drive;
-    m_angle=angle;
+    m_turningPIDController.setTolerance(2.0,2);
+    target_angle=angle;
     addRequirements(drive);
   }
-  // =================================================
-  // initialize: Called when the command is initially scheduled.
-  // =================================================
+
+  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("TurnToAngle.initialize");
-    //m_controller.enableContinuousInput(-180, 180);
-    m_controller.setTolerance(0.5, 1.0); // TurnToleranceDeg, TurnRateToleranceDegPerS 
-    m_drive.startAuto();
-    start_pos=m_drive.getHeading();
-
-   //m_drive.driveForward(0);
-    last_time=start_time=m_drive.getClockTime();
-    // need a dummy read from controller to avoid bad first correction (looks like a bug
-    m_controller.setSetpoint(m_angle);
-
-    m_controller.calculate(0,m_angle);
+    turning=true;
+    start_phase=m_drive.getHeading();
+    heading=last_heading=0;
+    
+    //target_angle=180*direction;
+    m_turningPIDController.reset(0);
+    
+    start_time=m_drive.getClockTime();
+    if(debug)    
+      System.out.format("turn started current:%-3.1f target:%-3.1f %s\n",
+      start_phase,target_angle+start_phase,target_angle>0?"CW":"CCW");
   }
-  // =================================================
-  // execute: Called every time the scheduler runs while the command is scheduled
-  // =================================================
+
+  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double heading=m_drive.getHeading();
-    double tm=m_drive.getClockTime();
-
-    if ((tm-last_time)>0.015 && heading !=last_pos){
-      double pos=heading-start_pos;
-      double correction=0.2*m_controller.calculate(pos,m_angle);
-      if(debug)
-      System.out.format("time:%f dt:%d gain:%g pos:%g pos error:%g vel error:%g\n",
-        tm-start_time,(int)(1000*(tm-last_time)),correction,pos,m_controller.getPositionError(),m_controller.getVelocityError());
-     //m_drive.turnInPlace(correction);
-      m_drive.drive(0.0, 0,correction,true);
-      //m_drive.turnInPlace(correction);
-
-    }
-    last_pos=heading;
-    last_time=tm;
+    calculate();
   }
-  // =================================================
-  // isFinished: Returns true when the command should end
-  // =================================================
-  @Override
-  public boolean isFinished() {
-    // End when the controller is at the reference.
-    return (last_time>0.05 && m_controller.atSetpoint()) || m_drive.disabled();
-  }
-  // =================================================
-  // end: Called once the command ends or is interrupted.
-  // =================================================
+
+  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("TurnToAngle.end");
-    //m_drive.reset();
+
   }
-  
+
+  // Returns true when the command should end.
+  // note: for a profiled PID controller "atSetpoint()" doesn't work (BUG)
+  // reason 
+  // - ProfiledPIDController contains a regular PIDcontroller (m_controller)
+  //   ProfiledPIDController.atSetpoint() is passed to m_controller.atSetpoint().
+  //   but m_controller.setSetpoint() function is never called so a private
+  //   variable m_controller.m_haveSetpoint is never set to true and m_controller.atSetpoint()
+  //   always returns false
+  // - also another BUG exists in ProfiledPIDController.getPositionError() (see below)
+  @Override
+  public boolean isFinished() {
+    if(!turning)
+        return true;
+    // BUG double perr=m_turningPIDController.getPositionError();
+    //- another problem is that at the start of the trapazoid ramp m_turningPIDController.getPositionError()
+    //  returns a value close to zero if the control parameter also starts at zero so it can't be used in a
+    //  check for "atSetpoint"
+    //- the error check needs to return the error based on the difference between the user's calculate target and
+    //  the current value of the control parameter
+    heading= m_drive.getHeading()-start_phase;
+    double perr=heading-target_angle;
+    double verr=m_turningPIDController.getVelocityError();
+    double ptol=m_turningPIDController.getPositionTolerance();
+    double vtol=m_turningPIDController.getVelocityTolerance();
+    double delt=m_drive.getClockTime()-start_time;
+    if(delt>3.5 || (Math.abs(perr)<ptol && Math.abs(verr)<vtol)){
+      if(debug)
+        System.out.format("atTurnSetpoint time:%-2.1f heading:%-3.1f perr:%-3.1f verr:%-2.1f\n",delt,heading+start_phase,perr,verr);
+      turning=false;
+      return true;
+    }
+    return false;   
+  }
+  // return the calculated rotation value (right stick)
+  public double calculate(){  
+    heading=m_drive.getHeading()-start_phase;
+    correction=0;
+    if(last_heading !=heading){ 
+      double err=heading-target_angle;
+      correction=m_turningPIDController.calculate(heading,target_angle);
+      if(debug)
+        System.out.format("   heading:%-3.1f target:%-3.1f err:%-3.1f cor:%-1.2f\n",
+          heading+start_phase,target_angle+start_phase,err,correction);     
+      if(isFinished()){
+        if(debug)
+          System.out.println("turning finished - at setpoint");
+        turning=false;
+      }
+    }
+    last_heading=heading;
+    return correction;  
+  }
 }

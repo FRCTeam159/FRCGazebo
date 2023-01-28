@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.Calibrate;
 import frc.robot.commands.DrivePath;
-import frc.robot.commands.TurnToAngle;
+import frc.robot.commands.TurnTest;
 import utils.PlotUtils;
 
 public class Autonomous extends SequentialCommandGroup  {
@@ -73,7 +73,7 @@ public class Autonomous extends SequentialCommandGroup  {
    case AUTOTEST:
      //return new SequentialCommandGroup(new TurnToAngle(m_drive,45.0));
       return new SequentialCommandGroup(
-        new TurnToAngle(m_drive,180.0)
+        new TurnTest(m_drive,180.0)
        //, new DrivePath(m_drive,PROGRAM,reversed)
         );
     }
