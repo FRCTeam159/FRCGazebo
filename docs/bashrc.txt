@@ -1,20 +1,23 @@
+# this fixes wierd characters in vscode gitbash terminal
+TERM=cygwin
+
 alias lst='ls -ltr'
 alias swap='pushd +1'
 alias his='history'
 
-export MY_GAZEBO=/c/Users/Alpiner/Robotics/FRCTeam159Repos/FRCGazebo
+export GZ_SIM=/c/Users/Alpiner/Robotics/FRCTeam159Repos/FRCGazebo
 export GAZEBO_LIBRARY=/c/Users/Alpiner/miniconda3/Library
 export GAZEBO_TOOLS=$GAZEBO_LIBRARY/share/gazebo-11
 
 export GAZEBO_MASTER_URI=${GAZEBO_MASTER_URI:-http://localhost:11345}
 export GAZEBO_MODEL_DATABASE_URI=http://models.gazebosim.org
-export GAZEBO_RESOURCE_PATH=$GAZEBO_TOOLS:$MY_GAZEBO/worlds
-export GAZEBO_PLUGIN_PATH=$GAZEBO_TOOLS/plugins:$MY_GAZEBO/plugins
-export GAZEBO_MODEL_PATH=$GAZEBO_TOOLS/models:$MY_GAZEBO/models
+export GAZEBO_RESOURCE_PATH=$GAZEBO_TOOLS:$GZ_SIM/worlds
+export GAZEBO_PLUGIN_PATH=$GAZEBO_TOOLS/plugins:$GZ_SIM/plugins
+export GAZEBO_MODEL_PATH=$GAZEBO_TOOLS/models:$GZ_SIM/models
 export OGRE_RESOURCE_PATH=$GAZEBO_LIBRARY/bin
 
 export LD_LIBRARY_PATH=$OGRE_RESOURCE_PATH:$GAZEBO_PLUGIN_PATH
 
-alias gztest='cd $MY_GAZEBO/gzsim/c++'
+alias gztest='cd $GZ_SIM/gzsim/tests/SimDriveTest'
 
-export PATH=.:$HOME/bin:$MY_GAZEBO/wpilib/libs:$PATH
+export PATH=.:$HOME/bin:$GZ_SIM/wpilib/libs:$PATH

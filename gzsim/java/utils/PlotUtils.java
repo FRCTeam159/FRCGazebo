@@ -14,12 +14,13 @@ public class PlotUtils {
         FEET, METERS, INCHES, DEGREES, RADIANS
     }
 
-    public static int PLOT_NONE = 0;
-    public static int PLOT_DISTANCE = 1;
-    public static int PLOT_DYNAMICS = 2;
-    public static int PLOT_POSITION = 3;
-    public static int PLOT_CALIBRATE  = 4;
-    public static int PLOT_GENERIC  = 5;
+    public static final int PLOT_NONE = 0;
+    public static final int PLOT_DISTANCE = 1;
+    public static final int PLOT_DYNAMICS = 2;
+    public static final int PLOT_POSITION = 3;
+    public static final int PLOT_LOCATION = 4;
+    public static final int PLOT_CALIBRATE  = 5;
+    public static final int PLOT_GENERIC  = 6;
 
     public static int auto_plot_option = PLOT_NONE;
 
@@ -35,8 +36,8 @@ public class PlotUtils {
 
     private static PathData data_sum;
 
-    private static Averager acc_average = new Averager(20);
-    private static Averager vel_average = new Averager(10);
+    private static Averager acc_average = new Averager(5);
+    private static Averager vel_average = new Averager(2);
 
     static ArrayList<PathData> data = new ArrayList<>();
 
@@ -290,8 +291,8 @@ public class PlotUtils {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
-  */  
-    // publish plot data to NetworkTables
+*/
+    // publish plot data to NetworkTables (works for NT3 only)
     public static void publish(ArrayList<PathData> dataList, int traces, int type) {
         if (table == null) {
             NetworkTableInstance inst = NetworkTableInstance.getDefault();

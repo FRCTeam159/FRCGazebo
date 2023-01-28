@@ -28,4 +28,5 @@ public class Averager {
         total += d;
         return total / vals.size();
     }
+   
 }

@@ -14,6 +14,9 @@ import java.awt.Stroke;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import utils.PathData;
+import utils.PlotUtils;
+
 
 //import org.usfirst.frc.team159.robot.TestPlot.DrawSine;
 
@@ -61,6 +64,8 @@ public class PlotRenderer extends JFrame {
 			distancePlot(d,traces);
 		else if(type==PlotUtils.PLOT_DYNAMICS)
 			dynamicsPlot(d,traces);
+		else if(type==PlotUtils.PLOT_LOCATION)
+			locationPlot(d,traces);
 		else if(type==PlotUtils.PLOT_POSITION)
 			positionPlot(d,traces);
 		else if(type==PlotUtils.PLOT_CALIBRATE)
@@ -90,6 +95,15 @@ public class PlotRenderer extends JFrame {
 	// Plot Path motion (values vs time)
 	public static void distancePlot(ArrayList<PathData> d, int traces) {
 		String list[] = { "Distance Plot","Time (s)","","Left Travel", "Target", "Right Travel", "Target","Heading","Target"};
+        JFrame frame = new PlotRenderer(d, traces, PlotRenderer.TIME_MODE, list);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+
+	// Plot Path motion (values vs time)
+	public static void locationPlot(ArrayList<PathData> d, int traces) {
+		String list[] = { "Location Plot","Time (s)","","Target X", "Robot X", "Target Y", "Robot Y","Target Heading","Robot Heading"};
         JFrame frame = new PlotRenderer(d, traces, PlotRenderer.TIME_MODE, list);
         frame.pack();
         frame.setLocationRelativeTo(null);

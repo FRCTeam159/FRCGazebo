@@ -1,0 +1,10 @@
+Gazebo Solidworks installer
+Work on this project was stopped in ~2015 but the add-in still works in Solidworks (as of 2022)
+
+Install the add-in by running the GazeboExporterInstaller.msi in the ../bin directory or downloading it first from :
+https://usfirst.collab.net/sf/frs/do/viewRelease/projects.solidworks_robot_exporter/frs.solidworks_gazebo_export_plugin.solidworks_exporter_beta_1_0
+
+Documentation:
+https://s3.amazonaws.com/screensteps_live/exported/Wpilib/2078/34934/Using_FRCSim_with_C_and_Java.pdf?1503487021
+
+https://bpb-us-w2.wpmucdn.com/wp.wpi.edu/dist/1/35/files/2016/05/FRC-Gazebo-Presentation.pd

@@ -16,6 +16,9 @@ void GzEncoder::callback(const ConstVector3dPtr &msg){
         x=msg->x();
         y=msg->y();
     }
+    else{
+        x=y=0;
+    }
     table->PutNumber("position",x);
     table->PutNumber("velocity",y);
 }

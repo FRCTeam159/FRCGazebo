@@ -1,0 +1,6 @@
+#!/bin/bash
+javac -h include apriltag/TagDetectorJNI.java 
+x86_64-w64-mingw32-g++  -I"include" -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/win32" -shared -o lib/apriltagjni.dll native/TagDetectorJNI.cpp native/TagDetector.cpp
+
+
+

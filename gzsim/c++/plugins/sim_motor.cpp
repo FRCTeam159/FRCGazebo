@@ -20,12 +20,10 @@ void MotorPlugin::Load(gazebo::physics::ModelPtr model, sdf::ElementPtr sdf)
   }
 
   // Get the first joint. We are making an assumption about the model
-  // having one joint that is the rotational joint.
   std::string str = sdf->Get<std::string>("joint");
   // std::cerr << "Joint str:" << str << "\n";
   this->joint = model->GetJoint(str);
-  if (this->joint == NULL)
-  {
+  if (this->joint == NULL){
     std::cerr << "could not find Joint element in plugin - reverting to "
                  "first joint\n";
     this->joint = model->GetJoints()[0];
@@ -45,26 +43,37 @@ void MotorPlugin::Load(gazebo::physics::ModelPtr model, sdf::ElementPtr sdf)
   else
     multiplier = 1;
   // Setup a P-controller
+  set_velocity=true;
 
-  double P = 0.1;
+  double P = 0.2;
   double I = 0.0;
   double D = 0.0;
-  if (sdf->HasElement("P"))
+  
+  if (sdf->HasElement("F")){
+    set_velocity=!sdf->Get<bool>("F");
+  }
+  if (sdf->HasElement("P")){
     P = sdf->Get<double>("P");
+    set_velocity=true;
+  }
   if (sdf->HasElement("I")){
     I = sdf->Get<double>("I");
-    debug = true;
+   set_velocity=true;
   }
-  if (sdf->HasElement("D"))
+  if (sdf->HasElement("D")){
     D = sdf->Get<double>("D");
-  this->pid = gazebo::common::PID(P, I, D,100000,-100000);
+    set_velocity=true;
+  }
+  
+  if(set_velocity){
+    this->pid = gazebo::common::PID(P, I, D,100000,-100000);
 
-  // Apply the P-controller to the joint.
-  this->model->GetJointController()->SetVelocityPID(
-      this->joint->GetScopedName(), this->pid);
-
+    // Apply the P-controller to the joint.
+    this->model->GetJointController()->SetVelocityPID(
+        this->joint->GetScopedName(), this->pid);
+  }
   last_vel = 1;
-  scale = 1;
+
   this->SetVelocity(0); // initial velocity
 
   std::cout << "Initializing sim_motor: " << topic << " joint=" << joint->GetName()
@@ -75,9 +84,8 @@ void MotorPlugin::Load(gazebo::physics::ModelPtr model, sdf::ElementPtr sdf)
 
 void MotorPlugin::OnMsg(ConstVector3dPtr &_msg)
 {
-  scale=_msg->y();
   double rps=_msg->x()*2*M_PI;
-  double vel = rps*multiplier * scale;
+  double vel = rps*multiplier;
 
   if(debug && vel !=last_vel){
     int is_neg=signbit(vel);
@@ -90,20 +98,11 @@ void MotorPlugin::OnMsg(ConstVector3dPtr &_msg)
   last_vel = vel;
   this->SetVelocity(vel);
 }
-/// \brief Set the velocity of the Velodyne
-/// \param[in] _vel New target velocity
 
-//#define USE_THE_FORCE
 void MotorPlugin::SetVelocity(double vel)
 {
-#ifdef USE_THE_FORCE
+if(set_velocity)
+    this->model->GetJointController()->SetVelocityTarget(this->joint->GetScopedName(), vel);
+else
     this->joint->SetForce(0, vel);
-#else
-    //if (debug){
-      //double jvel=joint->GetVelocity(0);
-      //std::cout << "set vel:" << vel << " actual vel:" << jvel << " err:" << jvel-vel << std::endl;
-    //} 
-  this->model->GetJointController()->SetVelocityTarget(this->joint->GetScopedName(), vel);
-  
-#endif
 }

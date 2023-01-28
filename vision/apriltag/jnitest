@@ -1,0 +1,23 @@
+#!/bin/bash
+#java -Xlog:nmethod* $GZ_SIM/gzsim/java/utils/TagDetectorJNI
+
+export TEST=SwerveDriveTest
+#export TEST=NewSwerveTest
+
+export TESTDIR=$GZ_SIM/gzsim/tests/$TEST
+export OPENCV=$GZ_SIM/bin/opencv-java-4.6.0-4.jar
+export JAR=$TESTDIR/build/libs/$TEST.jar
+export BLDDIR="$TESTDIR/build/jni/release"
+
+cp lib/apriltagsim.dll $BLDDIR
+
+export DLLDIR="$GZ_SIM/wpilib/libs-beta-7"
+#export DLLDIR="$BLDDIR"
+
+cd $TESTDIR
+gradlew jar
+
+export PATH="$DLLDIR;$PATH"
+
+java -Djava.library.path=$DLLDIR -cp $JAR utils.TagDetectorJNI
+

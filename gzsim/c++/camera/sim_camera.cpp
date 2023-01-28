@@ -23,7 +23,7 @@ GZ_REGISTER_SENSOR_PLUGIN(CameraPlugin)
 
 /////////////////////////////////////////////////
 CameraPlugin::CameraPlugin() : SensorPlugin(), width(0), height(0), depth(0),
-stream("sim-frames", cs::VideoMode::PixelFormat::kMJPEG, 320,240, 10)
+stream("sim-frames", cs::VideoMode::PixelFormat::kMJPEG, 640,480, 10)
 {
   FreeImage_Initialise();
   stopped=true;
@@ -103,7 +103,7 @@ void CameraPlugin::Load(sensors::SensorPtr _sensor, sdf::ElementPtr sdf) {
   }
   video_index=0;
   
-  gzmsg << "Initializing sim_camera"<<" port="<<port<<" video=" << record_video << " fps=" << fps<<"\n";
+  gzmsg << "Initializing sim_camera"<<" port="<<port<<" movie=" << record_video << " fps=" << fps<<"\n";
 
   stream.SetVideoMode(cs::VideoMode::PixelFormat::kMJPEG, width, height,fps);
   server.SetSource(stream);
@@ -126,7 +126,7 @@ void CameraPlugin::OnNewFrame(const unsigned char *_image, unsigned int _width,
   
 if(!enabled)
   return;
-if (!record_video && !stopped && (saveCount < saveMax)) {  
+if (!record_video && saveMax && (saveCount < saveMax)) {  
   // note: save jpeg frames into a directory
   // - no longer needed for mjpeg streamer
   // - but could be used to capture frames for generating a video
@@ -142,6 +142,8 @@ if (!record_video && !stopped && (saveCount < saveMax)) {
     memcpy(FreeImage_GetBits(bitmap), _image, _width * _height * 3);
     FreeImage_FlipVertical(bitmap);
     FreeImage_Save(FIF_JPEG, bitmap, tmp);
+    std::cout << "saving image:" << saveCount << " "<<tmp<<std::endl;
+
     saveCount++;
   }
   // Instead of using mjpeg-streamer (which isn't supported on Windows) 
@@ -164,7 +166,7 @@ void CameraPlugin::Callback(ConstGzStringPtr  & msg) {
   } 
   else if (command == "enable") {
     enabled=true;
-  } 
+  }
   else if (command == "reset") {
     this->saveCount=0; // should also clear the tmp directory if saving jpegs
     stopped=true;
