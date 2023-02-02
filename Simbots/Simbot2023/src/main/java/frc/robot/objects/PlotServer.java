@@ -5,18 +5,9 @@ import java.util.ArrayList;
 import javax.swing.SwingUtilities;
 
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.networktables.DoubleArrayPublisher;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
-import edu.wpi.first.networktables.NetworkTableListener;
-import edu.wpi.first.networktables.NetworkTableEvent.Kind;
-import edu.wpi.first.networktables.NetworkTableEvent;
-import java.util.EnumSet;
-import java.util.function.Consumer;
-
-
 import utils.PathData;
 import utils.PlotRenderer;
 import utils.PlotUtils;

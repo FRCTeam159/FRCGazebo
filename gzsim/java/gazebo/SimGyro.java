@@ -38,9 +38,16 @@ public class SimGyro extends SimNode {
         System.out.println("SimGyro");
     }
     
-    public void reset(){
+    public void reset(double d){
         resetting=true;
-        zero=yaw_node.getDouble(0.0);
+        double offset=(yaw_node.getDouble(0.0));
+        zero=offset+d;
+        System.out.println(offset+" "+d+" "+zero);
+    }
+    public void reset(){
+        reset(0);
+        //resetting=true;
+        //zero=yaw_node.getDouble(0.0);
     }
     public void setEnabled(boolean t){
         enabled=t;
@@ -61,9 +68,9 @@ public class SimGyro extends SimNode {
     public double getHeading() {
         if(!enabled)
             return 0;
-        if(resetting)
-          zero=yaw_node.getDouble(0.0);  
-        return -(yaw_node.getDouble(0.0)-zero);
+        //if(resetting)
+       //  zero=yaw_node.getDouble(0.0);  
+        return (yaw_node.getDouble(0.0)-zero);
     }
     public double getRadians() {
         return -Math.PI*(yaw_node.getDouble(0.0))/180.0;

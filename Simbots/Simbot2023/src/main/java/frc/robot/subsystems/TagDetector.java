@@ -10,6 +10,9 @@ import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.opencv.core.Core;
 
 import edu.wpi.first.apriltag.AprilTagDetection;
@@ -44,7 +47,6 @@ public class TagDetector extends Thread {
 
   Drivetrain m_drivetrain;
 
-  static double pose_err = 2;
   static AprilTag target_tag = null;
   static public int BEST = -1;
 
@@ -53,11 +55,15 @@ public class TagDetector extends Thread {
   static Pose2d last_pose = null;
   static int target_id = BEST;
 
+  static boolean first_pose=true;
+
+  public static double min_decision_margin=30; // reject tags less than this
+
   static double maxtime = 0;
   static double grab_time = 0;
   static double detect_time=0;
   static int count = 0;
-  static String test_image = System.getenv("GZ_SIM") + "/docs/apriltag_0_test.jpg";
+  static String test_image = System.getenv("GZ_SIM") + "/docs/frame_0000.jpg";
 
   public TagDetector(Drivetrain drivetrain) {
     m_drivetrain = drivetrain;
@@ -70,7 +76,7 @@ public class TagDetector extends Thread {
     wpi_pose_estimator = new AprilTagPoseEstimator(wpi_poseEstConfig);
 
     ouputStream = CameraServer.putVideo("testCamera", cam.image_width, cam.image_height);
-    //test();
+    test();
   }
 
   // test tag detection jni using an image file
@@ -84,15 +90,29 @@ public class TagDetector extends Thread {
 
   // return an array of tag info structures from an image
   private AprilTag[] getTags(Mat mat) {
-    AprilTag[] atags;
+    AprilTag[] atags=null;
     Mat graymat = new Mat();
     Imgproc.cvtColor(mat, graymat, Imgproc.COLOR_RGB2GRAY);
     AprilTagDetection[] detections = wpi_detector.detect(graymat);
 
-    int num_tags = detections.length;
+    // reject tags with a poor decision margin or out of expected index range
+    List<AprilTagDetection> list=new ArrayList<AprilTagDetection>();
+    for (int i = 0; i < detections.length; i++) {
+      AprilTagDetection dect=detections[i];
+      int id=dect.getId();
+      if(id<TargetMgr.minTargetId() || id>TargetMgr.maxTargetId())
+        continue;
+      if(dect.getDecisionMargin()>min_decision_margin)
+        list.add(dect);
+    }
+
+    int num_tags = list.size();
+    if(num_tags==0)
+      return null;
+  
     atags = new AprilTag[num_tags];
     for (int i = 0; i < num_tags; i++) {
-      AprilTagDetection detection = detections[i];
+      AprilTagDetection detection = list.get(i);
       Transform3d pose = wpi_pose_estimator.estimate(detection);
       atags[i] = new AprilTag(detections[i], pose);
     }
@@ -104,6 +124,7 @@ public class TagDetector extends Thread {
     grab_time = 0;
     count = 0;
     detect_time=0;
+    first_pose=true;
   }
 
   static public void setTargetId(int i) {
@@ -116,11 +137,6 @@ public class TagDetector extends Thread {
 
   static public Pose2d getLastPose() {
     return last_pose;
-  }
-
-  // return pose ambiquity
-  public static double getPoseError() {
-    return pose_err;
   }
 
   // project a scaler distance and angle to x and y coordinates
@@ -136,44 +152,50 @@ public class TagDetector extends Thread {
     return target_tag.getPose();
   }
 
-  //
   // Calculate the position of a tag with respect to the robot
-  //
-  public static Translation2d camToTarget(AprilTag tag, Rotation2d gyroAngle) {
+  public static Translation2d robotToTarget(AprilTag tag, Rotation2d gyroAngle) {
     Pose3d pose = tag.getPose();
     double distance = tag.getDistance(); // distance to camera
+    double g=gyroAngle.getRadians();
+   
     // convert x,y, coords in camera space to camera angle
     double cam_angle = Math.atan2(pose.getTranslation().getY(), pose.getTranslation().getX());
-    // robot pose angle on field = gyro angle - camera angle
-    Rotation2d camrot = new Rotation2d(cam_angle);
-    Rotation2d rot = gyroAngle.minus(camrot);
-    // project camera posion to target onto the field
-    return project(distance, rot);
+  
+    double theta=g+cam_angle; // add in gyro angle
+    double x=distance*Math.cos(theta);
+    double y=distance*Math.sin(theta);
+
+    return new Translation2d(x,+y);
   }
 
-  //
+  // coordinates of robot relative to field center
+  public static Translation2d robotFromFieldCenter(AprilTag tag, Rotation2d gyroAngle){
+    Translation2d robot_pos_on_field=robotFromFieldOrigin(tag,gyroAngle); // robot in FRC coord system
+    return TargetMgr.fromField(robot_pos_on_field); // robot in FRC coord system
+  }
+
+  // FRC coordinates of robot determined from tag
+  public static Translation2d robotFromFieldOrigin(AprilTag tag, Rotation2d gyroAngle){
+    TargetMgr.TagTarget target = TargetMgr.getTarget(tag.getTagId());
+    Translation2d cam_to_tag = robotToTarget(tag, gyroAngle);
+    Translation2d tag_trans = target.getPose().getTranslation().toTranslation2d();
+    return cam_to_tag.plus(tag_trans); // robot in FRC coord system
+  }
+
   // Calculate the position of a robot on the field given a visible tag
   // - robot coordinates set to 0,0 at program start
-  //
   public static Pose2d getRobotPoseFromTag(AprilTag tag, Rotation2d gyroAngle) {
     TargetMgr.TagTarget target = TargetMgr.getTarget(tag.getTagId());
     if (target == null) { // sometime bad tag id is returned (e.g. 13 vs 0)
       System.out.println("null target:" + tag.getTagId());
       return null;
     }
-    Translation2d target_trans = target.getPose().getTranslation().toTranslation2d();
-    // get tag location from robot POV
-    Translation2d ctot = camToTarget(tag, gyroAngle);
-    Translation2d camToTargetTranslation = new Translation2d(ctot.getX(), ctot.getY());
-
-    // convert robot position to field zero coords from known target position
-    Translation2d camToFieldTranslation = target_trans.minus(camToTargetTranslation);
-    // robot position determined from tag and current gyro angle to create robot
-    // pose
-    Pose2d fieldToRobot = new Pose2d(camToFieldTranslation, gyroAngle);
-
+    
     // TODO: compensate for camera position on robot
 
+    Translation2d camToFieldTranslation = robotFromFieldOrigin(tag,gyroAngle);
+    Pose2d fieldToRobot = new Pose2d(camToFieldTranslation, gyroAngle);
+    
     return fieldToRobot;
   }
 
@@ -206,31 +228,29 @@ public class TagDetector extends Thread {
         count++;
         if (count > 1)
           maxtime = total > maxtime ? total : maxtime;
-        String s = String.format("max:%-3.1f ave grab:%-2.1f detect:%-2.1f ms", 1e-6*maxtime, 1e-6*grab_time / count, 1e-6*detect_time/count);
+        int ntags=tags==null?0:tags.length;
+        
+        String s = String.format("ntags:%d ave grab:%-2.1f detect:%-2.1f ms", ntags,1e-6*grab_time / count, 1e-6*detect_time/count);
+        
         SmartDashboard.putString("Detect", s);
-        if (!TargetMgr.tagsPresent() || !m_drivetrain.useTags()) {
+
+        if (!TargetMgr.tagsPresent() || !m_drivetrain.useTags() || tags==null) {
           ouputStream.putFrame(mat);
           continue;
         }
-
         target_tag = null;
-        pose_err = 4;
-        double min_err = 1e6;
+
+        double min_dist = 1e6;
         for (int i = 0; i < tags.length; i++) {
-          AprilTag tag = tags[i];
-
-          double err = tag.getPoseError();
-
+          AprilTag tag = tags[i];  
+          double dist = tag.getDistance();
           if (target_id == BEST) {
-            if (err <= min_err) {
+            if (dist <= min_dist) {
               target_tag = tag;
-              min_err = err;
-              pose_err = err;
             }
           } else {
             if (tag.getTagId() == target_id) {
               target_tag = tag;
-              pose_err = err;
               break;
             }
           }
@@ -238,20 +258,20 @@ public class TagDetector extends Thread {
         last_pose = null;
         if (target_tag != null) {
           last_pose = getRobotPoseFromTag(target_tag, m_drivetrain.gyroRotation2d());
-          if (last_pose != null) { // could be an incorrect tag identifier (index out of bounds for expected tag_id
-                                   // range)
-            Translation2d show = last_pose.getTranslation();
-            if (TargetMgr.fieldRelative())
-              show = TargetMgr.robotToFRC(camToTarget(target_tag, m_drivetrain.gyroRotation2d()),
-                  target_tag.getTagId());
+          if (last_pose != null) { // could be an incorrect tag identifier (index out of bounds for expected tag_id)
+            if(!TargetMgr.startPoseSet())
+              TargetMgr.setStartPose(target_tag.getTagId(), last_pose);
+            Translation2d trans = last_pose.getTranslation();           
             String str = String.format("id:%d D:%-2.2f P:%-2.1f H:%-2.1f Robot: X:%-2.1f Y:%-2.1f",
                 target_tag.getTagId(), target_tag.getDistance(), target_tag.getPitch(), target_tag.getYaw(),
-                show.getX(), show.getY());
+                trans.getX(), trans.getY());
             SmartDashboard.putString("Tag", str);
+            Translation2d start_trans=TargetMgr.startPose().getTranslation();
+            trans=start_trans.minus(trans);
+            last_pose=new Pose2d(trans,last_pose.getRotation());
           }
         } else {
-          SmartDashboard.putString("Tag", "no valid tags visible");
-          // m_drivetrain.setVisionPose(null);
+          SmartDashboard.putString("Tag", "no target tag");
         }
 
         for (int i = 0; i < tags.length; i++) {

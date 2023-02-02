@@ -176,7 +176,7 @@ public class Simulation extends SubsystemBase {
     if (b) {
       if (!resetting) {
         resetting = true;
-        //if (m)
+        if (m)
           clear();       
        // m_drive.reset(); 
         //m_drive.disable();   
