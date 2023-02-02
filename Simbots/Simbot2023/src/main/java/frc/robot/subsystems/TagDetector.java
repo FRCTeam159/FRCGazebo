@@ -71,7 +71,12 @@ public class TagDetector extends Thread {
     cam = new Camera(0, 640, 480, 40); // specs for Gazebo camera
 
     wpi_detector = new AprilTagDetector();
-    wpi_detector.addFamily("tag16h5", 0);
+    wpi_detector.addFamily("tag16h5",0);
+    AprilTagDetector.Config config=new AprilTagDetector.Config();
+    //config.quadSigma=0.1f;
+    //config.quadDecimate=1.0f;
+    //wpi_detector.setConfig(config);
+
     wpi_poseEstConfig = new AprilTagPoseEstimator.Config(TargetMgr.targetSize, cam.fx, cam.fy, cam.cx, cam.cy);
     wpi_pose_estimator = new AprilTagPoseEstimator(wpi_poseEstConfig);
 

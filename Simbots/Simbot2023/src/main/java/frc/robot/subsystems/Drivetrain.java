@@ -74,7 +74,7 @@ public class Drivetrain extends SubsystemBase {
 	double h_std=1.0;
 
 	double latency=0.05;
-	double vision_confidence=0.0001;
+	double vision_confidence=0.00001;
 	boolean use_tags=false;
 
 	boolean m_disabled = true;
@@ -297,7 +297,7 @@ public class Drivetrain extends SubsystemBase {
 			String s=String.format("X:%-3.2f Y:%-3.2f",vision_pose.getX(),vision_pose.getY());
 			SmartDashboard.putString("Vision",s);
 		}
-		if(Math.abs(conf-vision_confidence)>1e-5){
+		if(Math.abs(conf-vision_confidence)>1e-7){
 			vision_confidence=conf;
 			double vmult=1.0/vision_confidence;
 			m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(vmult*x_std, vmult*y_std, Units.degreesToRadians(vmult*h_std)));
@@ -388,13 +388,16 @@ public class Drivetrain extends SubsystemBase {
 	/** Updates the field relative position of the robot. */
 	public void updateOdometry() {
 		updatePositions();
-		m_poseEstimator.updateWithTime(getClockTime(),m_gyro.getRotation2d(), m_positions);
+		m_poseEstimator.updateWithTime(getTime(),m_gyro.getRotation2d(), m_positions);
 
 		// apply vision measurements - this must be calculated based either on latency or timestamps.
 
 		vision_pose=TagDetector.getLastPose();
-		if(vision_pose !=null&& use_tags && vision_confidence>0)		
-			m_poseEstimator.addVisionMeasurement(vision_pose,getClockTime()-latency);												
+		if(vision_pose !=null&& use_tags && vision_confidence>0){
+			double tm=getTime()-latency;
+			if(tm>0.1)
+				m_poseEstimator.addVisionMeasurement(vision_pose,tm);
+		}											
 		field_pose = getPose();
 		log();
 	}

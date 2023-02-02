@@ -43,10 +43,13 @@ public class Simulation extends SubsystemBase {
     SmartDashboard.putNumber("SimClock", 0);
     SmartDashboard.putData("Field", m_fieldSim);
     m_timer.start();
+    m_simclock.clear();
     m_cameras = new ArrayList<SimCamera>();
   }
 
   public double getSimTime() {
+    if(!running)
+    return 0;
     return m_simclock.getTime();
   }
 
@@ -184,7 +187,6 @@ public class Simulation extends SubsystemBase {
       } else if (m_timer.get() > 0.25) {
         if (!disabling) {
           m_drive.reset();
-          //m_drive.disable();
           disabling = true;
         } else if (m_timer.get() > 0.5) {
           SmartDashboard.putBoolean("Reset", false);
@@ -207,5 +209,8 @@ public class Simulation extends SubsystemBase {
   public void run() {
     running = true;
     m_simcontrol.run();
+  }
+  public boolean running(){
+    return running;
   }
 }

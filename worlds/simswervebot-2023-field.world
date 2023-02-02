@@ -26,7 +26,7 @@
 
     <include>
       <uri>model://SimSwerveBot</uri>
-      <pose>-6.0 -1.24 0.091698 1.57159 -0.000147 3.12701</pose>
+      <pose>-6.45 -1.3 0.091698 1.57159 -0.000147 3.12701</pose>
     </include>
     
     <include>
