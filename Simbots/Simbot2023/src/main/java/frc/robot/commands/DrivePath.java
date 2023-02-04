@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.objects.PlotServer;
 import frc.robot.subsystems.TagDetector;
+import frc.robot.subsystems.TargetMgr;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Drivetrain;
 import utils.PathData;
@@ -42,10 +43,8 @@ public class DrivePath extends CommandBase {
   /** Creates a new AutoTest. */
   private ArrayList<PathData> pathdata = new ArrayList<PathData>();
 
-  public boolean holotest=true;
-  //private final RamseteController m_ramsete = new RamseteController();
   private final PPHolonomicDriveController m_ppcontroller=new PPHolonomicDriveController(
-      new PIDController(4, 0, 0), new PIDController(4, 0, 0), new PIDController(2, 0, 0));
+      new PIDController(5, 0, 0), new PIDController(5, 0, 0.0), new PIDController(5, 0.0, 0.0));
 
   private final Timer m_timer = new Timer();
   private final Drivetrain m_drive;
@@ -60,21 +59,21 @@ public class DrivePath extends CommandBase {
   double yPath = 4;
   double xPath = 4;
   double rPath = 90;
-  boolean reversed = false;
 
   double maxV;
   double maxA;
   double last_time;
+  double last_heading;
+  int cnt=0;
 
+  static boolean debug_path=false;
   int plot_type = utils.PlotUtils.PLOT_NONE;
   int trajectory_option = Autonomous.PROGRAM;
 
-  public DrivePath(Drivetrain drive, int opt,boolean rev) {
-    reversed=rev;
+  public DrivePath(Drivetrain drive, int opt) {
     trajectory_option=opt;
     m_drive = drive;
-    addRequirements(drive);
-    
+    addRequirements(drive);   
   }
 
   // =================================================
@@ -92,9 +91,7 @@ public class DrivePath extends CommandBase {
     yPath = SmartDashboard.getNumber("yPath", yPath);
     rPath = SmartDashboard.getNumber("rPath", rPath);
 
-    //holotest=SmartDashboard.getBoolean("holographic", true);
-
-    using_pathplanner=(trajectory_option == Autonomous.PATHPLANNER || holotest);
+    using_pathplanner=(trajectory_option == Autonomous.PATHPLANNER);
 
     PlotUtils.initPlot();
 
@@ -105,23 +102,24 @@ public class DrivePath extends CommandBase {
     }
     
     PlotUtils.setInitialPose(m_trajectory.sample(0).poseMeters, Drivetrain.kTrackWidth);
-    // PlotUtils.setDistanceUnits(PlotUtils.UnitType.FEET);
 
     runtime = m_trajectory.getTotalTimeSeconds();
     states = m_trajectory.getStates().size();
     intervals = (int) (runtime / 0.02);
     Pose2d p = m_trajectory.getInitialPose();
 
-    m_drive.resetOdometry(p);
+    elapsed=0;
+    PathPlannerState reference = (PathPlannerState)m_trajectory.sample(0);
+    last_heading=reference.holonomicRotation.getDegrees();
 
-    //System.out.println(p);
+    m_drive.resetOdometry(p); 
 
     m_timer.reset();
     m_timer.start();
     
     pathdata.clear();
     m_drive.startAuto();
-    elapsed=0;
+
   
     System.out.println("runtime:" + runtime + " states:" + states + " intervals:" + intervals);
   }
@@ -131,7 +129,6 @@ public class DrivePath extends CommandBase {
   // =================================================
   @Override
   public void execute() {
-    //elapsed = m_timer.get();
     if(m_trajectory==null){
       System.out.print("ERROR DrivePath.execute - trajectory is null");
        return;
@@ -162,8 +159,6 @@ public class DrivePath extends CommandBase {
     m_drive.endAuto();
     TagDetector.setBestTarget();
 
-    //m_drive.reset();
-    // m_drive.enable();
     if (plot_type != utils.PlotUtils.PLOT_NONE)
       PlotServer.publish(pathdata, 6, plot_type);
   }
@@ -173,6 +168,7 @@ public class DrivePath extends CommandBase {
   // =================================================
   @Override
   public boolean isFinished() {
+    //return true;
     return (elapsed >= 1.001 * runtime || m_trajectory == null)||m_drive.disabled();
   }
 
@@ -186,7 +182,7 @@ public class DrivePath extends CommandBase {
       case Autonomous.PROGRAM:
         return programPath();    
       case Autonomous.PATHPLANNER:
-        return pathPlannerTest();
+        return pathPlannerPath();
       default:
         System.out.println("ERROR unknown trajectory type:"+trajectory_option);
     }
@@ -202,35 +198,63 @@ public class DrivePath extends CommandBase {
 
     PathConstraints constraints= new PathConstraints(maxV, maxA);
     // reversal not supported for swerve drive 
-    PathPlannerTrajectory traj=PathPlanner.generatePath(constraints, reversed, p1, p2);
+    PathPlannerTrajectory traj=PathPlanner.generatePath(constraints, false, p1, p2);
 
-  
-    // if(yPath>0 && TargetMgr.numTargets()>1)
-    //   AprilTagDetector.setTargetId(1);
-    // else
-    //   AprilTagDetector.setTargetId(0);
+    if(!TargetMgr.FRCfield()){
+      if(yPath>0 && TargetMgr.numTargets()>1)
+        TagDetector.setTargetId(1);
+      else
+        TagDetector.setTargetId(0);
+    }
     return traj; 
   }
 
   // =================================================
   // pathPlannerTest: build a trajectory from PathPlanner data
   // =================================================
-  Trajectory pathPlannerTest() {
+  Trajectory pathPlannerPath() {
     try {
-      PathPlannerTrajectory trajectory = PathPlanner.loadPath("swervetest", 
+      String file="swervetest";
+      if(TargetMgr.FRCfield()){
+        if(TargetMgr.getStartPosition()==TargetMgr.OUTSIDE)
+          file="LeftAuto";
+        else if(TargetMgr.getStartPosition()==TargetMgr.INSIDE)
+          file="RightAuto";
+        else if(TargetMgr.getStartPosition()==TargetMgr.CENTER)
+          file="CenterAuto";
+      }
+      PathPlannerTrajectory trajectory = PathPlanner.loadPath(file, 
         new PathConstraints(Drivetrain.kMaxVelocity,Drivetrain.kMaxAcceleration)); // max vel & accel
-
-      Pose2d p0 = trajectory.getInitialPose();
 
       // Pathplanner sets 0,0 as the lower left hand corner (FRC field coord system) 
       // for Gazebo, need to subtract intitial pose from each state so that 0,0 is 
-      // in the center of the field 
-
+      // in the center of the robot 
+      Pose2d p0;
+     
+      p0=trajectory.getInitialHolonomicPose();
+      System.out.println("Path started:"+file+" relative to first state");
+     
+      System.out.println("initial path pose:"+trajectory.getInitialHolonomicPose());
+      System.out.println("initial robot pose:"+TargetMgr.startPose());
+     
       List<State> states = trajectory.getStates();
       for(int i=0;i<states.size();i++){
-        State state=states.get(i);
-        Pose2d psi=state.poseMeters.relativeTo(p0);
-        state.poseMeters=psi;
+        PathPlannerState state=trajectory.getState(i);
+        Pose2d p=state.poseMeters;
+
+        Rotation2d h=state.holonomicRotation;
+       
+        Pose2d pr=p.relativeTo(p0);
+        if(i<2)
+          pr=new Pose2d(pr.getTranslation(),new Rotation2d());
+        if(TargetMgr.getAlliance()==TargetMgr.BLUE)
+          state.holonomicRotation=h.plus(new Rotation2d(Math.toRadians(180)));
+        if(debug_path && (i%10)==0)
+          System.out.format("%d p X:%-3.1f Y:%-3.1f R:%-3.1f H:%-3.1f pr X:%-3.1f Y:%-3.1f R:%-3.1f H:%-3.1f \n",
+            i,p.getX(),p.getY(),p.getRotation().getDegrees(),h.getDegrees(),
+            pr.getX(),pr.getY(),pr.getRotation().getDegrees(),state.holonomicRotation.getDegrees()
+          );
+        state.poseMeters=pr;
       }
       return trajectory;
     } catch (Exception ex) {
@@ -302,9 +326,12 @@ public class DrivePath extends CommandBase {
     pd.d[1] = current_pose.getX();
     pd.d[2] = target_pose.getY();
     pd.d[3] = current_pose.getY();
-    pd.d[4] = 2*((PathPlannerState)state).holonomicRotation.getRadians();
-    double r=Math.toRadians(m_drive.getHeading());
-    pd.d[5] = 2*r;
+    double r=((PathPlannerState)state).holonomicRotation.getDegrees();
+    double angle=Drivetrain.unwrap(last_heading,r);
+   
+    pd.d[4] =Math.toRadians(angle);
+    pd.d[5] = Math.toRadians(m_drive.getHeading());
+    last_heading=angle;
 
     pathdata.add(pd);
   }

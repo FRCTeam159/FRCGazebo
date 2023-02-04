@@ -14,9 +14,6 @@ import java.awt.Stroke;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import utils.PathData;
-import utils.PlotUtils;
-
 
 //import org.usfirst.frc.team159.robot.TestPlot.DrawSine;
 

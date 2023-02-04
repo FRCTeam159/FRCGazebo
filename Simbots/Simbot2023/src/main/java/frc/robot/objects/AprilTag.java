@@ -1,8 +1,6 @@
 
 package frc.robot.objects;
 
-import javax.xml.crypto.dsig.Transform;
-
 import org.opencv.core.Point;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -13,7 +11,6 @@ import edu.wpi.first.apriltag.AprilTagDetection;
 
 import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Nat;
-import apriltag.jni.TagResult;
 
 public class AprilTag {
     int id;
@@ -22,7 +19,6 @@ public class AprilTag {
     double centerX, centerY;
     double[][] corners;
     double[][] homog;
-    double pose_err;
 
     Transform3d poseResult;
 
@@ -45,26 +41,8 @@ public class AprilTag {
           homog[i][j]=c[k++];
 
         poseResult=pose;
-        // pose_err=det.getPoseAmbiguity();
-    }
-    public AprilTag(TagResult t){
-        corners=t.getCorners();
-        id=t.getId();
-        tag_id=t.getTagId();
-        margin=t.getDecisionMargin();
-        centerX=t.getCenterX();
-        centerY=t.getCenterY();
-        homog=t.getHomog();
-        //rotation=t.getRotation();
-        pose_err=t.getPoseError();
-        poseResult=t.getPoseTransform();
     }
     
-    /**
-     * Photonvision: All our solvepnp code returns a tag with X left, Y up, and Z out of the tag To better match
-     * wpilib, we want to apply another rotation so that we get Z up, X out of the tag, and Y to the
-     * right. We apply the following change of basis: X -> Y Y -> Z Z -> X
-     */
     private static final Rotation3d WPILIB_BASE_ROTATION = new Rotation3d(
         new MatBuilder<>(Nat.N3(), Nat.N3()).fill(0, 1, 0, 0, 0, 1, 1, 0, 0));
 
@@ -141,9 +119,6 @@ public class AprilTag {
     public Pose3d getPose() {
         return convertOpenCVtoWPIlib(poseResult);
     }
-    public double getPoseError() {
-        return pose_err;
-    }
 
     public double getDistance() {
 		// camera to target distance along the ground
@@ -176,14 +151,13 @@ public class AprilTag {
         Pose3d pose=getPose();
         
         if(pose !=null)
-          str = String.format("id:%d err:%-2.3f X:%-2.1f Y:%-2.1f Z:%-2.1f H:%-2.1f P:%-2.1f",
-                tag_id, pose_err, getX(), getY(), getZ(), getYaw(), getPitch());
+          str = String.format("id:%d X:%-2.1f Y:%-2.1f Z:%-2.1f H:%-2.1f P:%-2.1f",
+                tag_id, getX(), getY(), getZ(), getYaw(), getPitch());
         return str;
     }
 
     public void print() {
         String str = toString();
         System.out.println(str);
-    
     }
 }

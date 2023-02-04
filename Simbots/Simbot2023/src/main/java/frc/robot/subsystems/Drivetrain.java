@@ -33,18 +33,16 @@ public class Drivetrain extends SubsystemBase {
 	public static double dely = Units.inchesToMeters(0.5 * side_wheel_base); // 0.2949 metters
 	public static double delx = Units.inchesToMeters(0.5 * front_wheel_base);
 
-	private final Translation2d m_frontLeftLocation = new Translation2d(dely, -delx);
-	private final Translation2d m_frontRightLocation = new Translation2d(dely, delx);
-	private final Translation2d m_backLeftLocation = new Translation2d(-dely, -delx);
-	private final Translation2d m_backRightLocation = new Translation2d(-dely, delx);
+	private final Translation2d m_frontLeftLocation = new Translation2d(delx, dely);
+	private final Translation2d m_frontRightLocation = new Translation2d(delx, -dely);
+	private final Translation2d m_backLeftLocation = new Translation2d(-delx, dely);
+	private final Translation2d m_backRightLocation = new Translation2d(-delx, -dely);
 
 	private final SwerveModule m_frontLeft = new SwerveModule(1, 2);
 	private final SwerveModule m_frontRight = new SwerveModule(3, 4);
 	private final SwerveModule m_backLeft = new SwerveModule(5, 6);
 	private final SwerveModule m_backRight = new SwerveModule(7, 8); 
 	
-	//final PIDController m_controller=new PIDController(1,0.1,0.0);
-
 	private final SwerveModulePosition[] m_positions={
 		new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition()
 	};
@@ -63,7 +61,7 @@ public class Drivetrain extends SubsystemBase {
 	public static double kMaxVelocity = 3; // meters per second
 	public static double kMaxAcceleration = 0.5; // meters/second/second
 	public static double kMaxAngularSpeed = Math.toRadians(360); // degrees per second
-	public static double kMaxAngularAcceleration =Math.toRadians(720);// degrees per second per second
+	public static double kMaxAngularAcceleration = Math.toRadians(720);// degrees per second per second
 
 	boolean field_oriented = true;
 	double last_heading = 0;
@@ -76,8 +74,7 @@ public class Drivetrain extends SubsystemBase {
 	double h_std=1.0;
 
 	double latency=0.05;
-	double vision_confidence=0.05;
-	double pose_error=0;
+	double vision_confidence=0.00001;
 	boolean use_tags=false;
 
 	boolean m_disabled = true;
@@ -87,9 +84,12 @@ public class Drivetrain extends SubsystemBase {
 
 	private int cnt=0;
 
+	Pose2d vision_pose;
+
     /** Creates a new Subsystem. */
 	public Drivetrain() {
 		m_timer.start();
+
 		makeEstimator();
 
 		TargetMgr.init();
@@ -100,7 +100,6 @@ public class Drivetrain extends SubsystemBase {
 		SmartDashboard.putBoolean("Use Tags", use_tags);
 		SmartDashboard.putNumber("Latency", latency);
 		SmartDashboard.putNumber("Conf", vision_confidence);
-		SmartDashboard.putNumber("Error", pose_error);
 	}
 
 	void makeEstimator(){
@@ -127,7 +126,6 @@ public class Drivetrain extends SubsystemBase {
 	public double getClockTime() {
 		//return simulation.getClockTime();
 		return Timer.getFPGATimestamp();
-		//return m_timer.get();
 	}
 	public void startAuto() {
 		simulation.reset();
@@ -137,7 +135,7 @@ public class Drivetrain extends SubsystemBase {
 
 	public void endAuto() {
 		if(debug)
-		System.out.println("Drivetrain.endAuto");
+			System.out.println("Drivetrain.endAuto");
 		setRobotDisabled(true);
 		//simulation.end();
 		//disable();
@@ -189,14 +187,20 @@ public class Drivetrain extends SubsystemBase {
 		m_backLeft.reset();
 		m_backRight.reset();
 
+		TargetMgr.clearStartPose();
+
+		//last_heading =p.getRotation().getDegrees();
+		last_heading =0;
 		m_gyro.reset();
-		last_heading = 0;
+
 		makeEstimator();
 	}
 
 	public void resetPose() {
-		last_heading = 0;
-		resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
+		Pose2d p=new Pose2d();	
+		last_heading = p.getRotation().getDegrees();
+		resetOdometry(p);
+
 		field_pose = getPose();
 	}
 
@@ -215,7 +219,6 @@ public class Drivetrain extends SubsystemBase {
 	}
 
 	public void setFieldOriented(boolean t){
-		//m_gyro.setEnabled(t);
 		field_oriented=t;
 	}
 
@@ -224,10 +227,6 @@ public class Drivetrain extends SubsystemBase {
 	}
 	public double getHeading() {
 		double angle=getRotation2d().getDegrees();
-		// if(angle>180)
-		// 	angle-=360;
-		// if(angle<-180)
-		// 	angle+=360;
 		return angle;
 	}
 
@@ -276,7 +275,6 @@ public class Drivetrain extends SubsystemBase {
 	}
 
 	public void log() {
-
 		SmartDashboard.putNumber("Distance", getDistance());
 		SmartDashboard.putNumber("Velocity", getVelocity());
 		Translation2d t=  getPose().getTranslation();
@@ -286,17 +284,20 @@ public class Drivetrain extends SubsystemBase {
 		SmartDashboard.putNumber("X:", t.getX());
 		SmartDashboard.putNumber("Y:", t.getY());
 
+		use_tags = SmartDashboard.getBoolean("Use Tags", use_tags);
+
 		field_oriented = SmartDashboard.getBoolean("Field Oriented", field_oriented);
 		TargetMgr.setFieldRelative(field_oriented);
 		kMaxVelocity=SmartDashboard.getNumber("maxV", kMaxVelocity);
 		kMaxAcceleration=SmartDashboard.getNumber("maxA", kMaxAcceleration);
 
-		use_tags = SmartDashboard.getBoolean("Use Tags", use_tags);
-		SmartDashboard.putNumber("Error", pose_error);
-
 		latency=SmartDashboard.getNumber("Latency", 0);
 		double conf=SmartDashboard.getNumber("Conf", vision_confidence);
-		if(Math.abs(conf-vision_confidence)>0.001){
+		if(vision_pose !=null){
+			String s=String.format("X:%-3.2f Y:%-3.2f",vision_pose.getX(),vision_pose.getY());
+			SmartDashboard.putString("Vision",s);
+		}
+		if(Math.abs(conf-vision_confidence)>1e-7){
 			vision_confidence=conf;
 			double vmult=1.0/vision_confidence;
 			m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(vmult*x_std, vmult*y_std, Units.degreesToRadians(vmult*h_std)));
@@ -307,7 +308,6 @@ public class Drivetrain extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		//updateOdometry();
 	}
 
 	@Override
@@ -388,24 +388,16 @@ public class Drivetrain extends SubsystemBase {
 	/** Updates the field relative position of the robot. */
 	public void updateOdometry() {
 		updatePositions();
-		m_poseEstimator.updateWithTime(getClockTime(),m_gyro.getRotation2d(), m_positions);
-		//m_poseEstimator.update(m_gyro.getRotation2d(), m_positions);
+		m_poseEstimator.updateWithTime(getTime(),m_gyro.getRotation2d(), m_positions);
 
-		// Also apply vision measurements - this must be calculated based either on latency or timestamps.
-		if(TargetMgr.tagsPresent()){
-			Pose2d vision_pose=TagDetector.getLastPose();
-			pose_error=TagDetector.getPoseError();
-			if(vision_pose !=null){		
-				if(use_tags && vision_confidence>0){
-					try{
-						m_poseEstimator.addVisionMeasurement(vision_pose,getClockTime()-latency);
-					}catch(Exception e){
-						System.out.println("exception caught in addVisionMeasurement:"+e);
-					}
-					// TODO: determine actual latency from camera pose 
-				}
-			}
-		}			
+		// apply vision measurements - this must be calculated based either on latency or timestamps.
+
+		vision_pose=TagDetector.getLastPose();
+		if(vision_pose !=null&& use_tags && vision_confidence>0){
+			double tm=getTime()-latency;
+			if(tm>0.1)
+				m_poseEstimator.addVisionMeasurement(vision_pose,tm);
+		}											
 		field_pose = getPose();
 		log();
 	}
@@ -423,7 +415,6 @@ public class Drivetrain extends SubsystemBase {
 		m_positions[3]=new SwerveModulePosition();
 	}
 	public void resetOdometry(Pose2d pose) {
-		//reset();
 		last_heading = 0;
 		m_gyro.reset();
 		resetPositions();

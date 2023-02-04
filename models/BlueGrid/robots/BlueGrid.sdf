@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sdf version="1.5">
   <model name="BlueGrid">
-    <pose>0 0 -8.85402862138562E-15 0 0 0</pose>
-    
+    <pose>0 0 0 0 0 0</pose>
+   
     <link name="Body">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>-2.58766437610333 -0.373657256229708 -0.132157991348386 0 0 3.14159265358979</pose>
+      <pose>2.58766437610333 0.373657256229708 -0.132157991348386 0 0 0</pose>
       <must_be_base_link>1</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
@@ -17,14 +17,13 @@
         <pose>0 0 0 0 0 0</pose>
         <inertia>
           <ixx>9.13610706013795</ixx>
-          <ixy>2.27938493877248</ixy>
-          <ixz>0.977433511583552</ixz>
+          <ixy>2.27938493877244</ixy>
+          <ixz>0.977433511583546</ixz>
           <iyy>450.556531174994</iyy>
           <iyz>2.87991649996356</iyz>
           <izz>451.900251698765</izz>
         </inertia>
       </inertial>
-      <!--
       <collision name="Body_collision">
         <pose>-3.32839104198053 -0.373657256229717 0.82890430125006 0 0 0</pose>
         <geometry>
@@ -45,12 +44,11 @@
           </friction>
         </surface>
       </collision>
-      -->
       <visual name="Body_visual">
         <pose>-3.32839104198053 -0.373657256229717 0.82890430125006 0 0 0</pose>
         <material>
-          <ambient>0.752941176470588 0.752941176470588 0.9 1</ambient>
-          <diffuse>0.752941176470588 0.752941176470588 0.9 1</diffuse>
+          <ambient>0.8 0.8 1 1</ambient>
+          <diffuse>0.8 0.8 1 1</diffuse>
         </material>
         <geometry>
           <mesh>
