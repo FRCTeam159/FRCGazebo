@@ -1,0 +1,1140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.5">
+  <model name="SimSwerveBot3">
+    <pose>0 0 -1.09292752624527E-15 0 0 0</pose>
+    <plugin name="clock" filename="libgz_clock.so">
+      <topic>/gazebo/frc/time</topic>
+    </plugin>
+    <link name="Body">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.0103185969497103 0.0270555915724389 0.00229909099591104 0 0 0</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>100</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0.281462866767804</ixx>
+          <ixy>0.00534071773862858</ixy>
+          <ixz>0.00063191111485271</ixz>
+          <iyy>0.688565334814199</iyy>
+          <iyz>0.00210804924810935</iyz>
+          <izz>0.474279088453001</izz>
+        </inertia>
+      </inertial>
+      <collision name="Body_collision">
+        <pose>-0.466812853283889 -0.02705559157244 -0.00301802987182291 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/Body_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="Body_visual">
+        <pose>-0.466812853283889 -0.02705559157244 -0.00301802987182291 0 0 0</pose>
+        <material>
+          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/Body.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    
+    <link name="FRdrive">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.363496387518542 0.00308940755423762 0.210899192814309 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.657888054648102</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0.00176096960655331</ixx>
+          <ixy>3.4876847881195E-05</ixy>
+          <ixz>0.000780859801168257</ixz>
+          <iyy>0.00265420485611322</iyy>
+          <iyz>3.74130649061973E-05</iyz>
+          <izz>0.00176736703322897</izz>
+        </inertia>
+      </inertial>
+      <visual name="FRdrive_visual">
+        <pose>-0.81999064385272 -0.00308940755423872 -0.211618131690221 0 0 0</pose>
+        <material>
+          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/FRdrive.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Body-FRdrive" type="revolute">
+      <parent>Body</parent>
+      <child>FRdrive</child>
+      <pose>0.0270286124815718 -1.09208571005825E-11 138.360469452063 0 0 0</pose>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>50</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="FRwheel">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.390524894652224 -0.045440778296 0.239779131380291 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.123981366006226</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>3.88278352520219E-06</ixx>
+          <ixy>2.45178744082116E-09</ixy>
+          <ixz>3.03959796514531E-08</ixz>
+          <iyy>3.86178892347252E-06</iyy>
+          <iyz>1.19329957457669E-08</iyz>
+          <izz>2.19913716679678E-08</izz>
+        </inertia>
+      </inertial>
+      <collision name="FRwheel_collision">
+        <pose>-0.847019150986402 0.0454407782959989 -0.240498070256203 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/FRwheel_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="FRwheel_visual">
+        <pose>-0.847019150986402 0.0454407782959989 -0.240498070256203 0 0 0</pose>
+        <material>
+          <ambient>0 1 0 1</ambient>
+          <diffuse>0 1 0 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/FRwheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="FRdrive-FRwheel" type="revolute">
+      <parent>FRdrive</parent>
+      <child>FRwheel</child>
+      <pose>1.2563807359034E-05 0.000114295457507303 138.333243550245 0 0 0</pose>
+      <axis>
+        <xyz>0.00753194032505162 -5.39495021367634E-16 0.99997163453517</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>25</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="FLdrive">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.390516175212258 -0.00398782218945136 -0.236504732283261 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.104844245672399</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>8.02733542023956E-05</ixx>
+          <ixy>7.99408983935354E-09</ixy>
+          <ixz>2.15004488581546E-07</ixz>
+          <iyy>3.94598209748503E-05</iyy>
+          <iyz>1.46851676850662E-06</iyz>
+          <izz>4.08158762844341E-05</izz>
+        </inertia>
+      </inertial>
+      <visual name="FLdrive_visual">
+        <pose>-0.847010431546437 0.00398782218945027 0.235785793407349 0 0 0</pose>
+        <material>
+          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/FLdrive.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Body-FLdrive" type="revolute">
+      <parent>Body</parent>
+      <child>FLdrive</child>
+      <pose>8.82478785446672E-06 -1.88252191613003E-14 138.331623377161 0 0 0</pose>
+      <axis>
+        <xyz>1.52655665885957E-16 -1 8.59873560937597E-30</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>50</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="FLwheel">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.390549941149665 -0.0454363391768118 -0.236470756117954 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.123981363237598</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>3.88123093123913E-06</ixx>
+          <ixy>6.20012767170166E-09</ixy>
+          <ixz>2.45786304027227E-08</ixz>
+          <iyy>3.86342616154093E-06</iyy>
+          <iyz>1.14534871757271E-08</iyz>
+          <izz>2.19057994070499E-08</izz>
+        </inertia>
+      </inertial>
+      <collision name="FLwheel_collision">
+        <pose>-0.847044197483843 0.0454363391768107 0.235751817242042 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/FLwheel_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="FLwheel_visual">
+        <pose>-0.847044197483843 0.0454363391768107 0.235751817242042 0 0 0</pose>
+        <material>
+          <ambient>0 1 0 1</ambient>
+          <diffuse>0 1 0 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/FLwheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="FLdrive-FLwheel" type="revolute">
+      <parent>FLdrive</parent>
+      <child>FLwheel</child>
+      <pose>-3.39534050320944E-05 0.000109856338368935 138.33324345988 0 0 0</pose>
+      <axis>
+        <xyz>-0.00544848904353874 5.39806568947221E-16 0.999985156873412</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>25</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="BRdrive">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.389820351374971 -0.0252568719347456 0.23794658223208 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.0366045007681131</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>3.41504034558259E-05</ixx>
+          <ixy>4.88097084483977E-09</ixy>
+          <ixz>2.07634539991463E-07</ixz>
+          <iyy>3.41328053798174E-05</iyy>
+          <iyz>8.02347541431378E-07</iyz>
+          <izz>2.01243083049774E-08</izz>
+        </inertia>
+      </inertial>
+      <visual name="BRdrive_visual">
+        <pose>-0.0666739049592076 0.0252568719347445 -0.238665521107992 0 0 0</pose>
+        <material>
+          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/BRdrive.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Body-BRdrive" type="revolute">
+      <parent>Body</parent>
+      <child>BRdrive</child>
+      <pose>1.09504079237599E-06 -1.5404344466674E-15 138.333422062645 0 0 0</pose>
+      <axis>
+        <xyz>-1.94289029309404E-16 -1 1.57772181044202E-30</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>50</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="BRwheel">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.38981675512866 -0.0454407782968198 0.236470870684926 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.123981364545114</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>3.88286314957006E-06</ixx>
+          <ixy>2.43450099757003E-09</ixy>
+          <ixz>2.48038534874932E-08</ixz>
+          <iyy>3.8617885958559E-06</iyy>
+          <iyz>1.19365329137536E-08</iyz>
+          <izz>2.1911419680857E-08</izz>
+        </inertia>
+      </inertial>
+      <collision name="BRwheel_collision">
+        <pose>-0.066677501205518 0.0454407782968187 -0.237189809560838 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/BRwheel_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="BRwheel_visual">
+        <pose>-0.066677501205518 0.0454407782968187 -0.237189809560838 0 0 0</pose>
+        <material>
+          <ambient>0 1 0 1</ambient>
+          <diffuse>0 1 0 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/BRwheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="BRdrive-BRwheel" type="revolute">
+      <parent>BRdrive</parent>
+      <child>BRwheel</child>
+      <pose>-1.25639304104225E-05 0.000114295458376698 138.333243721312 0 0 0</pose>
+      <axis>
+        <xyz>-0.0060835652850518 5.44873555814072E-16 -0.999981494945493</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>25</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="BLdrive">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.389831464443077 -0.00398782097182753 -0.239745247576255 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.104844240889755</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>8.02722768390511E-05</ixx>
+          <ixy>1.10699316912706E-08</ixy>
+          <ixz>2.97186563436984E-07</ixz>
+          <iyy>3.94598136598907E-05</iyy>
+          <iyz>1.46850166523728E-06</iyz>
+          <izz>4.08169398786503E-05</izz>
+        </inertia>
+      </inertial>
+      <visual name="BLdrive_visual">
+        <pose>-0.0666627918911016 0.00398782097182643 0.239026308700343 0 0 0</pose>
+        <material>
+          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/BLdrive.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Body-BLdrive" type="revolute">
+      <parent>Body</parent>
+      <child>BLdrive</child>
+      <pose>1.22081088980014E-05 -1.84389346673253E-10 138.334863892454 0 0 0</pose>
+      <axis>
+        <xyz>-1.02695629777827E-15 -1 2.11988446961496E-17</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>50</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="BLwheel">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.389819150986402 -0.045440778296001 -0.239779131380316 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.123981366006225</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>3.8827835252021E-06</ixx>
+          <ixy>2.45178744083197E-09</ixy>
+          <ixz>3.03959796515128E-08</ixz>
+          <iyy>3.86178892347244E-06</iyy>
+          <iyz>1.19329957459059E-08</iyz>
+          <izz>2.19913716679634E-08</izz>
+        </inertia>
+      </inertial>
+      <collision name="BLwheel_collision">
+        <pose>-0.0666751053477765 0.0454407782959999 0.239060192504404 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/BLwheel_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="BLwheel_visual">
+        <pose>-0.0666751053477765 0.0454407782959999 0.239060192504404 0 0 0</pose>
+        <material>
+          <ambient>0 1 0 1</ambient>
+          <diffuse>0 1 0 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/BLwheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="BLdrive-BLwheel" type="revolute">
+      <parent>BLdrive</parent>
+      <child>BLwheel</child>
+      <pose>-1.25638072460965E-05 0.000114295457557811 138.33324373951 0 0 0</pose>
+      <axis>
+        <xyz>-0.00753194032505203 -5.52958291197397E-16 -0.99997163453517</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>25</effort>
+        </limit>
+      </axis>
+    </joint>
+    <!--
+    <link name="LowerArm">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.286613438363416 0.569352514264946 0.201682058992877 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>3.19006579837111</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0.0573004752158579</ixx>
+          <ixy>0.0388509565035045</ixy>
+          <ixz>0.00215756738631079</ixz>
+          <iyy>0.0267256940750842</iyy>
+          <iyz>0.0031675240564386</iyz>
+          <izz>0.0835009253183463</izz>
+        </inertia>
+      </inertial>
+      <collision name="LowerArm_collision">
+        <pose>-0.743107694697595 -0.569352514264947 -0.202400997868789 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/LowerArm_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="LowerArm_visual">
+        <pose>-0.743107694697595 -0.569352514264947 -0.202400997868789 0 0 0</pose>
+        <material>
+          <ambient>0.250980392156863 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0.250980392156863 0.501960784313725 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/LowerArm.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Body-LowerArm" type="revolute">
+      <parent>Body</parent>
+      <child>LowerArm</child>
+      <pose>-0.288320694697595 -0.423302514264946 138.333243644877 0 0 0</pose>
+      <axis>
+        <xyz>0 0 -1</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+        </dynamics>
+        <limit>
+          <upper>0</upper>
+          <lower>0</lower>
+          <effort>1</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="UpperArm">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.520807370409663 0.709767313781582 0.132747045366564 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>2.3570164391411</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0.0327522810455929</ixx>
+          <ixy>0.00899866466757545</ixy>
+          <ixz>0.000721787313956972</ixz>
+          <iyy>0.00274871570596632</iyy>
+          <iyz>0.00260642623951405</iyz>
+          <izz>0.0349873948280755</izz>
+        </inertia>
+      </inertial>
+      <collision name="UpperArm_collision">
+        <pose>-0.977301626743842 -0.709767313781583 -0.133465984242475 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/UpperArm_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="UpperArm_visual">
+        <pose>-0.977301626743842 -0.709767313781583 -0.133465984242475 0 0 0</pose>
+        <material>
+          <ambient>0.250980392156863 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0.250980392156863 0.501960784313725 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/UpperArm.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="LowerArm-UpperArm" type="revolute">
+      <parent>LowerArm</parent>
+      <child>UpperArm</child>
+      <pose>0.389357612730077 0.0457068725294052 138.333243644877 0 0 0</pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+        </dynamics>
+        <limit>
+          <upper>0</upper>
+          <lower>0</lower>
+          <effort>1</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="GripperRotate">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.410644632079937 0.304251355032236 0.0335850565029148 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.16415889155247</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0.000247446697604103</ixx>
+          <ixy>3.2175323245983E-07</ixy>
+          <ixz>1.36430845946673E-05</ixz>
+          <iyy>0.000248282839780158</iyy>
+          <iyz>4.64214313285637E-06</iyz>
+          <izz>1.05509919390112E-06</izz>
+        </inertia>
+      </inertial>
+      <collision name="GripperRotate_collision">
+        <pose>-0.867138888414116 -0.304251355032237 -0.0343039953788267 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/GripperRotate_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="GripperRotate_visual">
+        <pose>-0.867138888414116 -0.304251355032237 -0.0343039953788267 0 0 0</pose>
+        <material>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/GripperRotate.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="UpperArm-GripperRotate" type="revolute">
+      <parent>UpperArm</parent>
+      <child>GripperRotate</child>
+      <pose>0.109354009169226 -0.22069801960454 138.333243644877 0 0 0</pose>
+      <axis>
+        <xyz>0 0 -1</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+        </dynamics>
+        <limit>
+          <upper>0</upper>
+          <lower>0</lower>
+          <effort>1</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="GripperTwist">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.513843964560248 0.209879195510605 -0.0171770373937321 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.357691002526427</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0.000144179290386782</ixx>
+          <ixy>5.90870697792821E-05</ixy>
+          <ixz>4.10715642258176E-06</ixz>
+          <iyy>0.000240011662145135</iyy>
+          <iyz>3.63816895023731E-05</iyz>
+          <izz>0.000362956457253779</izz>
+        </inertia>
+      </inertial>
+      <collision name="GripperTwist_collision">
+        <pose>-0.970338220894427 -0.209879195510606 0.0164580985178202 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/GripperTwist_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="GripperTwist_visual">
+        <pose>-0.970338220894427 -0.209879195510606 0.0164580985178202 0 0 0</pose>
+        <material>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/GripperTwist.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <sensor name="GripperTwistCamera" type="camera">
+        <visualize>1</visualize>
+        <always_on>1</always_on>
+        <pose>0.170292940701964 -0.101240974145927 138.33756166404 0 0 0</pose>
+        <camera name="GripperTwistcamera">
+          <horizontal_fov>1.5707963267949</horizontal_fov>
+          <image>
+            <width>320</width>
+            <height>240</height>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+        </camera>
+      </sensor>
+    </link>
+    <joint name="GripperRotate-GripperTwist" type="revolute">
+      <parent>GripperRotate</parent>
+      <child>GripperTwist</child>
+      <pose>0.142783014018622 -0.141987017322231 138.339964296233 0 0 0</pose>
+      <axis>
+        <xyz>0.583258850663007 -0.812286349216376 -6.41212387269936E-16</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+        </dynamics>
+        <limit>
+          <upper>0</upper>
+          <lower>0</lower>
+          <effort>1</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="LeftGripper">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.557320667154498 0.0719869069981106 -0.193435240872313 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.528149142135129</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <collision name="LeftGripper_collision">
+        <pose>-1.01381492348868 -0.0719869069981117 0.192716301996401 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/LeftGripper_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="LeftGripper_visual">
+        <pose>-1.01381492348868 -0.0719869069981117 0.192716301996401 0 0 0</pose>
+        <material>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/LeftGripper.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="GripperTwist-LeftGripper" type="revolute">
+      <parent>GripperTwist</parent>
+      <child>LeftGripper</child>
+      <pose>0.111890652409923 -0.0215624740650626 138.35185961093 0 0 0</pose>
+      <axis>
+        <xyz>-0.808622698046812 -0.580628181106082 -0.0948696342827216</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+        </dynamics>
+        <limit>
+          <upper>0</upper>
+          <lower>0</lower>
+          <effort>1</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="RightGripper">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.535309594713599 0.0523854190468442 0.133776452201924 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.52814914213513</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <collision name="RightGripper_collision">
+        <pose>-0.991803851047778 -0.0523854190468453 -0.134495391077836 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/RightGripper_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="RightGripper_visual">
+        <pose>-0.991803851047778 -0.0523854190468453 -0.134495391077836 0 0 0</pose>
+        <material>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/RightGripper.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="GripperTwist-RightGripper" type="revolute">
+      <parent>GripperTwist</parent>
+      <child>RightGripper</child>
+      <pose>0.131168146676638 -0.0382658693857197 138.314476087231 0 0 0</pose>
+      <axis>
+        <xyz>-0.808622698046812 -0.580628181106082 -0.0948696342827216</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+        </dynamics>
+        <limit>
+          <upper>0</upper>
+          <lower>0</lower>
+          <effort>1</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="LeftPad">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.65045406809633 -0.061857243117229 -0.158044572202814 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.0254993671569944</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <collision name="LeftPad_collision">
+        <pose>-1.10694832443051 0.0618572431172279 0.157325633326903 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/LeftPad_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="LeftPad_visual">
+        <pose>-1.10694832443051 0.0618572431172279 0.157325633326903 0 0 0</pose>
+        <material>
+          <ambient>0 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0 0.501960784313725 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/LeftPad.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="LeftGripper-LeftPad" type="prismatic">
+      <parent>LeftGripper</parent>
+      <child>LeftPad</child>
+      <pose>0.300698114297486 0.0683516039871302 138.3325519293 0 0 0</pose>
+      <axis>
+        <xyz>0.0142604132425631 -0.180524087546997 0.983467180148619</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+        </dynamics>
+        <limit>
+          <upper>0</upper>
+          <lower>0</lower>
+          <effort>1</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="RightPad">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.632231615928298 -0.0778836267017213 0.0953488079418481 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.0254993671569936</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <collision name="RightPad_collision">
+        <pose>-1.08872587226248 0.0778836267017202 -0.0960677468177599 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/RightPad_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="RightPad_visual">
+        <pose>-1.08872587226248 0.0778836267017202 -0.0960677468177599 0 0 0</pose>
+        <material>
+          <ambient>0 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0 0.501960784313725 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimSwerveBot3/meshes/RightPad.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="RightGripper-RightPad" type="prismatic">
+      <parent>RightGripper</parent>
+      <child>RightPad</child>
+      <pose>0.316296975863962 0.0511474732792853 138.331519317753 0 0 0</pose>
+      <axis>
+        <xyz>0.1559048176831 -0.0559484237584419 -0.986186322001145</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+        </dynamics>
+        <limit>
+          <upper>0</upper>
+          <lower>0</lower>
+          <effort>1</effort>
+        </limit>
+      </axis>
+    </joint>
+    -->
+    
+  </model>
+</sdf>

@@ -73,7 +73,6 @@ public class SwerveModule {
   }
   public void disable(){
     m_turningPIDController.reset(0.0);
-
     m_enabled=false;
     m_driveMotor.disable();
     m_turnMotor.disable();
@@ -134,12 +133,10 @@ public class SwerveModule {
      System.out.format("%d turn:%-4.2f state:%-4.2f out:%-4.2f\n",
           m_drive_chnl/2,angle,state.angle.getRadians(),turnOutput);
      }
-    //if(m_enabled){
-      //m_turnMotor.set(turnOutput); 
-      //m_driveMotor.set(driveOutput);
-      m_turnMotor.set(turnOutput + turnFeedforward); 
-      m_driveMotor.set(driveOutput + driveFeedforward);
-   // }
+    
+    m_turnMotor.set(turnOutput + turnFeedforward); 
+    m_driveMotor.set(driveOutput + driveFeedforward);
+   
    cnt++;
 
   }

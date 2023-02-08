@@ -44,7 +44,7 @@ public class DrivePath extends CommandBase {
   private ArrayList<PathData> pathdata = new ArrayList<PathData>();
 
   private final PPHolonomicDriveController m_ppcontroller=new PPHolonomicDriveController(
-      new PIDController(5, 0, 0), new PIDController(5, 0, 0.0), new PIDController(5, 0.0, 0.0));
+      new PIDController(5, 0, 0), new PIDController(4, 0, 0.0), new PIDController(3, 0.0, 0.0));
 
   private final Timer m_timer = new Timer();
   private final Drivetrain m_drive;

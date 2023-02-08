@@ -37,8 +37,8 @@ public class Simulation extends SubsystemBase {
 
   public Simulation(Drivetrain drivetrain) {
     m_drive = drivetrain;
-    SmartDashboard.putBoolean("Reset", false);
-    SmartDashboard.putBoolean("Gazebo", false);
+    SmartDashboard.putBoolean("Reset", true);
+    SmartDashboard.putBoolean("Gazebo", true);
     SmartDashboard.putNumber("SimTime", 0);
     SmartDashboard.putNumber("SimClock", 0);
     SmartDashboard.putData("Field", m_fieldSim);

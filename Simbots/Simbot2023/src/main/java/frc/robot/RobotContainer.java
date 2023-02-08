@@ -7,9 +7,13 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.DriveWithGamepad;
+import frc.robot.commands.PoseArm;
 import frc.robot.objects.PlotServer;
 import frc.robot.subsystems.TagDetector;
+import frc.robot.subsystems.Wrist;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Drivetrain;
 
@@ -25,15 +29,20 @@ public class RobotContainer {
   private final Autonomous m_autonomous = new Autonomous(m_drivetrain);
   private final XboxController m_controller = new XboxController(0);
   private final TagDetector m_detector= new TagDetector(m_drivetrain);
+  private final Wrist m_wrist=new Wrist();
+
+  private final Arm m_arm = new Arm();
+  private DriveWithGamepad m_driveCommand = null; 
+
   PlotServer m_plotsub=new PlotServer();
 
-
-  private DriveWithGamepad m_driveCommand = null; // TODO
  
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     m_driveCommand=new DriveWithGamepad(m_drivetrain, m_controller);
     m_drivetrain.setDefaultCommand(m_driveCommand);
+   //m_Arm.setDefaultCommand(m_PoseArm);
+
     configureButtonBindings();
   }
 
@@ -54,6 +63,7 @@ public class RobotContainer {
     return m_autonomous.getCommand();
   }
   public void teleopInit(){
+    CommandScheduler.getInstance().schedule(new PoseArm(m_arm,m_controller));
     m_drivetrain.setRobotDisabled(false);
     m_drivetrain.setFieldOriented(true);
   }
@@ -68,6 +78,8 @@ public class RobotContainer {
   public void robotInit(){
     m_drivetrain.setRobotDisabled(true);
     m_drivetrain.init();
+    m_arm.start();
+    m_wrist.start();
     m_detector.start();
     m_plotsub.start();
   }

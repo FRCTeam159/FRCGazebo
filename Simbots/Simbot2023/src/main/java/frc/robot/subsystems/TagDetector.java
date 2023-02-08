@@ -311,7 +311,7 @@ public class TagDetector extends Thread {
 
         ouputStream.putFrame(mat);
       } catch (Exception ex) {
-        System.out.println("exception:" + ex);
+        //System.out.println("exception:" + ex);
       }
     }
   }
