@@ -540,12 +540,12 @@
           <damping>1</damping>
           <friction>1</friction>
         </dynamics>
-        <!--
+        <!-- -->
         <limit>
-         <lower>0</lower>
-         <upper>1</upper>
+         <lower>-0.5</lower>
+         <upper>0.5</upper>
         </limit>
-        -->
+       
       </axis>
     </joint>
     
@@ -556,7 +556,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.03</angular>
+        <angular>0.1</angular>
       </velocity_decay>
       <inertial>
         <mass>2.3570164391411</mass>
@@ -616,7 +616,12 @@
           <damping>2</damping>
           <friction>1</friction>
         </dynamics>
-        
+<!-- --> 
+        <limit>
+         <lower>0</lower>
+         <upper>3.14</upper>
+        </limit>
+      
       </axis>
     </joint>
    
@@ -628,7 +633,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.01</angular>
+        <angular>0.1</angular>
       </velocity_decay>
       <inertial>
         <mass>0.1</mass>
@@ -679,15 +684,15 @@
         <xyz>1 0 0</xyz>
         
         <dynamics>
-          <damping>1</damping>
-          <friction>1</friction>
+          <damping>2</damping>
+          <friction>2</friction>
         </dynamics>
-        <!--
+        <!---->
         <limit>
           <upper>1.5</upper>
-          <lower>-0.9</lower>
+          <lower>-1.5</lower>
         </limit>
-        -->
+        
       </axis>
     </joint>
      
@@ -698,13 +703,22 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.01</angular>
+        <angular>0.1</angular>
       </velocity_decay>
       <inertial>
        <mass>0.01</mass>
         <pose>0 0 0 0 0 0</pose>      
       </inertial>
-      
+      <!--
+      <inertia>
+          <ixx>0.000144179290386782</ixx>
+          <ixy>5.90870697792821E-05</ixy>
+          <ixz>4.10715642258176E-06</ixz>
+          <iyy>0.000240011662145135</iyy>
+          <iyz>3.63816895023731E-05</iyz>
+          <izz>0.000362956457253779</izz>
+        </inertia>
+      -->
       <collision name="GripperTwist_collision">
         <pose>-0.970338220894427 -0.209879195510606 0.0164580985178202 0 0 0</pose>
         <geometry>
@@ -743,7 +757,7 @@
       <sensor name="GripperTwistCamera" type="camera">
         <visualize>1</visualize>
         <always_on>1</always_on>
-        <pose>0.027422507856745 -0.00627316013977647 0.00272223138191047 0 0 -1.0</pose>
+        <pose>0.027422507856745 -0.00627316013977647 0.00272223138191047 0 0 0</pose>
         <camera name="GripperTwistcamera">
           <horizontal_fov>1.5707963267949</horizontal_fov>
           <image>
@@ -765,28 +779,24 @@
       </plugin>
       </sensor>
     </link>
-  
+ 
     <joint name="GripperRotate-GripperTwist" type="revolute">
       <parent>GripperRotate</parent>
       <child>GripperTwist</child>
       <pose>-0.020871891120782 -0.0149869750218195 0.00672065135518525 0 0 0</pose>
       <axis>
-       <!--<xyz>0.812286349216375 0.583258850663008 0</xyz>-->
        <xyz>-0.8122 1.0 0</xyz>
        <dynamics>
-          <damping>1</damping>
-          <friction>1</friction>
+          <damping>0.1</damping>
+          <friction>0.1</friction>
         </dynamics>
-        <!--
         <limit>
-          <upper>0.1</upper>
-          <lower>0</lower>
-
+          <upper>3.14</upper>
+          <lower>-3.14</lower>
         </limit>
-        -->
       </axis>
     </joint>
-   <!--
+    <!--
     <link name="LeftGripper">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
@@ -797,7 +807,7 @@
         <angular>0.1</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.1</mass>
+        <mass>0.01</mass>
         <pose>0 0 0 0 0 0</pose>
         
       </inertial>
@@ -840,15 +850,18 @@
       <child>LeftGripper</child>
       <pose>-0.0728289790912465 0.0982768539036823 0.0192775555177667 0 0.0950125221191799 4.55042876026699</pose>
       <axis>
-        <xyz>-0.808622698046812 -0.580628181106082 -0.0948696342827216</xyz>
+        <xyz>-0.6 0.6 0</xyz>
         <dynamics>
-          <damping>0.1</damping>
-          <friction>0.1</friction>
+          <damping>0.0</damping>
+          <friction>0.0</friction>
         </dynamics>
-        
+         <limit>
+          <upper>0.25</upper>
+          <lower>0</lower>
+        </limit>  
       </axis>
     </joint>
-    
+   
     <link name="RightGripper">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
@@ -856,10 +869,10 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.01</angular>
+        <angular>0.1</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.1</mass>
+        <mass>0.01</mass>
         <pose>0 0 0 0 0 0</pose>
         
       </inertial>
@@ -902,14 +915,20 @@
       <child>RightGripper</child>
       <pose>-0.0702210082292961 0.100570244506764 -0.0169877012766035 0 0.0950125221191799 4.55042876026699</pose>
       <axis>
-        <xyz>-0.808622698046812 -0.580628181106082 -0.0948696342827216</xyz>
+        <xyz>0.6 -0.6 0</xyz>
         <dynamics>
-          <damping>0.1</damping>
-          <friction>0.1</friction>
+          <damping>0.0</damping>
+          <friction>0.0</friction>
         </dynamics>
+        <limit>
+          <upper>0.25</upper>
+          <lower>0</lower>
+        </limit>
        
       </axis>
     </joint>
+
+    
     <link name="LeftPad">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
@@ -920,16 +939,9 @@
         <angular>0</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.0254993671569944</mass>
+        <mass>0.01</mass>
         <pose>0 0 0 0 0 0</pose>
-        <inertia>
-          <ixx>0</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>0</iyy>
-          <iyz>0</iyz>
-          <izz>0</izz>
-        </inertia>
+       
       </inertial>
       <collision name="LeftPad_collision">
         <pose>-1.10694832443051 0.0618572431172279 0.157325633326903 0 0 0</pose>
@@ -992,7 +1004,7 @@
         <angular>0</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.0254993671569936</mass>
+        <mass>0.01</mass>
         <pose>0 0 0 0 0 0</pose>    
       </inertial>
       <collision name="RightPad_collision">
@@ -1046,7 +1058,7 @@
         </limit>
       </axis>
     </joint>
- -->
+  -->
     <plugin name="clock" filename="sim_clock.dll">
       <topic>~/gazebo/frc/simulator/clock</topic>
     </plugin>
@@ -1145,7 +1157,7 @@
     <plugin name="Frame-lower-arm_motor" filename="sim_motor.dll">
         <joint>Body-LowerArm</joint>
         <topic>~/gazebo/frc/simulator/motor/9</topic>
-        <multiplier>30</multiplier>
+        <multiplier>40</multiplier>
     </plugin>
     <plugin name="Frame-lower-arm_encoder" filename="sim_encoder.dll">
         <joint>Body-LowerArm</joint>
@@ -1156,7 +1168,7 @@
     <plugin name="LowerArm-UpperArm_motor" filename="sim_motor.dll">
         <joint>LowerArm-UpperArm</joint>
         <topic>~/gazebo/frc/simulator/motor/10</topic>
-        <multiplier>10</multiplier>
+        <multiplier>30</multiplier>
     </plugin>
     <plugin name="LowerArm-UpperArm_encoder" filename="sim_encoder.dll">
         <joint>LowerArm-UpperArm</joint>
@@ -1167,7 +1179,7 @@
     <plugin name="UpperArm-Wrist_motor" filename="sim_motor.dll">
         <joint>UpperArm-GripperRotate</joint>
         <topic>~/gazebo/frc/simulator/motor/11</topic>
-        <multiplier>10</multiplier>
+        <multiplier>40</multiplier>
     </plugin>
     <plugin name="UpperArm-Wrist_encoder" filename="sim_encoder.dll">
         <joint>UpperArm-GripperRotate</joint>
@@ -1178,13 +1190,27 @@
     <plugin name="GripperRotate-GripperTwist_motor" filename="sim_motor.dll">
         <joint>GripperRotate-GripperTwist</joint>
         <topic>~/gazebo/frc/simulator/motor/12</topic>
-        <multiplier>10</multiplier>
+        <multiplier>20</multiplier>
     </plugin>
     <plugin name="GripperRotate-GripperTwist_encoder" filename="sim_encoder.dll">
         <joint>GripperRotate-GripperTwist</joint>
         <topic>~/gazebo/frc/simulator/encoder/12</topic>
         <multiplier>1</multiplier>
     </plugin>
+
+    <plugin name="GripperTwist-LeftGripper" filename="sim_piston.dll">
+        <joint>GripperTwist-LeftGripper</joint>
+        <topic>~/gazebo/frc/simulator/piston/0</topic>
+        <forward-force>20</forward-force>
+        <reverse-force>20</reverse-force>
+    </plugin>
+
+     <plugin name="GripperTwist-RightGripper" filename="sim_piston.dll">
+        <joint>GripperTwist-RightGripper</joint>
+        <topic>~/gazebo/frc/simulator/piston/0</topic>
+        <forward-force>20</forward-force>
+        <reverse-force>20</reverse-force>    
+      </plugin>
 
   </model>
 </sdf>

@@ -68,8 +68,8 @@ public class DriveWithGamepad extends CommandBase {
     
 
     // execute a 180 degree heading reversal if left (CCW) or right (CW) bumper button is pressed
-    boolean rb = m_controller.getRightBumperPressed();
-    boolean lb = m_controller.getLeftBumperPressed();
+    boolean rb = m_controller.getLeftStickButtonPressed();
+    boolean lb = m_controller.getRightStickButtonPressed();
     if (rb || lb) {
       m_turnaround = new TurnToAngle(m_drive, rb ? 180.0 : -180.0);
       m_turnaround.initialize();

@@ -100,6 +100,7 @@ public class Drivetrain extends SubsystemBase {
 		SmartDashboard.putBoolean("Use Tags", use_tags);
 		SmartDashboard.putNumber("Latency", latency);
 		SmartDashboard.putNumber("Conf", vision_confidence);
+		SmartDashboard.putString("State","Driving");
 	}
 
 	void makeEstimator(){
