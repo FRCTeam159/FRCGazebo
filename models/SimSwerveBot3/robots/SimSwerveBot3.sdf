@@ -535,15 +535,15 @@
       <child>LowerArm</child>
       <pose>-0.288320694697595 -0.423302514264947 0 0 1.5707963267949 0</pose>
       <axis>
-        <xyz>1 0 0</xyz>
+        <xyz>-1 0 0</xyz>
         <dynamics>
-          <damping>1</damping>
-          <friction>1</friction>
+          <damping>10</damping>
+          <friction>10</friction>
         </dynamics>
         <!-- -->
         <limit>
-         <lower>-0.5</lower>
-         <upper>0.5</upper>
+         <lower>-0.8</lower>
+         <upper>0.8</upper>
         </limit>
        
       </axis>
@@ -611,15 +611,15 @@
       <child>UpperArm</child>
       <pose>0.0949078106668886 0.34275847396224 0 0 4.71238898038469 0</pose>
       <axis>
-        <xyz>-1 0 0</xyz>
+        <xyz>1 0 0</xyz>
         <dynamics>
-          <damping>2</damping>
+          <damping>1</damping>
           <friction>1</friction>
         </dynamics>
 <!-- --> 
         <limit>
-         <lower>0</lower>
-         <upper>3.14</upper>
+         <lower>-2.85</lower>
+         <upper>2.85</upper>
         </limit>
       
       </axis>
@@ -757,7 +757,8 @@
       <sensor name="GripperTwistCamera" type="camera">
         <visualize>1</visualize>
         <always_on>1</always_on>
-        <pose>0.027422507856745 -0.00627316013977647 0.00272223138191047 0 0 0</pose>
+                <pose>0.027422507856745 -0.00627316013977647 0.00272223138191047 -1.57 0.0 -1.0</pose>
+
         <camera name="GripperTwistcamera">
           <horizontal_fov>1.5707963267949</horizontal_fov>
           <image>
@@ -796,7 +797,7 @@
         </limit>
       </axis>
     </joint>
-    <!--
+    
     <link name="LeftGripper">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
@@ -1058,7 +1059,7 @@
         </limit>
       </axis>
     </joint>
-  -->
+  <!---->
     <plugin name="clock" filename="sim_clock.dll">
       <topic>~/gazebo/frc/simulator/clock</topic>
     </plugin>

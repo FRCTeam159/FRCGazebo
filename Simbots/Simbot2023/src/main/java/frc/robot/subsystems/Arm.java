@@ -25,8 +25,10 @@ public class Arm extends Thread {
 
   public static final double kStageOneLength = Units.inchesToMeters(43.18); // 1.0968
   public static final double kStageTwoLength = Units.inchesToMeters(30.59)+kwristLength; // 0.7742+
-  public static final double kgroundY = Units.inchesToMeters(9.5);  // 0.24
-  public static final double kfrontX = Units.inchesToMeters(18);    // 0.457
+  public static final double kgroundY = Units.inchesToMeters(9.5);   // lower arm joint to ground
+  public static final double kfrontX = Units.inchesToMeters(18);     // lower arm joint to front of robot
+  public static final double kovertargetY = Units.inchesToMeters(4); // ht of claw over target for grab or place 
+  public static final double kgripperX = Units.inchesToMeters(14);    // distance from upper arm to center of claw   
 
   // field dimensions
 
@@ -36,8 +38,8 @@ public class Arm extends Thread {
   public static final double[] kcone1 = {0.58,0.87}; // to top of post
   public static final double[] kcone2 = {1.01,1.17};
  
-  public static final double[] kshelf = {0.5,1.11}; // nominal 6" from front of robot (could be zero))
-  public static final double[] kground = {0.15,0.15}; // nominal 6" from front of robot (could be zero))
+  public static final double[] kshelf =  {0.0,1.0}; // nominal 6" from front of robot (could be zero))
+  public static final double[] kground = {0.1,0.15}; // 
 
   public static boolean debug = false;
   public boolean using_Owens_code=false;
@@ -61,6 +63,7 @@ public class Arm extends Thread {
     stageTwo = new SimEncMotor(kStageTwoChannel);
     stageOne.enable();
     stageTwo.enable();
+    stageTwo.setInverted();
 
     onePID.setTolerance(1);
     twoPID.setTolerance(1);
@@ -81,6 +84,10 @@ public class Arm extends Thread {
     }
   }
 
+  public void setPose(double[]p){
+    X=p[0]+kfrontX-kgripperX;
+    Y=p[1]-kgroundY+kovertargetY;
+  }
   void setDashboard(){
     double d[]=getPosition();
     String s=String.format("X:%-3.1f(%-3.1f) Y:%-3.1f(%-3.1f) A1:%-3.1f(%-3.1f) A2:%-3.1f(%-3.1f)",
@@ -167,10 +174,7 @@ public class Arm extends Thread {
   public void setGroundPose(){
     setPose(kground);
   }
-  public void setPose(double[]p){
-    X=p[0]+kfrontX;
-    Y=p[1]+kgroundY;
-  }
+ 
   public void setHoldingPose() {
     X = kHoldX;
     Y = kHoldY;

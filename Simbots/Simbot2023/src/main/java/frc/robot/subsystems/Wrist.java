@@ -16,7 +16,7 @@ public class Wrist extends Thread {
   private SimEncMotor rotateMotor;
 
   public static final double kRotateAngleOffset = Math.toRadians(25); // starting angle
-  public static final double kTwistAngleOffset = Math.toRadians(4); // starting angle
+  public static final double kTwistAngleOffset = Math.toRadians(2); // starting angle
 
   static double twistAngle = 0;
   static double rotateAngle = 0;
@@ -30,14 +30,14 @@ public class Wrist extends Thread {
   boolean m_twistup=false;
   boolean m_clawopen=false;
 
-  public static final double kGround = Math.toRadians(58);
-  public static final double kShelf = Math.toRadians(58);
+  public static final double kGround = Math.toRadians(-20);
+  public static final double kShelf = Math.toRadians(49);
 
-  public static final double kConeMiddle = Math.toRadians(12);
-  public static final double kConeTop = Math.toRadians(58);
+  public static final double kConeMiddle = Math.toRadians(48);
+  public static final double kConeTop = Math.toRadians(70);
 
   public static final double kCubeMiddle = Math.toRadians(12);
-  public static final double kCubeTop = Math.toRadians(58);
+  public static final double kCubeTop = Math.toRadians(45);
   public Wrist() {
 
     rotateMotor = new SimEncMotor(kWristRotateChannel);
@@ -87,6 +87,7 @@ public class Wrist extends Thread {
   public void setTopCubePose(){
     rotateAngle=kCubeTop;
   }
+ 
   void setDashboard(){
     String s=String.format("Rot:%-3.1f Twist:%-3.1f Claw:%s",
       Math.toDegrees(getRotation()),Math.toDegrees(getTwist()),m_clawopen?"Open":"closed");

@@ -235,9 +235,10 @@ public class TagDetector extends Thread {
           maxtime = total > maxtime ? total : maxtime;
         int ntags=tags==null?0:tags.length;
         
-        String s = String.format("ntags:%d ave grab:%-2.1f detect:%-2.1f ms", ntags,1e-6*grab_time / count, 1e-6*detect_time/count);
-        
-        SmartDashboard.putString("Detect", s);
+        if(m_drivetrain.useTags()){
+          String s = String.format("ntags:%d ave grab:%-2.1f detect:%-2.1f ms", ntags,1e-6*grab_time / count, 1e-6*detect_time/count);
+          SmartDashboard.putString("Detect", s);
+        }
 
         if (!TargetMgr.tagsPresent() || !m_drivetrain.useTags() || tags==null) {
           ouputStream.putFrame(mat);
@@ -266,11 +267,13 @@ public class TagDetector extends Thread {
           if (last_pose != null) { // could be an incorrect tag identifier (index out of bounds for expected tag_id)
             if(!TargetMgr.startPoseSet())
               TargetMgr.setStartPose(target_tag.getTagId(), last_pose);
-            Translation2d trans = last_pose.getTranslation();           
+            Translation2d trans = last_pose.getTranslation(); 
+            if(m_drivetrain.useTags()){        
             String str = String.format("id:%d D:%-2.2f P:%-2.1f H:%-2.1f Robot: X:%-2.1f Y:%-2.1f",
                 target_tag.getTagId(), target_tag.getDistance(), target_tag.getPitch(), target_tag.getYaw(),
                 trans.getX(), trans.getY());
-            SmartDashboard.putString("Tag", str);
+              SmartDashboard.putString("Tag", str);
+            }
             Translation2d start_trans=TargetMgr.startPose().getTranslation();
             trans=start_trans.minus(trans);
             last_pose=new Pose2d(trans,last_pose.getRotation());
