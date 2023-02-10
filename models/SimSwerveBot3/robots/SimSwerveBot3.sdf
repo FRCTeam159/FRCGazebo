@@ -537,8 +537,8 @@
       <axis>
         <xyz>-1 0 0</xyz>
         <dynamics>
-          <damping>10</damping>
-          <friction>10</friction>
+          <damping>5</damping>
+          <friction>5</friction>
         </dynamics>
         <!-- -->
         <limit>
