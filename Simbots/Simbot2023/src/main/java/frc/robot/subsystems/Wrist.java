@@ -1,13 +1,25 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import gazebo.SimEncMotor;
 import gazebo.SimPiston;
 
 public class Wrist extends Thread {
-  public PIDController rotatePID = new PIDController(8, 0, 0);
-  public PIDController twistPID = new PIDController(4, 0, 0);
+
+  double kMaxAngularSpeed=Math.toRadians(360);
+  double kMaxAngularAcceleration=Math.toRadians(180);
+
+  final ProfiledPIDController rotatePID= 
+  new ProfiledPIDController(3,1,0,
+    new TrapezoidProfile.Constraints(kMaxAngularSpeed,kMaxAngularAcceleration));
+  final ProfiledPIDController twistPID= 
+  new ProfiledPIDController(2,0,0,
+  new TrapezoidProfile.Constraints(kMaxAngularSpeed,kMaxAngularAcceleration));
+  // public PIDController rotatePID = new PIDController(4, 0, 0);
+  // public PIDController twistPID = new PIDController(1, 0, 0);
 
   public static final int kWristRotateChannel = 11;
   public static final int kWristTwistChannel = 12;
@@ -15,8 +27,11 @@ public class Wrist extends Thread {
   private SimEncMotor twistMotor;
   private SimEncMotor rotateMotor;
 
-  public static final double kRotateAngleOffset = Math.toRadians(25); // starting angle
-  public static final double kTwistAngleOffset = Math.toRadians(2); // starting angle
+  //public static final double kRotateAngleOffset = Math.toRadians(25); // starting angle
+  //public static final double kTwistAngleOffset = Math.toRadians(2); // starting angle
+
+  public static final double kRotateAngleOffset = Math.toRadians(0); // starting angle
+  public static final double kTwistAngleOffset = Math.toRadians(0); // starting angle
 
   static double twistAngle = 0;
   static double rotateAngle = 0;
@@ -30,7 +45,9 @@ public class Wrist extends Thread {
   boolean m_twistup=false;
   boolean m_clawopen=false;
 
-  public static final double kGround = Math.toRadians(-20);
+  public static final double kDive = Math.toRadians(0);
+  
+  public static final double kGround = Math.toRadians(25);
   public static final double kShelf = Math.toRadians(49);
 
   public static final double kConeMiddle = Math.toRadians(48);
@@ -69,28 +86,38 @@ public class Wrist extends Thread {
     }
   }
 
+  public void setDrivePose(){
+    twistAngle=0;
+    rotateAngle=kGround;
+  }
   public void setGroundPose(){
+    twistAngle=0;
     rotateAngle=kGround;
   }
   public void setMidConePose(){
+    twistAngle=0;
     rotateAngle=kConeMiddle;
   }
   public void setTopConePose(){
+    twistAngle=0;
     rotateAngle=kConeTop;
   }
   public void setShelfPose(){
+    twistAngle=0;
     rotateAngle=kShelf;
   }
   public void setMidCubePose(){
+    twistAngle=0;
     rotateAngle=kCubeMiddle;
   }
   public void setTopCubePose(){
+    twistAngle=0;
     rotateAngle=kCubeTop;
   }
  
   void setDashboard(){
-    String s=String.format("Rot:%-3.1f Twist:%-3.1f Claw:%s",
-      Math.toDegrees(getRotation()),Math.toDegrees(getTwist()),m_clawopen?"Open":"closed");
+    String s=String.format("Rot:%-3.1f(%-3.1f) Twist:%-3.1f(%-3.1f) Claw:%s",
+      Math.toDegrees(getRotation()),Math.toDegrees(rotateAngle),Math.toDegrees(getTwist()),Math.toDegrees(twistAngle),m_clawopen?"Open":"Closed");
     SmartDashboard.putString("Wrist",s);
   }
   private void setTwist() {

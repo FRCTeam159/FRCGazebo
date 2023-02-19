@@ -207,7 +207,7 @@ public class TagDetector extends Thread {
   @Override
   public void run() {
     cam.start();
-    SmartDashboard.putString("Tag", "no valid tags visible");
+    //SmartDashboard.putString("Tag", "no valid tags visible");
 
     while (!Thread.interrupted()) {
       try {

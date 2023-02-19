@@ -23,6 +23,7 @@ public class DriveWithGamepad extends CommandBase {
 
   private TurnToAngle m_turnaround;
 
+
   /**
    * Creates a new DriveWithGamepad command.
    *
@@ -66,12 +67,11 @@ public class DriveWithGamepad extends CommandBase {
     var rot = m_rotLimiter.calculate(MathUtil.applyDeadband(vr, 0.2))
         * Drivetrain.kMaxAngularSpeed;
     
-
     // execute a 180 degree heading reversal if left (CCW) or right (CW) bumper button is pressed
-    boolean rb = m_controller.getLeftStickButtonPressed();
-    boolean lb = m_controller.getRightStickButtonPressed();
-    if (rb || lb) {
-      m_turnaround = new TurnToAngle(m_drive, rb ? 180.0 : -180.0);
+    boolean rsb = m_controller.getLeftStickButtonPressed();
+    boolean lsb = m_controller.getRightStickButtonPressed();
+    if (rsb || lsb) {
+      m_turnaround = new TurnToAngle(m_drive, rsb ? 180.0 : -180.0);
       m_turnaround.initialize();
     }
 

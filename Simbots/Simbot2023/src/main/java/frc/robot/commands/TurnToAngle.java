@@ -22,7 +22,7 @@ public class TurnToAngle extends CommandBase {
   double start_time=0;
 
   final ProfiledPIDController m_turningPIDController= 
-  new ProfiledPIDController(0.25,0.05,0,
+  new ProfiledPIDController(0.5,0.5,0,
     new TrapezoidProfile.Constraints(
         Math.toDegrees(Drivetrain.kMaxAngularSpeed),Math.toDegrees(Drivetrain.kMaxAngularAcceleration)));
 
@@ -111,6 +111,6 @@ public class TurnToAngle extends CommandBase {
       }
     }
     last_heading=heading;
-    return correction;  
+    return -correction;  
   }
 }
