@@ -10,66 +10,57 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import gazebo.SimEncMotor;
+import static frc.robot.Constants.*;
 
 public class Arm extends Thread {
 
-  public static final int kStageOneChannel = 9;
-  public static final int kStageTwoChannel = 10;
+  //public static final int kStageOneChannel = 9;
+  //public static final int kStageTwoChannel = 10;
 
-    // Solidworks initial offsets to desired pose
-  public static final double kStageOneAngleOffset = Math.toRadians(101); // starting angle
-  //public static final double kStageOneAngleOffset = Math.toRadians(55.74); // starting angle
-
-  //public static final double kStageTwoAngleOffset = Math.toRadians(161.28);
-  public static final double kStageTwoAngleOffset = Math.toRadians(170);
-
-  //public static final double kHoldX = 0.445; // distance corresponding to start angles
-  //public static final double kHoldY = 0.115;
-
+  // Solidworks initial offsets to desired pose
+  
   public static double kHoldX = 0; // distance corresponding to start angles
   public static double kHoldY = 0;
   // robot dimensions
-  public static final double kwristLength = Units.inchesToMeters(8);
 
-  public static final double kStageOneLength = Units.inchesToMeters(43.18); // 1.0968
-  public static final double kStageTwoLength = Units.inchesToMeters(30.59); // 0.7742+
+  public static final double kwristLength = Units.inchesToMeters(8);
   public static final double kgroundY = Units.inchesToMeters(9.5);   // lower arm joint to ground
   public static final double kfrontX = Units.inchesToMeters(18);     // lower arm joint to front of robot
   public static final double kovertargetY = Units.inchesToMeters(4); // ht of claw over target for grab or place 
   public static final double kgripperX = Units.inchesToMeters(10);    // distance from upper arm to center of claw   
-  public static final double kbumperX = Units.inchesToMeters(4);    // width of bumpers   
+  public static final double kbumperX = Units.inchesToMeters(4);    // width of bumpers 
 
+  public static double kmaxAngleError=Math.toRadians(1.0);
 
   // field dimensions
 
-  public static final double[] kcube1 = {0.56,0.36}; // center of platform
-  public static final double[] kcube2 = {1.00,0.90};
+  public static final double[] kinit =  {0.1,0.36}; // center of platform
+
+  public static final double[] kcube1 = {0.6,0.6}; // center of platform
+  public static final double[] kcube2 = {1.00,1.1};
  
   public static final double[] kcone1 = {0.58,0.87}; // to top of post
   public static final double[] kcone2 = {1.01,1.17};
  
   public static final double[] kshelf =  {0.1,1.0}; // nominal 6" from front of robot (could be zero))
-  public static final double[] kground = {0.2,0.2}; // 
+  public static final double[] kground = {0.3,0.2}; // 
 
   public static boolean debug = false;
  
   private SimEncMotor stageOne;
   private SimEncMotor stageTwo;
-
-  double kMaxAngularSpeed=Math.toRadians(180);
-  double kMaxAngularAcceleration=Math.toRadians(90);
-  
+ 
   boolean test_mode=false;
 
-  // final ProfiledPIDController onePID= 
-  // new ProfiledPIDController(4,1,0,
-  //  new TrapezoidProfile.Constraints(kMaxAngularSpeed,kMaxAngularAcceleration));
-  // final ProfiledPIDController twoPID= 
-  // new ProfiledPIDController(4,1,0,
-  //   new TrapezoidProfile.Constraints(kMaxAngularSpeed,kMaxAngularAcceleration));
+  final ProfiledPIDController onePID= 
+  new ProfiledPIDController(8,1,0,
+   new TrapezoidProfile.Constraints(0.5*kMaxArmAngularSpeed,0.2*kMaxArmAngularAcceleration));
+  final ProfiledPIDController twoPID= 
+  new ProfiledPIDController(10,1,0,
+    new TrapezoidProfile.Constraints(kMaxArmAngularSpeed,kMaxArmAngularAcceleration));
   
-  public PIDController onePID = new PIDController(5, 0, 0.0);
-  public PIDController twoPID = new PIDController(5, 0, 0.0);
+  // public PIDController onePID = new PIDController(5, 0, 0.0);
+  // public PIDController twoPID = new PIDController(5, 0, 0.0);
 
   static double X;
   static double Y;
@@ -95,10 +86,11 @@ public class Arm extends Thread {
     double alpha = lowerArmAngle();
     double beta = upperArmAngle();
     double d[]=getPosition();
-    kHoldX=X=d[0];
-    kHoldY=Y=d[1];
-
-    System.out.format("initial pose alpha:%-3.1f beta:%-3.1f x:%-1.2f y:%-1.2f\n",
+    
+    kinit[0]=X=d[0];
+    kinit[1]=Y=d[1];
+    
+    System.out.format("initial pose alpha:%-3.1f beta:%-3.1f x:%-1.3f y:%-1.3f\n",
       Math.toDegrees(alpha),Math.toDegrees(beta),X,Y);
 
     while (!Thread.interrupted()) {
@@ -147,6 +139,7 @@ public class Arm extends Thread {
     setX(x);
     setY(y);
   }
+ 
   public double getAlpha(){
     return lowerArmAngle();
   }
@@ -159,13 +152,17 @@ public class Arm extends Thread {
   public void setBeta(double a){
     twoAngle=a;
   }
+  public void setPose(double[]p){
+    setX(p[0]);
+    setY(p[1]);
+  }
   public void setTargetPose(double[]p){
     setX(p[0]+kfrontX-kgripperX+kbumperX);
     setY(p[1]-kgroundY+kovertargetY);
   }
   void setDashboard(){
     double d[]=getPosition();
-    String s=String.format("X:%-3.1f(%-3.1f) Y:%-3.1f(%-3.1f) A1:%-3.1f(%-3.1f) A2:%-3.1f(%-3.1f)",
+    String s=String.format("X:%-3.2f(%-3.2f) Y:%-3.1f(%-3.2f) A1:%-3.1f(%-3.1f) A2:%-3.1f(%-3.1f)",
       d[0],X,d[1],Y,Math.toDegrees(oneAngle),Math.toDegrees(target[0]),Math.toDegrees(twoAngle),Math.toDegrees(target[1]));
     SmartDashboard.putString("Arm",s);
   }
@@ -242,32 +239,42 @@ double[] calculateAngle(double x, double y) {
     cnt++;
   }
 
-  public boolean armAtSetPoint() {
-    return onePID.atSetpoint() && twoPID.atSetpoint();
+  public boolean atSetPoint() {
+    double err1=oneAngle-target[0];
+    double err2=twoAngle-target[1];
+    if(Math.abs(err1)<kmaxAngleError && Math.abs(err2)<kmaxAngleError){
+      return true;
+    }
+    return false;
   }
 
   public void setMidCubePose(){
-    setTargetPose(kcube1);
+    setPose(kcube1);
   }
   public void setTopCubePose(){
-    setTargetPose(kcube2);
+    setPose(kcube2);
   }
   public void setMidConePose(){
-    setTargetPose(kcone1);
+    setPose(kcone1);
   }
   public void setTopConePose(){
-    setTargetPose(kcone2);
+    setPose(kcone2);
   }
   public void setShelfPose(){
     setTargetPose(kshelf);
   }
   public void setGroundPose(){
-    setTargetPose(kground);
+    setPose(kground);
   }
  
+  public void setInitPose() {
+    X = kinit[0];
+    Y = kinit[1];
+  }
   public void setHoldingPose() {
     X = kHoldX;
     Y = kHoldY;
   }
 
+ 
 }

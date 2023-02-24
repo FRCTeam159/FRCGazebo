@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.objects.SwerveModule;
 import gazebo.SimGyro;
+import static frc.robot.Constants.*;
 
 public class Drivetrain extends SubsystemBase {
 
@@ -27,21 +29,18 @@ public class Drivetrain extends SubsystemBase {
 	static public boolean debug=true;
 	static public boolean debug_angles=true;
 
-	public static double front_wheel_base = 23.22; // distance beteen front wheels
-	public static double side_wheel_base = 23.22; // distance beteen side wheels
-
-	public static double dely = Units.inchesToMeters(0.5 * side_wheel_base); // 0.2949 metters
-	public static double delx = Units.inchesToMeters(0.5 * front_wheel_base);
+	public static double dely = Units.inchesToMeters(0.5 * kSideWheelBase); // 0.2949 metters
+	public static double delx = Units.inchesToMeters(0.5 * kFrontWheelBase);
 
 	private final Translation2d m_frontLeftLocation = new Translation2d(delx, dely);
 	private final Translation2d m_frontRightLocation = new Translation2d(delx, -dely);
 	private final Translation2d m_backLeftLocation = new Translation2d(-delx, dely);
 	private final Translation2d m_backRightLocation = new Translation2d(-delx, -dely);
 
-	private final SwerveModule m_frontLeft = new SwerveModule(1, 2);
-	private final SwerveModule m_frontRight = new SwerveModule(3, 4);
-	private final SwerveModule m_backLeft = new SwerveModule(5, 6);
-	private final SwerveModule m_backRight = new SwerveModule(7, 8); 
+	private final SwerveModule m_frontLeft = new SwerveModule(kFl_Drive, kFl_Turn);
+	private final SwerveModule m_frontRight = new SwerveModule(kFr_Drive, kFr_Turn);
+	private final SwerveModule m_backLeft = new SwerveModule(kBl_Drive, kBl_Turn);
+	private final SwerveModule m_backRight = new SwerveModule(kBr_Drive, kBr_Turn); 
 	
 	private final SwerveModulePosition[] m_positions={
 		new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition()
@@ -56,12 +55,7 @@ public class Drivetrain extends SubsystemBase {
 	private SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
 			m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
-	public static final double kTrackWidth = Units.inchesToMeters(2 * front_wheel_base); // bug? need to double actual value for geometry to work
-
-	public static double kMaxVelocity = 3; // meters per second
-	public static double kMaxAcceleration = 0.5; // meters/second/second
-	public static double kMaxAngularSpeed = Math.toRadians(360); // degrees per second
-	public static double kMaxAngularAcceleration = Math.toRadians(720);// degrees per second per second
+	public static final double kTrackWidth = Units.inchesToMeters(2 * kFrontWheelBase); // bug? need to double actual value for geometry to work
 
 	boolean field_oriented = true;
 	double last_heading = 0;
@@ -440,5 +434,14 @@ public class Drivetrain extends SubsystemBase {
 		double d = new_angle - previous_angle%360;
 		d = d >= 180 ? d - 360 : (d <= -180 ? d + 360 : d);
 		return previous_angle + d;
+	}
+
+	public static boolean PConTarget(ProfiledPIDController ppc, double perr){
+		double verr=ppc.getVelocityError();
+		double ptol=ppc.getPositionTolerance();
+		double vtol=ppc.getVelocityTolerance();
+		if(Math.abs(perr)<ptol && Math.abs(verr)<vtol)
+			return true;
+		return false;
 	}
 }

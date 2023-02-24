@@ -11,18 +11,16 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
-import frc.robot.subsystems.Drivetrain;
 import gazebo.SimEncMotor;
+import static frc.robot.Constants.*;
 
 public class SwerveModule {
-  private static final double kWheelRadius = Units.inchesToMeters(2.0); // 2 inches
 
   private double gazebo_scale=1;  // not sure why but grid marks in gazebo are somewhat larger than a meter ?
   private double distancePerRotation=gazebo_scale*2*kWheelRadius*Math.PI;
 
-  private static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed; //degrees per second;
-  private static final double kModuleMaxAngularAcceleration = Drivetrain.kMaxAngularAcceleration;// degrees per second per second
+  private static final double kModuleMaxAngularVelocity = kMaxAngularSpeed; //degrees per second;
+  private static final double kModuleMaxAngularAcceleration = kMaxAngularAcceleration;// degrees per second per second
 
   private SimEncMotor m_driveMotor;
 	private SimEncMotor m_turnMotor;

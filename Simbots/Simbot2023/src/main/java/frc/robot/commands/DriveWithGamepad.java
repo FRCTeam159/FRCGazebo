@@ -9,6 +9,8 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import static frc.robot.Constants.*;
+
 
 public class DriveWithGamepad extends CommandBase {
 
@@ -57,15 +59,15 @@ public class DriveWithGamepad extends CommandBase {
     double vy = m_controller.getLeftX();
     double vr = m_controller.getRightX();
     final var xSpeed = -m_xspeedLimiter.calculate(MathUtil.applyDeadband(vx, 0.2))
-        * Drivetrain.kMaxVelocity;
+        *kMaxVelocity;
 
     // Get the y speed or sideways/strafe speed.
     final var ySpeed = m_yspeedLimiter.calculate(MathUtil.applyDeadband(vy, 0.2))
-        * Drivetrain.kMaxVelocity;
+        * kMaxVelocity;
 
     // Get the rate of angular rotation.
     var rot = m_rotLimiter.calculate(MathUtil.applyDeadband(vr, 0.2))
-        * Drivetrain.kMaxAngularSpeed;
+        * kMaxAngularSpeed;
     
     // execute a 180 degree heading reversal if left (CCW) or right (CW) bumper button is pressed
     boolean rsb = m_controller.getLeftStickButtonPressed();

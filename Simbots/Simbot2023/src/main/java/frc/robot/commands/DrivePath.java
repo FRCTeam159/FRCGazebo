@@ -32,6 +32,7 @@ import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Drivetrain;
 import utils.PathData;
 import utils.PlotUtils;
+import static frc.robot.Constants.*;
 
 // =================================================
 // DrivePath: class constructor (called from RobotContainer)
@@ -84,8 +85,8 @@ public class DrivePath extends CommandBase {
     plot_type = PlotUtils.auto_plot_option;
     System.out.println("DRIVEPATH_INIT");
 
-    maxV=Drivetrain.kMaxVelocity;
-    maxA=Drivetrain.kMaxAcceleration;
+    maxV=kMaxVelocity;
+    maxA=kMaxAcceleration;
 
     xPath = SmartDashboard.getNumber("xPath", xPath);
     yPath = SmartDashboard.getNumber("yPath", yPath);
@@ -224,7 +225,7 @@ public class DrivePath extends CommandBase {
           file="CenterAuto";
       }
       PathPlannerTrajectory trajectory = PathPlanner.loadPath(file, 
-        new PathConstraints(Drivetrain.kMaxVelocity,Drivetrain.kMaxAcceleration)); // max vel & accel
+        new PathConstraints(kMaxVelocity,kMaxAcceleration)); // max vel & accel
 
       // Pathplanner sets 0,0 as the lower left hand corner (FRC field coord system) 
       // for Gazebo, need to subtract intitial pose from each state so that 0,0 is 

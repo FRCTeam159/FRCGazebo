@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
+import static frc.robot.Constants.*;
 
 public class TurnToAngle extends CommandBase {
   boolean debug=false;
@@ -24,7 +25,7 @@ public class TurnToAngle extends CommandBase {
   final ProfiledPIDController m_turningPIDController= 
   new ProfiledPIDController(0.5,0.5,0,
     new TrapezoidProfile.Constraints(
-        Math.toDegrees(Drivetrain.kMaxAngularSpeed),Math.toDegrees(Drivetrain.kMaxAngularAcceleration)));
+        Math.toDegrees(kMaxAngularSpeed),Math.toDegrees(kMaxAngularAcceleration)));
 
   public TurnToAngle(Drivetrain drive, double angle) {
     m_drive=drive;

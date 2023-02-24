@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.DriveWithGamepad;
 import frc.robot.commands.PassThru;
-import frc.robot.commands.ArmTest;
+import frc.robot.commands.PoseArm;
 import frc.robot.objects.PlotServer;
 import frc.robot.subsystems.TagDetector;
 import frc.robot.subsystems.Wrist;
@@ -65,7 +65,7 @@ public class RobotContainer {
   }
   public void teleopInit(){
     CommandScheduler.getInstance().schedule(new PassThru(m_wrist,m_arm, m_controller));
-    CommandScheduler.getInstance().schedule(new ArmTest(m_arm,m_wrist, m_controller));
+    CommandScheduler.getInstance().schedule(new PoseArm(m_arm,m_wrist, m_controller));
     m_drivetrain.setRobotDisabled(false);
     m_drivetrain.setFieldOriented(true);
   }

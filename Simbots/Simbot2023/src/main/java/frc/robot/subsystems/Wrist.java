@@ -6,6 +6,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import gazebo.SimEncMotor;
 import gazebo.SimPiston;
+import static frc.robot.Constants.*;
 
 public class Wrist extends Thread {
 
@@ -16,22 +17,14 @@ public class Wrist extends Thread {
   new ProfiledPIDController(3,1,0,
     new TrapezoidProfile.Constraints(kMaxAngularSpeed,kMaxAngularAcceleration));
   final ProfiledPIDController twistPID= 
-  new ProfiledPIDController(2,0,0,
+  new ProfiledPIDController(0.8,0,0,
   new TrapezoidProfile.Constraints(kMaxAngularSpeed,kMaxAngularAcceleration));
-  // public PIDController rotatePID = new PIDController(4, 0, 0);
-  // public PIDController twistPID = new PIDController(1, 0, 0);
+  // public PIDController rotatePID = new PIDController(4, 1, 0);
+  // public PIDController twistPID = new PIDController(4, 0.5, 0);
 
-  public static final int kWristRotateChannel = 11;
-  public static final int kWristTwistChannel = 12;
 
   private SimEncMotor twistMotor;
   private SimEncMotor rotateMotor;
-
-  //public static final double kRotateAngleOffset = Math.toRadians(25); // starting angle
-  //public static final double kTwistAngleOffset = Math.toRadians(2); // starting angle
-
-  public static final double kRotateAngleOffset = Math.toRadians(0); // starting angle
-  public static final double kTwistAngleOffset = Math.toRadians(0); // starting angle
 
   static double twistAngle = 0;
   static double rotateAngle = 0;
@@ -45,16 +38,17 @@ public class Wrist extends Thread {
   boolean m_twistup=false;
   boolean m_clawopen=false;
 
-  public static final double kDive = Math.toRadians(0);
+  public static final double kInit = Math.toRadians(0);
+  public static final double kDrive = Math.toRadians(0);
   
-  public static final double kGround = Math.toRadians(25);
+  public static final double kGround = Math.toRadians(0);
   public static final double kShelf = Math.toRadians(49);
 
   public static final double kConeMiddle = Math.toRadians(48);
-  public static final double kConeTop = Math.toRadians(70);
+  public static final double kConeTop = Math.toRadians(91);
 
-  public static final double kCubeMiddle = Math.toRadians(12);
-  public static final double kCubeTop = Math.toRadians(45);
+  public static final double kCubeMiddle = Math.toRadians(45);
+  public static final double kCubeTop = Math.toRadians(119);
   public Wrist() {
 
     rotateMotor = new SimEncMotor(kWristRotateChannel);
@@ -69,7 +63,7 @@ public class Wrist extends Thread {
   }
 
   public void run() {
-    setHoldingPose();
+    setInitialPose();
     closeClaw();
 
     while (!Thread.interrupted()) {
@@ -77,8 +71,7 @@ public class Wrist extends Thread {
         Thread.sleep(20);
         setRotation();
         setTwist();
-        setDashboard();
-        
+        setDashboard();    
         cnt++;
       } catch (Exception ex) {
         System.out.println("exception:" + ex);
@@ -152,11 +145,15 @@ public class Wrist extends Thread {
   public void setRotation(double r){
     rotateAngle=r;
   }
-  public void setHoldingPose() {
-    rotateAngle = -kRotateAngleOffset; // rotate to level
+  public void setInitialPose() {
+    rotateAngle = kInit; 
     twistAngle = -kTwistAngleOffset;
   }
 
+  public void setHoldingPose() {
+    rotateAngle = kInit-kRotateAngleOffset; // rotate to level
+    twistAngle = -kTwistAngleOffset;
+  }
   public boolean twistUp(){
     return m_twistup;
   }

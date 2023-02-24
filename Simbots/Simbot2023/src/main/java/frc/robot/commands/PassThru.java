@@ -70,8 +70,8 @@ public class PassThru extends CommandBase {
   public void execute() {
     if((state !=IDLE) && m_timer.get()>max_delay){
       System.out.println("state max delay exceeded - aborting");
-      m_arm.setHoldingPose();
-      m_wrist.setHoldingPose();
+      m_arm.setInitPose();
+      m_wrist.setInitialPose();
       state=END;
     }
     // if(m_arm.testMode() && m_controller.getLeftBumperPressed()){

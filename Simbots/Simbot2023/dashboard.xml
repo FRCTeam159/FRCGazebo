@@ -1,12 +1,25 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="Wrist" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="19" y="441"/>
+		<width>320</width>
+	</widget>
+	<widget field="Arm" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="22" y="463"/>
+		<width>318</width>
+		<height>22</height>
+	</widget>
+	<widget field="State" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="20" y="415"/>
+		<width>319</width>
+	</widget>
 	<widget field="G:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="444" y="193"/>
 		<width>65</width>
 	</widget>
 	<widget field="Wheel " type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="18" y="413"/>
-		<width>258</width>
+		<location x="31" y="375"/>
+		<width>239</width>
 		<height>24</height>
 	</widget>
 	<widget field="Conf" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
@@ -17,20 +30,12 @@
 		<location x="429" y="321"/>
 		<width>95</width>
 	</widget>
-	<widget field="Tag" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="42" y="371"/>
-		<width>248</width>
-	</widget>
 	<widget field="H:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="449" y="215"/>
 		<width>66</width>
 	</widget>
 	<widget field="Use Tags" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
 		<location x="458" y="289"/>
-	</widget>
-	<widget field="Detect" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="28" y="342"/>
-		<width>262</width>
 	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
 		<location x="19" y="94"/>
