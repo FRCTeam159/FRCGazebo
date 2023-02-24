@@ -16,12 +16,9 @@ public class Arm extends Thread {
   public static double kHoldX = 0; // distance corresponding to start angles
   public static double kHoldY = 0;
 
-
   public static double kmaxAngleError=Math.toRadians(1.0);
 
-  // field dimensions
-
-  public static final double[] kinit =  {0.1,0.36,0}; // center of platform
+  public static final double[] kinit =  {0.1,0.36,0}; 
 
   public static final double[] kcube1 = {0.6,0.6,Math.toRadians(45)}; // center of platform
   public static final double[] kcube2 = {1.00,1.1,Math.toRadians(119)};
@@ -67,7 +64,7 @@ public class Arm extends Thread {
   double twoAngle;
   static int cnt=0;
 
-  ArmPosition m_target;
+  ArmPosition m_armpose;
 
   public Arm() {
     stageOne = new SimEncMotor(kStageOneChannel);
@@ -144,12 +141,7 @@ public class Arm extends Thread {
   public double getYTarget(){
     return Y;
   }
-  double getX(){
-    return getPosition()[0];
-  }
-  double getY(){
-   return getPosition()[1];
-  }
+  
   void setX(double x){
     X=x;
     X=X>maxX?maxX:X;
@@ -161,8 +153,8 @@ public class Arm extends Thread {
     Y=Y<minY?minY:Y;
   }
   public void setPose(double x, double y){
-    setX(x);
-    setY(y);
+    double tmp[]={x,y,rotateAngle};
+    setPose(tmp);    
   }
  
   void setPose(double[]p){
@@ -170,7 +162,7 @@ public class Arm extends Thread {
     setY(p[1]);
     rotateAngle=p[2];
     twistAngle=0;
-    m_target=new ArmPosition(p[0], p[1],ArmPosition.consType.pose);
+    m_armpose=new ArmPosition(p[0], p[1],ArmPosition.consType.pose);
   }
   
   void log(){
@@ -187,8 +179,7 @@ public class Arm extends Thread {
   }
 
   // Input x and y, returns 2 angles for the 2 parts of the arm
-double[] calculateAngle(double x, double y) {
-   
+double[] calculateAngle(double x, double y) {  
     double a1 = kStageOneLength;
     double a2 = kStageTwoLength;
     double f1 = (x * x + y * y - a1 * a1 - a2 * a2) / (2 * a1 * a2);
@@ -203,8 +194,7 @@ double[] calculateAngle(double x, double y) {
     double alpha = t1-t2;
     beta+=beta<0?2*Math.PI:0;
 
-    double[] angles={alpha,beta};
-  
+    double[] angles={alpha,beta}; 
     return angles;
   }
 
@@ -282,10 +272,10 @@ double[] calculateAngle(double x, double y) {
     X = kinit[0];
     Y = kinit[1];
   }
-  public void setHoldingPose() {
-    X = kHoldX;
-    Y = kHoldY;
-    rotateAngle = -kRotateAngleOffset; // rotate to level
-    twistAngle = 0;
-  }
+  // public void setHoldingPose() {
+  //   X = kHoldX;
+  //   Y = kHoldY;
+  //   rotateAngle = -kRotateAngleOffset; // rotate to level
+  //   twistAngle = 0;
+  // }
 }
