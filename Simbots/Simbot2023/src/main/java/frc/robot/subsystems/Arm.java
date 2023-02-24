@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -13,11 +12,6 @@ import gazebo.SimEncMotor;
 import static frc.robot.Constants.*;
 
 public class Arm extends Thread {
-
-  //public static final int kStageOneChannel = 9;
-  //public static final int kStageTwoChannel = 10;
-
-  // Solidworks initial offsets to desired pose
   
   public static double kHoldX = 0; // distance corresponding to start angles
   public static double kHoldY = 0;
@@ -34,36 +28,43 @@ public class Arm extends Thread {
 
   // field dimensions
 
-  public static final double[] kinit =  {0.1,0.36}; // center of platform
+  public static final double[] kinit =  {0.1,0.36,0}; // center of platform
 
-  public static final double[] kcube1 = {0.6,0.6}; // center of platform
-  public static final double[] kcube2 = {1.00,1.1};
+  public static final double[] kcube1 = {0.6,0.6,Math.toRadians(45)}; // center of platform
+  public static final double[] kcube2 = {1.00,1.1,Math.toRadians(119)};
  
-  public static final double[] kcone1 = {0.58,0.87}; // to top of post
-  public static final double[] kcone2 = {1.01,1.17};
+  public static final double[] kcone1 = {0.58,0.87,Math.toRadians(48)}; // to top of post
+  public static final double[] kcone2 = {1.01,1.17,Math.toRadians(91)};
  
-  public static final double[] kshelf =  {0.1,1.0}; // nominal 6" from front of robot (could be zero))
-  public static final double[] kground = {0.3,0.2}; // 
+  public static final double[] kshelf =  {0.1,1.0,Math.toRadians(49)}; // nominal 6" from front of robot (could be zero))
+  public static final double[] kground = {0.3,0.2, Math.toRadians(0)}; // 
 
   public static boolean debug = false;
  
   private SimEncMotor stageOne;
   private SimEncMotor stageTwo;
- 
-  boolean test_mode=false;
+  private SimEncMotor twistMotor;
+  private SimEncMotor rotateMotor;
 
+ 
   final ProfiledPIDController onePID= 
   new ProfiledPIDController(8,1,0,
-   new TrapezoidProfile.Constraints(0.5*kMaxArmAngularSpeed,0.2*kMaxArmAngularAcceleration));
+   new TrapezoidProfile.Constraints(kMaxLowerArmAngularSpeed,kMaxLowerArmAngularAcceleration));
   final ProfiledPIDController twoPID= 
   new ProfiledPIDController(10,1,0,
-    new TrapezoidProfile.Constraints(kMaxArmAngularSpeed,kMaxArmAngularAcceleration));
-  
-  // public PIDController onePID = new PIDController(5, 0, 0.0);
-  // public PIDController twoPID = new PIDController(5, 0, 0.0);
-
+    new TrapezoidProfile.Constraints(kMaxUpperArmAngularSpeed,kMaxUpperArmAngularAcceleration));
+  final ProfiledPIDController rotatePID= 
+  new ProfiledPIDController(3,1,0,
+    new TrapezoidProfile.Constraints(kMaxWristRotateAngularSpeed,kMaxWristRotaterAcceleration));
+  final ProfiledPIDController twistPID= 
+  new ProfiledPIDController(0.8,0,0,
+    new TrapezoidProfile.Constraints(kMaxWristRotateAngularSpeed,kMaxWristRotaterAcceleration));
+ 
   static double X;
   static double Y;
+  static double twistAngle = 0;
+  static double rotateAngle = 0;
+
 
   static double maxX=1.1;
   static double maxY=1.1;
@@ -78,8 +79,15 @@ public class Arm extends Thread {
   public Arm() {
     stageOne = new SimEncMotor(kStageOneChannel);
     stageTwo = new SimEncMotor(kStageTwoChannel);
+    rotateMotor = new SimEncMotor(kWristRotateChannel);
+    twistMotor = new SimEncMotor(kWristTwistChannel);
     stageOne.enable();
     stageTwo.enable();
+    rotateMotor.enable();
+    twistMotor.enable();
+    twistMotor.setInverted();
+    rotatePID.setTolerance(1);
+    twistPID.setTolerance(1);
   }
 
   public void run() {
@@ -97,21 +105,45 @@ public class Arm extends Thread {
       try {
         Thread.sleep(20);
         setAngle(X, Y);
-        setDashboard();
+        setRotation();
+        setTwist();
+        log();
       } catch (Exception ex) {
         System.out.println("exception:" + ex);
       }
     }
   }
 
-  public void setTestMode(){
-    test_mode=true;
+  public void setTwist(double r){
+    twistAngle=r;
   }
-  public void clrTestMode(){
-    test_mode=false;
+  public void setRotation(double r){
+    rotateAngle=r;
   }
-  public boolean testMode(){
-    return test_mode;
+  public double getTwist() {
+    return twistMotor.getDistance() * 2 * Math.PI;
+  }
+
+  public double getRotation() {
+    return rotateMotor.getDistance() * 2 * Math.PI + kRotateAngleOffset;
+  }
+
+  private void setTwist() {
+    double angle = getTwist();
+    double err = twistPID.calculate(angle, twistAngle);
+    if (debug && cnt % 20 == 0) {
+      System.out.format("twist target:%-2.1f current:%-2.1f corr:%-1.3f\n", twistAngle, angle, err);
+    }
+    twistMotor.set(err);
+  }
+
+  private void setRotation() {
+    double angle = getRotation();
+    double err = rotatePID.calculate(angle, rotateAngle);
+    if (debug && cnt % 20 == 0) {
+      System.out.format("rotate target:%-2.1f current:%-2.1f corr:%-1.3f\n", rotateAngle, angle, err);
+    }
+    rotateMotor.set(err);
   }
   public double getXTarget(){
     return X;
@@ -155,16 +187,21 @@ public class Arm extends Thread {
   public void setPose(double[]p){
     setX(p[0]);
     setY(p[1]);
+    rotateAngle=p[2];
+    twistAngle=0;
   }
-  public void setTargetPose(double[]p){
-    setX(p[0]+kfrontX-kgripperX+kbumperX);
-    setY(p[1]-kgroundY+kovertargetY);
-  }
-  void setDashboard(){
+  
+  void log(){
     double d[]=getPosition();
     String s=String.format("X:%-3.2f(%-3.2f) Y:%-3.1f(%-3.2f) A1:%-3.1f(%-3.1f) A2:%-3.1f(%-3.1f)",
-      d[0],X,d[1],Y,Math.toDegrees(oneAngle),Math.toDegrees(target[0]),Math.toDegrees(twoAngle),Math.toDegrees(target[1]));
+      d[0],X,
+      d[1],Y,
+      Math.toDegrees(oneAngle),Math.toDegrees(target[0]),
+      Math.toDegrees(twoAngle),Math.toDegrees(target[1]));
     SmartDashboard.putString("Arm",s);
+    s=String.format("Rot:%-3.1f(%-3.1f) Twist:%-3.1f(%-3.1f)",
+    Math.toDegrees(getRotation()),Math.toDegrees(rotateAngle),Math.toDegrees(getTwist()),Math.toDegrees(twistAngle));
+    SmartDashboard.putString("Wrist",s);
   }
 
   // Input x and y, returns 2 angles for the 2 parts of the arm
@@ -222,8 +259,7 @@ double[] calculateAngle(double x, double y) {
     target = calculateAngle(x, y);
     oneAngle = lowerArmAngle();
     twoAngle = upperArmAngle();
-    //if(x<0)
-   //   target[1]=-target[1];
+   
     double oneOut = onePID.calculate(oneAngle, target[0]);
     double twoOut = twoPID.calculate(twoAngle, target[1]);
     if (debug && (cnt % 100) == 0) {
@@ -261,20 +297,23 @@ double[] calculateAngle(double x, double y) {
     setPose(kcone2);
   }
   public void setShelfPose(){
-    setTargetPose(kshelf);
+    setPose(kshelf);
   }
   public void setGroundPose(){
     setPose(kground);
   }
  
   public void setInitPose() {
+    rotateAngle=0;
+    twistAngle=0;
+
     X = kinit[0];
     Y = kinit[1];
   }
   public void setHoldingPose() {
     X = kHoldX;
     Y = kHoldY;
+    rotateAngle = -kRotateAngleOffset; // rotate to level
+    twistAngle = 0;
   }
-
- 
 }

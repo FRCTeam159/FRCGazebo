@@ -9,10 +9,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Wrist;
+import static frc.robot.Constants.*;
+
 
 public class PassThru extends CommandBase {
    Arm m_arm;
-   Wrist m_wrist;
    XboxController m_controller;
 
    final static int IDLE=0;
@@ -49,9 +50,8 @@ public class PassThru extends CommandBase {
 
    Timer m_timer=new Timer();
   /** Creates a new PassThru. */
-  public PassThru(Wrist w, Arm a, XboxController c) {
-    m_wrist=w;
-    m_arm=a;
+  public PassThru(Arm arm, XboxController c) {
+    m_arm=arm;
     m_controller=c;
   }
 
@@ -71,13 +71,12 @@ public class PassThru extends CommandBase {
     if((state !=IDLE) && m_timer.get()>max_delay){
       System.out.println("state max delay exceeded - aborting");
       m_arm.setInitPose();
-      m_wrist.setInitialPose();
       state=END;
     }
     // if(m_arm.testMode() && m_controller.getLeftBumperPressed()){
     //   System.out.println("Passthru apborted by user");
     //   m_arm.setHoldingPose();
-    //   m_wrist.setHoldingPose();
+    //   m_arm.setHoldingPose();
     //   state=IDLE;
     // }
    
@@ -88,7 +87,7 @@ public class PassThru extends CommandBase {
     switch(state){
       default:
       case IDLE:
-        if(m_arm.testMode() && m_controller.getRightBumperPressed()){
+        if(kTestMode && m_controller.getRightBumperPressed()){
           m_reversed=m_arm.getX()<-0.25?true:false;
           System.out.println("PassThru: starting reversed:"+m_reversed);
           x_target=reversed()?-0.5:0.5;
@@ -100,22 +99,22 @@ public class PassThru extends CommandBase {
       case STARTED:
         if(Math.abs(m_arm.getX()-x_target)<maxXerr && Math.abs(m_arm.getY()-y_target)<maxYerr){
           System.out.format("PassThru: reached start position x:%-1.2f y:%-1.2f\n",m_arm.getX(), m_arm.getY());
-          m_wrist.setTwist(twist_90);
+          m_arm.setTwist(twist_90);
           resetTimer(default_delay);
           state=TWIST_90;
         }
         break;
       case TWIST_90:
-        if(Math.abs(m_wrist.getTwist()-twist_90)<maxRotationError){
+        if(Math.abs(m_arm.getTwist()-twist_90)<maxRotationError){
           System.out.println("PassThru: reached twist angle -90");
           rotation=reversed()?0:rotate_180;
-          m_wrist.setRotation(rotation);
+          m_arm.setRotation(rotation);
           state=ROTATE_180;
           resetTimer(default_delay);
         }
         break;
         case ROTATE_180: 
-        if(Math.abs(m_wrist.getRotation()-rotation)<maxRotationError){
+        if(Math.abs(m_arm.getRotation()-rotation)<maxRotationError){
           System.out.format("PassThru: reached rotation angle %-3.1f\n",Math.toDegrees(rotation));
           x_target=reversed()?0.5:-0.5;
           m_arm.setPose(x_target,y_target);
@@ -128,14 +127,14 @@ public class PassThru extends CommandBase {
           System.out.println("PassThru: reached end position x:"+x_target);
           resetTimer(default_delay);
           twist=reversed()?0:twist_180;
-          m_wrist.setTwist(twist);
+          m_arm.setTwist(twist);
           state=TWIST_180;
         }
         break;
       case TWIST_180:
-        if(Math.abs(m_wrist.getTwist()-twist)<maxRotationError){
+        if(Math.abs(m_arm.getTwist()-twist)<maxRotationError){
           System.out.format("PassThru: end x:%-1.2f y:%-1.2f rot:%-3.1f twist:%-3.1f\n",
-             m_arm.getX(),m_arm.getY(),Math.toDegrees(m_wrist.getRotation()),Math.toDegrees(m_wrist.getTwist()));
+             m_arm.getX(),m_arm.getY(),Math.toDegrees(m_arm.getRotation()),Math.toDegrees(m_arm.getTwist()));
           state=END;
         }
         break;

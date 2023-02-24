@@ -16,6 +16,7 @@ import frc.robot.subsystems.TagDetector;
 import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Autonomous;
+import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Drivetrain;
 
 /**
@@ -30,7 +31,9 @@ public class RobotContainer {
   private final Autonomous m_autonomous = new Autonomous(m_drivetrain);
   private final XboxController m_controller = new XboxController(0);
   private final TagDetector m_detector= new TagDetector(m_drivetrain);
-  private final Wrist m_wrist=new Wrist();
+  //private final Wrist m_wrist=new Wrist();
+  private final Claw m_claw=new Claw();
+
 
   private final Arm m_arm = new Arm();
   private DriveWithGamepad m_driveCommand = null; 
@@ -64,8 +67,8 @@ public class RobotContainer {
     return m_autonomous.getCommand();
   }
   public void teleopInit(){
-    CommandScheduler.getInstance().schedule(new PassThru(m_wrist,m_arm, m_controller));
-    CommandScheduler.getInstance().schedule(new PoseArm(m_arm,m_wrist, m_controller));
+    CommandScheduler.getInstance().schedule(new PassThru(m_arm, m_controller));
+    CommandScheduler.getInstance().schedule(new PoseArm(m_arm,m_claw, m_controller));
     m_drivetrain.setRobotDisabled(false);
     m_drivetrain.setFieldOriented(true);
   }
@@ -81,7 +84,6 @@ public class RobotContainer {
     m_drivetrain.setRobotDisabled(true);
     m_drivetrain.init();
     m_arm.start();
-    m_wrist.start();
     m_detector.start();
     m_plotsub.start();
   }
