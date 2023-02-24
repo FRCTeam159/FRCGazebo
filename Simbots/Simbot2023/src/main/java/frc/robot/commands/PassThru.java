@@ -45,7 +45,6 @@ public class PassThru extends CommandBase {
    double default_delay=30;
    double max_delay=default_delay;
 
-   double d[]=new double[2];
    double rotation=0;
    double twist=0;
 
@@ -76,9 +75,9 @@ public class PassThru extends CommandBase {
       m_arm.setInitPose();
       state=END;
     }
-    d=m_arm.getPosition();
-    double x=d[0];
-    double y=d[1];
+    double pose[]=m_arm.getPosition();
+    double x=pose[0];
+    double y=pose[1];
     cnt++;
     switch(state){
       default:

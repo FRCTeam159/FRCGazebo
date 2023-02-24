@@ -141,7 +141,7 @@ public class PoseArm extends CommandBase {
     // trigger actions
     double left_trigger=m_controller.getLeftTriggerAxis();
     double right_trigger=m_controller.getRightTriggerAxis();
-    pose=m_arm.getPosition();
+    pose=m_arm.getTargetPosition();
     switch (turn_mode) {
       case FIXED:
         break;

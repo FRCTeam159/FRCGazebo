@@ -18,7 +18,7 @@ public class Arm extends Thread {
 
   public static double kmaxAngleError=Math.toRadians(1.0);
 
-  public static final double[] kinit =  {0.1,0.36,0}; 
+  public static final double[] kinit =  {0.131,0.378,0}; // from kStageOneAngleOffset, kStageTwoAngleOffset
 
   public static final double[] kcube1 = {0.6,0.6,Math.toRadians(45)}; // center of platform
   public static final double[] kcube2 = {1.00,1.1,Math.toRadians(119)};
@@ -81,15 +81,17 @@ public class Arm extends Thread {
   }
 
   public void run() {
-    double alpha = lowerArmAngle();
-    double beta = upperArmAngle();
-    double d[]=getPosition();
+    //double alpha = lowerArmAngle();
+    //double beta = upperArmAngle();
+
+    setPose(kinit);
+    // double d[]=getPosition();
     
-    kinit[0]=X=d[0];
-    kinit[1]=Y=d[1];
+    // kinit[0]=X=d[0];
+    // kinit[1]=Y=d[1];
     
-    System.out.format("initial pose alpha:%-3.1f beta:%-3.1f x:%-1.3f y:%-1.3f\n",
-      Math.toDegrees(alpha),Math.toDegrees(beta),X,Y);
+    //System.out.format("initial pose alpha:%-3.1f beta:%-3.1f x:%-1.3f y:%-1.3f\n",
+    //  Math.toDegrees(alpha),Math.toDegrees(beta),X,Y);
 
     while (!Thread.interrupted()) {
       try {
@@ -135,6 +137,10 @@ public class Arm extends Thread {
     }
     rotateMotor.set(err);
   }
+  public double[] getTargetPosition(){
+    double tmp[]={X,Y};
+    return tmp;
+  }
   public double getXTarget(){
     return X;
   }
@@ -162,7 +168,7 @@ public class Arm extends Thread {
     setY(p[1]);
     rotateAngle=p[2];
     twistAngle=0;
-    m_armpose=new ArmPosition(p[0], p[1],ArmPosition.consType.pose);
+   // m_armpose=new ArmPosition(p[0], p[1],ArmPosition.consType.pose); // unused so far
   }
   
   void log(){
@@ -264,18 +270,7 @@ double[] calculateAngle(double x, double y) {
   public void setGroundPose(){
     setPose(kground);
   }
- 
   public void setInitPose() {
-    rotateAngle=0;
-    twistAngle=0;
-
-    X = kinit[0];
-    Y = kinit[1];
+    setPose(kinit);
   }
-  // public void setHoldingPose() {
-  //   X = kHoldX;
-  //   Y = kHoldY;
-  //   rotateAngle = -kRotateAngleOffset; // rotate to level
-  //   twistAngle = 0;
-  // }
 }
