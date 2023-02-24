@@ -29,8 +29,8 @@ public class Drivetrain extends SubsystemBase {
 	static public boolean debug=true;
 	static public boolean debug_angles=true;
 
-	public static double dely = Units.inchesToMeters(0.5 * kSideWheelBase); // 0.2949 metters
-	public static double delx = Units.inchesToMeters(0.5 * kFrontWheelBase);
+	public static double dely = Units.inchesToMeters(0.5 * kFrontWheelBase); // 0.2949 metters
+	public static double delx = Units.inchesToMeters(0.5 * kSideWheelBase);
 
 	private final Translation2d m_frontLeftLocation = new Translation2d(delx, dely);
 	private final Translation2d m_frontRightLocation = new Translation2d(delx, -dely);

@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Wrist;
 import static frc.robot.Constants.*;
 
 
@@ -29,11 +28,13 @@ public class PassThru extends CommandBase {
 
    int cnt=0;
 
-   double x_target=0.5;
-   double y_target=0.325;  // must be set at x=0 point to avoid NaN
+  //double x_target=0.5;
+   //double target[1]=0.325;  // must be set at x=0 point to avoid NaN
    double twist_90=Math.toRadians(-90);
    double twist_180=Math.toRadians(-180);
    double rotate_180=Math.toRadians(180);
+
+   double target[]=new double[2];
 
    double maxRotationError=Math.toRadians(5);
    double maxXerr=0.1;
@@ -58,10 +59,12 @@ public class PassThru extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    target[0]=0.5;
+    target[1]=0.325;
     m_timer.reset();
     m_timer.start();
     cnt=0;
-    m_reversed=m_arm.getX()<-0.25?true:false;
+    m_reversed=m_arm.getPosition()[0]<-0.25?true:false;
     System.out.println("PassThru.initialize()");
   }
 
@@ -73,32 +76,25 @@ public class PassThru extends CommandBase {
       m_arm.setInitPose();
       state=END;
     }
-    // if(m_arm.testMode() && m_controller.getLeftBumperPressed()){
-    //   System.out.println("Passthru apborted by user");
-    //   m_arm.setHoldingPose();
-    //   m_arm.setHoldingPose();
-    //   state=IDLE;
-    // }
-   
-    // if((cnt%50)==0){
-    //   System.out.println("PassThru state="+state);  
-    // }
+    d=m_arm.getPosition();
+    double x=d[0];
+    double y=d[1];
     cnt++;
     switch(state){
       default:
       case IDLE:
         if(kTestMode && m_controller.getRightBumperPressed()){
-          m_reversed=m_arm.getX()<-0.25?true:false;
+          m_reversed=x<-0.25?true:false;
           System.out.println("PassThru: starting reversed:"+m_reversed);
-          x_target=reversed()?-0.5:0.5;
-          m_arm.setPose(x_target,y_target);
+          target[0]=reversed()?-0.5:0.5;
+          m_arm.setPose(target[0],target[1]);
           resetTimer(default_delay);
           state=STARTED;
         }
         break;
       case STARTED:
-        if(Math.abs(m_arm.getX()-x_target)<maxXerr && Math.abs(m_arm.getY()-y_target)<maxYerr){
-          System.out.format("PassThru: reached start position x:%-1.2f y:%-1.2f\n",m_arm.getX(), m_arm.getY());
+        if(Math.abs(x-target[0])<maxXerr && Math.abs(y-target[1])<maxYerr){
+          System.out.format("PassThru: reached start position x:%-1.2f y:%-1.2f\n",x, y);
           m_arm.setTwist(twist_90);
           resetTimer(default_delay);
           state=TWIST_90;
@@ -116,15 +112,15 @@ public class PassThru extends CommandBase {
         case ROTATE_180: 
         if(Math.abs(m_arm.getRotation()-rotation)<maxRotationError){
           System.out.format("PassThru: reached rotation angle %-3.1f\n",Math.toDegrees(rotation));
-          x_target=reversed()?0.5:-0.5;
-          m_arm.setPose(x_target,y_target);
+          target[0]=reversed()?0.5:-0.5;
+          m_arm.setPose(target[0],target[1]);
           state=MOVE_X;
           resetTimer(2*default_delay);
         }
         break;
       case MOVE_X:
-        if(Math.abs(m_arm.getX()-x_target)<maxXerr && Math.abs(m_arm.getY()-y_target)<maxYerr){
-          System.out.println("PassThru: reached end position x:"+x_target);
+        if(Math.abs(x-target[0])<maxXerr && Math.abs(y-target[1])<maxYerr){
+          System.out.println("PassThru: reached end position x:"+target[0]);
           resetTimer(default_delay);
           twist=reversed()?0:twist_180;
           m_arm.setTwist(twist);
@@ -134,7 +130,7 @@ public class PassThru extends CommandBase {
       case TWIST_180:
         if(Math.abs(m_arm.getTwist()-twist)<maxRotationError){
           System.out.format("PassThru: end x:%-1.2f y:%-1.2f rot:%-3.1f twist:%-3.1f\n",
-             m_arm.getX(),m_arm.getY(),Math.toDegrees(m_arm.getRotation()),Math.toDegrees(m_arm.getTwist()));
+             x,y,Math.toDegrees(m_arm.getRotation()),Math.toDegrees(m_arm.getTwist()));
           state=END;
         }
         break;

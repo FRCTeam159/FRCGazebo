@@ -45,6 +45,8 @@ public class PoseArm extends CommandBase {
   public static final int MOVE2=4;
 
   static int turn_mode=ROTATE;
+
+  double pose[]=new double[2];
   
   public PoseArm(Arm arm, Claw claw, XboxController controller) {
     m_arm = arm;
@@ -139,6 +141,7 @@ public class PoseArm extends CommandBase {
     // trigger actions
     double left_trigger=m_controller.getLeftTriggerAxis();
     double right_trigger=m_controller.getRightTriggerAxis();
+    pose=m_arm.getPosition();
     switch (turn_mode) {
       case FIXED:
         break;
@@ -155,16 +158,24 @@ public class PoseArm extends CommandBase {
           m_arm.setTwist( m_arm.getTwist() + left_trigger * wrist_incr);     
         break;
       case MOVE1:
-        if (right_trigger > 0.1) 
-          m_arm.setX(m_arm.getXTarget()+right_trigger * move_incr);
-        if (left_trigger > 0.1) 
-          m_arm.setX(m_arm.getXTarget()-left_trigger * move_incr);
+        if (right_trigger > 0.1) {
+          pose[0]=m_arm.getXTarget()+right_trigger * move_incr;
+          m_arm.setPose(pose[0],pose[1]);
+        }
+        if (left_trigger > 0.1){
+          pose[0]=m_arm.getXTarget()-left_trigger * move_incr;
+          m_arm.setPose(pose[0],pose[1]);
+        }
         break; 
       case MOVE2:
-        if (right_trigger > 0.1) 
-          m_arm.setY(m_arm.getYTarget()+right_trigger * move_incr);
-        if (left_trigger > 0.1) 
-          m_arm.setY(m_arm.getYTarget()-left_trigger * move_incr);
+        if (right_trigger > 0.1) {
+          pose[1]=m_arm.getXTarget()+right_trigger * move_incr;
+          m_arm.setPose(pose[0],pose[1]);
+        }
+        if (left_trigger > 0.1) {
+          pose[1]=m_arm.getYTarget()-left_trigger * move_incr;
+          m_arm.setPose(pose[0],pose[1]);
+        }
         break;       
     }
     

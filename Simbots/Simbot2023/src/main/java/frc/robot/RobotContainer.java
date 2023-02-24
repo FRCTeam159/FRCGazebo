@@ -13,7 +13,6 @@ import frc.robot.commands.PassThru;
 import frc.robot.commands.PoseArm;
 import frc.robot.objects.PlotServer;
 import frc.robot.subsystems.TagDetector;
-import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Claw;
