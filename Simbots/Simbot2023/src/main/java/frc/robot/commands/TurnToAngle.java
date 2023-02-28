@@ -11,7 +11,7 @@ import frc.robot.subsystems.Drivetrain;
 import static frc.robot.Constants.*;
 
 public class TurnToAngle extends CommandBase {
-  boolean debug=true;
+  boolean debug=false;
   boolean turning=false;
   double target_angle=0;
   double heading=0;

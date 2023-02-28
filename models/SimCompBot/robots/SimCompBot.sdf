@@ -735,7 +735,7 @@
         </plugin>
       </sensor>
     </link>
-    <joint name="GripperRotate-GripperTwist" type="revolute">
+    <joint name="GripperRotate-GripperTwist" type="fixed">
       <parent>GripperRotate</parent>
       <child>GripperTwist</child>
       <pose>-0.038351588966394 -0.0753937915180227 0.0266113955059517 0 0 4.71238898038469</pose>
@@ -1180,11 +1180,13 @@
         <topic>~/gazebo/frc/simulator/motor/12</topic>
         <multiplier>50</multiplier>
     </plugin>
+    <!--
     <plugin name="GripperRotate-GripperTwist_encoder" filename="sim_encoder.dll">
         <joint>GripperRotate-GripperTwist</joint>
         <topic>~/gazebo/frc/simulator/encoder/12</topic>
         <multiplier>1</multiplier>
     </plugin>
+    -->
 
   </model>
    <plugin name="Body_gyro" filename="sim_gyro.dll">

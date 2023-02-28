@@ -19,11 +19,11 @@ public class Arm extends Thread {
 
   public static final double[] kinit =  {0.131,0.378,0}; // from kStageOneAngleOffset, kStageTwoAngleOffset
 
-  public static final double[] kcube1 = {0.6,0.6,Math.toRadians(45)}; // center of platform
-  public static final double[] kcube2 = {1.00,1.1,Math.toRadians(119)};
+  public static final double[] kcube1 = {0.8,0.6,Math.toRadians(61)}; // center of platform
+  public static final double[] kcube2 = {1.2,0.9,Math.toRadians(98)};
  
-  public static final double[] kcone1 = {0.64,0.84,Math.toRadians(59)}; // to top of post
-  public static final double[] kcone2 = {1.15,1.15,Math.toRadians(98)};
+  public static final double[] kcone1 = {0.8,0.8,Math.toRadians(76)}; // to top of post
+  public static final double[] kcone2 = {1.19,1.08,Math.toRadians(98)};
  
   public static final double[] kshelf =  {0.1,1.0,Math.toRadians(49)}; // nominal 6" from front of robot (could be zero))
   public static final double[] kground = {0.3,0.2, Math.toRadians(0)}; // 
@@ -168,15 +168,16 @@ public class Arm extends Thread {
   
   void log(){
     double d[]=getPosition();
-    String s=String.format("X:%-3.2f(%-3.2f) Y:%-3.1f(%-3.2f) A1:%-3.1f(%-3.1f) A2:%-3.1f(%-3.1f)",
+    String s=String.format("X:%-3.2f(%-3.2f) Y:%-3.1f(%-3.2f) A:%-3.1f(%-3.1f) B:%-3.1f(%-3.1f) W:%-3.1f(%-3.1f)",
       d[0],X,
       d[1],Y,
       Math.toDegrees(oneAngle),Math.toDegrees(target[0]),
-      Math.toDegrees(twoAngle),Math.toDegrees(target[1]));
+      Math.toDegrees(twoAngle),Math.toDegrees(target[1]),
+      getRotation(),Math.toDegrees(rotateAngle));
     SmartDashboard.putString("Arm",s);
-    s=String.format("Rot:%-3.1f(%-3.1f) Twist:%-3.1f(%-3.1f)",
-    Math.toDegrees(getRotation()),Math.toDegrees(rotateAngle),Math.toDegrees(getTwist()),Math.toDegrees(twistAngle));
-    SmartDashboard.putString("Wrist",s);
+    //s=String.format("Rot:%-3.1f(%-3.1f) Twist:%-3.1f(%-3.1f)",
+   // Math.toDegrees(getRotation()),Math.toDegrees(rotateAngle),Math.toDegrees(getTwist()),Math.toDegrees(twistAngle));
+    //SmartDashboard.putString("Wrist",s);
   }
 
 // Inverse kinematics: Input x and y, returns 2 angles for the 2-segment arm

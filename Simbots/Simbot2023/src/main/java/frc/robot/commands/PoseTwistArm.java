@@ -12,9 +12,7 @@ import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Claw;
 import static frc.robot.Constants.*;
 
-import javax.xml.stream.StreamFilter;
-
-public class PoseArm extends CommandBase {
+public class PoseTwistArm extends CommandBase {
   Arm m_arm;
   Claw m_claw;
 
@@ -52,7 +50,7 @@ public class PoseArm extends CommandBase {
 
   double pose[]=new double[2];
   
-  public PoseArm(Arm arm, Claw claw, XboxController controller) {
+  public PoseTwistArm(Arm arm, Claw claw, XboxController controller) {
     m_arm = arm;
     m_claw=claw;
     m_controller=controller;

@@ -1,12 +1,8 @@
 <xml version="1.0">
 <dashboard>
-	<widget field="Wrist" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="18" y="400"/>
-		<width>210</width>
-	</widget>
 	<widget field="State" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="242" y="401"/>
-		<width>140</width>
+		<location x="395" y="426"/>
+		<width>154</width>
 	</widget>
 	<widget field="Arm" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="22" y="425"/>
@@ -23,24 +19,24 @@
 		<height>20</height>
 	</widget>
 	<widget field="Conf" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="442" y="413"/>
+		<location x="440" y="364"/>
 		<width>80</width>
 	</widget>
 	<widget field="Latency" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="431" y="347"/>
+		<location x="435" y="315"/>
 		<width>95</width>
 	</widget>
 	<widget field="H:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="438" y="243"/>
+		<location x="437" y="234"/>
 		<width>66</width>
 	</widget>
 	<widget field="Use Tags" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="455" y="382"/>
+		<location x="455" y="339"/>
 	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
 		<location x="16" y="99"/>
-		<width>388</width>
-		<height>289</height>
+		<width>405</width>
+		<height>310</height>
 		<property name="Camera Choice" value="testCamera"/>
 	</static-widget>
 	<widget field="maxA" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
@@ -55,11 +51,11 @@
 		<location x="135" y="12"/>
 	</widget>
 	<widget field="Y:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="441" y="310"/>
+		<location x="438" y="287"/>
 		<width>69</width>
 	</widget>
 	<widget field="X:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="441" y="275"/>
+		<location x="439" y="261"/>
 		<width>68</width>
 		<height>20</height>
 	</widget>
@@ -113,6 +109,90 @@
 	</static-widget>
 </dashboard>
 <live-window>
+	<widget field="Claw" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
+		<location x="0" y="69"/>
+	</widget>
+	<widget field="Drivetrain" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
+		<location x="0" y="46"/>
+	</widget>
+	<widget field="Simulation" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
+		<location x="0" y="23"/>
+	</widget>
+	<widget field="Ungrouped" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
+		<widget field="PIDController[9]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+			<location x="6" y="16"/>
+			<height>94</height>
+			<width>141</width>
+		</widget>
+		<widget field="PIDController[12]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+			<location x="6" y="110"/>
+			<height>94</height>
+			<width>141</width>
+		</widget>
+		<widget field="PIDController[1]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+			<location x="6" y="204"/>
+			<height>94</height>
+			<width>141</width>
+		</widget>
+		<widget field="PIDController[6]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+			<location x="6" y="298"/>
+			<height>94</height>
+			<width>141</width>
+		</widget>
+		<widget field="PIDController[2]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+			<location x="6" y="392"/>
+			<height>94</height>
+			<width>141</width>
+		</widget>
+		<widget field="PIDController[11]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+			<location x="6" y="486"/>
+			<height>94</height>
+			<width>141</width>
+		</widget>
+		<widget field="PIDController[13]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+			<location x="6" y="580"/>
+			<height>94</height>
+			<width>141</width>
+		</widget>
+		<widget field="PIDController[8]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+			<location x="6" y="674"/>
+			<height>94</height>
+			<width>141</width>
+		</widget>
+		<widget field="PIDController[14]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+			<location x="6" y="768"/>
+			<height>94</height>
+			<width>141</width>
+		</widget>
+		<widget field="PIDController[3]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+			<location x="6" y="862"/>
+			<height>94</height>
+			<width>141</width>
+		</widget>
+		<widget field="PIDController[7]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+			<location x="6" y="956"/>
+			<height>94</height>
+			<width>141</width>
+		</widget>
+		<widget field="PIDController[4]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+			<location x="6" y="1050"/>
+			<height>94</height>
+			<width>141</width>
+		</widget>
+		<widget field="PIDController[5]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+			<location x="6" y="1144"/>
+			<height>94</height>
+			<width>141</width>
+		</widget>
+		<widget field="PIDController[10]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+			<location x="6" y="1238"/>
+			<height>94</height>
+			<width>141</width>
+		</widget>
+		<location x="0" y="0"/>
+		<width>153</width>
+		<height>1338</height>
+	</widget>
 </live-window>
 	<hidden field="Field"/>
 </xml>
