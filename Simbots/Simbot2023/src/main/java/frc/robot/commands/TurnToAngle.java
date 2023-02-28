@@ -11,7 +11,7 @@ import frc.robot.subsystems.Drivetrain;
 import static frc.robot.Constants.*;
 
 public class TurnToAngle extends CommandBase {
-  boolean debug=false;
+  boolean debug=true;
   boolean turning=false;
   double target_angle=0;
   double heading=0;
@@ -21,6 +21,7 @@ public class TurnToAngle extends CommandBase {
   double correction=0;
   //double direction=1;
   double start_time=0;
+  
 
   final ProfiledPIDController m_turningPIDController= 
   new ProfiledPIDController(0.5,0.5,0,
@@ -37,6 +38,8 @@ public class TurnToAngle extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    System.out.println("TurnToAngle.initialize");
+
     turning=true;
     start_phase=m_drive.getHeading();
     heading=last_heading=0;
@@ -59,6 +62,7 @@ public class TurnToAngle extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println("TurnToAngle.end");
 
   }
 
@@ -87,7 +91,12 @@ public class TurnToAngle extends CommandBase {
     double ptol=m_turningPIDController.getPositionTolerance();
     double vtol=m_turningPIDController.getVelocityTolerance();
     double delt=m_drive.getClockTime()-start_time;
-    if(delt>3.5 || (Math.abs(perr)<ptol && Math.abs(verr)<vtol)){
+    if(delt>12){
+      System.out.println("Turn aborted - timeout expired");
+      turning=false;
+      return true;
+    }
+    if(Math.abs(perr)<ptol && Math.abs(verr)<vtol){
       if(debug)
         System.out.format("atTurnSetpoint time:%-2.1f heading:%-3.1f perr:%-3.1f verr:%-2.1f\n",delt,heading+start_phase,perr,verr);
       turning=false;

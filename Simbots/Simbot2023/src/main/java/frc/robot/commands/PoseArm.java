@@ -12,6 +12,8 @@ import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Claw;
 import static frc.robot.Constants.*;
 
+import javax.xml.stream.StreamFilter;
+
 public class PoseArm extends CommandBase {
   Arm m_arm;
   Claw m_claw;
@@ -33,7 +35,7 @@ public class PoseArm extends CommandBase {
   public static final int CUBE=8;
   public static final int CONE=16;
 
-  static int mode=HOLDING;
+  static int mode=TEST;
 
   static double wrist_incr=0.1;
   static double move_incr=0.01;
@@ -45,6 +47,8 @@ public class PoseArm extends CommandBase {
   public static final int MOVE2=4;
 
   static int turn_mode=ROTATE;
+
+  String test_str="Wrist Rotate";
 
   double pose[]=new double[2];
   
@@ -82,19 +86,19 @@ public class PoseArm extends CommandBase {
       switch (turn_mode){
         default:
         case ROTATE:
-          System.out.println("setting wrist twist mode)");
+          test_str="Wrist Twist";
           turn_mode=TWIST;
           break;
         case TWIST:
-          System.out.println("setting arm x move mode)");
+          test_str="Move X";
           turn_mode=MOVE1;
           break;
         case MOVE1:
-          System.out.println("setting arm y move mode)");
+          test_str="Move Y";
           turn_mode=MOVE2;
           break;
         case MOVE2:
-          System.out.println("setting rotate wrist mode)");
+          test_str="Wrist Rotate";
           turn_mode=ROTATE;
           break;
       }
@@ -183,7 +187,7 @@ public class PoseArm extends CommandBase {
     switch (mode){
       default:
       case TEST:
-        SmartDashboard.putString("State","Test");
+        SmartDashboard.putString("State","Test "+test_str);
         break;
       case HOLDING:
         m_arm.setInitPose();

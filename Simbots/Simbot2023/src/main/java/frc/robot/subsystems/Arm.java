@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.objects.ArmPosition;
 import gazebo.SimEncMotor;
 import static frc.robot.Constants.*;
 
@@ -24,7 +23,7 @@ public class Arm extends Thread {
   public static final double[] kcube2 = {1.00,1.1,Math.toRadians(119)};
  
   public static final double[] kcone1 = {0.64,0.84,Math.toRadians(59)}; // to top of post
-  public static final double[] kcone2 = {1.05,1.17,Math.toRadians(98)};
+  public static final double[] kcone2 = {1.15,1.15,Math.toRadians(98)};
  
   public static final double[] kshelf =  {0.1,1.0,Math.toRadians(49)}; // nominal 6" from front of robot (could be zero))
   public static final double[] kground = {0.3,0.2, Math.toRadians(0)}; // 
@@ -54,17 +53,16 @@ public class Arm extends Thread {
   static double twistAngle = 0;
   static double rotateAngle = 0;
 
-  static double maxX=1.1;
+  static double maxX=1.4;
+  static double minX=-1.4;
+
   static double maxY=1.2;
-  static double minX=-1.2;
-  static double minY=0.15;
+   static double minY=0.15;
 
   double[] target =null;
   double oneAngle;
   double twoAngle;
   static int cnt=0;
-
-  ArmPosition m_armpose;
 
   public Arm() {
     stageOne = new SimEncMotor(kStageOneChannel);
@@ -81,9 +79,7 @@ public class Arm extends Thread {
   }
 
   public void run() {
-    //double alpha = lowerArmAngle();
-    //double beta = upperArmAngle();
-
+   
     setPose(kinit);
     // double d[]=getPosition();
     
@@ -168,7 +164,6 @@ public class Arm extends Thread {
     setY(p[1]);
     rotateAngle=p[2];
     twistAngle=0;
-   // m_armpose=new ArmPosition(p[0], p[1],ArmPosition.consType.pose); // unused so far
   }
   
   void log(){
@@ -184,19 +179,20 @@ public class Arm extends Thread {
     SmartDashboard.putString("Wrist",s);
   }
 
-  // Input x and y, returns 2 angles for the 2 parts of the arm
+// Inverse kinematics: Input x and y, returns 2 angles for the 2-segment arm
 double[] calculateAngle(double x, double y) {  
     double a1 = kStageOneLength;
     double a2 = kStageTwoLength;
     double f1 = (x * x + y * y - a1 * a1 - a2 * a2) / (2 * a1 * a2);
 
+    f1=f1>0.99?0.99:f1; // prevent NaN if f1>=1
     double beta=-Math.acos(f1);
-    if(x<0)
+
+    if(x<0) // only need if arm can pass through
       beta=-beta;
    
-    double f2 = a2 * Math.sin(beta) / (a1 + a2 * Math.cos(beta));
     double t1=Math.atan2(y,x);
-    double t2=Math.atan(f2);
+    double t2=Math.atan2(a2 * Math.sin(beta),(a1 + a2 * Math.cos(beta)));
     double alpha = t1-t2;
     beta+=beta<0?2*Math.PI:0;
 
@@ -204,7 +200,8 @@ double[] calculateAngle(double x, double y) {
     return angles;
   }
 
-  public double[] getPosition() {
+  // Forward kinematics: return x & y position given 2 angles for the arm
+public double[] getPosition() {
     double alpha = lowerArmAngle();
     double beta = upperArmAngle();
     double a1 = kStageOneLength;
@@ -215,7 +212,7 @@ double[] calculateAngle(double x, double y) {
     return new double[] {x ,y};
   }
 
-  public double lowerArmAngle() {
+  public double lowerArmAngle() { // convert 0 to actual arm angle
     return stageOne.getDistance() * 2 * Math.PI + kStageOneAngleOffset;
   }
 

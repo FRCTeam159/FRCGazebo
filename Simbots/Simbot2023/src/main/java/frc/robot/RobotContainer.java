@@ -11,12 +11,14 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.DriveWithGamepad;
 import frc.robot.commands.PassThru;
 import frc.robot.commands.PoseArm;
+import frc.robot.commands.PoseOneArm;
 import frc.robot.objects.PlotServer;
 import frc.robot.subsystems.TagDetector;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.OneArm;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -33,8 +35,11 @@ public class RobotContainer {
   //private final Wrist m_wrist=new Wrist();
   private final Claw m_claw=new Claw();
 
+  static public final boolean onestagearm=false;
 
   private final Arm m_arm = new Arm();
+  private final OneArm m_onearm = new OneArm();
+
   private DriveWithGamepad m_driveCommand = null; 
 
   PlotServer m_plotsub=new PlotServer();
@@ -44,7 +49,6 @@ public class RobotContainer {
   public RobotContainer() {
     m_driveCommand=new DriveWithGamepad(m_drivetrain, m_controller);
     m_drivetrain.setDefaultCommand(m_driveCommand);
-   //m_Arm.setDefaultCommand(m_PoseArm);
 
     configureButtonBindings();
   }
@@ -65,9 +69,16 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return m_autonomous.getCommand();
   }
-  public void teleopInit(){
+  
+  public void teleopInit() {
     CommandScheduler.getInstance().schedule(new PassThru(m_arm, m_controller));
-    CommandScheduler.getInstance().schedule(new PoseArm(m_arm,m_claw, m_controller));
+    // CommandScheduler.getInstance().schedule(new PoseArm(m_arm,m_claw,
+    // m_controller));
+    if (onestagearm)
+      CommandScheduler.getInstance().schedule(new PoseOneArm(m_onearm, m_controller, m_claw));
+    else
+      CommandScheduler.getInstance().schedule(new PoseArm(m_arm, m_claw, m_controller));
+
     m_drivetrain.setRobotDisabled(false);
     m_drivetrain.setFieldOriented(true);
   }
@@ -82,7 +93,10 @@ public class RobotContainer {
   public void robotInit(){
     m_drivetrain.setRobotDisabled(true);
     m_drivetrain.init();
-    m_arm.start();
+    if (onestagearm)
+      m_onearm.start();
+    else
+      m_arm.start();
     m_detector.start();
     m_plotsub.start();
   }

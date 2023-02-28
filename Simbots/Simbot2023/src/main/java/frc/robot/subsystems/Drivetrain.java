@@ -184,7 +184,6 @@ public class Drivetrain extends SubsystemBase {
 
 		TargetMgr.clearStartPose();
 
-		//last_heading =p.getRotation().getDegrees();
 		last_heading =0;
 		m_gyro.reset();
 
