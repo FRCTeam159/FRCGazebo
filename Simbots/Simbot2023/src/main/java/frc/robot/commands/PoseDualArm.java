@@ -49,7 +49,7 @@ public class PoseDualArm extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("ArmTest.initialize");
+    System.out.println("PoseDualArm.initialize");
     SmartDashboard.putString("State","Driving");
     m_arm.setInitPose();
     m_timer.start();
@@ -59,9 +59,6 @@ public class PoseDualArm extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    // button actions
-
     if(m_controller.getBButtonPressed()){
       if(m_claw.clawOpen())
         m_claw.closeClaw();
@@ -70,37 +67,39 @@ public class PoseDualArm extends CommandBase {
     }
 
     if(m_controller.getAButtonPressed()){ 
-      setManualMode();
-     
+      SmartDashboard.putString("State","Getting CONE from shelf");
+      if(mode==(GETTING|CONE))
+        mode=HOLDING;
+      else
+        mode=GETTING|CONE;
     }
     
     if(m_controller.getYButtonPressed()){
-      clrTestMode();
       switch(mode){
         default:
-        //   mode=GETTING|CONE;
            break;
+        case GETTING|CONE:
         case MANUAL:
+           level=0;
            mode=HOLDING;
            break;
         case HOLDING:
           mode=PLACING|CONE;
           m_timer.reset();
           break;
-        // case GETTING|CONE:
-        //    mode=PLACING|CONE;
-        //    break;
         case PLACING|CONE:
+          level=0;
           mode=HOLDING;
           break;
       } 
     }
     if(m_controller.getXButtonPressed()){
-      clrTestMode();
       switch(mode){
          default:
          break;
+      case GETTING|CONE:
       case MANUAL:
+        level=0;
         mode=HOLDING;
         break;
       case HOLDING:
@@ -109,6 +108,7 @@ public class PoseDualArm extends CommandBase {
         break;
       case PLACING|CUBE:
         mode=HOLDING;
+        level=0;
         break;
       } 
     }
@@ -146,47 +146,52 @@ public class PoseDualArm extends CommandBase {
         break;
       case PLACING|CONE:
         if(level==0){
+          SmartDashboard.putString("State","Ground level plce/pickup");
           m_arm.setGroundPose();
           m_arm.setGroundPose();
         }
         else if(level==1){
+          SmartDashboard.putString("State","Placing CONE at Mid Level");
           m_arm.setMidConePose();
           m_arm.setMidConePose();
         }
         else{
+          SmartDashboard.putString("State","Placing CONE at Top Level");
           m_arm.setTopConePose();
           m_arm.setTopConePose();
         }
-        SmartDashboard.putString("State","Placing CONE at Level:"+level);
         break;
       case PLACING|CUBE:
         if(level==0){
+          SmartDashboard.putString("State","Ground level place or pickup");
           m_arm.setGroundPose();
           m_arm.setGroundPose();
         }
         else if(level==1){
+          SmartDashboard.putString("State","Placing CUBE at Mid Level");
           m_arm.setMidCubePose();
           m_arm.setMidCubePose();
         }
         else{
+          SmartDashboard.putString("State","Placing CUBE at Top Level");
           m_arm.setTopCubePose();
           m_arm.setTopCubePose();
         }
-        SmartDashboard.putString("State","Placing CUBE at Level:"+level);
         break;
       case GETTING|CONE:
         m_arm.setShelfPose();
         m_arm.setShelfPose();
         SmartDashboard.putString("State","Getting CONE from shelf");
         break;
-      case GETTING|CUBE:
-        SmartDashboard.putString("State","Getting CUBE from ground");
-        m_arm.setGroundPose();
-        m_arm.setGroundPose();
-        break;
+      // case GETTING|CUBE:
+      //   SmartDashboard.putString("State","Getting CUBE from ground");
+      //   m_arm.setGroundPose();
+      //   m_arm.setGroundPose();
+      //   break;
     }
     int pov=m_controller.getPOV();
     if(pov>=0){
+      mode=MANUAL;
       double x=0;
       double y=0;
       switch(pov){
@@ -237,11 +242,5 @@ public class PoseDualArm extends CommandBase {
   public boolean isFinished() {
     return false;
   }
-  void setManualMode(){
-    mode=MANUAL;
-    kTestMode=true;
-  }
-  void clrTestMode(){
-    kTestMode=false;
-  }
+  
 }

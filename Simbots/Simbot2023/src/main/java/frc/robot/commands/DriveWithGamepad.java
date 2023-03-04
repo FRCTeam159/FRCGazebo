@@ -66,7 +66,7 @@ public class DriveWithGamepad extends CommandBase {
         * kMaxVelocity;
 
     // Get the rate of angular rotation.
-    var rot = m_rotLimiter.calculate(MathUtil.applyDeadband(vr, 0.2))
+    double rot = m_rotLimiter.calculate(MathUtil.applyDeadband(vr, 0.2))
         * kMaxAngularSpeed;
     
     // execute a 180 degree heading reversal if left (CCW) or right (CW) bumper button is pressed

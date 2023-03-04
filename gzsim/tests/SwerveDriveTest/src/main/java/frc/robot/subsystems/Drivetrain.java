@@ -25,7 +25,7 @@ public class Drivetrain extends SubsystemBase {
 	// square frame geometry
 
 	static public boolean debug=true;
-	static public boolean debug_angles=true;
+	static public boolean debug_angles=false;
 
 	public static double front_wheel_base = 23.22; // distance beteen front wheels
 	public static double side_wheel_base = 23.22; // distance beteen side wheels
@@ -33,17 +33,19 @@ public class Drivetrain extends SubsystemBase {
 	public static double dely = Units.inchesToMeters(0.5 * side_wheel_base); // 0.2949 metters
 	public static double delx = Units.inchesToMeters(0.5 * front_wheel_base);
 
-	private final Translation2d m_frontLeftLocation = new Translation2d(dely, -delx);
-	private final Translation2d m_frontRightLocation = new Translation2d(dely, delx);
-	private final Translation2d m_backLeftLocation = new Translation2d(-dely, -delx);
-	private final Translation2d m_backRightLocation = new Translation2d(-dely, delx);
+	private final Translation2d m_frontLeftLocation = new Translation2d(delx, dely);
+	private final Translation2d m_frontRightLocation = new Translation2d(delx, -dely);
+	private final Translation2d m_backLeftLocation = new Translation2d(-delx, dely);
+	private final Translation2d m_backRightLocation = new Translation2d(-delx, -dely);
 
-	private final SwerveModule m_frontLeft = new SwerveModule(1, 2);
-	private final SwerveModule m_frontRight = new SwerveModule(3, 4);
-	private final SwerveModule m_backLeft = new SwerveModule(5, 6);
-	private final SwerveModule m_backRight = new SwerveModule(7, 8); 
+	private final SwerveModule m_frontLeft = new SwerveModule(1, 2,1);
+	private final SwerveModule m_frontRight = new SwerveModule(3, 4,2);
+	private final SwerveModule m_backLeft = new SwerveModule(5, 6,3);
+	private final SwerveModule m_backRight = new SwerveModule(7, 8,4); 
 	
 	//final PIDController m_controller=new PIDController(1,0.1,0.0);
+
+	public static String chnlnames[] = { "BR", "BL", "FL", "FR" };
 
 	private final SwerveModulePosition[] m_positions={
 		new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition()
@@ -76,9 +78,9 @@ public class Drivetrain extends SubsystemBase {
 	double h_std=5.0;
 
 	double latency=0.05;
-	double vision_confidence=0.05;
+	double vision_confidence=0.00;
 	double pose_error=0;
-	boolean use_tags=false;
+	boolean use_tags=true;
 
 	boolean m_disabled = true;
 	SwerveDrivePoseEstimator m_poseEstimator;
@@ -191,7 +193,7 @@ public class Drivetrain extends SubsystemBase {
 
 		m_gyro.reset();
 		last_heading = 0;
-		makeEstimator();
+		//makeEstimator();
 	}
 
 	public void resetPose() {
@@ -311,7 +313,7 @@ public class Drivetrain extends SubsystemBase {
 		if((cnt%100)==0){
 			String str=String.format("angles fl:%-1.2f fr:%-1.2f bl:%-1.2f br:%-1.2f\n",
 			m_frontLeft.getAngle(),m_frontRight.getAngle(),m_backLeft.getAngle(),m_backRight.getAngle());
-			SmartDashboard.putString("Wheel ", str);
+			SmartDashboard.putString("Wheels ", str);
 		}
 		cnt++;
 	}
@@ -382,8 +384,7 @@ public class Drivetrain extends SubsystemBase {
 
 		// Also apply vision measurements - this must be calculated based either on latency or timestamps.
 		if(TargetMgr.tagsPresent()){
-			Pose2d vision_pose=AprilTagDetector.getLastPose();
-			pose_error=AprilTagDetector.getPoseError();
+			Pose2d vision_pose=TagDetector.getLastPose();
 			if(vision_pose !=null){		
 				if(use_tags && vision_confidence>0){
 					try{

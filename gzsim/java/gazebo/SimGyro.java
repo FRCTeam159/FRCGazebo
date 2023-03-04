@@ -3,8 +3,9 @@ package gazebo;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 
-public class SimGyro extends SimNode {
+public class SimGyro extends SimNode implements Gyro {
     private NetworkTableEntry ctrl_node;
     private NetworkTableEntry yaw_node;
     private NetworkTableEntry pitch_node;
@@ -46,8 +47,6 @@ public class SimGyro extends SimNode {
     }
     public void reset(){
         reset(0);
-        //resetting=true;
-        //zero=yaw_node.getDouble(0.0);
     }
     public void setEnabled(boolean t){
         enabled=t;
@@ -96,6 +95,21 @@ public class SimGyro extends SimNode {
 
     public Rotation2d getRotation2d() {
         return Rotation2d.fromDegrees(getHeading());
+    }
+
+    @Override
+    public void close() throws Exception {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void calibrate() {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public double getAngle() {
+        return getHeading();
     }
     
 }

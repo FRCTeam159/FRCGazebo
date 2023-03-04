@@ -20,12 +20,12 @@ public class Arm extends Thread {
   public static final double[] kinit =  {0.131,0.378,0}; // from kStageOneAngleOffset, kStageTwoAngleOffset
 
   public static final double[] kcube1 = {0.8,0.6,Math.toRadians(61)}; // center of platform
-  public static final double[] kcube2 = {1.2,0.9,Math.toRadians(98)};
+  public static final double[] kcube2 = {1.1,1.0,Math.toRadians(98)};
  
   public static final double[] kcone1 = {0.8,0.8,Math.toRadians(76)}; // to top of post
   public static final double[] kcone2 = {1.19,1.08,Math.toRadians(98)};
  
-  public static final double[] kshelf =  {0.1,1.0,Math.toRadians(49)}; // nominal 6" from front of robot (could be zero))
+  public static final double[] kshelf =  {0.18,1.0,Math.toRadians(109)}; // nominal 6" from front of robot (could be zero))
   public static final double[] kground = {0.3,0.2, Math.toRadians(0)}; // 
 
   public static boolean debug = false;

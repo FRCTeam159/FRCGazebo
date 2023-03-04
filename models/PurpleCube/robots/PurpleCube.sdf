@@ -28,7 +28,7 @@
           </mesh>
         </geometry>
         <surface>
-        <!--  -->
+        <!--  
           <contact>
              <ode>
               <kp>1e3</kp>
@@ -52,7 +52,7 @@
             </ode>
             
           </friction>
-       
+       -->
         </surface>
       </collision>
       <visual name="Body_visual">

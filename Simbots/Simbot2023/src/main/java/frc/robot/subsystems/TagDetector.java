@@ -67,6 +67,7 @@ public class TagDetector extends Thread {
 
   public TagDetector(Drivetrain drivetrain) {
     m_drivetrain = drivetrain;
+    System.out.println("new TagDetector");
 
     cam = new Camera(0, 640, 480, 40); // specs for Gazebo camera
 
@@ -86,10 +87,20 @@ public class TagDetector extends Thread {
 
   // test tag detection jni using an image file
   public void test() {
-    Mat mat = Imgcodecs.imread(test_image);
-    AprilTag[] tags = getTags(mat);
-    for (int i = 0; i < tags.length; i++) {
-      tags[i].print();
+    System.out.println("starting Apriltag test");
+    try {
+      Mat mat = Imgcodecs.imread(test_image);
+      if (TargetMgr.tagsPresent()) {
+        AprilTag[] tags = getTags(mat);
+        System.out.println(tags.length + " tags found in test image:" + test_image);
+        for (int i = 0; i < tags.length; i++) {
+          tags[i].print();
+        }
+      }
+      else
+        System.out.println("no tags found in test image:" + test_image);
+    } catch (Exception e) {
+      System.out.println("EXCEPTION reading test image:" + e);
     }
   }
 
@@ -207,6 +218,7 @@ public class TagDetector extends Thread {
   @Override
   public void run() {
     cam.start();
+    System.out.println("Starting TagDetector");
     //SmartDashboard.putString("Tag", "no valid tags visible");
 
     while (!Thread.interrupted()) {

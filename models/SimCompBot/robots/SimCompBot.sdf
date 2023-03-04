@@ -51,6 +51,30 @@
           </mesh>
         </geometry>
       </visual>
+      <sensor name="Camera" type="camera">
+        <visualize>1</visualize>
+        <always_on>1</always_on>
+        <pose>-0.2 0.2 0 -1.57 0 0</pose>
+        <camera name="camera">
+          <horizontal_fov>1.5707963267949</horizontal_fov>
+          <image>
+             <width>640</width>
+            <height>480</height>
+          </image>
+          <clip>
+            <near>0.05</near>
+            <far>30</far>
+          </clip>
+        </camera>
+         <plugin name="camera1" filename="sim_camera.dll">
+          <topic>~/gazebo/frc/simulator/camera/0</topic>
+          <port>9000</port>
+          <fps>20</fps>
+          <enabled>true</enabled>
+          <savepath>tmp</savepath>
+          <maxframes>1</maxframes>
+        </plugin>
+      </sensor>
     </link>
     <link name="FRdrive">
       <gravity>1</gravity>
@@ -152,7 +176,7 @@
       <child>FRwheel</child>
       <pose>3.5053368525606E-06 0.000114295457558644 -0.00120273472992993 0 0 0</pose>
       <axis>
-        <xyz>0 0 1</xyz>
+        <xyz>0 0 -1</xyz>
         <dynamics>
           <damping>1</damping>
           <friction>1</friction>
@@ -257,7 +281,7 @@
       <child>FLwheel</child>
       <pose>-1.01787932659247E-05 3.29335143967324E-05 -5.54598669211259E-08 0 0 0</pose>
       <axis>
-        <xyz>0 0 1</xyz>
+        <xyz>0 0 -1</xyz>
         <dynamics>
           <damping>1</damping>
           <friction>1</friction>
@@ -362,7 +386,7 @@
       <child>BRwheel</child>
       <pose>-3.7665044388957E-06 3.42643056162745E-05 2.29141998708826E-08 0 0 0</pose>
       <axis>
-        <xyz>0 0 1</xyz>
+        <xyz>0 0 -1</xyz>
         <dynamics>
           <damping>1</damping>
           <friction>1</friction>
@@ -467,7 +491,7 @@
       <child>BLwheel</child>
       <pose>-3.50533685232468E-06 0.000114295457558339 0.00120273472992949 0 0 0</pose>
       <axis>
-        <xyz>0 0 1</xyz>
+        <xyz>0 0 -1</xyz>
         <dynamics>
           <damping>1</damping>
           <friction>1</friction>
@@ -710,6 +734,7 @@
           </mesh>
         </geometry>
       </visual>
+      <!--
       <sensor name="GripperTwistCamera" type="camera">
         <visualize>1</visualize>
         <always_on>1</always_on>
@@ -734,6 +759,7 @@
           <maxframes>1</maxframes>
         </plugin>
       </sensor>
+      -->
     </link>
     <joint name="GripperRotate-GripperTwist" type="fixed">
       <parent>GripperRotate</parent>
@@ -1189,6 +1215,9 @@
     -->
 
   </model>
+  <plugin name="clock" filename="sim_clock.dll">
+      <topic>~/gazebo/frc/simulator/clock</topic>
+    </plugin>
    <plugin name="Body_gyro" filename="sim_gyro.dll">
       <link>Body</link>
       <topic>~/gazebo/frc/simulator/gyro/0</topic>

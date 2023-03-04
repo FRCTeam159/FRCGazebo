@@ -13,18 +13,8 @@
       </velocity_decay>
       <inertial>
         <mass>150</mass>
-        <pose>0 -0.05 0 0 0 0</pose>
+        <pose>0 0 0 0 0 0</pose>
         
-        <!--
-        <inertia>
-          <ixx>10</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>80</iyy>
-          <iyz>0</iyz>
-          <izz>10</izz>
-        </inertia>
-        -->
       </inertial>
       <collision name="Body_collision">
       <pose>0.892994123738397 0.372009620808783 0.40364125979582 0 0 0</pose>
@@ -136,7 +126,7 @@
         <angular>0.002</angular>
       </velocity_decay>
       <inertial>
-        <mass>1</mass>
+        <mass>0.123981363237599</mass>
         <pose>0 0 0 0 0 0</pose>
        </inertial>
       <collision name="FRwheel_collision">
@@ -346,7 +336,7 @@
         <angular>0.002</angular>
       </velocity_decay>
       <inertial>
-        <mass>1</mass>
+        <mass>0.123981363237599</mass>
         <pose>0 0 0 0 0 0</pose>
       </inertial>
       <collision name="BRwheel_collision">
@@ -598,7 +588,7 @@
       <topic>~/gazebo/frc/simulator/clock</topic>
     </plugin>
     <plugin name="Body_gyro" filename="sim_gyro.dll">
-      <link>gyro</link>
+      <link>Body</link>
       <topic>~/gazebo/frc/simulator/gyro/0</topic>
       <units>degrees</units>
       <axis>yaw</axis>

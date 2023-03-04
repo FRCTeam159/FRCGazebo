@@ -25,8 +25,8 @@
     </include>
 
     <include>
-      <uri>model://SimSwerveBot4</uri>
-      <pose>-6.44 -1.29897 0.091663 1.57159 0 3.14</pose>
+      <uri>model://SimSwerveBot</uri>
+      <pose>-6.3 -1.29897 0.091663 1.57159 0 3.14</pose>
     </include>
     <!-- 
     <include>

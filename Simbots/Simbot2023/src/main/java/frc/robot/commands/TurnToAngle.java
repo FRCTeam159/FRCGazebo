@@ -121,6 +121,6 @@ public class TurnToAngle extends CommandBase {
       }
     }
     last_heading=heading;
-    return -correction;  
+    return correction;  
   }
 }

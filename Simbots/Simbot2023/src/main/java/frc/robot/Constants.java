@@ -42,8 +42,8 @@ public final class Constants {
     public static final double kStageOneAngleOffset = Math.toRadians(101); // starting angle
     public static final double kStageTwoAngleOffset = Math.toRadians(195);
     public static final double kRotateAngleOffset = Math.toRadians(-26); // starting angle
-    public static final double kMaxLowerArmAngularSpeed=Math.toRadians(45);
-    public static final double kMaxLowerArmAngularAcceleration=Math.toRadians(5);
+    public static final double kMaxLowerArmAngularSpeed=Math.toRadians(90);
+    public static final double kMaxLowerArmAngularAcceleration=Math.toRadians(45);
     public static final double kMaxUpperArmAngularSpeed=Math.toRadians(180);
     public static final double kMaxUpperArmAngularAcceleration=Math.toRadians(90);
     public static final double kMaxWristRotateAngularSpeed=Math.toRadians(360);

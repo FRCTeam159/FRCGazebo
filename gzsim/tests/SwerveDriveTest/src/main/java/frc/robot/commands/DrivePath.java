@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.objects.PlotServer;
-import frc.robot.subsystems.AprilTagDetector;
+import frc.robot.subsystems.TagDetector;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.TargetMgr;
@@ -139,7 +139,13 @@ public class DrivePath extends CommandBase {
     }
     elapsed = m_drive.getTime();
   
-    Trajectory.State reference = m_trajectory.sample(elapsed);
+    PathPlannerTrajectory.State reference = m_trajectory.sample(elapsed);
+
+    // Pose2d pose=m_drive.getPose();
+    // Rotation2d hrot=((PathPlannerState)reference).holonomicRotation;
+    // System.out.format("x obs:%-3.1f trgt:%-3.1f heading obs:%-3.1f trgt:%-3.1f\n",
+    // pose.getX(),reference.poseMeters.getX(),pose.getRotation().getDegrees(),hrot.getDegrees()
+    // );
 
     ChassisSpeeds speeds = m_ppcontroller.calculate(m_drive.getPose(), (PathPlannerState) reference);
       m_drive.drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, false);
@@ -161,7 +167,7 @@ public class DrivePath extends CommandBase {
     if (m_trajectory == null)
       return;
     m_drive.endAuto();
-    AprilTagDetector.setBestTarget();
+    TagDetector.setBestTarget();
 
     //m_drive.reset();
     // m_drive.enable();
@@ -205,9 +211,9 @@ public class DrivePath extends CommandBase {
     // reversal not supported for swerve drive 
     PathPlannerTrajectory traj=PathPlanner.generatePath(constraints, reversed, p1, p2);
     if(yPath>0 && TargetMgr.numTargets()>1)
-      AprilTagDetector.setTargetId(1);
+      TagDetector.setTargetId(1);
     else
-      AprilTagDetector.setTargetId(0);
+      TagDetector.setTargetId(0);
     return traj; 
   }
 
@@ -216,7 +222,7 @@ public class DrivePath extends CommandBase {
   // =================================================
   Trajectory pathPlannerTest() {
     try {
-      PathPlannerTrajectory trajectory = PathPlanner.loadPath("swervetest", 
+      PathPlannerTrajectory trajectory = PathPlanner.loadPath("test", 
         new PathConstraints(Drivetrain.kMaxVelocity,Drivetrain.kMaxAcceleration)); // max vel & accel
 
       Pose2d p0 = trajectory.getInitialPose();
