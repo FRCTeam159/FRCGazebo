@@ -79,19 +79,15 @@ public class RobotContainer {
     else
       CommandScheduler.getInstance().schedule(new PoseDualArm(m_arm, m_claw, m_controller));
 
-    m_drivetrain.setRobotDisabled(false);
     m_drivetrain.setFieldOriented(true);
   }
   public void autonomousInit(){
-    m_drivetrain.setRobotDisabled(false);
     m_drivetrain.setFieldOriented(false);
   }
   public void disabledInit(){
-    m_drivetrain.setRobotDisabled(true);
     m_drivetrain.disable();
   }
   public void robotInit(){
-    m_drivetrain.setRobotDisabled(true);
     m_drivetrain.init();
     if (onestagearm)
       m_onearm.start();

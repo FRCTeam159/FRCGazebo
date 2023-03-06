@@ -25,8 +25,8 @@ public final class Constants {
     public static double kMaxAngularSpeed =  Math.toRadians(360); // 3 rotation per second
     public static double kMaxAngularAcceleration = Math.toRadians(720); // 1 rotations/s/s
     public static final double kWheelRadius = Units.inchesToMeters(2.0); // 2 inches
-    public static final double kFrontWheelBase = 18.625; // distance bewteen front wheels (in)
-	public static final double kSideWheelBase =  31;  // distance beteen side wheels (in)
+    public static final double kFrontWheelBase = 18.625; // 0.472 distance bewteen front wheels (in)
+	public static final double kSideWheelBase =  31;  // 0.787 distance b18eteen side wheels (in)
 
     // Image parameters
     public static final int kImageWidth = 640;

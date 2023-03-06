@@ -66,9 +66,7 @@ public class SimGyro extends SimNode implements Gyro {
    
     public double getHeading() {
         if(!enabled)
-            return 0;
-        //if(resetting)
-       //  zero=yaw_node.getDouble(0.0);  
+            return 0; 
         return (yaw_node.getDouble(0.0)-zero);
     }
     public double getRadians() {

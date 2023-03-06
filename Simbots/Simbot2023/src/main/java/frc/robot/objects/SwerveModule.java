@@ -5,19 +5,18 @@
 package frc.robot.objects;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import gazebo.SimEncMotor;
 import static frc.robot.Constants.*;
 
 public class SwerveModule {
 
-  private double gazebo_scale=1;  // not sure why but grid marks in gazebo are somewhat larger than a meter ?
-  private double distancePerRotation=gazebo_scale*2*kWheelRadius*Math.PI;
+  private double distancePerRotation=2*kWheelRadius*Math.PI;
+  public static final double kRadiansPerRot = Math.PI * 2;
+
 
   private static final double kModuleMaxAngularVelocity = kMaxAngularSpeed; //degrees per second;
   private static final double kModuleMaxAngularAcceleration = kMaxAngularAcceleration;// degrees per second per second
@@ -27,13 +26,7 @@ public class SwerveModule {
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final PIDController m_drivePIDController = new PIDController(5, 0.0, 0);
-  //private final PIDController m_turningPIDController = new PIDController(5, 0.0, 0);
-  // Gains are for example purposes only - must be determined for your own robot!
-   
-  private final ProfiledPIDController m_turningPIDController =
-      new ProfiledPIDController(5,0.0,0,
-          new TrapezoidProfile.Constraints(
-              kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
+  private final PIDController m_turningPIDController = new PIDController(2, 0, 0);
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(0.1, 0.1);
@@ -57,7 +50,7 @@ public class SwerveModule {
     m_turnMotor=new SimEncMotor(turningMotorChannel);
 
     m_driveMotor.setDistancePerRotation(distancePerRotation);
-		m_turnMotor.setDistancePerRotation(360.0); // getDistance will return degrees*rotations
+		m_turnMotor.setDistancePerRotation(kRadiansPerRot); // getDistance will return degrees*rotations
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
@@ -70,31 +63,33 @@ public class SwerveModule {
     m_turnMotor.enable();
   }
   public void disable(){
-    m_turningPIDController.reset(0.0);
     m_enabled=false;
     m_driveMotor.disable();
     m_turnMotor.disable();
   }
   public void reset(){
-    m_turningPIDController.reset(0.0);
     m_drivePIDController.reset();
-    m_turningPIDController.reset(0);
     m_enabled=false;
     m_driveMotor.reset();
     m_turnMotor.reset();
-  
+    cnt=0;
   }
-  /**
-   * Returns the current state of the module.
-   *
-   * @return The current state of the module.
-   */
+  
+  public double heading(){
+    return m_turnMotor.getDistance();
+  }
+
+  public Rotation2d getRotation2d() {
+    return Rotation2d.fromRadians(heading());
+  }
   public SwerveModuleState getState() {
-    return new SwerveModuleState(m_driveMotor.getRate(), new Rotation2d(Math.toRadians(m_turnMotor.getDistance())));
+    //return new SwerveModuleState(m_driveMotor.getRate(), new Rotation2d(Math.toRadians(m_turnMotor.getDistance())));
+    return new SwerveModuleState(m_driveMotor.getRate(), getRotation2d());
   }
 
   public SwerveModulePosition getPosition() {
-    return new SwerveModulePosition(m_driveMotor.getDistance(), new Rotation2d(Math.toRadians(m_turnMotor.getDistance())));
+    //return new SwerveModulePosition(m_driveMotor.getDistance(), new Rotation2d(Math.toRadians(m_turnMotor.getDistance())));
+    return new SwerveModulePosition(m_driveMotor.getDistance(), getRotation2d());
   }
 
   /**
@@ -105,19 +100,16 @@ public class SwerveModule {
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
     double angle=m_turnMotor.getDistance(); // rotations in degrees
-    angle=angle%360.0;
+    //angle=angle%360.0;
     angle=Math.toRadians(angle);
 
      SwerveModuleState state =desiredState;
-     if(m_enabled)
+     //if(m_enabled)
       state=SwerveModuleState.optimize(desiredState, new Rotation2d(angle));
 
     // Calculate the drive output from the drive PID controller.
     final double driveOutput = m_drivePIDController.calculate(m_driveMotor.getRate(), state.speedMetersPerSecond);
     final double driveFeedforward = m_driveFeedforward.calculate(state.speedMetersPerSecond);
-
-    // Calculate the turning motor output from the turning PID controller.
-    //System.out.println(m_drive_chnl/2+" "+angle+" "+state.angle.getDegrees()+" "+(-state.speedMetersPerSecond>0?"+":"-")+" "+turnOutput);
 
     final double turnOutput = m_turningPIDController.calculate(angle,state.angle.getRadians());
     final double turnFeedforward = 0;//m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
@@ -135,7 +127,7 @@ public class SwerveModule {
     m_turnMotor.set(turnOutput + turnFeedforward); 
     m_driveMotor.set(driveOutput + driveFeedforward);
    
-   cnt++;
+    cnt++;
 
   }
 
@@ -159,7 +151,6 @@ public class SwerveModule {
     double current=m_turnMotor.getDistance();
     current=current%360;
     double turnOutput = m_turningPIDController.calculate(Math.toRadians(current),Math.toRadians(a) );
-    //System.out.println(m_drive_chnl/2+" "+a+" "+current+" "+turnOutput+" "+d);
     m_driveMotor.set(d);
     m_turnMotor.set(turnOutput); 
   }

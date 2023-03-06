@@ -37,7 +37,7 @@ public class Simulation extends SubsystemBase {
 
   public Simulation(Drivetrain drivetrain) {
     m_drive = drivetrain;
-    SmartDashboard.putBoolean("Reset", true);
+    SmartDashboard.putBoolean("Reset", false);
     SmartDashboard.putBoolean("Gazebo", true);
     SmartDashboard.putNumber("SimTime", 0);
     SmartDashboard.putNumber("SimClock", 0);
@@ -45,11 +45,13 @@ public class Simulation extends SubsystemBase {
     m_timer.start();
     m_simclock.clear();
     m_cameras = new ArrayList<SimCamera>();
+    init();
+    start();
   }
 
   public double getSimTime() {
-    if(!running)
-    return 0;
+    //if(!running)
+    //  return 0;
     return m_simclock.getTime();
   }
 
@@ -178,10 +180,10 @@ public class Simulation extends SubsystemBase {
     boolean b = SmartDashboard.getBoolean("Reset", false);
     if (b) {
       if (!resetting) {
+        System.out.println("Start simulation reset");
         resetting = true;
         if (m)
           clear();       
-    
         m_timer.reset();
       } else if (m_timer.get() > 0.25) {
         if (!disabling) {
@@ -192,20 +194,26 @@ public class Simulation extends SubsystemBase {
           resetting = false;
           disabling = false;
           m_drive.resetPose();
-          //m_drive.enable();
+          m_drive.enable();
           run();
           running = true;
+          System.out.println("End simulation reset "+m_timer.get());
         }
       }
     }
   }
 
   public void init() {
+    if(debug)
+    System.out.println("Simulation.init");
     m_simcontrol.init();
-    m_simclock.disable();
+   // m_simclock.disable();
+    start();
   }
 
   public void run() {
+    if(debug)
+    System.out.println("Simulation.run");
     running = true;
     m_simcontrol.run();
   }
