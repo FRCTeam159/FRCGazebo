@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import gazebo.SimEncMotor;
 import static frc.robot.Constants.*;
@@ -17,7 +18,7 @@ public class Arm extends Thread {
 
   public static double kmaxAngleError=Math.toRadians(1.0);
 
-  public static final double[] kinit =  {0.131,0.378,0}; // from kStageOneAngleOffset, kStageTwoAngleOffset
+  public static final double[] kinit =  {0.131,0.378,Math.toRadians(-29)}; // from kStageOneAngleOffset, kStageTwoAngleOffset
 
   public static final double[] kcube1 = {0.8,0.6,Math.toRadians(61)}; // center of platform
   public static final double[] kcube2 = {1.1,1.0,Math.toRadians(98)};
@@ -26,7 +27,9 @@ public class Arm extends Thread {
   public static final double[] kcone2 = {1.19,1.08,Math.toRadians(98)};
  
   public static final double[] kshelf =  {0.18,1.0,Math.toRadians(109)}; // nominal 6" from front of robot (could be zero))
-  public static final double[] kground = {0.3,0.2, Math.toRadians(0)}; // 
+  public static final double[] kground = {0.3,0.2, Math.toRadians(0)}; //
+
+  public double gridtarget[]={0,0,0};
 
   public static boolean debug = false;
  
@@ -57,7 +60,11 @@ public class Arm extends Thread {
   static double minX=-1.4;
 
   static double maxY=1.2;
-   static double minY=0.15;
+  static double minY=0.15;
+
+  public static double maxXerr=Units.inchesToMeters(5); // meters
+  public static double maxYerr=Units.inchesToMeters(5);;
+  public static double maxWerr=Math.toRadians(5);
 
   double[] target =null;
   double oneAngle;
@@ -160,10 +167,24 @@ public class Arm extends Thread {
   }
  
   void setPose(double[]p){
+    gridtarget=p;
     setX(p[0]);
     setY(p[1]);
     rotateAngle=p[2];
     twistAngle=0;
+  }
+
+  public boolean onTarget(){
+    double[] xypos=getPosition();
+    double x=xypos[0];
+    double y=xypos[1];
+    double r=getRotation();
+    double xerr=Math.abs(x-gridtarget[0]);
+    double yerr=Math.abs(y-gridtarget[1]);
+    double werr=Math.abs(r-gridtarget[2]);
+    if(xerr<maxXerr && yerr<maxXerr && werr<maxWerr)
+      return true;
+    return false;
   }
   
   void log(){
@@ -175,9 +196,7 @@ public class Arm extends Thread {
       Math.toDegrees(twoAngle),Math.toDegrees(target[1]),
       getRotation(),Math.toDegrees(rotateAngle));
     SmartDashboard.putString("Arm",s);
-    //s=String.format("Rot:%-3.1f(%-3.1f) Twist:%-3.1f(%-3.1f)",
-   // Math.toDegrees(getRotation()),Math.toDegrees(rotateAngle),Math.toDegrees(getTwist()),Math.toDegrees(twistAngle));
-    //SmartDashboard.putString("Wrist",s);
+   
   }
 
 // Inverse kinematics: Input x and y, returns 2 angles for the 2-segment arm

@@ -50,9 +50,9 @@
 		<height>23</height>
 	</static-widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
-		<location x="14" y="93"/>
-		<width>422</width>
-		<height>319</height>
+		<location x="21" y="100"/>
+		<width>356</width>
+		<height>301</height>
 		<property name="Camera Choice" value="testCamera"/>
 	</static-widget>
 </dashboard>

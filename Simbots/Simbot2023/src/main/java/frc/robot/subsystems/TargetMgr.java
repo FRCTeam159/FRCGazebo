@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TargetMgr {
     static ArrayList<TagTarget> targets = new ArrayList<>();
@@ -66,6 +67,7 @@ public class TargetMgr {
                 setFieldTargets();
                 break;
         }
+        SmartDashboard.putString("Start","onfield");
     }
 
     public static boolean FRCfield() {
@@ -163,6 +165,7 @@ public class TargetMgr {
         System.out.format("Initial robot position %s-%s X:%-3.1f Y:%-3.1f H:%-3.1f\n",
                 aStrings[alliance], pStrings[start_position], start_pose.getX(), start_pose.getY(),
                 start_pose.getRotation().getDegrees());
+        SmartDashboard.putString("Start","Alliance:"+aStrings[alliance]+" Posiion:"+pStrings[start_position]);
     }
 
     static void setFieldTargets() {

@@ -52,7 +52,7 @@
         </geometry>
       </visual>
       <sensor name="Camera" type="camera">
-        <visualize>1</visualize>
+        <visualize>0</visualize>
         <always_on>1</always_on>
         <pose>-0.2 0.2 0 -1.57 0 0</pose>
         <camera name="camera">
@@ -734,32 +734,7 @@
           </mesh>
         </geometry>
       </visual>
-      <!--
-      <sensor name="GripperTwistCamera" type="camera">
-        <visualize>1</visualize>
-        <always_on>1</always_on>
-        <pose>0.0205235796459304 0.1 -0.15 -1.57 -0.1 -0.8</pose>
-        <camera name="GripperTwistcamera">
-          <horizontal_fov>1.5707963267949</horizontal_fov>
-          <image>
-             <width>640</width>
-            <height>480</height>
-          </image>
-          <clip>
-            <near>0.05</near>
-            <far>30</far>
-          </clip>
-        </camera>
-         <plugin name="camera1" filename="sim_camera.dll">
-          <topic>~/gazebo/frc/simulator/camera/0</topic>
-          <port>9000</port>
-          <fps>20</fps>
-          <enabled>true</enabled>
-          <savepath>tmp</savepath>
-          <maxframes>1</maxframes>
-        </plugin>
-      </sensor>
-      -->
+      
     </link>
     <joint name="GripperRotate-GripperTwist" type="fixed">
       <parent>GripperRotate</parent>
@@ -776,7 +751,8 @@
     <link name="LeftGripper">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>0.241320498086195 0.969184291056408 -0.158494078621501 0 0 0</pose>
+       <!--<pose>0.241320498086195 0.969184291056408 -0.158494078621501 0 0 0</pose>-->
+     <pose>0.245 0.9635 -0.1344 -0.2558 -0.1885 0.0248</pose>
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
@@ -836,15 +812,16 @@
           <friction>0</friction>
         </dynamics>
         <limit>
-          <upper>0.3</upper>
-          <lower>-0.6</lower>
+          <upper>0.1</upper>
+          <lower>-0.3</lower>
         </limit>
       </axis>
     </joint>
     <link name="RightGripper">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>0.246191175008786 0.971708729210025 0.181958210199892 0 0 0</pose>
+      <!--<pose>0.246191175008786 0.971708729210025 0.181958210199892 0 0 0</pose>-->
+      <pose>0.2503 0.9656 0.1577 0.226 0.17 0.00139</pose>
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
@@ -904,15 +881,16 @@
           <friction>0</friction>
         </dynamics>
         <limit>
-          <upper>0.3</upper>
-          <lower>-0.6</lower>
+          <upper>0.1</upper>
+          <lower>-0.3</lower>
         </limit>
       </axis>
     </joint>
     <link name="LeftPad">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>0.334045450628088 0.846041003834395 -0.21678381156418 0 0 0</pose>
+      <!--<pose>0.334045450628088 0.846041003834395 -0.21678381156418 0 0 0</pose>-->
+      <pose>0.334045450628088 0.832 -0.142 0.22 0.167 0.009</pose>
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
@@ -981,7 +959,8 @@
     <link name="RightPad">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>0.3306064908218 0.847323504491162 0.220265006162646 0 0 0</pose>
+      <!--<pose>0.3306064908218 0.847323504491162 0.220265006162646 0 0 0</pose>-->
+      <pose>0.3316 0.8449 0.1851 2.42 0.496 1.111</pose>
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
@@ -1038,7 +1017,6 @@
     <joint name="RightGripper-RightPad" type="revolute">
       <parent>RightGripper</parent>
       <child>RightPad</child>
-      <!--<pose>-0.00707123868382553 -0.00539134138354158 0.000141145112782848 0 0.0158713592468729 1.59696957940527</pose>-->
       <pose>0.0 0.0 0.02 0 0.0158713592468729 1.59696957940527</pose>
 
       <axis>
@@ -1052,7 +1030,8 @@
     <link name="LeftPad2">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>0.267729827818469 0.934037484108341 -0.177919376276616 0 0 0</pose>
+      <!--<pose>0.267729827818469 0.934037484108341 -0.177919376276616 0 0 0</pose>-->
+      <pose>0.2741 0.9253 -0.1392 -0.003 -0.00128 -.004570</pose>
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
@@ -1121,7 +1100,8 @@
     <link name="RightPad2">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>0.273152825042775 0.936848188163066 0.201139058060381 0 0 0</pose>
+      <!--<pose>0.273152825042775 0.936848188163066 0.201139058060381 0 0 0</pose>-->
+      <pose>0.2792 0.9277 0.1638 0.178 0.135 0.0075</pose>
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
@@ -1200,20 +1180,14 @@
         <forward-force>30</forward-force>
         <reverse-force>20</reverse-force>    
       </plugin>
-
-        <plugin name="GripperRotate-GripperTwist_motor" filename="sim_motor.dll">
+    <!--
+      <plugin name="GripperRotate-GripperTwist_motor" filename="sim_motor.dll">
         <joint>GripperRotate-GripperTwist</joint>
         <topic>~/gazebo/frc/simulator/motor/12</topic>
         <multiplier>50</multiplier>
     </plugin>
-    <!--
-    <plugin name="GripperRotate-GripperTwist_encoder" filename="sim_encoder.dll">
-        <joint>GripperRotate-GripperTwist</joint>
-        <topic>~/gazebo/frc/simulator/encoder/12</topic>
-        <multiplier>1</multiplier>
-    </plugin>
     -->
-
+  
   </model>
   <plugin name="clock" filename="sim_clock.dll">
       <topic>~/gazebo/frc/simulator/clock</topic>
@@ -1341,6 +1315,7 @@
         <topic>~/gazebo/frc/simulator/encoder/11</topic>
         <multiplier>1</multiplier>
     </plugin>
+    
   
   </model>
   
