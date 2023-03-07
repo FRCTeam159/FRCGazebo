@@ -68,7 +68,7 @@ public class Drivetrain extends SubsystemBase {
 	double h_std=1.0;
 
 	double latency=0.05;
-	double vision_confidence=0.00001;
+	double vision_confidence=0.0;
 	boolean use_tags=false;
 
 	boolean m_disabled = true;
@@ -198,6 +198,9 @@ public class Drivetrain extends SubsystemBase {
 		field_pose = getPose();
 	}
 
+	public void setUseTags(boolean b){
+		use_tags=b;
+	}
 	public boolean useTags(){
 		return use_tags;
 	}

@@ -186,6 +186,7 @@ public class Simulation extends SubsystemBase {
       } else if (m_timer.get() > 0.25) {
         if (!disabling) {
           m_drive.reset();
+          TagDetector.reset();
           disabling = true;
         } else if (m_timer.get() > 0.5) {
           SmartDashboard.putBoolean("Reset", false);

@@ -22,7 +22,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.Trajectory.State;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.objects.PlotServer;
@@ -218,15 +220,16 @@ public class DrivePath extends CommandBase {
       String file="swervetest";
       if(TargetMgr.FRCfield()){
         if(TargetMgr.getStartPosition()==TargetMgr.OUTSIDE)
-          file="LeftAuto";
+          file="Outside";
         else if(TargetMgr.getStartPosition()==TargetMgr.INSIDE)
-          file="RightAuto";
+          file="Inside";
         else if(TargetMgr.getStartPosition()==TargetMgr.CENTER)
-          file="CenterAuto";
+          file="Center";
       }
       PathPlannerTrajectory trajectory = PathPlanner.loadPath(file, 
         new PathConstraints(kMaxVelocity,kMaxAcceleration)); // max vel & accel
-
+      if(TargetMgr.getAlliance()==TargetMgr.RED)
+        trajectory=PathPlannerTrajectory.transformTrajectoryForAlliance(trajectory,Alliance.Red);
       // Pathplanner sets 0,0 as the lower left hand corner (FRC field coord system) 
       // for Gazebo, need to subtract intitial pose from each state so that 0,0 is 
       // in the center of the robot 
@@ -240,16 +243,16 @@ public class DrivePath extends CommandBase {
      
       List<State> states = trajectory.getStates();
       for(int i=0;i<states.size();i++){
-        PathPlannerState state=trajectory.getState(i);
+        PathPlannerTrajectory.PathPlannerState state=trajectory.getState(i);
+       
         Pose2d p=state.poseMeters;
 
         Rotation2d h=state.holonomicRotation;
        
         Pose2d pr=p.relativeTo(p0);
-        if(i<2)
-          pr=new Pose2d(pr.getTranslation(),new Rotation2d());
-        if(TargetMgr.getAlliance()==TargetMgr.BLUE)
-          state.holonomicRotation=h.plus(new Rotation2d(Math.toRadians(180)));
+        if(i==0)
+          pr=new Pose2d(pr.getTranslation(),new Rotation2d()); // 
+        state.holonomicRotation=h.plus(new Rotation2d(Math.toRadians(180))); // go backwards
         if(debug_path && (i%10)==0)
           System.out.format("%d p X:%-3.1f Y:%-3.1f R:%-3.1f H:%-3.1f pr X:%-3.1f Y:%-3.1f R:%-3.1f H:%-3.1f \n",
             i,p.getX(),p.getY(),p.getRotation().getDegrees(),h.getDegrees(),

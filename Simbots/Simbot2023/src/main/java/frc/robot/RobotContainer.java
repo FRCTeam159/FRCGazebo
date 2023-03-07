@@ -29,16 +29,12 @@ import frc.robot.subsystems.OneArm;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain m_drivetrain = new Drivetrain();
-  private final Autonomous m_autonomous = new Autonomous(m_drivetrain);
   private final XboxController m_controller = new XboxController(0);
   private final TagDetector m_detector= new TagDetector(m_drivetrain);
   //private final Wrist m_wrist=new Wrist();
   private final Claw m_claw=new Claw();
-
-  static public final boolean onestagearm=false;
-
   private final Arm m_arm = new Arm();
-  private final OneArm m_onearm = new OneArm();
+  private final Autonomous m_autonomous = new Autonomous(m_drivetrain, m_arm, m_claw);
 
   private DriveWithGamepad m_driveCommand = null; 
 
@@ -71,13 +67,11 @@ public class RobotContainer {
   }
   
   public void teleopInit() {
-    CommandScheduler.getInstance().schedule(new PassThru(m_arm, m_controller));
-    // CommandScheduler.getInstance().schedule(new PoseTwistArm(m_arm,m_claw,
-    // m_controller));
-    if (onestagearm)
-      CommandScheduler.getInstance().schedule(new PoseOneArm(m_onearm, m_controller, m_claw));
-    else
-      CommandScheduler.getInstance().schedule(new PoseDualArm(m_arm, m_claw, m_controller));
+    //CommandScheduler.getInstance().schedule(new PassThru(m_arm, m_controller));
+    //CommandScheduler.getInstance().schedule(new PoseTwistArm(m_arm,m_claw,m_controller));
+    m_drivetrain.setUseTags(false);
+
+    CommandScheduler.getInstance().schedule(new PoseDualArm(m_arm, m_claw, m_controller));
 
     m_drivetrain.setRobotDisabled(false);
     m_drivetrain.setFieldOriented(true);
@@ -93,10 +87,7 @@ public class RobotContainer {
   public void robotInit(){
     m_drivetrain.setRobotDisabled(true);
     m_drivetrain.init();
-    if (onestagearm)
-      m_onearm.start();
-    else
-      m_arm.start();
+    m_arm.start();
     m_detector.start();
     m_plotsub.start();
   }

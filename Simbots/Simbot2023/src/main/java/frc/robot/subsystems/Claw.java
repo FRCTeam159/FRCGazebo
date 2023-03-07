@@ -11,8 +11,8 @@ public class Claw extends SubsystemBase {
   boolean m_clawopen=false;
   SimPiston m_piston = new SimPiston(0);
   public Claw() {
-    closeClaw();
     m_piston.enable();
+    closeClaw();
   }
 
   @Override

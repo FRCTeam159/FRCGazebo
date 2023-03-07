@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.Calibrate;
 import frc.robot.commands.DrivePath;
+import frc.robot.commands.PlaceCube;
 import frc.robot.commands.TurnTest;
 import utils.PlotUtils;
 
@@ -18,6 +19,8 @@ public class Autonomous extends SequentialCommandGroup  {
   SendableChooser<Integer> m_auto_plot_option = new SendableChooser<>();
 
   Drivetrain m_drive;
+  Arm m_arm;
+  Claw m_claw;
 
   public static final int CALIBRATE = 0;
   public static final int PROGRAM = 1;
@@ -30,9 +33,12 @@ public class Autonomous extends SequentialCommandGroup  {
   public static boolean debug_commands=false;
 
   SendableChooser<Integer> m_path_chooser = new SendableChooser<Integer>();
-  /** Creates a new AutoCommands. */
-  public Autonomous(Drivetrain drive) {
+  /** Creates a new AutoCommands. 
+   * @param m_claw*/
+  public Autonomous(Drivetrain drive,Arm arm, Claw claw) {
     m_drive=drive;
+    m_arm=arm;
+    m_claw=claw;
    
     m_auto_plot_option.setDefaultOption("No Plot", PlotUtils.PLOT_NONE);
     m_auto_plot_option.addOption("Plot Dynamics", PlotUtils.PLOT_DYNAMICS);
@@ -64,7 +70,8 @@ public class Autonomous extends SequentialCommandGroup  {
       return new SequentialCommandGroup(new DrivePath(m_drive,PATHPLANNER));
    case AUTOTEST:
       return new SequentialCommandGroup(
-        new TurnTest(m_drive,180.0)
+        new PlaceCube(2,m_arm,m_claw),
+        new DrivePath(m_drive,PATHPLANNER)
        //, new DrivePath(m_drive,PROGRAM)
         );
     }

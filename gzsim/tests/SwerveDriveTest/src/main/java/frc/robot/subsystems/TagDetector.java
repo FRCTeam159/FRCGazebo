@@ -55,7 +55,7 @@ public class TagDetector extends Thread {
   static Pose2d last_pose = null;
   static int target_id = BEST;
 
-  static boolean start_tag_needed=true;
+  static boolean first_pose=true;
 
   public static double min_decision_margin=30; // reject tags less than this
 
@@ -67,7 +67,6 @@ public class TagDetector extends Thread {
 
   public TagDetector(Drivetrain drivetrain) {
     m_drivetrain = drivetrain;
-    System.out.println("new TagDetector");
 
     cam = new Camera(0, 640, 480, 40); // specs for Gazebo camera
 
@@ -87,20 +86,10 @@ public class TagDetector extends Thread {
 
   // test tag detection jni using an image file
   public void test() {
-    System.out.println("starting Apriltag test");
-    try {
-      Mat mat = Imgcodecs.imread(test_image);
-      if (TargetMgr.tagsPresent()) {
-        AprilTag[] tags = getTags(mat);
-        System.out.println(tags.length + " tags found in test image:" + test_image);
-        for (int i = 0; i < tags.length; i++) {
-          tags[i].print();
-        }
-      }
-      else
-        System.out.println("no tags found in test image:" + test_image);
-    } catch (Exception e) {
-      System.out.println("EXCEPTION reading test image:" + e);
+    Mat mat = Imgcodecs.imread(test_image);
+    AprilTag[] tags = getTags(mat);
+    for (int i = 0; i < tags.length; i++) {
+      tags[i].print();
     }
   }
 
@@ -140,11 +129,7 @@ public class TagDetector extends Thread {
     grab_time = 0;
     count = 0;
     detect_time=0;
-    if(TargetMgr.tagsPresent()){
-      start_tag_needed=true;
-      TargetMgr.clearStartPose();
-    }
-    System.out.println("TagDetector.reset");
+    first_pose=true;
   }
 
   static public void setTargetId(int i) {
@@ -222,7 +207,6 @@ public class TagDetector extends Thread {
   @Override
   public void run() {
     cam.start();
-    System.out.println("Starting TagDetector");
     //SmartDashboard.putString("Tag", "no valid tags visible");
 
     while (!Thread.interrupted()) {
@@ -239,7 +223,7 @@ public class TagDetector extends Thread {
 
         startTime = System.nanoTime();
         AprilTag[] tags = null;
-        if (start_tag_needed || m_drivetrain.useTags())
+        if (m_drivetrain.useTags())
           tags = getTags(mat);
         endtime = System.nanoTime();
         duration=(endtime - startTime);
@@ -251,16 +235,12 @@ public class TagDetector extends Thread {
           maxtime = total > maxtime ? total : maxtime;
         int ntags=tags==null?0:tags.length;
         
-        if(m_drivetrain.useTags() || !TargetMgr.startPoseSet()){
+        if(m_drivetrain.useTags()){
           String s = String.format("ntags:%d ave grab:%-2.1f detect:%-2.1f ms", ntags,1e-6*grab_time / count, 1e-6*detect_time/count);
           SmartDashboard.putString("Detect", s);
         }
 
-        if (!TargetMgr.tagsPresent() || tags==null) {
-          ouputStream.putFrame(mat);
-          continue;
-        }
-        if (!start_tag_needed && !m_drivetrain.useTags()) {
+        if (!TargetMgr.tagsPresent() || !m_drivetrain.useTags() || tags==null) {
           ouputStream.putFrame(mat);
           continue;
         }
@@ -285,10 +265,10 @@ public class TagDetector extends Thread {
         if (target_tag != null) {
           last_pose = getRobotPoseFromTag(target_tag, m_drivetrain.gyroRotation2d());
           if (last_pose != null) { // could be an incorrect tag identifier (index out of bounds for expected tag_id)
-            if(start_tag_needed || !TargetMgr.startPoseSet())
+            if(!TargetMgr.startPoseSet())
               TargetMgr.setStartPose(target_tag.getTagId(), last_pose);
             Translation2d trans = last_pose.getTranslation(); 
-            if(start_tag_needed || m_drivetrain.useTags()){        
+            if(m_drivetrain.useTags()){        
             String str = String.format("id:%d D:%-2.2f P:%-2.1f H:%-2.1f Robot: X:%-2.1f Y:%-2.1f",
                 target_tag.getTagId(), target_tag.getDistance(), target_tag.getPitch(), target_tag.getYaw(),
                 trans.getX(), trans.getY());
@@ -297,8 +277,6 @@ public class TagDetector extends Thread {
             Translation2d start_trans=TargetMgr.startPose().getTranslation();
             trans=start_trans.minus(trans);
             last_pose=new Pose2d(trans,last_pose.getRotation());
-            if(TargetMgr.startPoseSet())
-              start_tag_needed=false;
           }
         } else {
           SmartDashboard.putString("Tag", "no target tag");
