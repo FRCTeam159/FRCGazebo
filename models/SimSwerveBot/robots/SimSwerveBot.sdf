@@ -83,7 +83,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.0</angular>
+        <angular>0.01</angular>
       </velocity_decay>
       <inertial>
         <mass>1</mass>
@@ -111,8 +111,8 @@
       <axis>
         <xyz>0 1 0</xyz>
         <dynamics>
-          <damping>2</damping>
-          <friction>0</friction>
+          <damping>1</damping>
+          <friction>1</friction>
         </dynamics>
       </axis>
     </joint>
@@ -138,7 +138,6 @@
           </mesh>
         </geometry>
         <surface>
-        <!---->
           <contact>
              <ode>
               <max_vel>0.1</max_vel>
@@ -149,7 +148,6 @@
               <min_depth>0.0001</min_depth>
             </ode>          
           </contact>
-          
           <friction>
             <ode>
               <mu>1</mu>
@@ -191,7 +189,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.0</angular>
+        <angular>0.01</angular>
       </velocity_decay>
       <inertial>
         <mass>1</mass>
@@ -218,8 +216,8 @@
       <axis>
         <xyz>0 1 0</xyz>
         <dynamics>
-          <damping>2</damping>
-          <friction>0</friction>
+          <damping>1</damping>
+          <friction>1</friction>
         </dynamics>    
       </axis>
     </joint>
@@ -245,7 +243,6 @@
           </mesh>
         </geometry>
         <surface>
-        <!---->
           <contact>
              <ode>
               <max_vel>0.1</max_vel>
@@ -256,7 +253,6 @@
               <min_depth>0.001</min_depth>
             </ode>          
           </contact>
-          
           <friction>
             <ode>
               <mu>1</mu>
@@ -298,7 +294,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.0</angular>
+        <angular>0.01</angular>
       </velocity_decay>
       <inertial>
         <mass>1</mass>
@@ -325,8 +321,8 @@
       <axis>
         <xyz>0 1 0</xyz>
         <dynamics>
-          <damping>2</damping>
-          <friction>0</friction>
+          <damping>1</damping>
+          <friction>1</friction>
         </dynamics>      
       </axis>
     </joint>
@@ -352,7 +348,6 @@
           </mesh>
         </geometry>
         <surface>
-        <!-- -->
           <contact>
             <ode>
               <max_vel>0.1</max_vel>
@@ -363,7 +358,6 @@
               <min_depth>0.0001</min_depth>
             </ode>          
           </contact>
-         
           <friction>
             <ode>
               <mu>1</mu>
@@ -405,7 +399,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.0</angular>
+        <angular>0.01</angular>
       </velocity_decay>
       <inertial>
         <mass>1</mass>
@@ -432,8 +426,8 @@
       <axis>
         <xyz>0 1 0</xyz>
         <dynamics>
-          <damping>2</damping>
-          <friction>0</friction>
+          <damping>1</damping>
+          <friction>1</friction>
         </dynamics>      
       </axis>
     </joint>
@@ -459,7 +453,6 @@
           </mesh>
         </geometry>
         <surface>
-        <!---->
           <contact>
              <ode>
               <max_vel>0.1</max_vel>
@@ -470,7 +463,6 @@
               <min_depth>0.0001</min_depth>
             </ode>          
           </contact>
-          
           <friction>
             <ode>
               <mu>1</mu>

@@ -171,7 +171,7 @@ public class DrivePath extends CommandBase {
   @Override
   public boolean isFinished() {
     //return true;
-    return (elapsed >= 1.001 * runtime || m_trajectory == null);
+    return (elapsed >= 1.001 * runtime || m_trajectory == null)||m_drive.disabled();
   }
 
   // *********************** trajectory functions *******************/
@@ -216,7 +216,7 @@ public class DrivePath extends CommandBase {
   // =================================================
   Trajectory pathPlannerPath() {
     try {
-      String file="Test";
+      String file="swervetest";
       if(TargetMgr.FRCfield()){
         if(TargetMgr.getStartPosition()==TargetMgr.OUTSIDE)
           file="Outside";
@@ -225,9 +225,6 @@ public class DrivePath extends CommandBase {
         else if(TargetMgr.getStartPosition()==TargetMgr.CENTER)
           file="Center";
       }
-      boolean blue=TargetMgr.getAlliance()==TargetMgr.BLUE;
-      System.out.println("Pathplanner position="+file+" alliance="+(blue?"blue":"red"));
- 
       PathPlannerTrajectory trajectory = PathPlanner.loadPath(file, 
         new PathConstraints(kMaxVelocity,kMaxAcceleration)); // max vel & accel
       if(TargetMgr.getAlliance()==TargetMgr.RED)
@@ -235,7 +232,9 @@ public class DrivePath extends CommandBase {
       // Pathplanner sets 0,0 as the lower left hand corner (FRC field coord system) 
       // for Gazebo, need to subtract intitial pose from each state so that 0,0 is 
       // in the center of the robot 
-      Pose2d p0=trajectory.getInitialHolonomicPose();
+      Pose2d p0;
+     
+      p0=trajectory.getInitialHolonomicPose();
       System.out.println("Path started:"+file+" relative to first state");
      
       System.out.println("initial path pose:"+trajectory.getInitialHolonomicPose());

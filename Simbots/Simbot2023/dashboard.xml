@@ -1,9 +1,5 @@
 <xml version="1.0">
 <dashboard>
-<<<<<<< HEAD
-	<widget field="autoReset" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="151" y="21"/>
-=======
 	<widget field="Start" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="303" y="449"/>
 		<width>149</width>
@@ -11,7 +7,6 @@
 	<widget field="G:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="324" y="44"/>
 		<width>64</width>
->>>>>>> temp
 	</widget>
 	<widget field="Pose" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="151" y="0"/>
@@ -31,10 +26,6 @@
 	<widget field="BL" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="0" y="56"/>
 	</widget>
-<<<<<<< HEAD
-	<widget field="BR" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="35"/>
-=======
 	<widget field="Tag" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="44" y="366"/>
 		<width>218</width>
@@ -187,7 +178,6 @@
 	<widget field="SimTime" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="140" y="44"/>
 		<width>95</width>
->>>>>>> temp
 	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
 		<location x="17" y="11"/>
