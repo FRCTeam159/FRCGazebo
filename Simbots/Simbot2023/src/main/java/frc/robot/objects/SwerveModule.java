@@ -5,10 +5,12 @@
 package frc.robot.objects;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import gazebo.SimEncMotor;
 import static frc.robot.Constants.*;
 
@@ -25,8 +27,14 @@ public class SwerveModule {
 	private SimEncMotor m_turnMotor;
 
   // Gains are for example purposes only - must be determined for your own robot!
-  private final PIDController m_drivePIDController = new PIDController(5, 0.0, 0);
-  private final PIDController m_turningPIDController = new PIDController(2, 0, 0);
+  private final PIDController m_drivePIDController = new PIDController(5, 0.5, 0);
+  //private final PIDController m_turningPIDController = new PIDController(5, 0.0, 0);
+  // Gains are for example purposes only - must be determined for your own robot!
+   
+  private final ProfiledPIDController m_turningPIDController =
+      new ProfiledPIDController(5,0.0,0,
+          new TrapezoidProfile.Constraints(
+              kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(0.1, 0.1);

@@ -1,7 +1,17 @@
 <xml version="1.0">
 <dashboard>
+<<<<<<< HEAD
 	<widget field="autoReset" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="151" y="21"/>
+=======
+	<widget field="Start" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="303" y="449"/>
+		<width>149</width>
+	</widget>
+	<widget field="G:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="324" y="44"/>
+		<width>64</width>
+>>>>>>> temp
 	</widget>
 	<widget field="Pose" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="151" y="0"/>
@@ -21,8 +31,163 @@
 	<widget field="BL" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="0" y="56"/>
 	</widget>
+<<<<<<< HEAD
 	<widget field="BR" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="0" y="35"/>
+=======
+	<widget field="Tag" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="44" y="366"/>
+		<width>218</width>
+	</widget>
+	<widget field="Detect" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="27" y="336"/>
+		<width>233</width>
+	</widget>
+	<widget field="Use Tags" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="403" y="367"/>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="17" y="11"/>
+		<width>23</width>
+		<height>23</height>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="17" y="11"/>
+		<width>23</width>
+		<height>23</height>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="17" y="11"/>
+		<width>23</width>
+		<height>23</height>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="17" y="11"/>
+		<width>23</width>
+		<height>23</height>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="17" y="11"/>
+		<width>23</width>
+		<height>23</height>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="17" y="11"/>
+		<width>23</width>
+		<height>23</height>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="17" y="11"/>
+		<width>23</width>
+		<height>23</height>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="17" y="11"/>
+		<width>23</width>
+		<height>23</height>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="17" y="11"/>
+		<width>23</width>
+		<height>23</height>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="17" y="11"/>
+		<width>23</width>
+		<height>23</height>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="17" y="11"/>
+		<width>23</width>
+		<height>23</height>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="17" y="11"/>
+		<width>23</width>
+		<height>23</height>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="17" y="11"/>
+		<width>23</width>
+		<height>23</height>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="17" y="11"/>
+		<width>23</width>
+		<height>23</height>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="17" y="11"/>
+		<width>23</width>
+		<height>23</height>
+	</static-widget>
+	<widget field="Wheel " type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="14" y="418"/>
+		<width>269</width>
+	</widget>
+	<widget field="Y:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="125" y="70"/>
+		<width>69</width>
+	</widget>
+	<widget field="X:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="27" y="70"/>
+		<width>84</width>
+	</widget>
+	<widget field="H:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="248" y="44"/>
+		<width>70</width>
+	</widget>
+	<widget field="Arm" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="15" y="393"/>
+		<width>353</width>
+	</widget>
+	<widget field="SendableChooser[1]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="386" y="3"/>
+	</widget>
+	<widget field="SendableChooser[2]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="390" y="105"/>
+	</widget>
+	<widget field="rPath" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="405" y="261"/>
+		<width>77</width>
+	</widget>
+	<widget field="yPath" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="400" y="236"/>
+		<width>82</width>
+		<height>20</height>
+	</widget>
+	<widget field="xPath" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="396" y="213"/>
+		<width>85</width>
+	</widget>
+	<widget field="State" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="302" y="419"/>
+		<width>153</width>
+	</widget>
+	<widget field="Conf" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="407" y="342"/>
+		<width>80</width>
+	</widget>
+	<widget field="Latency" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="392" y="316"/>
+		<width>97</width>
+	</widget>
+	<widget field="maxA" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="296" y="71"/>
+		<width>77</width>
+	</widget>
+	<widget field="maxV" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="207" y="71"/>
+		<width>80</width>
+	</widget>
+	<widget field="SimClock" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="22" y="43"/>
+		<width>110</width>
+	</widget>
+	<widget field="SimTime" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="140" y="44"/>
+		<width>95</width>
+>>>>>>> temp
 	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
 		<location x="17" y="11"/>

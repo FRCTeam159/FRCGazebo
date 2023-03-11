@@ -2,20 +2,18 @@
 <sdf version="1.5">
   <model name="YellowCone">
     <pose>0 0 0 0 0 0</pose>
-    <plugin name="clock" filename="libgz_clock.so">
-      <topic>/gazebo/frc/time</topic>
-    </plugin>
+   
     <link name="Body">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>-6.24396529457481E-15 0.0964948330496707 1.98059788172295E-15 0 0 0</pose>
+      <pose>0.0 0.0 0.1 1.57 0 0</pose>
       <must_be_base_link>1</must_be_base_link>
       <velocity_decay>
-        <linear>0.01</linear>
-        <angular>0.01</angular>
+        <linear>0.0</linear>
+        <angular>0.0</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.05</mass>
+        <mass>0.01</mass>
         <pose>0 0 0 0 0 0</pose>
         
       </inertial>
@@ -28,7 +26,14 @@
           </mesh>
         </geometry>
         <surface>
-        <!-- -->
+        <!-- <contact>
+            <ode>
+              <kp>1e3</kp>
+              <kd>1e7</kd>
+            </ode>          
+          </contact>
+        
+          
            <contact>
              <ode>
               <max_vel>0.1</max_vel>
@@ -39,7 +44,9 @@
               <min_depth>0.001</min_depth>
             </ode>          
           </contact>
+         -->
          <friction>
+         <!-- 
             <torsional>
               <coefficient>8.0</coefficient>
               <use_patch_radius>1</use_patch_radius>
@@ -48,9 +55,10 @@
                 <slip>0</slip>
               </ode>
             </torsional>
+          --> 
             <ode>
-              <mu>8</mu>
-              <mu2>8</mu2>
+              <mu>10</mu>
+              <mu2>10</mu2>
             </ode>
           </friction>
         </surface>

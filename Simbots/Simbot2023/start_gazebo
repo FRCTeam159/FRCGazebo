@@ -10,12 +10,8 @@ rm -f tmp/*;
 #gazebo -u --verbose simswervebot-1arm-2023-Field.world &
 
 #gazebo  -u --verbose simswervebot-4.world &
-gazebo  -u --verbose simcompbot-2023-field.world &
-#gazebo -u --verbose simcompbot-empty-field.world &
-#gazebo -u --verbose simcompbot-empty-field.world &
-
-#gazebo  -u --verbose SimCompBot.world &
-
+#gazebo  -u --verbose simcompbot-2023-field.world &
+gazebo -u --verbose simcompbot-cone.world &
 
 #gazebo --verbose temp.world &
 

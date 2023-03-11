@@ -19,15 +19,20 @@ public class Arm extends Thread {
   public static double kmaxAngleError=Math.toRadians(1.0);
 
   public static final double[] kinit =  {0.131,0.378,Math.toRadians(-29)}; // from kStageOneAngleOffset, kStageTwoAngleOffset
+  public static final double[] khold =  {0.1,0.4,Math.toRadians(34)}; // from kStageOneAngleOffset, kStageTwoAngleOffset
 
-  public static final double[] kcube1 = {0.8,0.6,Math.toRadians(61)}; // center of platform
-  public static final double[] kcube2 = {1.1,1.0,Math.toRadians(98)};
- 
-  public static final double[] kcone1 = {0.8,0.8,Math.toRadians(76)}; // to top of post
-  public static final double[] kcone2 = {1.19,1.08,Math.toRadians(98)};
+  // place positions
+
+  public static final double[] kcube1 = {0.66,0.5,Math.toRadians(50)};   // center of platform
+  public static final double[] kcube2 = {1.13,0.9,Math.toRadians(91.6)};
+  public static final double[] kcone1 = {0.71,0.83,Math.toRadians(80)};  // to top of post
+  public static final double[] kcone2 = {1.2,1.15,Math.toRadians(101)};
+  public static final double[] kplace = {0.3,0.2, Math.toRadians(0)};    // ground level
+
+   // pickup positions
  
   public static final double[] kshelf =  {0.18,1.0,Math.toRadians(109)}; // nominal 6" from front of robot (could be zero))
-  public static final double[] kground = {0.3,0.2, Math.toRadians(0)}; //
+  public static final double[] kground = {0.79,-0.1, Math.toRadians(4)}; //
 
   public double gridtarget[]={0,0,0};
 
@@ -57,10 +62,10 @@ public class Arm extends Thread {
   static double rotateAngle = 0;
 
   static double maxX=1.4;
-  static double minX=-1.4;
+  static double minX=0.1;
 
   static double maxY=1.2;
-  static double minY=0.15;
+  static double minY=-0.2;
 
   public static double maxXerr=Units.inchesToMeters(5); // meters
   public static double maxYerr=Units.inchesToMeters(5);;
@@ -281,6 +286,9 @@ public double[] getPosition() {
   public void setTopConePose(){
     setPose(kcone2);
   }
+  public void setBottomPose(){
+    setPose(kplace);
+  }
   public void setShelfPose(){
     setPose(kshelf);
   }
@@ -289,5 +297,8 @@ public double[] getPosition() {
   }
   public void setInitPose() {
     setPose(kinit);
+  }
+  public void setHoldPose() {
+    setPose(khold);
   }
 }

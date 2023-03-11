@@ -1,0 +1,28 @@
+<?xml version='1.0'?>
+<sdf version='1.7'>
+  <model name='shelf_box'>
+    <link name='link'>
+      <collision name='collision'>
+       
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.36 1.25 0.98</size>
+          </box>
+        </geometry>
+      </collision>
+      <!--
+       <visual name='visual'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <box>
+             <size>0.36 1.25 1</size>
+          </box>
+        </geometry>
+      </visual>
+      -->
+    </link>
+    <static>0</static>
+    <allow_auto_disable>1</allow_auto_disable>
+  </model>
+</sdf>

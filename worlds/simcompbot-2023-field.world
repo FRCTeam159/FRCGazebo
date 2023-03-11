@@ -1,0 +1,125 @@
+<?xml version="1.0" ?>
+<sdf version="1.7">
+  <world name="default">
+  <!-- -->
+    <gui fullscreen='0'>
+       <camera name='user_camera'>
+        <pose>-6.41499 -6.6452 7.39775 0 0.947642 1.24419</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+    </gui>
+   
+    <!-- A global light source -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <!-- A ground plane -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+<!---->
+    <include>
+      <uri>model://2023-Field</uri>
+      <pose>0 0 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://SimCompBot</uri>
+      <pose>-6.3 -1.29897 0.091663 1.57159 0 3.14</pose>
+    </include>
+    <!-- -->
+    <include>
+      <uri>model://PurpleCube2</uri>
+     <pose>-6.54 -1.34749 0.99 0.020792 1.04137 0.00696</pose>
+    </include>
+
+    <include>
+      <name>BluePlatform</name>
+      <uri>model://Platform</uri>
+      <pose>-4.83815 -2.37108 0.01 0 0 1.57227</pose>
+    </include>
+<!---->
+    <include>
+      <name>RedPlatform</name>
+      <uri>model://Platform</uri>
+      <pose>3.83 -2.37108 0.01 0 0 1.57227</pose>
+    </include>
+
+    <include>
+      <uri>model://BlueGrid</uri>
+      <pose>-7.60138 -3.98271 0.001024 1.57227 9e-06 1.57</pose>
+    </include>
+
+   <include>
+      <uri>model://RedGrid</uri>
+      <pose>7.5654 1.37908 0.001017 -1.57227 -6e-06 1.57</pose>
+    </include>
+
+    <!-- Red side -->
+     <include>
+      <uri>model://Apriltag16_05_00001</uri>
+      <pose>7.2 -2.92 0.46 0 0 4.71</pose>
+    </include>
+
+    <include>
+      <uri>model://Apriltag16_05_00002</uri>
+      <pose>7.2 -1.24 0.46 0 0 4.71</pose>
+    </include>
+
+    <include>
+      <uri>model://Apriltag16_05_00003</uri>
+      <pose>7.2 0.38 0.46 0 0 4.71</pose>
+    </include>
+
+    <include>
+      <uri>model://Apriltag16_05_00004</uri>
+      <pose>7.75 2.76 0.72 0 0 4.71</pose>
+    </include>
+    <!-- Blue side -->
+    <include>
+      <uri>model://Apriltag16_05_00005</uri>
+      <pose>-7.64 2.76 0.76 0 0 1.57</pose>
+    </include>
+
+    <include>
+      <uri>model://Apriltag16_05_00006</uri>
+      <pose>-7.23 0.38 0.46 0 0 1.57</pose>
+    </include>
+
+    <include>
+      <uri>model://Apriltag16_05_00007</uri>
+      <pose>-7.23 -1.28 0.46 0 0 1.57</pose>
+    </include>
+    
+     <include>
+      <uri>model://Apriltag16_05_00008</uri>
+      <pose>-7.25 -2.97 0.47 0 0 1.57</pose>
+    </include>
+
+     <include>
+      <uri>model://PurpleCube2</uri>
+      <name>Cube1</name>
+      <pose>-1.2 -3.08 0.1 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://YellowCone</uri>
+      <name>Cone1</name>
+      <pose>-1.2 -1.84 0.0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://YellowCone</uri>
+      <name>Cone2</name>
+      <pose>-1.2 -0.62 0.0 0 0 0</pose>
+    </include>
+
+     <include>
+      <uri>model://PurpleCube2</uri>
+      <name>Cube2</name>
+      <pose>-1.2 0.56 0.1 0 0 0</pose>
+    </include>
+       
+  </world>
+</sdf>

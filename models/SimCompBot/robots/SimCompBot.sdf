@@ -14,7 +14,7 @@
         <angular>0</angular>
       </velocity_decay>
       <inertial>
-        <mass>150</mass>
+        <mass>200</mass>
         <pose>0 0 0 0 0 0</pose>
         
       </inertial>
@@ -27,9 +27,7 @@
           </mesh>
         </geometry>
         <surface>
-          <contact>
-            <ode />
-          </contact>
+        
           <friction>
             <ode>
               <mu>0</mu>
@@ -139,6 +137,7 @@
           </mesh>
         </geometry>
         <surface>
+        <!--
           <contact>
              <ode>
               <max_vel>0.1</max_vel>
@@ -149,10 +148,11 @@
               <min_depth>0.0001</min_depth>
             </ode>          
           </contact>
+          -->
           <friction>
             <ode>
-              <mu>1</mu>
-              <mu2>1</mu2>
+              <mu>2</mu>
+              <mu2>2</mu2>
             </ode>
           </friction>
         </surface>
@@ -244,6 +244,7 @@
           </mesh>
         </geometry>
         <surface>
+        <!--
           <contact>
              <ode>
               <max_vel>0.1</max_vel>
@@ -254,10 +255,11 @@
               <min_depth>0.001</min_depth>
             </ode>          
           </contact>
+          -->
           <friction>
             <ode>
-              <mu>1</mu>
-              <mu2>1</mu2>
+              <mu>2</mu>
+              <mu2>2</mu2>
             </ode>
           </friction>
         </surface>
@@ -349,6 +351,7 @@
           </mesh>
         </geometry>
         <surface>
+        <!--
           <contact>
             <ode>
               <max_vel>0.1</max_vel>
@@ -359,10 +362,11 @@
               <min_depth>0.0001</min_depth>
             </ode>          
           </contact>
+          -->
           <friction>
             <ode>
-              <mu>1</mu>
-              <mu2>1</mu2>
+              <mu>2</mu>
+              <mu2>2</mu2>
             </ode>
           </friction>
         </surface>
@@ -454,6 +458,7 @@
           </mesh>
         </geometry>
         <surface>
+        <!--
           <contact>
              <ode>
               <max_vel>0.1</max_vel>
@@ -464,10 +469,11 @@
               <min_depth>0.0001</min_depth>
             </ode>          
           </contact>
+          -->
           <friction>
             <ode>
-              <mu>1</mu>
-              <mu2>1</mu2>
+              <mu>2</mu>
+              <mu2>2</mu2>
             </ode>
           </friction>
         </surface>
@@ -702,12 +708,13 @@
         <pose>0 0 0 0 0 0</pose>
       </inertial>
       <collision name="GripperTwist_collision">
-        <pose>-0.602543047746872 -1.0967249869109 -1.91914278295272 0 0 0</pose>
+      <pose>0.0  -0.04 0.0  0  1.57 0.67 </pose>
+      <!--<pose>-0.602543047746872 -1.0967249869109 -1.91914278295272 0 0 0</pose>-->
         <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>model://Gripper/meshes/GripperTwist_col.STL</uri>
-          </mesh>
+         <box>
+            <size>0.334186 0.18325 0.055666</size>
+        </box>
+      
         </geometry>
         <surface>
           <contact>
@@ -715,8 +722,8 @@
           </contact>
           <friction>
             <ode>
-              <mu>1</mu>
-              <mu2>1</mu2>
+              <mu>4</mu>
+              <mu2>4</mu2>
             </ode>
           </friction>
         </surface>
@@ -756,37 +763,13 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.01</angular>
+        <angular>0.0</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.1</mass>
+        <mass>0.05</mass>
         <pose>0 0 0 0 0 0</pose>
       </inertial>
-      <collision name="LeftGripper_collision">
-        <pose>-0.697814754420374 -0.969184291056409 -1.7405664858757 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>model://Gripper/meshes/LeftGripper_col.STL</uri>
-          </mesh>
-        </geometry>
-        <surface>
-          <contact>
-           <ode>
-              <kp>1e8</kp>
-              <kd>100</kd>
-              <max_vel>0.01</max_vel>
-              <min_depth>0.01</min_depth>
-            </ode>
-          </contact>
-          <friction>
-            <ode>
-              <mu>1</mu>
-              <mu2>1</mu2>
-            </ode>
-          </friction>
-        </surface>
-      </collision>
+      
       <visual name="LeftGripper_visual">
         <pose>-0.697814754420374 -0.969184291056409 -1.7405664858757 0 0 0</pose>
         <material>
@@ -808,12 +791,12 @@
       <axis>
         <xyz>0.585394002287998 -0.810722241994805 -0.00658091332233763</xyz>
         <dynamics>
-          <damping>0</damping>
-          <friction>0</friction>
+          <damping>0.1</damping>
+          <friction>0.1</friction>
         </dynamics>
         <limit>
-          <upper>0.1</upper>
-          <lower>-0.3</lower>
+          <upper>0.2</upper>
+          <lower>-0.45</lower>
         </limit>
       </axis>
     </joint>
@@ -828,34 +811,10 @@
         <angular>0</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.1</mass>
+        <mass>0.05</mass>
         <pose>0 0 0 0 0 0</pose>
       </inertial>
-      <collision name="RightGripper_collision">
-        <pose>-0.702685431342964 -0.971708729210026 -2.0810187746971 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>model://Gripper/meshes/RightGripper_col.STL</uri>
-          </mesh>
-        </geometry>
-        <surface>
-          <contact>
-           <ode>
-              <kp>1e8</kp>
-              <kd>100</kd>
-              <max_vel>0.01</max_vel>
-              <min_depth>0.01</min_depth>
-            </ode>      
-          </contact>
-          <friction>
-            <ode>
-              <mu>1</mu>
-              <mu2>1</mu2>
-            </ode>
-          </friction>
-        </surface>
-      </collision>
+     
       <visual name="RightGripper_visual">
         <pose>-0.702685431342964 -0.971708729210026 -2.0810187746971 0 0 0</pose>
         <material>
@@ -877,12 +836,12 @@
       <axis>
         <xyz>-0.585394002287996 0.810722241994806 -0.00658091332233764</xyz>
         <dynamics>
-          <damping>0</damping>
-          <friction>0</friction>
+          <damping>0.1</damping>
+          <friction>0.1</friction>
         </dynamics>
         <limit>
-          <upper>0.1</upper>
-          <lower>-0.3</lower>
+          <upper>0.2</upper>
+          <lower>-0.45</lower>
         </limit>
       </axis>
     </joint>
@@ -890,7 +849,7 @@
       <gravity>1</gravity>
       <self_collide>0</self_collide>
       <!--<pose>0.334045450628088 0.846041003834395 -0.21678381156418 0 0 0</pose>-->
-      <pose>0.334045450628088 0.832 -0.142 0.22 0.167 0.009</pose>
+      <pose>0.334 0.85 -0.142 0.22 0.167 0.009</pose>
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
@@ -901,31 +860,19 @@
         <pose>0 0 0 0 0 0</pose>
       </inertial>
       <collision name="LeftPad_collision">
-        <pose>-0.790539706962267 -0.846041003834396 -1.68227675293302 0 0 0</pose>
+      <pose>0.0  0 0.0  0  1.57 0.67 </pose>
+        <!--<pose>-0.790539706962267 -0.846041003834396 -1.68227675293302 0 0 0</pose>-->
         <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>model://Gripper/meshes/LeftPad_col.STL</uri>
-          </mesh>
+         <cylinder>
+            <radius>0.06</radius>
+            <length>0.11</length>
+        </cylinder>
         </geometry>
         <surface>
-          <contact>
-            <ode>
-              <kp>1e3</kp>
-              <kd>1e7</kd>
-              <min_depth>0.001</min_depth>
-            </ode>          
-          </contact>
-          <torsional>
-            <ode>
-              <coefficient>1</coefficient>
-              <slip>0</slip>
-            </ode>
-          </torsional>
           <friction>
             <ode>
-              <mu>4</mu>
-              <mu2>4</mu2>
+              <mu>10</mu>
+              <mu2>10</mu2>
             </ode>
           </friction>
         </surface>
@@ -944,15 +891,15 @@
         </geometry>
       </visual>
     </link>
-    <joint name="LeftGripper-LeftPad" type="revolute">
+    <joint name="LeftGripper-LeftPad" type="fixed">
       <parent>LeftGripper</parent>
       <child>LeftPad</child>
       <pose>-0.00707124173938922 -0.00539133761890198 0.000141142572698261 0 0.0158713592468798 1.59696957940528</pose>
       <axis>
         <xyz>0.585394002288015 -0.810722241994793 -0.00658091332233035</xyz>
         <dynamics>
-          <damping>0</damping>
-          <friction>0</friction>
+          <damping>1</damping>
+          <friction>1</friction>
         </dynamics>
       </axis>
     </joint>
@@ -960,7 +907,7 @@
       <gravity>1</gravity>
       <self_collide>0</self_collide>
       <!--<pose>0.3306064908218 0.847323504491162 0.220265006162646 0 0 0</pose>-->
-      <pose>0.3316 0.8449 0.1851 2.42 0.496 1.111</pose>
+      <pose>0.3285 0.8449 0.187 2.42 0.496 1.111</pose>
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
@@ -971,14 +918,17 @@
         <pose>0 0 0 0 0 0</pose>
       </inertial>
       <collision name="RightPad_collision">
-        <pose>-0.787100747155979 -0.847323504491163 -2.11932557065985 0 0 0</pose>
+      <pose>0.012  -0.0 0.02  0  1.57 0.67 </pose>
+        <!--<pose>-0.787100747155979 -0.847323504491163 -2.11932557065985 0 0 0</pose>-->
         <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>model://Gripper/meshes/RightPad_col.STL</uri>
-          </mesh>
+        <cylinder>
+            <radius>0.06</radius>
+            <length>0.11</length>
+        </cylinder>
+       
         </geometry>
         <surface>
+        <!--
           <contact>
             <ode>
               <min_depth>0.001</min_depth>
@@ -992,13 +942,15 @@
               <slip>0</slip>
             </ode>
           </torsional>
+          -->
           <friction>
             <ode>
-              <mu>4</mu>
-              <mu2>4</mu2>
+              <mu>10</mu>
+              <mu2>10</mu2>
             </ode>
           </friction>
         </surface>
+        
       </collision>
       <visual name="RightPad_visual">
         <pose>-0.787100747155979 -0.847323504491163 -2.11932557065985 0 0 0</pose>
@@ -1014,16 +966,15 @@
         </geometry>
       </visual>
     </link>
-    <joint name="RightGripper-RightPad" type="revolute">
+    <joint name="RightGripper-RightPad" type="fixed">
       <parent>RightGripper</parent>
       <child>RightPad</child>
       <pose>0.0 0.0 0.02 0 0.0158713592468729 1.59696957940527</pose>
-
       <axis>
         <xyz>0.585394002288031 -0.810722241994781 -0.00658091332232724</xyz>
         <dynamics>
-          <damping>0</damping>
-          <friction>0</friction>
+          <damping>1</damping>
+          <friction>1</friction>
         </dynamics>
       </axis>
     </joint> 
@@ -1042,33 +993,22 @@
         <pose>0 0 0 0 0 0</pose>
       </inertial>
       <collision name="LeftPad2_collision">
-        <pose>-0.724224084152647 -0.934037484108342 -1.72114118822059 0 0 0</pose>
+        <pose>0.0  0 0.0  0  1.57 0.67 </pose>
+        <!--<pose>-0.724224084152647 -0.934037484108342 -1.72114118822059 0 0 0</pose>-->
         <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>model://Gripper/meshes/LeftPad2_col.STL</uri>
-          </mesh>
+           <cylinder>
+            <radius>0.06</radius>
+            <length>0.11</length>
+        </cylinder>
         </geometry>
         <surface>
-          <contact>
-            <ode>
-              <kp>1e3</kp>
-              <kd>1e7</kd>
-              <min_depth>0.001</min_depth>
-            </ode>          
-          </contact>
-          <torsional>
-            <ode>
-              <coefficient>1</coefficient>
-              <slip>0</slip>
-            </ode>
-          </torsional>
           <friction>
             <ode>
-              <mu>4</mu>
-              <mu2>4</mu2>
+              <mu>10</mu>
+              <mu2>10</mu2>
             </ode>
           </friction>
+          
         </surface>
       </collision>
       <visual name="LeftPad2_visual">
@@ -1085,15 +1025,15 @@
         </geometry>
       </visual>
     </link>
-    <joint name="LeftGripper-LeftPad2" type="revolute">
+    <joint name="LeftGripper-LeftPad2" type="fixed">
       <parent>LeftGripper</parent>
       <child>LeftPad2</child>
       <pose>-0.00707123917503549 -0.00539134103551542 0.000141140539531293 0 0.0158713592468895 1.5969695794053</pose>
       <axis>
         <xyz>0.585394002288009 -0.810722241994798 -0.00658091332233447</xyz>
         <dynamics>
-          <damping>0</damping>
-          <friction>0</friction>
+          <damping>1</damping>
+          <friction>1</friction>
         </dynamics>
       </axis>
     </joint>
@@ -1112,33 +1052,22 @@
         <pose>0 0 0 0 0 0</pose>
       </inertial>
       <collision name="RightPad2_collision">
-        <pose>-0.729647081376953 -0.936848188163068 -2.10019962255758 0 0 0</pose>
+      <pose>0.0  0 0.0  0  1.57 0.67 </pose>
+        <!--<pose>-0.729647081376953 -0.936848188163068 -2.10019962255758 0 0 0</pose>-->
         <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>model://Gripper/meshes/RightPad2_col.STL</uri>
-          </mesh>
+         <cylinder>
+            <radius>0.06</radius>
+            <length>0.11</length>
+        </cylinder>
         </geometry>
         <surface>
-          <contact>
-            <ode>
-              <kp>1e3</kp>
-              <kd>1e7</kd>
-              <min_depth>0.001</min_depth>
-            </ode>          
-          </contact>
-          <torsional>
-            <ode>
-              <coefficient>1</coefficient>
-              <slip>0</slip>
-            </ode>
-          </torsional>
           <friction>
             <ode>
-              <mu>4</mu>
-              <mu2>4</mu2>
+              <mu>10</mu>
+              <mu2>10</mu2>
             </ode>
           </friction>
+          
         </surface>
       </collision>
       <visual name="RightPad2_visual">
@@ -1155,15 +1084,15 @@
         </geometry>
       </visual>
     </link>
-    <joint name="RightGripper-RightPad2" type="revolute">
+    <joint name="RightGripper-RightPad2" type="fixed">
       <parent>RightGripper</parent>
       <child>RightPad2</child>
       <pose>-0.00707123836826895 -0.00539134206835934 0.000141141506121656 0 0.0158713592468928 1.5969695794053</pose>
       <axis>
         <xyz>0.585394002288003 -0.810722241994801 -0.00658091332233593</xyz>
         <dynamics>
-          <damping>0</damping>
-          <friction>0</friction>
+          <damping>1</damping>
+          <friction>1</friction>
         </dynamics>
       </axis>
     </joint>
@@ -1171,16 +1100,40 @@
     <plugin name="GripperTwist-LeftGripper" filename="sim_piston.dll">
         <joint>GripperTwist-LeftGripper</joint>
         <topic>~/gazebo/frc/simulator/piston/0</topic>
-        <forward-force>30</forward-force>
+        <forward-force>20</forward-force>
         <reverse-force>20</reverse-force>
     </plugin>
      <plugin name="GripperTwist-RightGripper" filename="sim_piston.dll">
         <joint>GripperTwist-RightGripper</joint>
         <topic>~/gazebo/frc/simulator/piston/0</topic>
-        <forward-force>30</forward-force>
+        <forward-force>20</forward-force>
         <reverse-force>20</reverse-force>    
       </plugin>
-    <!--
+ <!--
+       <plugin name="left_pad" filename="sim_motor.dll">
+        <joint>LeftGripper-LeftPad</joint>
+        <topic>~/gazebo/frc/simulator/motor/12</topic>
+        <multiplier>10</multiplier>
+    </plugin>
+
+     <plugin name="left_pad2" filename="sim_motor.dll">
+        <joint>LeftGripper-LeftPad2</joint>
+        <topic>~/gazebo/frc/simulator/motor/12</topic>
+        <multiplier>10</multiplier>
+    </plugin>
+
+     <plugin name="right_pad" filename="sim_motor.dll">
+        <joint>RightGripper-RightPad</joint>
+        <topic>~/gazebo/frc/simulator/motor/12</topic>
+        <multiplier>-10</multiplier>
+    </plugin>
+
+    <plugin name="right_pad2" filename="sim_motor.dll">
+        <joint>RightGripper-RightPad2</joint>
+        <topic>~/gazebo/frc/simulator/motor/12</topic>
+        <multiplier>-10</multiplier>
+    </plugin>
+   
       <plugin name="GripperRotate-GripperTwist_motor" filename="sim_motor.dll">
         <joint>GripperRotate-GripperTwist</joint>
         <topic>~/gazebo/frc/simulator/motor/12</topic>
@@ -1315,7 +1268,9 @@
         <topic>~/gazebo/frc/simulator/encoder/11</topic>
         <multiplier>1</multiplier>
     </plugin>
+
     
+   
   
   </model>
   
