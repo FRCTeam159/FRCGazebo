@@ -5,11 +5,13 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import gazebo.SimPiston;
 
 public class Claw extends SubsystemBase {
   boolean m_clawopen=false;
   SimPiston m_piston = new SimPiston(0);
+  
   public Claw() {
     m_piston.enable();
     closeClaw();
@@ -17,14 +19,12 @@ public class Claw extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
   }
   public void openClaw() {
     m_clawopen=true;
     System.out.println("Claw openclaw");
     m_piston.forward();
   }
-
   public void closeClaw() {
     m_clawopen=false;
     System.out.println("Claw closeclaw");

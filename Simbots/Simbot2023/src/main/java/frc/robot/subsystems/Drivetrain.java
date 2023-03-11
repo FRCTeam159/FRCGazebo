@@ -14,10 +14,12 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.objects.SwerveModule;
 import gazebo.SimGyro;
 import static frc.robot.Constants.*;
@@ -42,6 +44,9 @@ public class Drivetrain extends SubsystemBase {
 	private final SwerveModule m_backLeft = new SwerveModule(kBl_Drive, kBl_Turn);
 	private final SwerveModule m_backRight = new SwerveModule(kBr_Drive, kBr_Turn); 
 	
+	private final SwerveModule[] m_modules={
+		m_frontLeft,m_frontRight,m_backLeft,m_backRight
+	};
 	private final SwerveModulePosition[] m_positions={
 		new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition()
 	};
@@ -111,9 +116,6 @@ public class Drivetrain extends SubsystemBase {
           VecBuilder.fill(vmult*x_std, vmult*y_std, Units.degreesToRadians(vmult*h_std))); // encoder accuracy
 	}
 
-	public void setRobotDisabled(boolean f){
-		robot_disabled=f;
-	}
 	public double getTime() {
 		return simulation.getSimTime();
 	}
@@ -127,13 +129,9 @@ public class Drivetrain extends SubsystemBase {
 		simulation.start();
 		enable();
 	}
-
 	public void endAuto() {
 		if(debug)
 			System.out.println("Drivetrain.endAuto");
-		setRobotDisabled(true);
-		//simulation.end();
-		//disable();
 	}
 	public void init() {
 		if(debug)
@@ -149,14 +147,15 @@ public class Drivetrain extends SubsystemBase {
 	public boolean disabled(){
 		return m_disabled;
 	}
+	public void disabledInit() {
+		simulation.end();
+	}
 	public void disable() {
 		m_disabled = true;
 		if(debug)
-		System.out.println("Drivetrain.disable");
-		m_frontLeft.disable();
-		m_frontRight.disable();
-		m_backLeft.disable();
-		m_backRight.disable();
+			System.out.println("Drivetrain.disable");
+		for(int i=0;i<m_modules.length;i++)
+			m_modules[i].disable();
 		m_gyro.disable();
 		simulation.end();
 	}
@@ -166,27 +165,20 @@ public class Drivetrain extends SubsystemBase {
 		simulation.run();
 		if(debug)
 		System.out.println("Drivetrain.enable");
-		m_frontLeft.enable();
-		m_frontRight.enable();
-		m_backLeft.enable();
-		m_backRight.enable();
+		for(int i=0;i<m_modules.length;i++)
+			m_modules[i].enable();	
 		m_gyro.enable();
 	}
 
 	public void reset() {
 		m_disabled = true;
 		if(debug)
-		System.out.println("Drivetrain.reset");
-		m_frontLeft.reset();
-		m_frontRight.reset();
-		m_backLeft.reset();
-		m_backRight.reset();
-
+			System.out.println("Drivetrain.reset");
+		for(int i=0;i<m_modules.length;i++)
+			m_modules[i].reset();	
 		TargetMgr.clearStartPose();
-
 		last_heading =0;
 		m_gyro.reset();
-
 		makeEstimator();
 	}
 
@@ -305,15 +297,14 @@ public class Drivetrain extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-	}
-
-	@Override
-	public void simulationPeriodic() {
-		if(robot_disabled)
-			drive(0.0,0.0,0,true); // stay in place
+		if (Robot.isRobotDisabled())
+			drive(0.0, 0.0, 0, true); // stay in place
 		updateOdometry();
 		log();
 	}
+
+	@Override
+	public void simulationPeriodic() {}
 
 	void displayAngles(){
 		if((cnt%100)==0){
@@ -325,17 +316,13 @@ public class Drivetrain extends SubsystemBase {
 	}
 	
 	public void turn(double value) {
-		m_frontLeft.turn(value);
-		m_frontRight.turn(value);
-		m_backLeft.turn(value);
-		m_backRight.turn(value);
+		for(int i=0;i<m_modules.length;i++)
+			m_modules[i].turn(value);
 	}
 
 	public void move(double value) {
-		m_frontLeft.move(value);
-		m_frontRight.move(value);
-		m_backLeft.move(value);
-		m_backRight.move(value);
+		for(int i=0;i<m_modules.length;i++)
+			m_modules[i].move(value);
 	}
 
 	public void testDrive(double speed, double rot) {
@@ -366,15 +353,14 @@ public class Drivetrain extends SubsystemBase {
 	}
 	@SuppressWarnings("ParameterName")
 	public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-		var swerveModuleStates = m_kinematics.toSwerveModuleStates(
+		SwerveModuleState swerveModuleStates[] = m_kinematics.toSwerveModuleStates(
 				fieldRelative
 						? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
 						: new ChassisSpeeds(xSpeed, ySpeed, rot));
 		SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxVelocity);
-		m_frontLeft.setDesiredState(swerveModuleStates[0]);
-		m_frontRight.setDesiredState(swerveModuleStates[1]);
-		m_backLeft.setDesiredState(swerveModuleStates[2]);
-		m_backRight.setDesiredState(swerveModuleStates[3]);
+		for(int i=0;i<m_modules.length;i++)
+			m_modules[i].setDesiredState(swerveModuleStates[i]);
+		
 		updateOdometry();
 	}
 
@@ -400,16 +386,15 @@ public class Drivetrain extends SubsystemBase {
 	}
 
 	public void updatePositions(){
-		m_positions[0]=m_frontLeft.getPosition();
-		m_positions[1]=m_frontRight.getPosition();
-		m_positions[2]=m_backLeft.getPosition();
-		m_positions[3]=m_backRight.getPosition();
+		for(int i=0;i<m_modules.length;i++)
+			m_positions[i]=m_modules[i].getPosition();
 	}
 	public void resetPositions(){
-		m_positions[0]=new SwerveModulePosition();
-		m_positions[1]=new SwerveModulePosition();
-		m_positions[2]=new SwerveModulePosition();
-		m_positions[3]=new SwerveModulePosition();
+		for(int i=0;i<m_positions.length;i++)
+			m_positions[i]=new SwerveModulePosition();
+	}
+	public void resetOdometry() {
+		resetOdometry(new Pose2d());
 	}
 	public void resetOdometry(Pose2d pose) {
 		last_heading = 0;

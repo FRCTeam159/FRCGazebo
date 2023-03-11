@@ -123,7 +123,6 @@ public class DrivePath extends CommandBase {
     pathdata.clear();
     m_drive.startAuto();
 
-  
     System.out.println("runtime:" + runtime + " states:" + states + " intervals:" + intervals);
   }
 

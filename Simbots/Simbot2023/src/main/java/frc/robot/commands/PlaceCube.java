@@ -21,7 +21,8 @@ public class PlaceCube extends CommandBase {
   /** Creates a new PlaceCube. 
  * @param i
  * @param m_claw
- * @param m_arm*/
+ * @param m_arm
+ * */
   public PlaceCube(int i, Arm arm, Claw claw) {
     m_arm=arm;
     m_claw=claw;

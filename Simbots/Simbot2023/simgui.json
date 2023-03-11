@@ -205,13 +205,6 @@
       "/SmartDashboard/SendableChooser[1]": "String Chooser",
       "/SmartDashboard/SendableChooser[2]": "String Chooser",
       "/SmartDashboard/Simulation": "Subsystem"
-    },
-    "windows": {
-      "/SmartDashboard/Field": {
-        "window": {
-          "visible": true
-        }
-      }
     }
   },
   "NetworkTables": {
@@ -269,9 +262,6 @@
       }
     },
     "transitory": {
-      "Shuffleboard": {
-        "open": true
-      },
       "SmartDashboard": {
         "SendableChooser[1]": {
           "open": true
@@ -281,7 +271,24 @@
         }
       },
       "gazebo": {
-        "open": true
+        "motor": {
+          "1": {
+            "open": true
+          },
+          "12": {
+            "open": true
+          },
+          "2": {
+            "open": true
+          },
+          "open": true
+        },
+        "open": true,
+        "piston": {
+          "0": {
+            "open": true
+          }
+        }
       }
     }
   },

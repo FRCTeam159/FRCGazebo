@@ -1,5 +1,9 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="Start" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="303" y="449"/>
+		<width>149</width>
+	</widget>
 	<widget field="G:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="324" y="44"/>
 		<width>64</width>
@@ -150,7 +154,7 @@
 	</widget>
 	<widget field="State" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="302" y="419"/>
-		<width>146</width>
+		<width>153</width>
 	</widget>
 	<widget field="Conf" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="407" y="342"/>

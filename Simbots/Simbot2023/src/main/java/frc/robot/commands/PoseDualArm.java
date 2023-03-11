@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Robot;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Claw;
 import static frc.robot.Constants.*;
@@ -33,10 +34,13 @@ public class PoseDualArm extends CommandBase {
   public static final int CUBE=8;
   public static final int CONE=16;
 
+  public static final int SHELF=8;
+  public static final int GROUND=16;
+
   static int mode=MANUAL;
 
   static double wrist_incr=0.1;
-  static double move_incr=0.01;
+  static double move_incr=0.005;
 
   double pose[]=new double[2];
   
@@ -50,7 +54,7 @@ public class PoseDualArm extends CommandBase {
   @Override
   public void initialize() {
     System.out.println("PoseDualArm.initialize");
-    SmartDashboard.putString("State","Driving");
+    SmartDashboard.putString("State","Disabled");
     m_arm.setInitPose();
     m_timer.start();
     m_timer.reset();
@@ -59,6 +63,10 @@ public class PoseDualArm extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(Robot.isRobotDisabled())
+       return;
+   
+     // B button (claw open or close)
     if(m_controller.getBButtonPressed()){
       if(m_claw.clawOpen())
         m_claw.closeClaw();
@@ -66,21 +74,34 @@ public class PoseDualArm extends CommandBase {
         m_claw.openClaw();
     }
 
+    // A button (pickup mode)
     if(m_controller.getAButtonPressed()){ 
-      SmartDashboard.putString("State","Getting CONE from shelf");
-      if(mode==(GETTING|CONE))
-        mode=HOLDING;
-      else
-        mode=GETTING|CONE;
+      SmartDashboard.putString("State","Pickup mode");
+      switch(mode){
+        default:
+           mode=GETTING;
+           break;
+        case GETTING:
+           mode=GETTING|GROUND;
+           break;
+        case GETTING|GROUND:
+          mode=GETTING|SHELF;
+          break;
+        case GETTING|SHELF:
+          mode=GETTING|GROUND;
+          break;
+      } 
     }
     
+    // Y button (cone place mode)
     if(m_controller.getYButtonPressed()){
       switch(mode){
         default:
            break;
-        case GETTING|CONE:
+        case GETTING|SHELF:
+        case GETTING|GROUND:
+        case PLACING|CUBE:    
         case MANUAL:
-           level=0;
            mode=HOLDING;
            break;
         case HOLDING:
@@ -88,18 +109,20 @@ public class PoseDualArm extends CommandBase {
           m_timer.reset();
           break;
         case PLACING|CONE:
-          level=0;
           mode=HOLDING;
           break;
       } 
     }
+
+    // X button (cube place mode)
     if(m_controller.getXButtonPressed()){
       switch(mode){
          default:
          break;
-      case GETTING|CONE:
+      case GETTING|SHELF:
+      case GETTING|GROUND:
+      case PLACING|CONE: 
       case MANUAL:
-        level=0;
         mode=HOLDING;
         break;
       case HOLDING:
@@ -108,87 +131,18 @@ public class PoseDualArm extends CommandBase {
         break;
       case PLACING|CUBE:
         mode=HOLDING;
-        level=0;
         break;
       } 
     }
+    // switch to manual mode if either triggers or dpad are used
     // trigger actions
     double left_trigger=m_controller.getLeftTriggerAxis();
     double right_trigger=m_controller.getRightTriggerAxis();
-    if (right_trigger > 0) 
-      m_arm.setRotation(m_arm.getRotation() - right_trigger * wrist_incr);
-    if (left_trigger > 0) 
-      m_arm.setRotation(m_arm.getRotation() + left_trigger * wrist_incr);
- 
-    pose=m_arm.getTargetPosition();
-    
-    // state machine
-    switch (mode){
-      default:
-      case MANUAL:
-        if (right_trigger > 0) 
-          m_arm.setRotation(m_arm.getRotation() - right_trigger * wrist_incr);
-        if (left_trigger > 0) 
-          m_arm.setRotation(m_arm.getRotation() + left_trigger * wrist_incr);
-        SmartDashboard.putString("State","Arm move using POV");
-        break;
-      case HOLDING:
-        m_arm.setInitPose();
-        if (m_controller.getRightBumperPressed()) {
-          level++;
-          level = level > 2 ? 2 : level;
-        }
-        if (m_controller.getLeftBumperPressed()) {
-          level--;
-          level = level <= 0 ? 0 : level;
-        } 
-        SmartDashboard.putString("State","Holding level:"+level);
-        break;
-      case PLACING|CONE:
-        if(level==0){
-          SmartDashboard.putString("State","Ground level plce/pickup");
-          m_arm.setGroundPose();
-          m_arm.setGroundPose();
-        }
-        else if(level==1){
-          SmartDashboard.putString("State","Placing CONE at Mid Level");
-          m_arm.setMidConePose();
-          m_arm.setMidConePose();
-        }
-        else{
-          SmartDashboard.putString("State","Placing CONE at Top Level");
-          m_arm.setTopConePose();
-          m_arm.setTopConePose();
-        }
-        break;
-      case PLACING|CUBE:
-        if(level==0){
-          SmartDashboard.putString("State","Ground level place or pickup");
-          m_arm.setGroundPose();
-          m_arm.setGroundPose();
-        }
-        else if(level==1){
-          SmartDashboard.putString("State","Placing CUBE at Mid Level");
-          m_arm.setMidCubePose();
-          m_arm.setMidCubePose();
-        }
-        else{
-          SmartDashboard.putString("State","Placing CUBE at Top Level");
-          m_arm.setTopCubePose();
-          m_arm.setTopCubePose();
-        }
-        break;
-      case GETTING|CONE:
-        m_arm.setShelfPose();
-        m_arm.setShelfPose();
-        SmartDashboard.putString("State","Getting CONE from shelf");
-        break;
-      // case GETTING|CUBE:
-      //   SmartDashboard.putString("State","Getting CUBE from ground");
-      //   m_arm.setGroundPose();
-      //   m_arm.setGroundPose();
-      //   break;
+    if(left_trigger>0 || right_trigger>0){
+      m_arm.setRotation(m_arm.getRotation() + (left_trigger-right_trigger) * wrist_incr);
+      mode=MANUAL;
     }
+    // dpad
     int pov=m_controller.getPOV();
     if(pov>=0){
       mode=MANUAL;
@@ -198,39 +152,101 @@ public class PoseDualArm extends CommandBase {
         case 0: 
           y+=move_incr;
           break;
-        case 45:
-          y+=0.5*move_incr;
-          x-=0.5*move_incr;
-          break;
         case 90:
           x-=move_incr;
           break;
         case 180:
           y-=move_incr;
           break;
-        case 225:
-          y-=0.5*move_incr;
-          x+=0.5*move_incr;
-          break;
         case 270:
           x+=move_incr;
           break;
-        case 315:
-          y+=0.5*move_incr;
-          x+=0.5*move_incr;
-        break;
-      }
-      // double a=move_incr*Math.toRadians((double)pov);
-      // double x=move_incr*Math.cos(a);
-      // double y=move_incr*Math.sin(a);
-      // pose[0]+=x;
-      // pose[1]+=y;
-      //System.out.println("pov="+pov);
+      }    
       m_arm.setPose(pose[0]+x,pose[1]+y);
     }
+    pose=m_arm.getTargetPosition();
+    
+    boolean rb=m_controller.getRightBumperPressed();
+    boolean lb=m_controller.getLeftBumperPressed();
+   
+    // State Machine
 
+    switch (mode){
+      default:
+      case GETTING:
+        m_arm.setHoldPose();
+      break;
+      case MANUAL:
+        if(rb)
+          incrLevel();
+        if(lb)
+          decrLevel();
+        SmartDashboard.putString("State","Manual Arm level:"+level);
+        break;
+      case HOLDING:
+        if(rb)
+          incrLevel();
+        if(lb)
+          decrLevel();
+        m_arm.setHoldPose();
+        SmartDashboard.putString("State","Holding Arm level:"+level);
+        break;
+      case PLACING|CONE:
+        if(level==0){
+          SmartDashboard.putString("State","Ground level place");
+          m_arm.setBottomPose();
+        }
+        else if(level==1){
+          SmartDashboard.putString("State","Placing CONE at Mid Level");
+          m_arm.setMidConePose();
+        }
+        else{
+          SmartDashboard.putString("State","Placing CONE at Top Level");
+          m_arm.setTopConePose();
+        }
+        break;
+      case PLACING|CUBE:
+        if(level==0){
+          SmartDashboard.putString("State","Ground level place");
+          m_arm.setBottomPose();
+        }
+        else if(level==1){
+          SmartDashboard.putString("State","Placing CUBE at Mid Level");
+          m_arm.setMidCubePose();
+        }
+        else{
+          SmartDashboard.putString("State","Placing CUBE at Top Level");
+          m_arm.setTopCubePose();
+        }
+        break;
+      case GETTING|SHELF:
+        if(rb)
+          mode=GETTING|GROUND;
+        else{
+          SmartDashboard.putString("State","Picking up from shelf");
+          m_arm.setShelfPose();      
+        }
+        break;
+      case GETTING|GROUND:
+        if(lb)
+          mode=GETTING|SHELF;
+        else{
+          SmartDashboard.putString("State","Picking up from ground");
+          m_arm.setGroundPose();       
+        }    
+        break;
+    }
+  }
+  void incrLevel(){
+      level++;
+      level = level > 2 ? 2 : level;
+  }
+  void decrLevel(){
+    level--;
+    level = level <= 0 ? 0 : level;
   }
 
+ 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {

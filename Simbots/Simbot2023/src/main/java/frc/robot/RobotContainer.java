@@ -31,7 +31,6 @@ public class RobotContainer {
   private final Drivetrain m_drivetrain = new Drivetrain();
   private final XboxController m_controller = new XboxController(0);
   private final TagDetector m_detector= new TagDetector(m_drivetrain);
-  //private final Wrist m_wrist=new Wrist();
   private final Claw m_claw=new Claw();
   private final Arm m_arm = new Arm();
   private final Autonomous m_autonomous = new Autonomous(m_drivetrain, m_arm, m_claw);
@@ -40,7 +39,6 @@ public class RobotContainer {
 
   PlotServer m_plotsub=new PlotServer();
 
- 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     m_driveCommand=new DriveWithGamepad(m_drivetrain, m_controller);
@@ -73,19 +71,20 @@ public class RobotContainer {
 
     CommandScheduler.getInstance().schedule(new PoseDualArm(m_arm, m_claw, m_controller));
 
-    m_drivetrain.setRobotDisabled(false);
+    //m_drivetrain.setRobotDisabled(false);
     m_drivetrain.setFieldOriented(true);
   }
   public void autonomousInit(){
-    m_drivetrain.setRobotDisabled(false);
+   // m_drivetrain.setRobotDisabled(false);
     m_drivetrain.setFieldOriented(false);
   }
   public void disabledInit(){
-    m_drivetrain.setRobotDisabled(true);
-    m_drivetrain.disable();
+    m_drivetrain.disabledInit();
+  }
+  public void disabledPeriodic() {   
   }
   public void robotInit(){
-    m_drivetrain.setRobotDisabled(true);
+    //m_drivetrain.setRobotDisabled(true);
     m_drivetrain.init();
     m_arm.start();
     m_detector.start();

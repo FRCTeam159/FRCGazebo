@@ -4,7 +4,7 @@
     <pose>0 0 0 0 0 0</pose>
    
     <link name="Body">
-      <gravity>1</gravity>
+      <gravity>0</gravity>
       <self_collide>0</self_collide>
       <pose>2.58766437610333 0.373657256229708 -0.132157991348386 0 0 0</pose>
       <must_be_base_link>1</must_be_base_link>

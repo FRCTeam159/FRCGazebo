@@ -1,0 +1,47 @@
+<?xml version="1.0" ?>
+<sdf version="1.7">
+  <world name="default">
+    <!-- A global light source -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <!-- A ground plane -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <include>
+      <uri>model://SimCompBot</uri>
+      <pose>0 0 0.092 1.57078 -8.3e-05 1.5512</pose>
+    </include>
+
+
+    <include>
+      <uri>model://YellowCone</uri>
+      <name>ground-cone</name>
+      <pose>0 1.56 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://YellowCone</uri>
+      <name>shelf-cone</name>
+       <pose>2.78195 4.06938 0.965614 0 -0 0</pose>
+    </include>
+
+     <include>
+      <uri>model://BlueGrid</uri>
+      <pose>-3.2599 3.70165 0.01 1.5708 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://2023-Field</uri>
+      <pose>0.671987 -3.89784 0.011587 0 0 -1.57466</pose>
+    </include>
+
+     <include>
+      <uri>model://shelf_box</uri>
+      <pose>2.9256 4.12082 0.518089 0 0 -1.57466</pose>
+    </include>
+
+  </world>
+</sdf>
