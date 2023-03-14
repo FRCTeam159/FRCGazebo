@@ -26,27 +26,23 @@
           </mesh>
         </geometry>
         <surface>
-        <!-- <contact>
-            <ode>
-              <kp>1e3</kp>
-              <kd>1e7</kd>
-            </ode>          
-          </contact>
         
           
            <contact>
              <ode>
+              <!-- 
               <max_vel>0.1</max_vel>
+              <min_depth>0.001</min_depth>
               <soft_cfm>0.2</soft_cfm>
               <soft_erp>0.2</soft_erp>
+              --> 
               <kd>1</kd>
-              <kp>5e7</kp>
-              <min_depth>0.001</min_depth>
+              <kp>5e8</kp>
             </ode>          
           </contact>
-         -->
+         
          <friction>
-         <!-- 
+         <!----> 
             <torsional>
               <coefficient>8.0</coefficient>
               <use_patch_radius>1</use_patch_radius>
@@ -54,8 +50,7 @@
               <ode>
                 <slip>0</slip>
               </ode>
-            </torsional>
-          --> 
+            </torsional>          
             <ode>
               <mu>10</mu>
               <mu2>10</mu2>

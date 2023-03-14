@@ -97,8 +97,8 @@ public class Drivetrain extends SubsystemBase {
 		SmartDashboard.putNumber("maxV", kMaxVelocity);
 		SmartDashboard.putNumber("maxA", kMaxAcceleration);
 		SmartDashboard.putBoolean("Use Tags", use_tags);
-		SmartDashboard.putNumber("Latency", latency);
-		SmartDashboard.putNumber("Conf", vision_confidence);
+		//SmartDashboard.putNumber("Latency", latency);
+		//SmartDashboard.putNumber("Conf", vision_confidence);
 		SmartDashboard.putString("State","Driving");
 	}
 
@@ -264,11 +264,11 @@ public class Drivetrain extends SubsystemBase {
 	}
 
 	public void log() {
-		SmartDashboard.putNumber("Distance", getDistance());
-		SmartDashboard.putNumber("Velocity", getVelocity());
+		//SmartDashboard.putNumber("Distance", getDistance());
+		//SmartDashboard.putNumber("Velocity", getVelocity());
 		Translation2d t=  getPose().getTranslation();
 		
-		SmartDashboard.putNumber("G:", gyroHeading());
+		//SmartDashboard.putNumber("G:", gyroHeading());
 		SmartDashboard.putNumber("H:", getHeading());
 		SmartDashboard.putNumber("X:", t.getX());
 		SmartDashboard.putNumber("Y:", t.getY());

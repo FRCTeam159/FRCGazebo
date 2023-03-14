@@ -29,8 +29,8 @@ public class TargetMgr {
     static final public int RED = 1;
     static final public int BLUE = 2;
 
-    static final String[] pStrings = { "unknown", "outside", "center", "inside", "station" };
-    static final String[] aStrings = { "unknown", "red", "blue" };
+    static final String[] pStrings = { "Unknown", "Outside", "Center", "Inside", "Station" };
+    static final String[] aStrings = { "Unknown", "Red", "Blue" };
 
     public static double targetSize = 0.1524; // 0.371; side of inner rectangle of apriltag (meters)
 
@@ -165,7 +165,7 @@ public class TargetMgr {
         System.out.format("Initial robot position %s-%s X:%-3.1f Y:%-3.1f H:%-3.1f\n",
                 aStrings[alliance], pStrings[start_position], start_pose.getX(), start_pose.getY(),
                 start_pose.getRotation().getDegrees());
-        SmartDashboard.putString("Start","Alliance:"+aStrings[alliance]+" Posiion:"+pStrings[start_position]);
+        SmartDashboard.putString("Start",aStrings[alliance]+" -- "+pStrings[start_position]);
     }
 
     static void setFieldTargets() {

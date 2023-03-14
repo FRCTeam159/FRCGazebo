@@ -55,7 +55,7 @@ public class PoseDualArm extends CommandBase {
   public void initialize() {
     System.out.println("PoseDualArm.initialize");
     SmartDashboard.putString("State","Disabled");
-    m_arm.setInitPose();
+    m_arm.setHoldPose();
     m_timer.start();
     m_timer.reset();
   }
@@ -63,8 +63,9 @@ public class PoseDualArm extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Robot.isRobotDisabled())
+    if(Robot.isRobotDisabled()){
        return;
+    }
    
      // B button (claw open or close)
     if(m_controller.getBButtonPressed()){
@@ -98,6 +99,7 @@ public class PoseDualArm extends CommandBase {
       switch(mode){
         default:
            break;
+        case GETTING:
         case GETTING|SHELF:
         case GETTING|GROUND:
         case PLACING|CUBE:    
@@ -119,6 +121,7 @@ public class PoseDualArm extends CommandBase {
       switch(mode){
          default:
          break;
+      case GETTING:
       case GETTING|SHELF:
       case GETTING|GROUND:
       case PLACING|CONE: 

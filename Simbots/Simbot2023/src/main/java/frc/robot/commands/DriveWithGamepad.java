@@ -62,11 +62,11 @@ public class DriveWithGamepad extends CommandBase {
         *kMaxVelocity;
 
     // Get the y speed or sideways/strafe speed.
-    final var ySpeed = m_yspeedLimiter.calculate(MathUtil.applyDeadband(vy, 0.2))
+    final var ySpeed = -m_yspeedLimiter.calculate(MathUtil.applyDeadband(vy, 0.2))
         * kMaxVelocity;
 
     // Get the rate of angular rotation.
-    double rot = m_rotLimiter.calculate(MathUtil.applyDeadband(vr, 0.2))
+    double rot = -m_rotLimiter.calculate(MathUtil.applyDeadband(vr, 0.2))
         * kMaxAngularSpeed;
     
     // execute a 180 degree heading reversal if left (CCW) or right (CW) bumper button is pressed

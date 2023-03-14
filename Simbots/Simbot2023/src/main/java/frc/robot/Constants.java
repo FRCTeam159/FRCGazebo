@@ -23,7 +23,7 @@ public final class Constants {
     public static double kMaxVelocity = 3.6; // 4 meters per second
     public static double kMaxAcceleration = 3.6; // meters/second/second
     public static double kMaxAngularSpeed =  Math.toRadians(360); // 3 rotation per second
-    public static double kMaxAngularAcceleration = Math.toRadians(720); // 1 rotations/s/s
+    public static double kMaxAngularAcceleration = Math.toRadians(360); // 1 rotations/s/s
     public static final double kWheelRadius = Units.inchesToMeters(2.0); // 2 inches
     public static final double kFrontWheelBase = 18.625; // 0.472 distance bewteen front wheels (in)
 	public static final double kSideWheelBase =  31;  // 0.787 distance b18eteen side wheels (in)
@@ -42,8 +42,8 @@ public final class Constants {
     public static final double kStageOneAngleOffset = Math.toRadians(101); // starting angle
     public static final double kStageTwoAngleOffset = Math.toRadians(195);
     public static final double kRotateAngleOffset = Math.toRadians(-29); // starting angle
-    public static final double kMaxLowerArmAngularSpeed=Math.toRadians(45);
-    public static final double kMaxLowerArmAngularAcceleration=Math.toRadians(15);
+    public static final double kMaxLowerArmAngularSpeed=Math.toRadians(40);
+    public static final double kMaxLowerArmAngularAcceleration=Math.toRadians(20);
     public static final double kMaxUpperArmAngularSpeed=Math.toRadians(180);
     public static final double kMaxUpperArmAngularAcceleration=Math.toRadians(90);
     public static final double kMaxWristRotateAngularSpeed=Math.toRadians(360);

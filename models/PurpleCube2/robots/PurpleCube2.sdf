@@ -6,7 +6,7 @@
     <link name="Body">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>-6.2674270492025E-12 -1.81944869235543E-07 1.28507793850448E-06 0 0 0</pose>
+      <pose>0 0.1 0 0 0 0</pose>
       <must_be_base_link>1</must_be_base_link>
       <velocity_decay>
         <linear>0.01</linear>
@@ -31,9 +31,10 @@
           -->
         </geometry> 
         <surface>
+        <!---->
           <contact>
              <ode>
-              <kp>1e3</kp>
+              <kp>1e1</kp>
               <kd>1e7</kd>
             </ode>          
           </contact>

@@ -24,6 +24,12 @@
 
     <include>
       <uri>model://YellowCone</uri>
+      <name>ground-cone-2</name>
+      <pose>0 -2.71 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://YellowCone</uri>
       <name>shelf-cone</name>
        <pose>2.78195 4.06938 0.965614 0 -0 0</pose>
     </include>
@@ -41,6 +47,26 @@
      <include>
       <uri>model://shelf_box</uri>
       <pose>2.9256 4.12082 0.518089 0 0 -1.57466</pose>
+    </include>
+
+    <include>
+      <uri>model://Apriltag16_05_00005</uri>
+      <pose>3.40062 3.87951 0.724962 0 -0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://Apriltag16_05_00006</uri>
+      <pose>1.09674 3.34973 0.471563 0 -0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://Apriltag16_05_00007</uri>
+      <pose>-0.562716 3.35146 0.460951 0 -0 0</pose>
+    </include>
+    
+     <include>
+      <uri>model://Apriltag16_05_00008</uri>
+      <pose>-2.20511 3.34902 0.463125 0 -0 0</pose>
     </include>
 
   </world>

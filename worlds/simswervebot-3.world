@@ -27,7 +27,6 @@
     </include>
     -->
     
-   
      
       <gui fullscreen='0'>
       <camera name='user_camera'>

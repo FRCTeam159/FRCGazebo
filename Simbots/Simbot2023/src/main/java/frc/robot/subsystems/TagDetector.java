@@ -78,11 +78,13 @@ public class TagDetector extends Thread {
     //config.quadDecimate=1.0f;
     //wpi_detector.setConfig(config);
 
+    start_tag_needed=TargetMgr.tagsPresent()?true:false;
+
     wpi_poseEstConfig = new AprilTagPoseEstimator.Config(TargetMgr.targetSize, cam.fx, cam.fy, cam.cx, cam.cy);
     wpi_pose_estimator = new AprilTagPoseEstimator(wpi_poseEstConfig);
 
     ouputStream = CameraServer.putVideo("testCamera", cam.image_width, cam.image_height);
-    test();
+    //test();
   }
 
   // test tag detection jni using an image file
@@ -106,6 +108,7 @@ public class TagDetector extends Thread {
 
   // return an array of tag info structures from an image
   private AprilTag[] getTags(Mat mat) {
+    System.out.println("getTags "+start_tag_needed);
     AprilTag[] atags=null;
     Mat graymat = new Mat();
     Imgproc.cvtColor(mat, graymat, Imgproc.COLOR_RGB2GRAY);

@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
 import gazebo.SimEncMotor;
 import static frc.robot.Constants.*;
 
@@ -18,21 +19,21 @@ public class Arm extends Thread {
 
   public static double kmaxAngleError=Math.toRadians(1.0);
 
-  public static final double[] kinit =  {0.131,0.378,Math.toRadians(-29)}; // from kStageOneAngleOffset, kStageTwoAngleOffset
+  public static final double[] kinit =  {0.12,0.4,Math.toRadians(-27)}; // from kStageOneAngleOffset, kStageTwoAngleOffset
   public static final double[] khold =  {0.1,0.4,Math.toRadians(34)}; // from kStageOneAngleOffset, kStageTwoAngleOffset
 
   // place positions
 
   public static final double[] kcube1 = {0.66,0.5,Math.toRadians(50)};   // center of platform
-  public static final double[] kcube2 = {1.13,0.9,Math.toRadians(91.6)};
+  public static final double[] kcube2 = {1.13,0.8,Math.toRadians(-3)};
   public static final double[] kcone1 = {0.71,0.83,Math.toRadians(80)};  // to top of post
-  public static final double[] kcone2 = {1.2,1.15,Math.toRadians(101)};
-  public static final double[] kplace = {0.3,0.2, Math.toRadians(0)};    // ground level
+  public static final double[] kcone2 = {1.11,1.05,Math.toRadians(0)};
+  public static final double[] kplace = {0.26,0.2, Math.toRadians(60)};    // ground level
 
    // pickup positions
  
-  public static final double[] kshelf =  {0.18,1.0,Math.toRadians(109)}; // nominal 6" from front of robot (could be zero))
-  public static final double[] kground = {0.79,-0.1, Math.toRadians(4)}; //
+  public static final double[] kshelf =  {0.18,1.0,Math.toRadians(-5)}; // nominal 6" from front of robot (could be zero))
+  public static final double[] kground = {0.6,-0.1, Math.toRadians(93)}; //
 
   public double gridtarget[]={0,0,0};
 
@@ -44,13 +45,13 @@ public class Arm extends Thread {
   private SimEncMotor rotateMotor;
 
   final ProfiledPIDController onePID= 
-  new ProfiledPIDController(8,1,0,
+  new ProfiledPIDController(4,0,0,
    new TrapezoidProfile.Constraints(kMaxLowerArmAngularSpeed,kMaxLowerArmAngularAcceleration));
   final ProfiledPIDController twoPID= 
-  new ProfiledPIDController(10,1,0,
+  new ProfiledPIDController(5,0,0,
     new TrapezoidProfile.Constraints(kMaxUpperArmAngularSpeed,kMaxUpperArmAngularAcceleration));
   final ProfiledPIDController rotatePID= 
-  new ProfiledPIDController(3,1,0,
+  new ProfiledPIDController(3,0,0,
     new TrapezoidProfile.Constraints(kMaxWristRotateAngularSpeed,kMaxWristRotaterAcceleration));
   final ProfiledPIDController twistPID= 
   new ProfiledPIDController(0.8,0,0,
@@ -62,9 +63,9 @@ public class Arm extends Thread {
   static double rotateAngle = 0;
 
   static double maxX=1.4;
-  static double minX=0.1;
+  static double minX=0.0;
 
-  static double maxY=1.2;
+  static double maxY=1.4;
   static double minY=-0.2;
 
   public static double maxXerr=Units.inchesToMeters(5); // meters
@@ -104,6 +105,9 @@ public class Arm extends Thread {
     while (!Thread.interrupted()) {
       try {
         Thread.sleep(20);
+        if(Robot.isRobotDisabled())
+          setInitPose();
+
         setAngles();
         setRotation();
         setTwist();
@@ -171,7 +175,7 @@ public class Arm extends Thread {
     setPose(tmp);    
   }
  
-  void setPose(double[]p){
+  public void setPose(double[]p){
     gridtarget=p;
     setX(p[0]);
     setY(p[1]);
@@ -194,12 +198,12 @@ public class Arm extends Thread {
   
   void log(){
     double d[]=getPosition();
-    String s=String.format("X:%-3.2f(%-3.2f) Y:%-3.1f(%-3.2f) A:%-3.1f(%-3.1f) B:%-3.1f(%-3.1f) W:%-3.1f(%-3.1f)",
+    String s=String.format("X:%-3.3f(%-3.3f) Y:%-3.3f(%-3.3f) A:%-4.1f(%-4.1f) B:%-4.1f(%-4.1f) W:%-4.1f(%-4.1f)",
       d[0],X,
       d[1],Y,
       Math.toDegrees(oneAngle),Math.toDegrees(target[0]),
       Math.toDegrees(twoAngle),Math.toDegrees(target[1]),
-      getRotation(),Math.toDegrees(rotateAngle));
+      Math.toDegrees(getRotation()),Math.toDegrees(rotateAngle));
     SmartDashboard.putString("Arm",s);
    
   }

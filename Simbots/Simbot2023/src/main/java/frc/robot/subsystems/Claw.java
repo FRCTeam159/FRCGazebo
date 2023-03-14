@@ -5,7 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import frc.robot.Robot;
 import gazebo.SimPiston;
 
 public class Claw extends SubsystemBase {
@@ -19,6 +19,8 @@ public class Claw extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if(Robot.isRobotDisabled())
+      closeClaw();
   }
   public void openClaw() {
     m_clawopen=true;
@@ -27,6 +29,7 @@ public class Claw extends SubsystemBase {
   }
   public void closeClaw() {
     m_clawopen=false;
+    if(!Robot.isRobotDisabled())
     System.out.println("Claw closeclaw");
     m_piston.reverse();
   }

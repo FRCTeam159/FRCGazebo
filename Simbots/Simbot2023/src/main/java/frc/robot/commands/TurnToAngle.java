@@ -24,9 +24,9 @@ public class TurnToAngle extends CommandBase {
   
 
   final ProfiledPIDController m_turningPIDController= 
-  new ProfiledPIDController(0.5,0.5,0,
+  new ProfiledPIDController(0.25,0.0,0,
     new TrapezoidProfile.Constraints(
-        Math.toDegrees(kMaxAngularSpeed),Math.toDegrees(kMaxAngularAcceleration)));
+        Math.toDegrees(0.25*kMaxAngularSpeed),Math.toDegrees(0.25*kMaxAngularAcceleration)));
 
   public TurnToAngle(Drivetrain drive, double angle) {
     m_drive=drive;

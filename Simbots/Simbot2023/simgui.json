@@ -263,12 +263,7 @@
     },
     "transitory": {
       "SmartDashboard": {
-        "SendableChooser[1]": {
-          "open": true
-        },
-        "SendableChooser[2]": {
-          "open": true
-        }
+        "open": true
       },
       "gazebo": {
         "motor": {
@@ -283,7 +278,6 @@
           },
           "open": true
         },
-        "open": true,
         "piston": {
           "0": {
             "open": true
