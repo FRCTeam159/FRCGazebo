@@ -19,14 +19,16 @@ public class Arm extends Thread {
 
   public static double kmaxAngleError=Math.toRadians(1.0);
 
-  public static final double[] kinit =  {0.12,0.4,Math.toRadians(-27)}; // from kStageOneAngleOffset, kStageTwoAngleOffset
-  public static final double[] khold =  {0.1,0.4,Math.toRadians(34)}; // from kStageOneAngleOffset, kStageTwoAngleOffset
+  public static final double[] kinit =  {0.12,0.4,Math.toRadians(-10)}; // from kStageOneAngleOffset, kStageTwoAngleOffset
+  //public static final double[] khold =  {0.1,0.4,Math.toRadians(56)}; // from kStageOneAngleOffset, kStageTwoAngleOffset
+  public static final double[] khold =  {0.17,0.4,Math.toRadians(95)}; // from kStageOneAngleOffset, kStageTwoAngleOffset
+
 
   // place positions
 
   public static final double[] kcube1 = {0.66,0.5,Math.toRadians(50)};   // center of platform
-  public static final double[] kcube2 = {1.13,0.8,Math.toRadians(-3)};
-  public static final double[] kcone1 = {0.71,0.83,Math.toRadians(80)};  // to top of post
+  public static final double[] kcube2 = {1.13,0.84,Math.toRadians(11)};
+  public static final double[] kcone1 = {0.71,0.83,Math.toRadians(20)};  // to top of post
   public static final double[] kcone2 = {1.11,1.05,Math.toRadians(0)};
   public static final double[] kplace = {0.26,0.2, Math.toRadians(60)};    // ground level
 
@@ -45,13 +47,13 @@ public class Arm extends Thread {
   private SimEncMotor rotateMotor;
 
   final ProfiledPIDController onePID= 
-  new ProfiledPIDController(4,0,0,
+  new ProfiledPIDController(8,1,0,
    new TrapezoidProfile.Constraints(kMaxLowerArmAngularSpeed,kMaxLowerArmAngularAcceleration));
   final ProfiledPIDController twoPID= 
-  new ProfiledPIDController(5,0,0,
+  new ProfiledPIDController(8,1,0,
     new TrapezoidProfile.Constraints(kMaxUpperArmAngularSpeed,kMaxUpperArmAngularAcceleration));
   final ProfiledPIDController rotatePID= 
-  new ProfiledPIDController(3,0,0,
+  new ProfiledPIDController(8,1,0,
     new TrapezoidProfile.Constraints(kMaxWristRotateAngularSpeed,kMaxWristRotaterAcceleration));
   final ProfiledPIDController twistPID= 
   new ProfiledPIDController(0.8,0,0,
@@ -198,12 +200,15 @@ public class Arm extends Thread {
   
   void log(){
     double d[]=getPosition();
-    String s=String.format("X:%-3.3f(%-3.3f) Y:%-3.3f(%-3.3f) A:%-4.1f(%-4.1f) B:%-4.1f(%-4.1f) W:%-4.1f(%-4.1f)",
+    double level=2*Math.PI-target[0]-target[1];
+
+    String s=String.format("X:%-3.3f(%-3.3f) Y:%-3.3f(%-3.3f) A:%-4.1f(%-4.1f) B:%-4.1f(%-4.1f) W:%-4.1f(%-4.1f) lvl %-4.1f",
       d[0],X,
       d[1],Y,
       Math.toDegrees(oneAngle),Math.toDegrees(target[0]),
       Math.toDegrees(twoAngle),Math.toDegrees(target[1]),
-      Math.toDegrees(getRotation()),Math.toDegrees(rotateAngle));
+      Math.toDegrees(getRotation()),Math.toDegrees(rotateAngle),
+      Math.toDegrees(level));
     SmartDashboard.putString("Arm",s);
    
   }
@@ -304,5 +309,50 @@ public double[] getPosition() {
   }
   public void setHoldPose() {
     setPose(khold);
+  }
+
+  public class ArmPosition {
+   
+    public double angles[]=new double[3];
+    public double position[]=new double [2];
+    ArmPosition(double[] p) {
+      position=p;
+      calculateAngles();
+    }
+    ArmPosition(double x, double y, double w) {
+      position[0]=x;
+      position[1]=y;
+      calculateAngles();
+      angles[2]=w;
+    }
+    ArmPosition(double x, double y) {
+      position[0]=x;
+      position[1]=y;
+     calculateAngles();
+     angles[2]=Math.PI-angles[0]-angles[1];
+   }
+   
+    void calculateAngles() {  
+      double x=position[0];
+      double y=position[1];
+      double a1 = kStageOneLength;
+      double a2 = kStageTwoLength;
+      double f1 = (x * x + y * y - a1 * a1 - a2 * a2) / (2 * a1 * a2);
+  
+      f1=f1>0.99?0.99:f1; // prevent NaN if f1>=1
+      double beta=-Math.acos(f1);
+  
+      if(x<0) // only need if arm can pass through
+        beta=-beta;
+     
+      double t1=Math.atan2(y,x);
+      double t2=Math.atan2(a2 * Math.sin(beta),(a1 + a2 * Math.cos(beta)));
+      double alpha = t1-t2;
+      beta+=beta<0?2*Math.PI:0;
+      angles[0]=alpha;
+      angles[1]=beta;
+      if(position.length==2)
+        angles[2]=Math.PI-angles[0]-angles[1];
+    }
   }
 }

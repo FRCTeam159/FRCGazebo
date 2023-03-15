@@ -38,6 +38,7 @@ public class PlaceCube extends CommandBase {
   public void initialize() {
     m_claw.closeClaw();
     System.out.println("PlaceCube.initialize");
+    state=placeState.start;
     switch(m_lvl){
       case 0:
         m_arm.setBottomPose();

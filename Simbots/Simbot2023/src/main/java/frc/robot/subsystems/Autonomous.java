@@ -79,8 +79,8 @@ public class Autonomous extends SequentialCommandGroup  {
    case AUTOTEST:
       return new SequentialCommandGroup(
         new PlaceCube(selected_level,m_arm,m_claw)
-        ,new DriveBack(m_drive)
-        //,new DrivePath(m_drive,PATHPLANNER)
+        //,new DriveBack(m_drive)
+        ,new DrivePath(m_drive,PATHPLANNER)
         );
     }
     return null;

@@ -39,13 +39,14 @@ public final class Constants {
     // Arm parameters
     public static final double kStageOneLength = Units.inchesToMeters(43.18); // 1.0968
     public static final double kStageTwoLength = Units.inchesToMeters(30.59); // 0.7742+
-    public static final double kStageOneAngleOffset = Math.toRadians(101); // starting angle
-    public static final double kStageTwoAngleOffset = Math.toRadians(195);
-    public static final double kRotateAngleOffset = Math.toRadians(-29); // starting angle
-    public static final double kMaxLowerArmAngularSpeed=Math.toRadians(40);
+    public static final double kStageOneAngleOffset = Math.toRadians(105.4); // starting angle
+    public static final double kStageTwoAngleOffset = Math.toRadians(201);
+    public static final double kRotateAngleOffset = Math.toRadians(-21); // starting angle
+    
+    public static final double kMaxLowerArmAngularSpeed=Math.toRadians(45);
     public static final double kMaxLowerArmAngularAcceleration=Math.toRadians(20);
-    public static final double kMaxUpperArmAngularSpeed=Math.toRadians(180);
-    public static final double kMaxUpperArmAngularAcceleration=Math.toRadians(90);
+    public static final double kMaxUpperArmAngularSpeed=Math.toRadians(360);
+    public static final double kMaxUpperArmAngularAcceleration=Math.toRadians(180);
     public static final double kMaxWristRotateAngularSpeed=Math.toRadians(360);
     public static final double kMaxWristRotaterAcceleration=Math.toRadians(180);
     
