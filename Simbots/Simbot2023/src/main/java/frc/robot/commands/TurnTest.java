@@ -71,7 +71,7 @@ public class TurnTest extends CommandBase {
   @Override
   public boolean isFinished() {
     // End when the controller is at the reference.
-    return (last_time>0.05 && m_controller.atSetpoint()) || m_drive.disabled();
+    return (last_time>0.05 && m_controller.atSetpoint());
   }
   // =================================================
   // end: Called once the command ends or is interrupted.

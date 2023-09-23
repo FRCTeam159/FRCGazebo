@@ -17,6 +17,7 @@
       <inertial>
         <mass>0.25</mass>
         <pose>0 0 0 0 0 0</pose>
+        <!--
         <inertia>
           <ixx>0.01</ixx>
           <ixy>0</ixy>
@@ -26,6 +27,7 @@
           <izz>0.01</izz>
         </inertia>
       </inertial>
+      -->
       <collision name="Body_collision">
         <pose>-0.1651 -0.1397 0.1651 0 0 0</pose>
         <geometry>

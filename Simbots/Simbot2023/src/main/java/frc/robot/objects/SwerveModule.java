@@ -11,24 +11,22 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
-import frc.robot.subsystems.Drivetrain;
 import gazebo.SimEncMotor;
+import static frc.robot.Constants.*;
 
 public class SwerveModule {
-  private static final double kWheelRadius = Units.inchesToMeters(2.0); // 2 inches
 
   private double gazebo_scale=1;  // not sure why but grid marks in gazebo are somewhat larger than a meter ?
   private double distancePerRotation=gazebo_scale*2*kWheelRadius*Math.PI;
 
-  private static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed; //degrees per second;
-  private static final double kModuleMaxAngularAcceleration = Drivetrain.kMaxAngularAcceleration;// degrees per second per second
+  private static final double kModuleMaxAngularVelocity = kMaxAngularSpeed; //degrees per second;
+  private static final double kModuleMaxAngularAcceleration = kMaxAngularAcceleration;// degrees per second per second
 
   private SimEncMotor m_driveMotor;
 	private SimEncMotor m_turnMotor;
 
   // Gains are for example purposes only - must be determined for your own robot!
-  private final PIDController m_drivePIDController = new PIDController(5, 0.0, 0);
+  private final PIDController m_drivePIDController = new PIDController(5, 0.5, 0);
   //private final PIDController m_turningPIDController = new PIDController(5, 0.0, 0);
   // Gains are for example purposes only - must be determined for your own robot!
    
@@ -73,7 +71,6 @@ public class SwerveModule {
   }
   public void disable(){
     m_turningPIDController.reset(0.0);
-
     m_enabled=false;
     m_driveMotor.disable();
     m_turnMotor.disable();
@@ -134,12 +131,10 @@ public class SwerveModule {
      System.out.format("%d turn:%-4.2f state:%-4.2f out:%-4.2f\n",
           m_drive_chnl/2,angle,state.angle.getRadians(),turnOutput);
      }
-    //if(m_enabled){
-      //m_turnMotor.set(turnOutput); 
-      //m_driveMotor.set(driveOutput);
-      m_turnMotor.set(turnOutput + turnFeedforward); 
-      m_driveMotor.set(driveOutput + driveFeedforward);
-   // }
+    
+    m_turnMotor.set(turnOutput + turnFeedforward); 
+    m_driveMotor.set(driveOutput + driveFeedforward);
+   
    cnt++;
 
   }

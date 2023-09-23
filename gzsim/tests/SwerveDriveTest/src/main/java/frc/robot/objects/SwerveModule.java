@@ -12,6 +12,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Drivetrain;
 import gazebo.SimEncMotor;
 
@@ -26,6 +27,10 @@ public class SwerveModule {
 
   private SimEncMotor m_driveMotor;
 	private SimEncMotor m_turnMotor;
+
+  public static String chnlnames[] = { "BR", "BL", "FL", "FR" };
+
+  String name;
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final PIDController m_drivePIDController = new PIDController(10, 0.0, 0);
@@ -44,13 +49,14 @@ public class SwerveModule {
   public int m_turn_chnl;
   
   boolean m_enabled=false;
-  int cnt=0;
+
   static boolean debug=false;
   /**
    * Constructs a SwerveModule with a drive motor, turning motor, drive encoder and turning encoder.
+   * @param i
    *
    */
-  public SwerveModule(int driveMotorChannel,int turningMotorChannel) {
+  public SwerveModule(int driveMotorChannel,int turningMotorChannel, int i) {
     m_drive_chnl=driveMotorChannel;
     m_turn_chnl=turningMotorChannel;
 
@@ -58,11 +64,15 @@ public class SwerveModule {
     m_turnMotor=new SimEncMotor(turningMotorChannel);
 
     m_driveMotor.setDistancePerRotation(distancePerRotation);
-		m_turnMotor.setDistancePerRotation(360.0); // getDistance will return degrees*rotations
+		m_turnMotor.setDistancePerRotation(2*Math.PI); // getDistance will return degrees*rotations
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
      m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+
+    name = chnlnames[i - 1];
+    if(debug)
+      SmartDashboard.putString(name, "Working");
   }
 
   public void enable(){
@@ -84,7 +94,14 @@ public class SwerveModule {
     m_enabled=false;
     m_driveMotor.reset();
     m_turnMotor.reset();
+  }
+
+  public double heading(){
+    return m_turnMotor.getDistance();
+  }
   
+  public Rotation2d getRotation2d() {
+    return Rotation2d.fromRadians(heading());
   }
   /**
    * Returns the current state of the module.
@@ -92,13 +109,20 @@ public class SwerveModule {
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
-    return new SwerveModuleState(m_driveMotor.getRate(), new Rotation2d(Math.toRadians(m_turnMotor.getDistance())));
+    return new SwerveModuleState(m_driveMotor.getRate(),  getRotation2d());
   }
 
   public SwerveModulePosition getPosition() {
-    return new SwerveModulePosition(m_driveMotor.getDistance(), new Rotation2d(Math.toRadians(m_turnMotor.getDistance())));
+    return new SwerveModulePosition(m_driveMotor.getDistance(),  getRotation2d());
   }
 
+  public double getDistance(){
+    return m_driveMotor.getDistance();
+  }
+
+  public double getVelocity() {
+      return m_driveMotor.getRate();
+  }
   /**
    * Sets the desired state for the module.
    *
@@ -106,40 +130,33 @@ public class SwerveModule {
    */
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
-    double angle=m_turnMotor.getDistance(); // rotations in degrees
-    angle=angle%360.0;
-    angle=Math.toRadians(angle);
+    //SwerveModuleState state = desiredState;  // don't optimize
+    SwerveModuleState state =SwerveModuleState.optimize(desiredState, getRotation2d());
 
-     SwerveModuleState state =desiredState;
-     if(m_enabled)
-      state=SwerveModuleState.optimize(desiredState, new Rotation2d(angle));
-
+    double velocity=getVelocity();
+    
     // Calculate the drive output from the drive PID controller.
     final double driveOutput = m_drivePIDController.calculate(m_driveMotor.getRate(), state.speedMetersPerSecond);
     final double driveFeedforward = m_driveFeedforward.calculate(state.speedMetersPerSecond);
+    
+    double turn_angle=getRotation2d().getRadians(); // rotations in radians
 
-    // Calculate the turning motor output from the turning PID controller.
-    //System.out.println(m_drive_chnl/2+" "+angle+" "+state.angle.getDegrees()+" "+(-state.speedMetersPerSecond>0?"+":"-")+" "+turnOutput);
-
-    final double turnOutput = m_turningPIDController.calculate(angle,state.angle.getRadians());
+    final double turnOutput = m_turningPIDController.calculate(turn_angle,state.angle.getRadians());
     final double turnFeedforward = 0;//m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
     //final double turnFeedforward = m_turnFeedforward.calculate(state.angle.getRadians());
 
-    //System.out.format("%d drive:%-4f out:%-4.1f ff:%-4.1f turn angle:%-4.1f rate:%-4.1f out:%-4.2f ff:%-3.2f\n",
-    //     m_drive_chnl/2,m_driveMotor.getRate(),driveOutput,driveFeedforward,angle,turn_rate,turnOutput,turnFeedforward);
-     if((debug && (cnt%100)==0)){
-     System.out.format("%d drive:%-4.2f state:%-4.2f out:%-4.2f\n",
-          m_drive_chnl/2,m_driveMotor.getRate(),state.speedMetersPerSecond,driveOutput);
-     System.out.format("%d turn:%-4.2f state:%-4.2f out:%-4.2f\n",
-          m_drive_chnl/2,angle,state.angle.getRadians(),turnOutput);
-     }
-    //if(m_enabled){
-      //m_turnMotor.set(turnOutput); 
-      //m_driveMotor.set(driveOutput);
-      m_turnMotor.set(turnOutput + turnFeedforward); 
-      m_driveMotor.set(driveOutput + driveFeedforward);
-   // }
-   cnt++;
+    double set_drive=driveOutput+driveFeedforward;
+    double set_turn=turnOutput+turnFeedforward;
+
+    if(debug){
+      String s = String.format("Vel %-2.2f(%-2.2f) -> %-2.2f Angle %-3.3f(%-2.3f) -> %-2.3f\n", 
+      velocity,state.speedMetersPerSecond,set_drive,Math.toDegrees(turn_angle), state.angle.getDegrees(), set_turn); 
+      SmartDashboard.putString(name, s);
+    }
+    
+      m_driveMotor.set(set_drive);
+      m_turnMotor.set(set_turn);
+   
 
   }
 
@@ -168,9 +185,7 @@ public class SwerveModule {
     m_turnMotor.set(turnOutput); 
   }
   
-  public double getDistance(){
-    return  m_driveMotor.getDistance();
-  }
+  
   public double getAngle(){
     return  m_turnMotor.getDistance();
   }

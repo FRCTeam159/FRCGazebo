@@ -207,7 +207,12 @@
       "/SmartDashboard/Simulation": "Subsystem"
     },
     "windows": {
-      "/SmartDashboard/Field": {
+      "/SmartDashboard/SendableChooser[1]": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/SendableChooser[2]": {
         "window": {
           "visible": true
         }
@@ -259,6 +264,37 @@
         "open": true
       },
       "open": true
+    },
+    "retained": {
+      "gazebo": {
+        "clock": {
+          "open": true
+        },
+        "open": true
+      }
+    },
+    "transitory": {
+      "gazebo": {
+        "clock": {
+          "open": true
+        },
+        "motor": {
+          "1": {
+            "open": true
+          },
+          "3": {
+            "open": true
+          },
+          "5": {
+            "open": true
+          },
+          "7": {
+            "open": true
+          },
+          "open": true
+        },
+        "open": true
+      }
     }
   },
   "NetworkTables View": {

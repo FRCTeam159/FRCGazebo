@@ -13,18 +13,8 @@
       </velocity_decay>
       <inertial>
         <mass>150</mass>
-        <pose>0 -0.05 0 0 0 0</pose>
+        <pose>0 0 0 0 0 0</pose>
         
-        <!--
-        <inertia>
-          <ixx>10</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>80</iyy>
-          <iyz>0</iyz>
-          <izz>10</izz>
-        </inertia>
-        -->
       </inertial>
       <collision name="Body_collision">
       <pose>0.892994123738397 0.372009620808783 0.40364125979582 0 0 0</pose>
@@ -46,7 +36,6 @@
           </friction>
         </surface>
       </collision>
-      <!---->
       <visual name="Body_visual">
       <pose>0.892994123738397 0.372009620808783 0.40364125979582 0 0 0</pose>
         <material>
@@ -99,13 +88,12 @@
       <inertial>
         <mass>1</mass>
         <pose>0 0 0 0 0 0</pose>
-       </inertial>
-       <!---->
+      </inertial>
       <visual name="FRdrive_visual">
         <pose>0.599628463681001 0.373181798466416 0.108109304250646 0 0 0</pose>
         <material>
-          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
-          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+          <ambient>1 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>1 0.501960784313725 0.501960784313725 1</diffuse>
         </material>
         <geometry>
           <mesh>
@@ -138,7 +126,7 @@
         <angular>0.002</angular>
       </velocity_decay>
       <inertial>
-        <mass>1</mass>
+        <mass>0.123981363237599</mass>
         <pose>0 0 0 0 0 0</pose>
        </inertial>
       <collision name="FRwheel_collision">
@@ -160,7 +148,6 @@
               <min_depth>0.0001</min_depth>
             </ode>          
           </contact>
-          <!---->
           <friction>
             <ode>
               <mu>1</mu>
@@ -208,7 +195,6 @@
         <mass>1</mass>
         <pose>0 0 0 0 0 0</pose>
        </inertial>
-       <!---->
       <visual name="FLdrive_visual">
         <pose>0.599636371210317 0.373181797190707 0.6977702941153 0 0 0</pose>
         <material>
@@ -221,8 +207,7 @@
             <uri>model://SimSwerveBot/meshes/FLdrive.STL</uri>
           </mesh>
         </geometry>
-      </visual>
-      
+      </visual>   
     </link>
     <joint name="Body-FLdrive" type="revolute">
       <parent>Body</parent>
@@ -233,13 +218,7 @@
         <dynamics>
           <damping>1</damping>
           <friction>1</friction>
-        </dynamics>
-        <!--
-        <limit>
-          <upper>1.57</upper>
-          <lower>-1.57</lower>
-        </limit>
-        -->
+        </dynamics>    
       </axis>
     </joint>
     <link name="FLwheel">
@@ -274,7 +253,6 @@
               <min_depth>0.001</min_depth>
             </ode>          
           </contact>
-          <!---->
           <friction>
             <ode>
               <mu>1</mu>
@@ -321,8 +299,7 @@
       <inertial>
         <mass>1</mass>
         <pose>0 0 0 0 0 0</pose>
-      </inertial>
-      <!---->
+      </inertial>    
       <visual name="BRdrive_visual">
         <pose>1.1894810229398 0.373181797387641 0.10932778119649 0 0 0</pose>
         <material>
@@ -335,8 +312,7 @@
             <uri>model://SimSwerveBot/meshes/BRdrive.STL</uri>
           </mesh>
         </geometry>
-      </visual>
-      
+      </visual>     
     </link>
     <joint name="Body-BRdrive" type="revolute">
       <parent>Body</parent>
@@ -347,13 +323,7 @@
         <dynamics>
           <damping>1</damping>
           <friction>1</friction>
-        </dynamics>
-        <!--
-        <limit>
-          <upper>1.57</upper>
-          <lower>-1.57</lower>
-        </limit>
-        -->
+        </dynamics>      
       </axis>
     </joint>
     <link name="BRwheel">
@@ -366,7 +336,7 @@
         <angular>0.002</angular>
       </velocity_decay>
       <inertial>
-        <mass>1</mass>
+        <mass>0.123981363237599</mass>
         <pose>0 0 0 0 0 0</pose>
       </inertial>
       <collision name="BRwheel_collision">
@@ -388,7 +358,6 @@
               <min_depth>0.0001</min_depth>
             </ode>          
           </contact>
-          <!-- -->
           <friction>
             <ode>
               <mu>1</mu>
@@ -435,8 +404,7 @@
       <inertial>
         <mass>1</mass>
         <pose>0 0 0 0 0 0</pose>
-       </inertial>
-       <!---->
+      </inertial>    
       <visual name="BLdrive_visual">
         <pose>1.18948190536721 0.37318179738922 0.699369775183744 0 0 0</pose>
         <material>
@@ -449,8 +417,7 @@
             <uri>model://SimSwerveBot/meshes/BLdrive.STL</uri>
           </mesh>
         </geometry>
-      </visual>
-      
+      </visual>   
     </link>
     <joint name="Body-BLdrive" type="revolute">
       <parent>Body</parent>
@@ -461,13 +428,7 @@
         <dynamics>
           <damping>1</damping>
           <friction>1</friction>
-        </dynamics>
-        <!--
-        <limit>
-          <upper>1.57</upper>
-          <lower>-1.57</lower>
-        </limit>
-        -->
+        </dynamics>      
       </axis>
     </joint>
     <link name="BLwheel">
@@ -502,14 +463,12 @@
               <min_depth>0.0001</min_depth>
             </ode>          
           </contact>
-          <!---->
           <friction>
             <ode>
               <mu>1</mu>
               <mu2>1</mu2>
             </ode>
-          </friction>
-          
+          </friction>         
         </surface>
       </collision>
       <visual name="BLwheel_visual">
@@ -629,7 +588,7 @@
       <topic>~/gazebo/frc/simulator/clock</topic>
     </plugin>
     <plugin name="Body_gyro" filename="sim_gyro.dll">
-      <link>gyro</link>
+      <link>Body</link>
       <topic>~/gazebo/frc/simulator/gyro/0</topic>
       <units>degrees</units>
       <axis>yaw</axis>

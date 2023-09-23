@@ -7,10 +7,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.CoordinateSystem;
-import edu.wpi.first.apriltag.jni.DetectionResult;
+import edu.wpi.first.apriltag.AprilTagDetection;
+
 import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Nat;
-import apriltag.jni.TagResult;
 
 public class AprilTag {
     int id;
@@ -19,12 +19,10 @@ public class AprilTag {
     double centerX, centerY;
     double[][] corners;
     double[][] homog;
-    double[][] rotation;
-    double pose_err;
 
     Transform3d poseResult;
 
-    public AprilTag(DetectionResult det){
+    public AprilTag(AprilTagDetection det,Transform3d pose){
         double[] c=det.getCorners();
         int k=0;
         corners=new double[4][2];
@@ -42,34 +40,9 @@ public class AprilTag {
         for(int j=0;j<3;j++)
           homog[i][j]=c[k++];
 
-        Transform3d pose1=det.getPoseResult1();
-        Transform3d pose2=det.getPoseResult2();
-        double perr1=det.getError1();
-        double perr2=det.getError2();
-
-        poseResult=perr1<perr2?pose1:pose2;
-
-        pose_err=det.getPoseAmbiguity();
-
-    }
-    public AprilTag(TagResult t){
-        corners=t.getCorners();
-        id=t.getId();
-        tag_id=t.getTagId();
-        margin=t.getDecisionMargin();
-        centerX=t.getCenterX();
-        centerY=t.getCenterY();
-        homog=t.getHomog();
-        //rotation=t.getRotation();
-        pose_err=t.getPoseError();
-        poseResult=t.getPoseTransform();
+        poseResult=pose;
     }
     
-    /**
-     * Photonvision: All our solvepnp code returns a tag with X left, Y up, and Z out of the tag To better match
-     * wpilib, we want to apply another rotation so that we get Z up, X out of the tag, and Y to the
-     * right. We apply the following change of basis: X -> Y Y -> Z Z -> X
-     */
     private static final Rotation3d WPILIB_BASE_ROTATION = new Rotation3d(
         new MatBuilder<>(Nat.N3(), Nat.N3()).fill(0, 1, 0, 0, 0, 1, 1, 0, 0));
 
@@ -146,9 +119,6 @@ public class AprilTag {
     public Pose3d getPose() {
         return convertOpenCVtoWPIlib(poseResult);
     }
-    public double getPoseError() {
-        return pose_err;
-    }
 
     public double getDistance() {
 		// camera to target distance along the ground
@@ -181,17 +151,13 @@ public class AprilTag {
         Pose3d pose=getPose();
         
         if(pose !=null)
-          str = String.format("id:%d err:%-2.3f X:%-2.1f Y:%-2.1f Z:%-2.1f H:%-2.1f P:%-2.1f",
-                tag_id, pose_err, getX(), getY(), getZ(), getYaw(), getPitch());
+          str = String.format("id:%d X:%-2.1f Y:%-2.1f Z:%-2.1f H:%-2.1f P:%-2.1f",
+                tag_id, getX(), getY(), getZ(), getYaw(), getPitch());
         return str;
     }
 
     public void print() {
         String str = toString();
         System.out.println(str);
-        //System.out.println(getPoseTransform());
-        //if(poseResult !=null){
-        //Pose3d pose=getPose();
-        //System.out.println(getPose()); 
     }
 }

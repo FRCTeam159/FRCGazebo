@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
+import static frc.robot.Constants.*;
 
 public class TurnToAngle extends CommandBase {
   boolean debug=false;
@@ -20,11 +21,12 @@ public class TurnToAngle extends CommandBase {
   double correction=0;
   //double direction=1;
   double start_time=0;
+  
 
   final ProfiledPIDController m_turningPIDController= 
-  new ProfiledPIDController(0.25,0.05,0,
+  new ProfiledPIDController(0.25,0.0,0,
     new TrapezoidProfile.Constraints(
-        Math.toDegrees(Drivetrain.kMaxAngularSpeed),Math.toDegrees(Drivetrain.kMaxAngularAcceleration)));
+        Math.toDegrees(0.25*kMaxAngularSpeed),Math.toDegrees(0.25*kMaxAngularAcceleration)));
 
   public TurnToAngle(Drivetrain drive, double angle) {
     m_drive=drive;
@@ -36,6 +38,8 @@ public class TurnToAngle extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    System.out.println("TurnToAngle.initialize");
+
     turning=true;
     start_phase=m_drive.getHeading();
     heading=last_heading=0;
@@ -58,6 +62,7 @@ public class TurnToAngle extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println("TurnToAngle.end");
 
   }
 
@@ -86,7 +91,12 @@ public class TurnToAngle extends CommandBase {
     double ptol=m_turningPIDController.getPositionTolerance();
     double vtol=m_turningPIDController.getVelocityTolerance();
     double delt=m_drive.getClockTime()-start_time;
-    if(delt>3.5 || (Math.abs(perr)<ptol && Math.abs(verr)<vtol)){
+    if(delt>12){
+      System.out.println("Turn aborted - timeout expired");
+      turning=false;
+      return true;
+    }
+    if(Math.abs(perr)<ptol && Math.abs(verr)<vtol){
       if(debug)
         System.out.format("atTurnSetpoint time:%-2.1f heading:%-3.1f perr:%-3.1f verr:%-2.1f\n",delt,heading+start_phase,perr,verr);
       turning=false;

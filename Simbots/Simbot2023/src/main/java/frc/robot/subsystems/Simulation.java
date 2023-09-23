@@ -37,8 +37,8 @@ public class Simulation extends SubsystemBase {
 
   public Simulation(Drivetrain drivetrain) {
     m_drive = drivetrain;
-    SmartDashboard.putBoolean("Reset", false);
-    SmartDashboard.putBoolean("Gazebo", false);
+    SmartDashboard.putBoolean("Reset", true);
+    SmartDashboard.putBoolean("Gazebo", true);
     SmartDashboard.putNumber("SimTime", 0);
     SmartDashboard.putNumber("SimClock", 0);
     SmartDashboard.putData("Field", m_fieldSim);
@@ -181,12 +181,12 @@ public class Simulation extends SubsystemBase {
         resetting = true;
         if (m)
           clear();       
-       // m_drive.reset(); 
-        //m_drive.disable();   
+    
         m_timer.reset();
       } else if (m_timer.get() > 0.25) {
         if (!disabling) {
           m_drive.reset();
+          TagDetector.reset();
           disabling = true;
         } else if (m_timer.get() > 0.5) {
           SmartDashboard.putBoolean("Reset", false);

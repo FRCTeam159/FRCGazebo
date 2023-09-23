@@ -9,15 +9,20 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.Calibrate;
+import frc.robot.commands.DriveBack;
 import frc.robot.commands.DrivePath;
+import frc.robot.commands.PlaceCube;
 import frc.robot.commands.TurnTest;
 import utils.PlotUtils;
 
 public class Autonomous extends SequentialCommandGroup  {
-  SendableChooser<Command> m_chooser = new SendableChooser<>();
-  SendableChooser<Integer> m_auto_plot_option = new SendableChooser<>();
+  SendableChooser<Integer> m_auto_plot_option;
+  SendableChooser<Integer> m_path_chooser;
+  SendableChooser<Integer> m_auto_level_option;
 
   Drivetrain m_drive;
+  Arm m_arm;
+  Claw m_claw;
 
   public static final int CALIBRATE = 0;
   public static final int PROGRAM = 1;
@@ -26,13 +31,20 @@ public class Autonomous extends SequentialCommandGroup  {
   public static final int PATHPLANNER = 4;
 
   public int selected_path=PROGRAM;
+  public int selected_level=2;
 
   public static boolean debug_commands=false;
 
-  SendableChooser<Integer> m_path_chooser = new SendableChooser<Integer>();
-  /** Creates a new AutoCommands. */
-  public Autonomous(Drivetrain drive) {
+  /** Creates a new AutoCommands. 
+   * @param m_claw*/
+  public Autonomous(Drivetrain drive,Arm arm, Claw claw) {
     m_drive=drive;
+    m_arm=arm;
+    m_claw=claw;
+
+    m_auto_plot_option = new SendableChooser<Integer>();
+    m_path_chooser = new SendableChooser<Integer>();
+    m_auto_level_option = new SendableChooser<Integer>();
    
     m_auto_plot_option.setDefaultOption("No Plot", PlotUtils.PLOT_NONE);
     m_auto_plot_option.addOption("Plot Dynamics", PlotUtils.PLOT_DYNAMICS);
@@ -44,16 +56,22 @@ public class Autonomous extends SequentialCommandGroup  {
     m_path_chooser.addOption("PathPlanner", PATHPLANNER);
     m_path_chooser.addOption("Calibrate", CALIBRATE);
 
+    m_auto_level_option.addOption("Level 0", 0);
+	  m_auto_level_option.addOption("Level 1", 1);
+    m_auto_level_option.setDefaultOption("Level 2", 2);
+
     SmartDashboard.putNumber("xPath", -2);
     SmartDashboard.putNumber("yPath", 0);
     SmartDashboard.putNumber("rPath", 0);
    
 		SmartDashboard.putData(m_path_chooser);
     SmartDashboard.putData(m_auto_plot_option);
+    SmartDashboard.putData(m_auto_level_option);
   }
   public SequentialCommandGroup  getCommand(){
     PlotUtils.auto_plot_option=m_auto_plot_option.getSelected();
     selected_path=m_path_chooser.getSelected();
+    selected_level=m_auto_level_option.getSelected();
     
     switch (selected_path){
     case CALIBRATE:
@@ -64,8 +82,9 @@ public class Autonomous extends SequentialCommandGroup  {
       return new SequentialCommandGroup(new DrivePath(m_drive,PATHPLANNER));
    case AUTOTEST:
       return new SequentialCommandGroup(
-        new TurnTest(m_drive,180.0)
-       //, new DrivePath(m_drive,PROGRAM)
+        new PlaceCube(selected_level,m_arm,m_claw)
+        //,new DriveBack(m_drive)
+        ,new DrivePath(m_drive,PATHPLANNER)
         );
     }
     return null;
