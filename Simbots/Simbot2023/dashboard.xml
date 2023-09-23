@@ -2,6 +2,8 @@
 <dashboard>
 	<widget field="SendableChooser[0]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
 		<location x="342" y="-8"/>
+		<width>105</width>
+		<height>105</height>
 	</widget>
 	<widget field="Vision" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="184" y="71"/>
@@ -31,76 +33,6 @@
 	<widget field="Use Tags" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
 		<location x="665" y="158"/>
 	</widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="17" y="11"/>
-		<width>23</width>
-		<height>23</height>
-	</static-widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="17" y="11"/>
-		<width>23</width>
-		<height>23</height>
-	</static-widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="17" y="11"/>
-		<width>23</width>
-		<height>23</height>
-	</static-widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="17" y="11"/>
-		<width>23</width>
-		<height>23</height>
-	</static-widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="17" y="11"/>
-		<width>23</width>
-		<height>23</height>
-	</static-widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="17" y="11"/>
-		<width>23</width>
-		<height>23</height>
-	</static-widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="17" y="11"/>
-		<width>23</width>
-		<height>23</height>
-	</static-widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="17" y="11"/>
-		<width>23</width>
-		<height>23</height>
-	</static-widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="17" y="11"/>
-		<width>23</width>
-		<height>23</height>
-	</static-widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="17" y="11"/>
-		<width>23</width>
-		<height>23</height>
-	</static-widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="17" y="11"/>
-		<width>23</width>
-		<height>23</height>
-	</static-widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="17" y="11"/>
-		<width>23</width>
-		<height>23</height>
-	</static-widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="17" y="11"/>
-		<width>23</width>
-		<height>23</height>
-	</static-widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="17" y="11"/>
-		<width>23</width>
-		<height>23</height>
-	</static-widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
 		<location x="17" y="11"/>
 		<width>23</width>
@@ -170,35 +102,22 @@
 		<width>23</width>
 		<height>23</height>
 	</static-widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="17" y="11"/>
-		<width>23</width>
-		<height>23</height>
-	</static-widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="17" y="11"/>
-		<width>23</width>
-		<height>23</height>
-	</static-widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="17" y="11"/>
-		<width>23</width>
-		<height>23</height>
-	</static-widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="17" y="11"/>
-		<width>23</width>
-		<height>23</height>
-	</static-widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
 		<location x="13" y="97"/>
 		<width>884</width>
 		<height>716</height>
 		<property name="Camera Choice" value="testCamera"/>
 	</static-widget>
+		<property name="Team Number/Host" value="localhost"/>
+		<property name="Grid Cell Width(s)" value="16"/>
+		<property name="Grid Cell Height(s)" value="16"/>
+		<property name="Window X Position" value="401"/>
+		<property name="Window Y Position" value="95"/>
+		<property name="Window Width" value="947"/>
+		<property name="Window Height" value="874"/>
+		<property name="Save File" value="C:\Users\deans\Robotics\FRCTeamRepos\FRCGazebo\Simbots\Simbot2023\dashboard.xml"/>
 </dashboard>
 <live-window>
 </live-window>
 	<hidden field="Field"/>
-	<hidden field="Latency"/>
 </xml>

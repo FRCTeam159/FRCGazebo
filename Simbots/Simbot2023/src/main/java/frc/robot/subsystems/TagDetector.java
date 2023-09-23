@@ -108,7 +108,7 @@ public class TagDetector extends Thread {
 
   // return an array of tag info structures from an image
   private AprilTag[] getTags(Mat mat) {
-    System.out.println("getTags "+start_tag_needed);
+    //System.out.println("getTags "+start_tag_needed);
     AprilTag[] atags=null;
     Mat graymat = new Mat();
     Imgproc.cvtColor(mat, graymat, Imgproc.COLOR_RGB2GRAY);

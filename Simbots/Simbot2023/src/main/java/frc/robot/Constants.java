@@ -20,8 +20,8 @@ public final class Constants {
 
     // Drivetrain parameters
 
-    public static double kMaxVelocity = 3.6; // 4 meters per second
-    public static double kMaxAcceleration = 3.6; // meters/second/second
+    public static double kMaxVelocity = 3; // 4 meters per second
+    public static double kMaxAcceleration = 1; // meters/second/second
     public static double kMaxAngularSpeed =  Math.toRadians(360); // 3 rotation per second
     public static double kMaxAngularAcceleration = Math.toRadians(360); // 1 rotations/s/s
     public static final double kWheelRadius = Units.inchesToMeters(2.0); // 2 inches

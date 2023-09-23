@@ -16,9 +16,9 @@ import frc.robot.commands.TurnTest;
 import utils.PlotUtils;
 
 public class Autonomous extends SequentialCommandGroup  {
-  SendableChooser<Integer> m_auto_plot_option = new SendableChooser<Integer>();
-  SendableChooser<Integer> m_path_chooser = new SendableChooser<Integer>();
-  SendableChooser<Integer> m_auto_level_option = new SendableChooser<Integer>();
+  SendableChooser<Integer> m_auto_plot_option;
+  SendableChooser<Integer> m_path_chooser;
+  SendableChooser<Integer> m_auto_level_option;
 
   Drivetrain m_drive;
   Arm m_arm;
@@ -41,6 +41,10 @@ public class Autonomous extends SequentialCommandGroup  {
     m_drive=drive;
     m_arm=arm;
     m_claw=claw;
+
+    m_auto_plot_option = new SendableChooser<Integer>();
+    m_path_chooser = new SendableChooser<Integer>();
+    m_auto_level_option = new SendableChooser<Integer>();
    
     m_auto_plot_option.setDefaultOption("No Plot", PlotUtils.PLOT_NONE);
     m_auto_plot_option.addOption("Plot Dynamics", PlotUtils.PLOT_DYNAMICS);
