@@ -9,6 +9,3 @@ rm -f tmp/*;
 gazebo --verbose simswervebot-2023-Field.world &
 
 #gazebo --verbose temp.world &
-
-
-

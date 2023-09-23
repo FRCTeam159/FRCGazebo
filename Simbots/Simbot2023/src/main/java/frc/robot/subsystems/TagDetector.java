@@ -81,7 +81,7 @@ public class TagDetector extends Thread {
     wpi_pose_estimator = new AprilTagPoseEstimator(wpi_poseEstConfig);
 
     ouputStream = CameraServer.putVideo("testCamera", cam.image_width, cam.image_height);
-    test();
+    //test();
   }
 
   // test tag detection jni using an image file
