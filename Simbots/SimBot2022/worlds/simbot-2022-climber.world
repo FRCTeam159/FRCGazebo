@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.7">
+  <world name="default">
+   <gui fullscreen='0'>
+      <camera name='user_camera'>
+
+        <pose>-6.058 3.21758 3.20992 0 1.10764 1.5802</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+    </gui>
+  <frame name="explicit_frame"/>
+  <physics type="ode">
+      <ode>
+      
+        <solver>
+        <iters>200</iters>
+        </solver>
+         
+      <!--    
+        <constraints>
+          <contact_max_correcting_vel>2</contact_max_correcting_vel>
+          <contact_surface_layer>0.01</contact_surface_layer>
+          
+        </constraints>
+     -->
+      
+      </ode>
+      <!--<max_step_size>0.001</max_step_size>-->
+    </physics>
+  <!---->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+    
+    <include>
+      <uri>model://2022-Field</uri>
+      <pose>-10.2 -3.35 0.01 0 -0 0</pose>
+    </include>
+    
+    <include>
+      <uri>model://Hanger</uri>
+      <name>Blue-Hanger</name>
+      <pose>-6.14 3.98 0 1.570 0 -3.12</pose>
+    </include>
+    <include>
+      <uri>model://Hub</uri>
+      <pose>0.74 1.18 0 1.570 0 -0.4</pose>
+    </include>
+<!---->
+    <include>
+      <uri>model://FakeHanger</uri>
+      <name>Red-Hanger</name>
+      <pose>7.39 -1.44 0 1.570 0 0</pose>
+    </include>
+
+     <include>
+      <uri>model://SimBot2022-climber</uri>
+      <pose>-5.67 4.3 0.1216 0 0 0</pose>
+    </include>
+
+    <!-- Cargo 
+    <include>
+      <uri>model://CargoRing</uri>
+      <pose>0.8 1.25 0 1.570 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://BlueCargo</uri>
+      <name>LoadedBall</name>
+
+      <pose  relative_to="SimBot2022">-0.35 -0.0 0.12 0 0 0</pose>
+    </include> 
+
+    <include>
+      <uri>model://BlueCargo</uri>
+      <name>Blue1</name>
+      <pose>0.14 -2.7 0.12 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://RedCargo</uri>
+      <name>Red1</name>
+      <pose>1.68 -2.66 0.12 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://BlueCargo</uri>
+      <name>Blue2</name>
+      <pose>3.026 -2.05 0.12 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://RedCargo</uri>
+      <name>Red2</name>
+      <pose>4.07 -0.98 0.12 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://BlueCargo</uri>
+      <name>Blue3</name>
+      <pose>4.59 1.98 0.12 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://RedCargo</uri>
+      <name>Red3</name>
+      <pose>3.97 3.34 0.12 0 0 0</pose>
+    </include>
+
+     <include>
+      <uri>model://RedCargo</uri>
+      <name>Red4</name>
+      <pose>1.44 4.93 0.12 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://BlueCargo</uri>
+      <name>Blue4</name>
+      <pose>-0.07 4.92 0.12 0 0 0</pose>
+    </include>
+ 
+    <include>
+      <uri>model://RedCargo</uri>
+      <name>Red5</name>
+      <pose>-1.44 4.31 0.12 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://BlueCargo</uri>
+      <name>Blue5</name>
+      <pose>-2.48 3.21 0.12 0 0 0</pose>
+    </include>
+
+     <include>
+      <uri>model://RedCargo</uri>
+      <name>Red6</name>
+      <pose>-3 0.27 0.12 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://BlueCargo</uri>
+      <name>Blue6</name>
+      <pose>-2.37 -1.11 0.12 0 0 0</pose>
+    </include>
+
+   <include>
+      <uri>model://BlueCargo</uri>
+      <name>BlueStation</name>
+      <pose>-6.3 -1.77 0.12 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://RedCargo</uri>
+      <name>RedStation</name>
+      <pose>7.81 3.95 0.12 0 0 0</pose>
+    </include>
+-->
+
+  </world>
+</sdf>

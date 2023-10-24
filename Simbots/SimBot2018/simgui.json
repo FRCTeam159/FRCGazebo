@@ -1,0 +1,19 @@
+{
+  "HALProvider": {
+    "Other Devices": {
+      "window": {
+        "visible": false
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Position": "String Chooser",
+      "/SmartDashboard/Strategy": "String Chooser"
+    }
+  },
+  "NetworkTables View": {
+    "visible": false
+  }
+}

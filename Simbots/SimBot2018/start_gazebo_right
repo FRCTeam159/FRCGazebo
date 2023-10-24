@@ -1,0 +1,6 @@
+
+export SWEXPORTS=$HOME/Robotics/MentorRepository/Solidworks/Exported
+export SWMODEL=$SWEXPORTS/FRC2018
+export GAZEBO_MODEL_PATH=$SWMODEL:$WPILIB/simulation/models:/usr/share/gazebo/models
+
+gazebo --verbose $SWMODEL/right.world

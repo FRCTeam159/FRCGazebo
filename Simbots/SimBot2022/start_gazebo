@@ -1,0 +1,9 @@
+#!/bin/bash
+rm -f tmp/*;
+
+#gazebo --verbose tank8-empty-field.world &
+#gazebo --verbose simbot-2022-field.world &
+#gazebo --verbose simbot-2022-field-3ball.world &
+gazebo --verbose simbot-2022-climber.world &
+#azebo --verbose simbot-empty-field.world &
+

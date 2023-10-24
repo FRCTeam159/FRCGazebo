@@ -1,0 +1,145 @@
+<xml version="1.0">
+<dashboard>
+	<widget field="Elevator Get" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="492" y="309"/>
+	</widget>
+	<widget field="Elevator Set" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="336" y="308"/>
+	</widget>
+	<widget field="Position" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="331" y="26"/>
+	</widget>
+	<widget field="Strategy" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="443" y="18"/>
+	</widget>
+	<widget field="Reset" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="409" y="169"/>
+	</widget>
+	<widget field="Gazebo" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="336" y="167"/>
+	</widget>
+	<widget field="SimClock" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="337" y="133"/>
+	</widget>
+	<widget field="SimTime" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="478" y="132"/>
+		<height>20</height>
+	</widget>
+	<widget field="HighGear" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="247" y="251"/>
+	</widget>
+	<widget field="Auto Scale" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="608" y="193"/>
+		<width>117</width>
+	</widget>
+	<widget field="ArmsOpen" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="418" y="284"/>
+	</widget>
+	<widget field="State" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="515" y="280"/>
+		<width>92</width>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="338" y="11"/>
+		<property name="Text" value="Robot Position"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="458" y="8"/>
+		<width>121</width>
+		<height>22</height>
+		<property name="Text" value="Strategy Selector"/>
+	</static-widget>
+	<widget field="Plot" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="661" y="299"/>
+	</widget>
+	<widget field="Test" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="657" y="327"/>
+	</widget>
+	<widget field="Target" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="323" y="248"/>
+		<width>195</width>
+		<height>28</height>
+	</widget>
+	<widget field="FMS-STR" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="337" y="218"/>
+		<width>109</width>
+	</widget>
+	<widget field="RightWheels" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="315" y="345"/>
+		<width>252</width>
+		<height>188</height>
+	</widget>
+	<widget field="LeftWheels" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="26" y="339"/>
+		<width>266</width>
+		<height>192</height>
+	</widget>
+	<widget field="GFACT" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="628" y="230"/>
+		<width>97</width>
+	</widget>
+	<widget field="KD" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="665" y="157"/>
+		<width>62</width>
+	</widget>
+	<widget field="Error" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="664" y="361"/>
+	</widget>
+	<widget field="UseGyro" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="530" y="235"/>
+	</widget>
+	<widget field="Calibrate" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="629" y="266"/>
+	</widget>
+	<widget field="KP" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="666" y="124"/>
+		<width>63</width>
+	</widget>
+	<widget field="MAX_JRK" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="624" y="90"/>
+		<width>105</width>
+	</widget>
+	<widget field="MAX_ACC" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="620" y="52"/>
+		<width>106</width>
+	</widget>
+	<widget field="MAX_VEL" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="621" y="17"/>
+		<width>104</width>
+	</widget>
+	<widget field="Travel" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="132" y="246"/>
+		<width>93</width>
+	</widget>
+	<widget field="Heading" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="8" y="246"/>
+		<width>121</width>
+	</widget>
+	<widget field="RightDistance" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="7" y="286"/>
+		<width>151</width>
+	</widget>
+	<widget field="LeftDistance" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="162" y="286"/>
+		<width>139</width>
+		<height>28</height>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.MjpgStreamViewerImpl">
+		<location x="3" y="9"/>
+		<width>324</width>
+		<height>226</height>
+		<property name="MJPG Server URL" value="http://localhost:9001/?action=stream"/>
+	</static-widget>
+		<property name="Team Number/Host" value="localhost"/>
+		<property name="Grid Cell Width(s)" value="16"/>
+		<property name="Grid Cell Height(s)" value="16"/>
+		<property name="Window X Position" value="1148"/>
+		<property name="Window Y Position" value="156"/>
+		<property name="Window Width" value="791"/>
+		<property name="Window Height" value="632"/>
+		<property name="Save File" value="C:\Users\deans\Robotics\FRCTeamRepos\FRCGazebo\Simbots\SimBot2018\dashboard.xml"/>
+</dashboard>
+<live-window>
+</live-window>
+	<hidden field="Elevator"/>
+</xml>

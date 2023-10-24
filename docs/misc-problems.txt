@@ -1,15 +1,15 @@
 
 Runtime problems
 1) GzProgram.exe generates "library not found" errors when run (? or ntcore.dll)
-likely cause: anaconda base shell not activated in gitbash results in missing dependent libraries
-symptom: (base) missing in command shell
-work-around: added the folowing to the top of ~/.bashrc
-  source ${HOME}/miniconda3/etc/profile.d/conda.sh
-  conda activate base
-possible reasons for failure
- - "conda init bash" fails with an error when run from comand shell
- - not sure why this error started occuring (might be a newer version of gitbash was installed ?)
+  likely cause: anaconda base shell not activated in gitbash results in missing dependent libraries
+  symptom: (base) missing in command shell
+  work-around: added the folowing to the top of ~/.bashrc
+    source ${HOME}/miniconda3/etc/profile.d/conda.sh
+    conda activate base
+  possible reasons for failure
+    - "conda init bash" fails with an error when run from comand shell
+    - not sure why this error started occuring (might be a newer version of gitbash was installed ?)
 2) Smartdashboard fails to display StringChooser (intermittantly)
-likely cause : classes ITable and ITableListener used in project have been deprecated
-work-around: can use shuffleboard as an alternative (problem doesn't happen here)
-better: wait for wpi to fix problem or build custom tool after fixing locally
+  likely cause : classes ITable and ITableListener used in project have been deprecated
+  work-around: can use shuffleboard as an alternative (problem doesn't happen here)
+  update: problem traced to my version - had to move earlier where Frame is envoked in SmartDashboard.java

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.7">
+  <world name="default">
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose frame=''>-0.689015 -10.6134 9.88668 0 0.971644 2.16019</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+    </gui>     
+    <physics type="ode">
+    </physics>
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+  
+    <include>
+      <uri>model://2018Field</uri>
+      <pose>11.6999 1.59604 0.011109 -4e-06 0 4.3e-05</pose>
+    </include>
+
+    <include>
+      <uri>model://Scale</uri>
+      <pose>0.723153 -4.6314 0.007615 -1e-05 1e-06 1.57245</pose>
+    </include>
+
+    <include>
+      <uri>model://Switch</uri>
+      <pose>-4.28075 -1.00838 0.01 0 -0 1.57424</pose>
+    </include>
+
+    <include>
+      <uri>model://2018Robot</uri>
+      <pose>-7.35 -3.07 0.06 0 0 0</pose>
+    </include>
+ 
+    <include>
+      <uri>model://Cube</uri>
+      <pose>-6.835 -2.92 0.17 -1.571 0 3.14</pose>
+    </include>
+ <!---->
+   
+    <include>
+      <uri>model://Cube</uri>
+      <name>cube1</name>
+      <pose>-4.46813 -2.68796 0.00478 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://Cube</uri>
+      <name>cube2</name>
+      <pose>-4.46813 -3.02207 0.00478 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://Cube</uri>
+      <name>cube3</name>
+      <pose>-4.46813 -3.35596 0.00478 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://Cube</uri>
+      <name>cube4</name>
+      <pose>-4.809 -2.84892 0.00478 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://Cube</uri>
+      <name>cube5</name>
+      <pose>-4.809 -3.17976 0.00478 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://Cube</uri>
+      <name>cube6</name>
+      <pose>-5.14089 -3.01406 0.00478 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://Cube</uri>
+      <name>cube7</name>
+      <pose>-4.47254 -3.17209 0.284179 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://Cube</uri>
+      <name>cube8</name>
+      <pose>-4.47081 -2.8267 0.284178 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://Cube</uri>
+      <name>cube9</name>
+      <pose>-4.80774 -3.01138 0.284181 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://Cube</uri>
+      <name>cube10</name>
+      <pose>-4.47058 -2.99974 0.563578 0 0 0</pose>
+    </include>
+    
+  </world>
+</sdf>

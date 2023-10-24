@@ -1,0 +1,3 @@
+# launch java
+java -Djava.library.path=/usr/local/wpi/2017/sim/jar -jar dist/FRCUserProgramSim.jar -DPOSITION=$1
+

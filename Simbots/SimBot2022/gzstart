@@ -1,0 +1,6 @@
+#!/bin/bash
+start_gazebo --verbose &
+GzProgram.exe &
+start_dashboard &
+sleep 2
+simulate &

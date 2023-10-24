@@ -1,0 +1,6 @@
+cp dashboard.xml ~/wpilib
+java -jar ~/wpilib/tools/SmartDashboard.jar -ip localhost file $SWDEV/JSim2018Bot/dashboard.xml
+#java -jar ~/wpilib/tools/SmartDashboard-2017.jar -ip localhost file $SWDEV/JSim2018Bot/dashboard.xml
+
+#java -jar ~/wpilib/tools/Shuffleboard.jar -ip localhost file $SWDEV/JSim2018Bot/dashboard.xml
+

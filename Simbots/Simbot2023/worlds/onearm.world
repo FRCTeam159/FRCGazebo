@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<sdf version="1.7">
+  <world name="default">
+    <!-- A global light source -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <!-- A ground plane -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <include>
+      <uri>model://SimBotOneArm2</uri>
+      <pose>-0.060685 -1.54515 0.099411 1.55609 -0 0</pose>
+    </include>
+
+      <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>0.450406 -2.7295 2.70159 0 0.775643 1.40019</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+    </gui>
+
+  </world>
+</sdf>

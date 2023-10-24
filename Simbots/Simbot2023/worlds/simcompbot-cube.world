@@ -1,0 +1,67 @@
+<?xml version="1.0" ?>
+<sdf version="1.7">
+  <world name="default">
+    <!-- A global light source -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <!-- A ground plane -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <include>
+      <uri>model://SimCompBot</uri>
+      <pose>-0.6 0 0.092 1.57078 0 1.57</pose>
+    </include>
+
+
+    <include>
+      <uri>model://PurpleCube2</uri>
+      <name>ground-cube</name>
+      <pose>-0.6 1.56 0.1 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://PurpleCube2</uri>
+      <name>shelf-cube</name>
+       <pose>2.78195 4.0 1.065614 0 0 0</pose>
+    </include>
+
+     <include>
+      <uri>model://BlueGrid</uri>
+      <pose>-3.2599 3.70165 0.01 1.5708 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://2023-Field</uri>
+      <pose>0.671987 -3.89784 0.011587 0 0 -1.57466</pose>
+    </include>
+
+     <include>
+      <uri>model://shelf_box</uri>
+      <pose>2.9256 4.12082 0.518089 0 0 -1.57466</pose>
+    </include>
+
+    <include>
+      <uri>model://Apriltag16_05_00005</uri>
+      <pose>3.40062 3.87951 0.724962 0 -0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://Apriltag16_05_00006</uri>
+      <pose>1.09674 3.34973 0.471563 0 -0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://Apriltag16_05_00007</uri>
+      <pose>-0.562716 3.35146 0.460951 0 -0 0</pose>
+    </include>
+    
+     <include>
+      <uri>model://Apriltag16_05_00008</uri>
+      <pose>-2.20511 3.34902 0.463125 0 -0 0</pose>
+    </include>
+
+  </world>
+</sdf>
