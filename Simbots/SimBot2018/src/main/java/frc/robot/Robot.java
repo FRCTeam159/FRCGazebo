@@ -117,9 +117,7 @@ public class Robot extends TimedRobot implements RobotMap, PhysicalConstants, Co
     plot_chooser.addOption("Position", utils.PlotUtils.PLOT_POSITION);
     plot_chooser.addOption("Dynamics", utils.PlotUtils.PLOT_DYNAMICS);
 
-    SmartDashboard.putBoolean("Calibrate", calibrate);
     SmartDashboard.putBoolean("UseGyro", useGyro);
-    SmartDashboard.putBoolean("Error", false);
 
     SmartDashboard.putNumber("MAX_VEL", MAX_VEL);
     SmartDashboard.putNumber("MAX_ACC", MAX_ACC);
@@ -156,6 +154,7 @@ public class Robot extends TimedRobot implements RobotMap, PhysicalConstants, Co
    */
   @Override
   public void disabledInit() {
+    simulation.endAuto();
     getDataFromDashboard();
     System.out.println("disabledInit");
     CommandScheduler.getInstance().cancelAll();
@@ -178,21 +177,18 @@ public class Robot extends TimedRobot implements RobotMap, PhysicalConstants, Co
     //if (autonomousCommand != null)
     //  autonomousCommand.cancel();
 
-    SmartDashboard.putBoolean("Error", false);
     setFMS();
-    autonomousCommand =null;
-    if (calibrate) 
-      autonomousCommand=new SequentialCommandGroup(new Calibrate(driveTrain));
-    else 
-      autonomousCommand = autoSelector.getAutonomous();
-
+    autonomousCommand = autoSelector.getAutonomous();
     // schedule the autonomous command (example)
     if (autonomousCommand != null)
       autonomousCommand.schedule();
+      simulation.startAuto();
   }
+
 
   @Override
   public void teleopInit() {
+    simulation.endAuto();
     getDataFromDashboard();
     System.out.println("teleopInit");
     reset();
@@ -225,7 +221,6 @@ public class Robot extends TimedRobot implements RobotMap, PhysicalConstants, Co
     KP = SmartDashboard.getNumber("KP", KP);
     KD = SmartDashboard.getNumber("KD", KD);
     auto_scale = SmartDashboard.getNumber("Auto Scale", auto_scale);
-    calibrate = SmartDashboard.getBoolean("Calibrate", calibrate);
   }
 
   void setFMS() {

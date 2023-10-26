@@ -20,6 +20,7 @@ public interface Constants {
   public static final int GO_STRAIGHT = 4;
   public static final int TWO_CUBE_SIDE = 5;
   public static final int TWO_CUBE_CENTER = 6;
+  public static final int CALIBRATE_SIDE = 7;
 
   // grabber states
   public static final int DROP = 0;

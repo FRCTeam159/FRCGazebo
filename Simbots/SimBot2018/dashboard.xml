@@ -1,29 +1,32 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="AutoTime" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="474" y="151"/>
+	</widget>
 	<widget field="Acceleration" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.SimpleDial">
-		<location x="294" y="353"/>
+		<location x="280" y="331"/>
 		<property name="Upper Limit" value="10.0"/>
 		<property name="Tick Interval" value="1.0"/>
 	</widget>
 	<widget field="Velocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.SimpleDial">
-		<location x="41" y="348"/>
+		<location x="44" y="340"/>
 		<property name="Upper Limit" value="10.0"/>
 		<property name="Tick Interval" value="1.0"/>
 	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
-		<location x="629" y="269"/>
+		<location x="630" y="248"/>
 		<width>78</width>
 		<property name="Text" value="Plot Option"/>
 	</static-widget>
 	<widget field="Plot" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
-		<location x="630" y="284"/>
+		<location x="631" y="263"/>
 	</widget>
 	<widget field="Elevator Get" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="492" y="309"/>
+		<location x="502" y="293"/>
 		<width>119</width>
 	</widget>
 	<widget field="Elevator Set" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="336" y="308"/>
+		<location x="337" y="293"/>
 	</widget>
 	<widget field="Position" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
 		<location x="331" y="26"/>
@@ -40,23 +43,20 @@
 	<widget field="SimClock" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="330" y="149"/>
 	</widget>
-	<widget field="SimTime" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="475" y="147"/>
-		<height>20</height>
-	</widget>
 	<widget field="HighGear" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
-		<location x="247" y="251"/>
+		<location x="466" y="189"/>
 	</widget>
 	<widget field="Auto Scale" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="608" y="193"/>
+		<location x="609" y="187"/>
 		<width>117</width>
 	</widget>
 	<widget field="ArmsOpen" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
-		<location x="418" y="284"/>
+		<location x="538" y="190"/>
 	</widget>
 	<widget field="State" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="515" y="280"/>
-		<width>92</width>
+		<location x="499" y="251"/>
+		<width>120</width>
+		<height>20</height>
 	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
 		<location x="338" y="11"/>
@@ -69,30 +69,27 @@
 		<property name="Text" value="Strategy Selector"/>
 	</static-widget>
 	<widget field="Test" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="542" y="191"/>
+		<location x="470" y="212"/>
 	</widget>
 	<widget field="Target" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="323" y="248"/>
-		<width>195</width>
-		<height>28</height>
+		<location x="283" y="249"/>
+		<width>184</width>
+		<height>23</height>
 	</widget>
 	<widget field="FMS-STR" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="342" y="212"/>
 		<width>109</width>
 	</widget>
 	<widget field="GFACT" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="628" y="230"/>
+		<location x="630" y="218"/>
 		<width>97</width>
 	</widget>
 	<widget field="KD" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="665" y="157"/>
 		<width>62</width>
 	</widget>
-	<widget field="Error" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
-		<location x="472" y="218"/>
-	</widget>
 	<widget field="UseGyro" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="520" y="220"/>
+		<location x="339" y="116"/>
 	</widget>
 	<widget field="Calibrate" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
 		<location x="468" y="119"/>
@@ -126,9 +123,9 @@
 		<width>151</width>
 	</widget>
 	<widget field="LeftDistance" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="162" y="286"/>
+		<location x="169" y="290"/>
 		<width>139</width>
-		<height>28</height>
+		<height>20</height>
 	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.MjpgStreamViewerImpl">
 		<location x="3" y="9"/>
@@ -140,14 +137,15 @@
 		<property name="Automatically Show Widgets" value="false"/>
 		<property name="Grid Cell Width(s)" value="16"/>
 		<property name="Grid Cell Height(s)" value="16"/>
-		<property name="Window X Position" value="1148"/>
-		<property name="Window Y Position" value="156"/>
-		<property name="Window Width" value="791"/>
-		<property name="Window Height" value="632"/>
+		<property name="Window X Position" value="1057"/>
+		<property name="Window Y Position" value="173"/>
+		<property name="Window Width" value="758"/>
+		<property name="Window Height" value="569"/>
 		<property name="Save File" value="C:\Users\deans\Robotics\FRCTeamRepos\FRCGazebo\Simbots\SimBot2018\dashboard.xml"/>
 </dashboard>
 <live-window>
 </live-window>
 	<hidden field="RightWheels"/>
 	<hidden field="LeftWheels"/>
+	<hidden field="Error"/>
 </xml>

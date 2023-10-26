@@ -51,7 +51,6 @@ public class DrivePath extends CommandBase implements PhysicalConstants, Constan
   static public boolean print_calculated_path = false;
   static public boolean use_gyro = Robot.useGyro;
   static public boolean debug_command = false;
-  static public boolean plot_path = false;
   static public boolean publish_path = false;
   static public boolean print_path = false;
 
@@ -80,8 +79,6 @@ public class DrivePath extends CommandBase implements PhysicalConstants, Constan
     double KD = Robot.KD;
     double KV = 1.0 / MAX_VEL;
     double KA = 0.0;
-
-    //plot_path = SmartDashboard.getBoolean("Plot", true);
 
     Waypoint[] waypoints = calculatePath(target);
     for (Waypoint waypoint : waypoints) {
@@ -197,8 +194,7 @@ public class DrivePath extends CommandBase implements PhysicalConstants, Constan
     double rval = r - turn;
     lval *= scale;
     rval *= scale;
-    if (Math.abs(lval) > 1.0 || Math.abs(rval) > 1.0)
-      SmartDashboard.putBoolean("Error", true);
+   
     double curtime = getTime();
 
     if (debug_command)
@@ -320,9 +316,9 @@ private Waypoint[] calculateStraightPoints() {
    * - Fires cube from Switch plate corner (45 degrees)
    */
   private Waypoint[] calculateSideSwitchPoints() {
-    double y = SWITCH_HOOK_Y_DISTANCE - 12;
+    double y = SWITCH_HOOK_Y_DISTANCE;
     
-    double x = ROBOT_TO_SWITCH;
+    double x = ROBOT_TO_SWITCH+12;
     Waypoint[] waypoints = new Waypoint[3];
     waypoints[0] = new Waypoint(0, 0, 0);
     waypoints[1] = new Waypoint(x - 2 * y, 0, 0);
@@ -358,7 +354,7 @@ private Waypoint[] calculateStraightPoints() {
     Waypoint[] waypoints = new Waypoint[3];
     waypoints[0] = new Waypoint(0, 0, Pathfinder.d2r(0));
     waypoints[1] = new Waypoint(40, 0, Pathfinder.d2r(0));
-    waypoints[2] = new Waypoint(70, 20, Pathfinder.d2r(35)); // best values by trial and error
+    waypoints[2] = new Waypoint(75, 25, Pathfinder.d2r(40)); // best values by trial and error
     // waypoints[1] = new Waypoint(40, 0, Pathfinder.d2r(0));
     // waypoints[2] = new Waypoint(70, 20, Pathfinder.d2r(35)); // best values by trial and error
     if (mirror)

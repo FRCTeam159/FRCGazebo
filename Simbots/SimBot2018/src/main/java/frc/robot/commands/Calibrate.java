@@ -44,9 +44,9 @@ public class Calibrate extends CommandBase {
 
   private final DriveTrain m_drive;
 
-  public Calibrate(DriveTrain drive) {
-     m_drive = drive;
-    addRequirements(drive);
+  public Calibrate() {
+    m_drive = Robot.driveTrain;
+    addRequirements(m_drive);
     m_timer = new Timer();
     m_timer.start();
     m_timer.reset();
@@ -69,6 +69,10 @@ public class Calibrate extends CommandBase {
     max_vel=0;
     max_power=0;
     step=0;
+    if(Robot.getPlotOption()==utils.PlotUtils.PLOT_NONE)
+      plot=false;
+    else
+      plot=true;
   }
 
   // Called repeatedly when this Command is scheduled to run
