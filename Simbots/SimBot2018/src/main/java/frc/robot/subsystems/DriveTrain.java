@@ -2,12 +2,17 @@ package frc.robot.subsystems;
 
 import gazebo.SimEncMotor;
 import gazebo.SimGyro;
-import frc.robot.Robot;
+import utils.Averager;
 import frc.robot.RobotMap;
 import frc.robot.commands.DriveWithGamepad;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+
 
 /**
  *
@@ -30,6 +35,17 @@ public class DriveTrain extends SubsystemBase{
 	private double last_heading=0;
 
   boolean inlowgear = false;
+  static double f2m=0.3048;
+
+  private final DifferentialDriveOdometry odometry;
+
+  private Averager acc_averager = new Averager(20);
+  private Averager vel_averager = new Averager(5);
+  private double ave_acc;
+  private double ave_vel;
+  private double last_velocity=0;
+  private double last_time=0;
+  private Timer timer=new Timer();
 
   public DriveTrain() {
     super();
@@ -44,13 +60,28 @@ public class DriveTrain extends SubsystemBase{
 
     leftMotor.setInverted();
 
-    //frontRight.configEncoderCodesPerRev((int) ticks_per_foot);
-    //backLeft.configEncoderCodesPerRev((int) ticks_per_foot);
+    odometry = new DifferentialDriveOdometry(getRotation2d(), 0, 0);
     setHighGear();
     gyro.enable();
-    log(true);
+    timer.start();
+    log();
   }
   
+  public Rotation2d getRotation2d(){
+		double angle;
+		angle=getHeading();
+		return Rotation2d.fromDegrees(angle);
+	}
+  /** Updates the field-relative position. */
+	public void updateOdometry() {
+		double l=f2m*leftMotor.getDistance();
+		double r=f2m*rightMotor.getDistance();
+		odometry.update(getRotation2d(), l, r);
+	}
+
+  public Pose2d getPose() {
+    return odometry.getPoseMeters();
+}
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     setDefaultCommand(new DriveWithGamepad());
@@ -58,17 +89,9 @@ public class DriveTrain extends SubsystemBase{
   public void init() {
 		System.out.println("Drivetrain.init");
 		enable();
+    timer.reset();
 	}
-  void log(boolean init) {
-    // if (init) {
-    //   SmartDashboard.putBoolean("HighGear", true);
-    //   SmartDashboard.putNumber("Heading", 0);
-    //   SmartDashboard.putNumber("LeftDistance", 0);
-    //   SmartDashboard.putNumber("RightDistance", 0);
-    //   SmartDashboard.putNumber("Travel", 0);
-    //   SmartDashboard.putNumber("LeftWheels", 0);
-    //   SmartDashboard.putNumber("RightWheels", 0);
-    // } else {
+  void log() {
       SmartDashboard.putBoolean("HighGear", !inlowgear);
       SmartDashboard.putNumber("Heading", getHeading());
       SmartDashboard.putNumber("LeftDistance", feet_to_inches(getLeftDistance()));
@@ -76,9 +99,28 @@ public class DriveTrain extends SubsystemBase{
       SmartDashboard.putNumber("Travel", feet_to_inches(getDistance()));
       SmartDashboard.putNumber("LeftWheels", round(getLeft()));
       SmartDashboard.putNumber("RightWheels", round(getRight()));
-    //}
+      SmartDashboard.putNumber("Velocity", Math.abs(getAveVelocity()));
+      SmartDashboard.putNumber("Acceleration", Math.abs(getAveAcceleration()));
   }
 
+  @Override
+	public void periodic() {
+		updateOdometry();
+   
+		log();
+	}
+
+  public double getAcceleration() {
+    double tm=timer.get();
+    double vel=getVelocity();
+    double accel=0;
+    if(last_time>0 && tm>0 && tm>last_time){
+        accel=(vel-last_velocity)/(tm-last_time);
+    }
+    last_velocity=vel;
+    last_time=tm; 
+    return accel; 
+}
   public double unwrap(double previous_angle, double new_angle) {
     double d = new_angle - previous_angle;
     d = d >= 180 ? d - 360 : (d <= -180 ? d + 360 : d);
@@ -124,14 +166,19 @@ public class DriveTrain extends SubsystemBase{
     return 0.5 * (d1 + d2);
   }
 
+  public double getAveVelocity(){
+    return ave_vel;
+  }
+  public double getAveAcceleration(){
+    return ave_acc;
+
+  }
   double round(double x) {
     return 0.001 * Math.round(x * 1000);
   }
 
   public double getHeading() {
-    // if (Robot.isReal())
     return unwrap(last_heading,  gyro.getAngle());
-    //return gyro.getAngle();
   }
 
   public boolean inLowGear() {
@@ -212,8 +259,13 @@ public class DriveTrain extends SubsystemBase{
     resetEncoders();
     resetGyro();
     last_heading=0;
+    Pose2d p=new Pose2d(0,0,new Rotation2d(0));
+    odometry.resetPosition(getRotation2d(),0,0,p);
+    last_velocity=0;
+    last_time=0;
+    timer.reset();
     System.out.println("Drivetrain reset");
-    log(true);
+    log();
   }
 
   public void resetEncoders() {
@@ -229,23 +281,21 @@ public class DriveTrain extends SubsystemBase{
   public void enable() {
     rightMotor.enable();
     leftMotor.enable();
-    log(true);
+    log();
   }
 
   public void disable() {
     rightMotor.disable();
     leftMotor.disable();
-    log(true);
+    log();
   }
 
   public void set(double left, double right) {
-    left = coerce(-1.0, 1.0, left);
-    right = coerce(-1.0, 1.0, right);
     leftMotor.set(left);
-   // leftMotor.set(RobotMap.BACKLEFT);
     rightMotor.set(right);
-    //leftMotor.set(RobotMap.FRONTRIGHT);
-    log(false);
+    ave_acc = acc_averager.getAve(getAcceleration());
+    ave_vel = vel_averager.getAve(getVelocity());
+    log();
   }
 
 }

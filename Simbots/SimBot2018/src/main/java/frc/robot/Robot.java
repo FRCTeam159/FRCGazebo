@@ -15,11 +15,13 @@ import java.util.Random;
 import frc.robot.commands.Calibrate;
 import frc.robot.commands.DriveWithGamepad;
 import frc.robot.commands.ElevatorCommands;
+import frc.robot.objects.PlotServer;
 import frc.robot.subsystems.AutoSelector;
 import frc.robot.subsystems.CubeHandler;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Simulation;
+import utils.PlotUtils;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -37,8 +39,9 @@ public class Robot extends TimedRobot implements RobotMap, PhysicalConstants, Co
   public static Simulation simulation;
   public static XboxController controller;
   
-  SendableChooser<Integer> position_chooser = new SendableChooser<Integer>();
- 
+  static SendableChooser<Integer> position_chooser = new SendableChooser<Integer>();
+  static SendableChooser<Integer> plot_chooser = new SendableChooser<Integer>();
+
   Command autonomousCommand;
   public static double auto_scale = 0.8;
   public static boolean calibrate = false;
@@ -50,11 +53,11 @@ public class Robot extends TimedRobot implements RobotMap, PhysicalConstants, Co
   // public static double MAX_ACC = 2.6;
   // public static double MAX_JRK = 1.3;
 
-  public static double MAX_VEL = 0.5;
-  public static double MAX_ACC = 0.5;
-  public static double MAX_JRK = 0.5;
+  public static double MAX_VEL = 0.75;
+  public static double MAX_ACC = 0.75;
+  public static double MAX_JRK = 0.25;
 
-  public static double KP = 0.5;
+  public static double KP = 3.0;
   public static double KD = 0.0;
   public static double GFACT = 10.0;
 
@@ -63,6 +66,9 @@ public class Robot extends TimedRobot implements RobotMap, PhysicalConstants, Co
   public static Integer robotPosition = POSITION_RIGHT;
   public static Integer fms_pattern = robotPosition;
   public static String fms_string = "RRR";
+
+  PlotServer m_plotsub=new PlotServer();
+
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -107,6 +113,9 @@ public class Robot extends TimedRobot implements RobotMap, PhysicalConstants, Co
       break;
     }
     
+    plot_chooser.setDefaultOption("None", utils.PlotUtils.PLOT_NONE);
+    plot_chooser.addOption("Position", utils.PlotUtils.PLOT_POSITION);
+    plot_chooser.addOption("Dynamics", utils.PlotUtils.PLOT_DYNAMICS);
 
     SmartDashboard.putBoolean("Calibrate", calibrate);
     SmartDashboard.putBoolean("UseGyro", useGyro);
@@ -122,15 +131,14 @@ public class Robot extends TimedRobot implements RobotMap, PhysicalConstants, Co
 
     SmartDashboard.putString("Target", "Calculating");
     SmartDashboard.putBoolean("Test", true);
-    SmartDashboard.putBoolean("Plot", false);
 
     SmartDashboard.putNumber("Auto Scale", auto_scale);
     SmartDashboard.putData("Position", position_chooser);
-    
+    SmartDashboard.putData("Plot", plot_chooser);
     simulation.init();
     driveTrain.init();
-    //robotPosition = position_chooser.getSelected(); // ITable not valid here ??
-      
+    m_plotsub.start();
+    //robotPosition = position_chooser.getSelected(); // ITable not valid here ?? 
   }
 
   @Override
@@ -174,7 +182,7 @@ public class Robot extends TimedRobot implements RobotMap, PhysicalConstants, Co
     setFMS();
     autonomousCommand =null;
     if (calibrate) 
-      autonomousCommand=new SequentialCommandGroup(new Calibrate());
+      autonomousCommand=new SequentialCommandGroup(new Calibrate(driveTrain));
     else 
       autonomousCommand = autoSelector.getAutonomous();
 
@@ -233,5 +241,9 @@ public class Robot extends TimedRobot implements RobotMap, PhysicalConstants, Co
       System.out.println("rand=" + rand + " indx=" + fms_pattern);
       SmartDashboard.putString("FMS-STR", fms[fms_pattern]);
     }
+  }
+
+  public static int getPlotOption() {
+    return plot_chooser.getSelected();
   }
 }

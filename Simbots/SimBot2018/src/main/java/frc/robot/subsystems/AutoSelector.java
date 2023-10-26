@@ -202,7 +202,7 @@ public class AutoSelector extends SubsystemBase implements Constants, PhysicalCo
       autoCommand = getAutoCommand(SAME_SCALE); // reentrant call !
       autoCommand.addCommands(new SetElevator(0, 2.0)); // drop elevator and prepare to grab
       if (Robot.robotPosition == POSITION_RIGHT) // note: pathfinder can't turn in place or drive in reverse
-        autoCommand.addCommands(new TurnToAngle(125, 3.0));
+        autoCommand.addCommands(new TurnToAngle(115, 3.0));
       else
         autoCommand.addCommands(new TurnToAngle(-125.0, 3.0));
       autoCommand.addCommands(new SetGrabberState(OPEN, 0.5));
@@ -211,7 +211,7 @@ public class AutoSelector extends SubsystemBase implements Constants, PhysicalCo
       autoCommand.addCommands(new SetGrabberState(CLOSE, 0.5));
       autoCommand.addCommands(new SetElevator(SWITCH_DROP_HEIGHT, 4.0));
       if (Robot.robotPosition == POSITION_RIGHT) // turn more toward center of switch
-        autoCommand.addCommands(new TurnToAngle(20.0, 3.0));
+        autoCommand.addCommands(new TurnToAngle(30.0, 3.0));
       else
         autoCommand.addCommands(new TurnToAngle(-25.0, 3.0));
       autoCommand.addCommands(new SetGrabberState(PUSH, 1.0));

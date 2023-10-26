@@ -9,6 +9,7 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Plot": "String Chooser",
       "/SmartDashboard/Position": "String Chooser",
       "/SmartDashboard/Strategy": "String Chooser"
     }

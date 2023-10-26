@@ -1,7 +1,26 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="Acceleration" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.SimpleDial">
+		<location x="294" y="353"/>
+		<property name="Upper Limit" value="10.0"/>
+		<property name="Tick Interval" value="1.0"/>
+	</widget>
+	<widget field="Velocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.SimpleDial">
+		<location x="41" y="348"/>
+		<property name="Upper Limit" value="10.0"/>
+		<property name="Tick Interval" value="1.0"/>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="629" y="269"/>
+		<width>78</width>
+		<property name="Text" value="Plot Option"/>
+	</static-widget>
+	<widget field="Plot" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="630" y="284"/>
+	</widget>
 	<widget field="Elevator Get" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="492" y="309"/>
+		<width>119</width>
 	</widget>
 	<widget field="Elevator Set" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="336" y="308"/>
@@ -10,19 +29,19 @@
 		<location x="331" y="26"/>
 	</widget>
 	<widget field="Strategy" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
-		<location x="443" y="18"/>
+		<location x="452" y="15"/>
 	</widget>
 	<widget field="Reset" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="409" y="169"/>
+		<location x="409" y="185"/>
 	</widget>
 	<widget field="Gazebo" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="336" y="167"/>
+		<location x="337" y="184"/>
 	</widget>
 	<widget field="SimClock" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="337" y="133"/>
+		<location x="330" y="149"/>
 	</widget>
 	<widget field="SimTime" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="478" y="132"/>
+		<location x="475" y="147"/>
 		<height>20</height>
 	</widget>
 	<widget field="HighGear" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
@@ -49,11 +68,8 @@
 		<height>22</height>
 		<property name="Text" value="Strategy Selector"/>
 	</static-widget>
-	<widget field="Plot" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="661" y="299"/>
-	</widget>
 	<widget field="Test" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="657" y="327"/>
+		<location x="542" y="191"/>
 	</widget>
 	<widget field="Target" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="323" y="248"/>
@@ -61,18 +77,8 @@
 		<height>28</height>
 	</widget>
 	<widget field="FMS-STR" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="337" y="218"/>
+		<location x="342" y="212"/>
 		<width>109</width>
-	</widget>
-	<widget field="RightWheels" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
-		<location x="315" y="345"/>
-		<width>252</width>
-		<height>188</height>
-	</widget>
-	<widget field="LeftWheels" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
-		<location x="26" y="339"/>
-		<width>266</width>
-		<height>192</height>
 	</widget>
 	<widget field="GFACT" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="628" y="230"/>
@@ -83,13 +89,13 @@
 		<width>62</width>
 	</widget>
 	<widget field="Error" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
-		<location x="664" y="361"/>
+		<location x="472" y="218"/>
 	</widget>
 	<widget field="UseGyro" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="530" y="235"/>
+		<location x="520" y="220"/>
 	</widget>
 	<widget field="Calibrate" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="629" y="266"/>
+		<location x="468" y="119"/>
 	</widget>
 	<widget field="KP" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="666" y="124"/>
@@ -131,6 +137,7 @@
 		<property name="MJPG Server URL" value="http://localhost:9001/?action=stream"/>
 	</static-widget>
 		<property name="Team Number/Host" value="localhost"/>
+		<property name="Automatically Show Widgets" value="false"/>
 		<property name="Grid Cell Width(s)" value="16"/>
 		<property name="Grid Cell Height(s)" value="16"/>
 		<property name="Window X Position" value="1148"/>
@@ -141,5 +148,6 @@
 </dashboard>
 <live-window>
 </live-window>
-	<hidden field="Elevator"/>
+	<hidden field="RightWheels"/>
+	<hidden field="LeftWheels"/>
 </xml>

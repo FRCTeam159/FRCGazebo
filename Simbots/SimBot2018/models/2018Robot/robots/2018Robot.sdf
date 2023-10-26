@@ -13,9 +13,10 @@
         <angular>0</angular>
       </velocity_decay>
       <inertial>
-         <mass>100</mass>
+         <mass>200</mass>
        <!-- <pose>-0.00759376246486691 0.136328157591616 0.0242947917100101 0 0 0</pose> -->
         <pose>-0.00759376246486691 0.05 0.0 0 0 0</pose>
+        
         <!--
         <inertia>
           <ixx>1.40287896</ixx>
@@ -68,7 +69,8 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.002</angular>
+        gzstop
+        
       </velocity_decay>
       <inertial>
         <mass>0.593273105209116</mass>

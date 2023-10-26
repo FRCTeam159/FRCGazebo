@@ -4,6 +4,10 @@ import frc.robot.Constants;
 //import frc.robot.PathData;
 import frc.robot.PhysicalConstants;
 import frc.robot.Robot;
+import frc.robot.objects.PlotServer;
+
+import java.util.ArrayList;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,7 +17,10 @@ import jaci.pathfinder.Trajectory.Segment;
 import jaci.pathfinder.Waypoint;
 import jaci.pathfinder.followers.DistanceFollower;
 import jaci.pathfinder.modifiers.TankModifier;
-
+import utils.PathData;
+import utils.PlotUtils;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 /**
  *
  */
@@ -26,16 +33,19 @@ public class DrivePath extends CommandBase implements PhysicalConstants, Constan
   Trajectory.Config config;
   TankModifier modifier;
 
-  //ArrayList<PathData> pathdata = new ArrayList<PathData>();
-  // pp = null;
+  ArrayList<PathData> pathdata = new ArrayList<PathData>();
 
   double TIME_STEP = 0.02;
 
+  final double f2m=0.3048;
   final double i2m = 0.0254;
   final double m2i = (1.0 / 0.0254);
 
   double wheelbase_width = i2m * ROBOT_WIDTH; // meters
   private int pathIndex = 0;
+
+  //int plot_type = utils.PlotUtils.PLOT_DYNAMICS;
+  int plot_type = utils.PlotUtils.PLOT_POSITION;
 
   static public boolean print_calculated_trajectory = false;
   static public boolean print_calculated_path = false;
@@ -47,9 +57,6 @@ public class DrivePath extends CommandBase implements PhysicalConstants, Constan
 
   double runtime = 0;
   Timer mytimer;
-
- // double last_heading = 0;
-
   int path_points = 0;
   int target = 0;
   boolean mirror=false;
@@ -64,19 +71,17 @@ public class DrivePath extends CommandBase implements PhysicalConstants, Constan
     mytimer = new Timer();
     mytimer.start();
     mytimer.reset();
-    
 
     double MAX_VEL = Robot.MAX_VEL;
     double MAX_ACC = Robot.MAX_ACC;
     double MAX_JRK = Robot.MAX_JRK;
     double KP = Robot.KP;
     double KI = 0.0;
-    double KD = Robot.KP;
+    double KD = Robot.KD;
     double KV = 1.0 / MAX_VEL;
     double KA = 0.0;
 
-    plot_path = SmartDashboard.getBoolean("Plot", true);
-   // Robot.showAutoTarget();
+    //plot_path = SmartDashboard.getBoolean("Plot", true);
 
     Waypoint[] waypoints = calculatePath(target);
     for (Waypoint waypoint : waypoints) {
@@ -138,11 +143,15 @@ public class DrivePath extends CommandBase implements PhysicalConstants, Constan
   public void initialize() {
     if (trajectory == null)
       return;
+    plot_type = Robot.getPlotOption();
+    if(plot_type==utils.PlotUtils.PLOT_NONE)
+      publish_path=false;
+    else
+      publish_path=true;
     System.out.println("DrivePath.initialize:" + target);
     leftFollower.reset();
     rightFollower.reset();
-   // last_heading = Robot.driveTrain.getHeading();
-    // Robot.driveTrain.resetEncoders();
+   
     Robot.driveTrain.reset();
     Robot.driveTrain.enable();
 
@@ -150,11 +159,6 @@ public class DrivePath extends CommandBase implements PhysicalConstants, Constan
     mytimer.reset();
     pathIndex = 0;
   }
-
-  double feet2meters(double x) {
-    return 12 * x * 0.0254;
-  }
-
   double getTime() {
     // double curtime=1e-9*(System.nanoTime()-start_time);
     // return (double)curtime;
@@ -168,19 +172,19 @@ public class DrivePath extends CommandBase implements PhysicalConstants, Constan
       return;
     double scale = Robot.auto_scale;
 
-    double ld = (Robot.driveTrain.getLeftDistance());
-    double rd = (Robot.driveTrain.getRightDistance());
+    double ld = f2m*(Robot.driveTrain.getLeftDistance());
+    double rd = f2m*(Robot.driveTrain.getRightDistance());
+   // System.out.println(ld+" "+rd);
+    
     if(reverse) {
       ld=-ld;
       rd=-rd;
     }
-    double l = leftFollower.calculate(feet2meters(ld)); // reversal ?
-    double r = rightFollower.calculate(feet2meters(rd));
-    double turn = 0;
+    double l = leftFollower.calculate(ld); // reversal ?
+    double r = rightFollower.calculate(rd);  double turn = 0;
     double gh = Robot.driveTrain.getHeading(); // Assuming the gyro is giving a value in degrees
     if(reverse)
       gh=-gh;
-    //gh = unwrap(last_heading, gh);
 
     double th = Pathfinder.r2d(leftFollower.getHeading()); // Should also be in degrees
     th = th > 180 ? th - 360 : th; // convert to signed angle fixes problem:th 0->360 gh:-180->180
@@ -199,16 +203,13 @@ public class DrivePath extends CommandBase implements PhysicalConstants, Constan
 
     if (debug_command)
       System.out.format("%f %f %f %f %f %f %f %f\n", curtime, ld, rd, gh, th, lval, rval,turn);
-    //if (print_path || plot_path || publish_path)
-    //  debugPathError(ld,rd,gh);
+    if (print_path || publish_path)
+      debugPathError();
     if(reverse)
       Robot.driveTrain.set(-lval, -rval);
     else
       Robot.driveTrain.set(lval, rval);
-
     pathIndex++;
-    // = gh;
-
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -231,10 +232,8 @@ public class DrivePath extends CommandBase implements PhysicalConstants, Constan
     System.out.println("DrivePath.end("+interrupted+")");
    // Robot.driveTrain.reset();
    // Robot.driveTrain.disable();
-    //if (plot_path)
-     // new PlotPath(pathdata, 6);
-    //if (publish_path)
-    //utils.PlotUtils.publish(pathdata, 6,PlotUtils.PLOT_POSITION);
+    if (publish_path)
+      PlotServer.publish(pathdata, 6,plot_type);
   }
 
   double unwrap(double previous_angle, double new_angle) {
@@ -243,27 +242,39 @@ public class DrivePath extends CommandBase implements PhysicalConstants, Constan
     return previous_angle + d;
   }
  
-  private void debugPathError(double ld, double rd,double g) {
-    /* 
-    PathData pd = new PathData();
-    pd.tm = getTime();
-    pd.d[0] = 12 * ld;//(Robot.driveTrain.getLeftDistance());
-    pd.d[2] = 12 * rd;//(Robot.driveTrain.getRightDistance());
-    Segment ls = leftTrajectory.get(pathIndex);
-    Segment rs = rightTrajectory.get(pathIndex);
-    pd.d[1] = m2i * (ls.position);
-    pd.d[3] = m2i * (rs.position);
-    double gh = g;//unwrap(last_heading, Robot.driveTrain.getHeading());
+  private void debugPathError() {
+   // Pose2d robot_pose=new Pose2d(ld,rd,new Rotation2d(gh));
+    Pose2d robot_pose=Robot.driveTrain.getPose();
 
-    pd.d[4] = gh; // Assuming the gyro is giving a value in degrees
-    double th = Pathfinder.r2d(rs.heading); // Should also be in degrees
-    pd.d[5] = th > 180 ? th - 360 : th; // convert to signed angle fixes problem:th 0->360 gh:-180->180
+    Segment t=trajectory.get(pathIndex);
+    Pose2d calc_pose=new Pose2d(t.x,t.y,new Rotation2d(t.heading));
+    double tm=TIME_STEP*pathIndex;
+    double calc_velocity=t.velocity;
+    double robot_velocity=f2m*Robot.driveTrain.getVelocity();
+    double calc_accel=t.acceleration;
 
-    if (print_path)
-      System.out.format("%f %f %f %f %f\n", pd.tm, pd.d[0], pd.d[1], pd.d[2], pd.d[3]);
-    if (plot_path || publish_path)
+    PathData pd;
+    switch(plot_type){
+      case utils.PlotUtils.PLOT_DYNAMICS:
+        pd =PlotUtils.plotDynamics(
+        tm,
+        calc_pose,robot_pose,
+        calc_velocity,robot_velocity,
+        calc_accel);
+        break;
+        default:
+      case PlotUtils.PLOT_POSITION:
+        pd=PlotUtils.plotPosition(
+        tm,calc_pose,robot_pose,wheelbase_width
+        );
+        break;
+    }
+    
+    if(print_path)
+      pd.print();
+    if(publish_path)
       pathdata.add(pd);
-      */
+    
   }
 private Waypoint[] calculateStraightPoints() {
     double x = ROBOT_TO_SWITCH + 12;
@@ -330,15 +341,9 @@ private Waypoint[] calculateStraightPoints() {
     Waypoint[] waypoints = new Waypoint[4];
     // double y = SCALE_HOOK_Y_DISTANCE;
     // double x = ROBOT_TO_SCALE_X - 6;
-    double y = SCALE_HOOK_Y_DISTANCE-20;
-    double x = ROBOT_TO_SCALE_X-6;
+    double y = SCALE_HOOK_Y_DISTANCE-10;
+    double x = ROBOT_TO_SCALE_X+6;
     waypoints[0] = new Waypoint(0, 0, 0);
-    // this path comes in from inside edge of Scale plate
-    // double y = SCALE_HOOK_Y_DISTANCE+SCALE_WIDTH/2-ROBOT_WIDTH/2;
-    // double x = ROBOT_TO_SCALE_X - 6;
-    // waypoints[1] = new Waypoint(ROBOT_TO_SWITCH+SWITCH_WIDTH, 0, 0);
-    // waypoints[2] = new Waypoint(ROBOT_TO_SCALE_X - 6, y, 0);
-
     waypoints[1] = new Waypoint(x - 6 * y, -6, 0);
     waypoints[2] = new Waypoint(x - 2 * y, -6, 0);
     waypoints[3] = new Waypoint(x, y - 6, Pathfinder.d2r(45));
@@ -352,8 +357,8 @@ private Waypoint[] calculateStraightPoints() {
   private Waypoint[] calculateSecondSwitchPoints() {
     Waypoint[] waypoints = new Waypoint[3];
     waypoints[0] = new Waypoint(0, 0, Pathfinder.d2r(0));
-    waypoints[1] = new Waypoint(60, 0, Pathfinder.d2r(0));
-    waypoints[2] = new Waypoint(80, 20, Pathfinder.d2r(35)); // best values by trial and error
+    waypoints[1] = new Waypoint(40, 0, Pathfinder.d2r(0));
+    waypoints[2] = new Waypoint(70, 20, Pathfinder.d2r(35)); // best values by trial and error
     // waypoints[1] = new Waypoint(40, 0, Pathfinder.d2r(0));
     // waypoints[2] = new Waypoint(70, 20, Pathfinder.d2r(35)); // best values by trial and error
     if (mirror)
@@ -369,9 +374,9 @@ private Waypoint[] calculateStraightPoints() {
     //waypoints[2] = new Waypoint(220, 90, Pathfinder.d2r(90));
     // waypoints[3] = new Waypoint(220, 135, Pathfinder.d2r(90));
     // waypoints[4] = new Waypoint(270, 175, Pathfinder.d2r(-15));
-    waypoints[2] = new Waypoint(215, 90, Pathfinder.d2r(90));
-    waypoints[3] = new Waypoint(215, 180, Pathfinder.d2r(65));
-    waypoints[4] = new Waypoint(250, 200, Pathfinder.d2r(-10));
+    waypoints[2] = new Waypoint(230, 90, Pathfinder.d2r(90));
+    waypoints[3] = new Waypoint(235, 180, Pathfinder.d2r(90));
+    waypoints[4] = new Waypoint(260, 210, Pathfinder.d2r(-10));
     if (mirror)
       return mirrorWaypoints(waypoints);
     else
@@ -433,4 +438,5 @@ private Waypoint[] calculateStraightPoints() {
     }
     return waypointsInchesToMeters(returnWaypoints);
   }
+  
 }

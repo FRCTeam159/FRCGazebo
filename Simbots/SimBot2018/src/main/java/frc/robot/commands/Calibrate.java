@@ -1,131 +1,137 @@
 package frc.robot.commands;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-//import frc.robot.PathData;
-import frc.robot.Robot;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Robot;
+import frc.robot.objects.PlotServer;
+import frc.robot.subsystems.DriveTrain;
+import utils.PathData;
+import utils.PlotUtils;
 
-/**
- *
- */
 public class Calibrate extends CommandBase {
-  Timer mytimer;
-  double runtime = 6;
-  private double lastVelocity = 0;
-
-  private LinkedList<Double> vals = null;
-  private double total = 0;
+  Timer m_timer;
+   private double lastVelocity = 0;
+  ArrayList<PathData> plotdata = new ArrayList<PathData>();
+ 
   private double lastTime = 0;
-  int averages = 2;
+
   int cnt = 0;
- // ArrayList<PathData> plotdata = new ArrayList<PathData>();
-  private static final boolean plot = true;
-  private static final boolean print = true;
+  utils.Averager acc_average =new utils.Averager(2);
+  utils.Averager vel_average =new utils.Averager(2);
+  private static final boolean print = false;
 
   double max_acc = 0;
   double max_vel = 0;
-  long start_time;
+  double max_pos = 0;
 
-  public Calibrate() {
-    addRequirements(Robot.driveTrain);
-    mytimer = new Timer();
-    mytimer.start();
-    mytimer.reset();
-  }
+  boolean plot=true;
+  double elapsed=0;
 
-  static public double f2m(double x) {
-    return x * 12 * 0.0254;
+  public static int vel_steps=10;
+  public static int step=0;
+  public static double vel_start=0;
+  public static double vel_delta=0.5;
+
+  public static double warmup_time = 0.25;
+  public static double run_time = 0.5;
+  public static double set_value=0;
+  double next_step=0;
+  double end_time = vel_steps*run_time+warmup_time;
+  double last_max_vel=0;
+  double max_power=0;
+
+  private final DriveTrain m_drive;
+
+  public Calibrate(DriveTrain drive) {
+     m_drive = drive;
+    addRequirements(drive);
+    m_timer = new Timer();
+    m_timer.start();
+    m_timer.reset();
   }
 
   // Called just before this Command runs the first time
   public void initialize() {
-    Robot.driveTrain.reset();
-    mytimer.start();
-    mytimer.reset();
-    System.out.println("Calibrate.initialize(" + Robot.auto_scale + ")");
-    vals = new LinkedList<Double>();
+    m_drive.reset(); // reset encoders
+    m_timer.start();
+    m_timer.reset();
+    acc_average.reset();
+    vel_average.reset();
+    plotdata.clear();
     lastTime = 0;
     lastVelocity = 0;
-    Robot.driveTrain.enable();
-    start_time = System.nanoTime();
+    m_drive.enable();
     cnt = 0;
+    set_value=vel_start;
+    next_step=warmup_time;
+    max_vel=0;
+    max_power=0;
+    step=0;
   }
 
   // Called repeatedly when this Command is scheduled to run
   public void execute() {
-    double curtime = getTime();
-    if (cnt < 1) {
-      lastTime = curtime;
-      cnt++;
-      return;
+    elapsed = m_timer.get();
+    if (elapsed > next_step) {
+      if (max_vel > 0.1 && (max_vel - last_max_vel) / (max_vel) > 0.05)
+        max_power = set_value;
+      double delta=max_vel-last_max_vel;
+      System.out.format("step %d:%d power:%1.1f speed:%1.2f delta:%1.3f\n",step,vel_steps,set_value,max_vel,delta);
+      set_value += vel_delta;
+      next_step += run_time;
+      last_max_vel = max_vel;
+      step++;
     }
-    double dt = curtime - lastTime;
-    if (curtime < 0.5)
-      Robot.driveTrain.set(0, 0);
-    else
-      Robot.driveTrain.set(Robot.auto_scale, Robot.auto_scale);
+    if (next_step <= end_time) {
+      m_drive.set(set_value,set_value);
+      execute_step();
+    }
+  }
 
-    double velocity = Robot.driveTrain.getVelocity();
-    double position = Robot.driveTrain.getDistance();
-    double acceleration = (velocity - lastVelocity) / dt;
-    double aveAcceleration = rollingAverage(acceleration, averages);
-    max_acc = aveAcceleration > max_acc ? aveAcceleration : max_acc;
-    max_vel = velocity > max_vel ? velocity : max_vel;
-
+  private void execute_step(){
+    double velocity = m_drive.getVelocity();
+    double position = m_drive.getDistance();
+    double v = vel_average.getAve(velocity);
+    double acceleration = (v - lastVelocity) / 0.02;
+    double a = acc_average.getAve(acceleration);
+    max_acc = a > max_acc ? a : max_acc;
+    max_vel = v > max_vel ? v : max_vel;
+    max_pos = set_value;
+    double dt = elapsed - lastTime;
     if (print)
-      System.out.format("%f %d %f %f %f\n", curtime, (int) Math.round(dt * 1000.0), f2m(position), f2m(velocity),
-          f2m(aveAcceleration));
-    // if (plot) {
-    //   PathData pd = new PathData();
-    //   pd.tm = curtime;
-    //   pd.d[0] = f2m(position);
-    //   pd.d[1] = f2m(velocity);
-    //   pd.d[2] = f2m(aveAcceleration);
-    //   plotdata.add(pd);
-    // }
-
-    lastVelocity = velocity;
-    lastTime = curtime;
-  }
-
-  // Make this return true when this Command no longer needs to run execute()
-  public boolean isFinished() {
-    if (getTime() >= runtime)
-      return true;
-    return false;
-  }
-
-  // Called once after isFinished returns true
-  protected void end() {
-    System.out.println("Calibrate.end()");
-    Robot.driveTrain.disable();
-    System.out.format("max vel=%f max acc=%f\n", f2m(max_vel), f2m(max_acc));
-
+      System.out.format("%f %d %f %f %f\n", elapsed, (int) Math.round(dt * 1000.0), position, v,
+          a);
     if (plot) {
-      //new PlotPath(plotdata, 3);
+      PathData pd = new PathData();
+      pd.tm = position;//elapsed;
+      pd.d[0] = set_value;
+      pd.d[1] = v;
+      if(a<0)
+        pd.d[2] = -Math.sqrt(-a);
+      else
+        pd.d[2] = Math.sqrt(a);
+      plotdata.add(pd);
     }
+
+    lastVelocity = v;
+    lastTime = elapsed;
+
+  }
+  // Make this return true when this Command no longer needs to run execute()
+  @Override
+  public boolean isFinished() {
+    return elapsed >= end_time;
   }
 
-  // Called when another command which requires one or more of the same
-  // subsystems is scheduled to run
-  protected void interrupted() {
-    System.out.println("Calibrate.interrupted()");
-  }
-
-  private double rollingAverage(double d, int aves) {
-    if (vals.size() == aves)
-      total -= vals.removeFirst().doubleValue();
-    vals.addLast(d);
-    total += d;
-    return total / vals.size();
-  }
-
-  double getTime() {
-    // double curtime=1e-9*(System.nanoTime()-start_time);
-    // return (double)curtime;
-    return mytimer.get();
+  @Override
+  public void end(boolean interrupted) {
+    System.out.println("Calibrate.end()");
+    System.out.format("max power=%f max velocity=%f\n", max_power,max_vel); 
+  
+    if (plot) {
+      PlotServer.publish(plotdata,3,utils.PlotUtils.PLOT_CALIBRATE);
+    }
   }
 }

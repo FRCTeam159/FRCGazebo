@@ -26,8 +26,6 @@ public class DriveTrain extends SubsystemBase {
 	private SparkMotor leftMotor;
 	private SparkMotor rightMotor;
 
-	//private Simulation simulation;
-	
 	public Gyro gyro = new Gyro(0);
 
 	public static final double kTrackWidth = i2M(2*23); // bug? need to double actual value for geometry to work
