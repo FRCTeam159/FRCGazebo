@@ -68,9 +68,8 @@
       <pose>0.345346896246474 0.328549000000001 0.026924 1.5707963267949 0 1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
-        <linear>0</linear>
-        gzstop
-        
+        <linear>0</linear> 
+        <angular>0.002</angular>
       </velocity_decay>
       <inertial>
         <mass>0.593273105209116</mass>
@@ -1253,7 +1252,7 @@
 
     <plugin name="Carriage-LeftArm_Piston" filename="sim_piston.dll">
        <joint>Carriage-LeftArm</joint>
-      <topic>~/gazebo/frc/simulator/piston/1</topic>
+       <topic>~/gazebo/frc/simulator/piston/1</topic>
        <direction>forward</direction>
        <forward-force>100</forward-force>
        <reverse-force>100</reverse-force>
@@ -1286,7 +1285,6 @@
       <topic>~/gazebo/frc/simulator/motor/5</topic>
       <multiplier>50</multiplier>
     </plugin>
-<!-- -->
   </model>
 
 </sdf>

@@ -8,20 +8,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-
 import java.util.Random;
 
-import frc.robot.commands.Calibrate;
-import frc.robot.commands.DriveWithGamepad;
-import frc.robot.commands.ElevatorCommands;
 import frc.robot.objects.PlotServer;
 import frc.robot.subsystems.AutoSelector;
 import frc.robot.subsystems.CubeHandler;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Simulation;
-import utils.PlotUtils;
 
 /**
  * The VM is configured to automatically run this class, and to call the

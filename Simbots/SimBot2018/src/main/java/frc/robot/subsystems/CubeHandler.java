@@ -31,8 +31,6 @@ public class CubeHandler extends SubsystemBase implements Constants{
   double cubeMinDetectValue = 0.1;
 
   boolean cube_obtained = false;
-  private LinkedList<Double> vals = null;
-  private double total = 0;
   int aves = 4;
 
   SimPiston piston;
@@ -55,8 +53,7 @@ public class CubeHandler extends SubsystemBase implements Constants{
   }
 
   public void reset() {
-    vals = new LinkedList<Double>();
-    total = 0;
+    new LinkedList<Double>();
     disable();
   }
 
@@ -68,7 +65,6 @@ public class CubeHandler extends SubsystemBase implements Constants{
   }
 
   public void enable() {
-    total = 0;
     closeArms();
     grab();
     wheels.enable();

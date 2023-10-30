@@ -210,7 +210,7 @@ public class AutoSelector extends SubsystemBase implements Constants, PhysicalCo
         if (Robot.robotPosition == POSITION_RIGHT) // note: pathfinder can't turn in place or drive in reverse
           autoCommand.addCommands(new TurnToAngle(115, 3.0));
         else
-          autoCommand.addCommands(new TurnToAngle(-125.0, 3.0));
+          autoCommand.addCommands(new TurnToAngle(-115.0, 3.0));
         autoCommand.addCommands(new SetGrabberState(OPEN, 0.5));
         autoCommand.addCommands(new SetGrabberState(GRAB, 0.5));
         autoCommand.addCommands(new DrivePath(TWO_CUBE_SIDE, mirror, false));
@@ -219,7 +219,7 @@ public class AutoSelector extends SubsystemBase implements Constants, PhysicalCo
         if (Robot.robotPosition == POSITION_RIGHT) // turn more toward center of switch
           autoCommand.addCommands(new TurnToAngle(30.0, 3.0));
         else
-          autoCommand.addCommands(new TurnToAngle(-25.0, 3.0));
+          autoCommand.addCommands(new TurnToAngle(-30.0, 3.0));
         autoCommand.addCommands(new SetGrabberState(PUSH, 1.0));
         break;
       case TWO_CUBE_CENTER:

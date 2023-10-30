@@ -110,12 +110,7 @@ public class Elevator extends SubsystemBase {
 
     public Outer(int i) {
       motor = new SimEncMotor(i);
-     // motor.configEncoderCodesPerRev(1); // deprecated in TalonSRX
       pid = new PIDController(P, I, D);
-      //pid.enableContinuousInput(0,max_outer_travel);
-
-     // pid.setOutputRange(-1, 1);
-     // pid.setInputRange(0, max_outer_travel);
       enable();
     }
 
@@ -182,9 +177,6 @@ public class Elevator extends SubsystemBase {
       motor = new SimEncMotor(i);
       //motor.configEncoderCodesPerRev(1); // deprecated in new CTRE TalonSRX
       pid = new PIDController(P, I, D);
-      //pid.enableContinuousInput(0,max_inner_travel);
-      //pid.setInputRange(0, max_inner_travel);
-      //pid.setOutputRange(-1, 1);
       enable();
     }
 
@@ -211,7 +203,6 @@ public class Elevator extends SubsystemBase {
       return inches_per_meter * motor.getDistance(); // return inches
     }
 
-    
     public void reset() {
       setpoint = 0;
       pid.reset();
@@ -223,7 +214,6 @@ public class Elevator extends SubsystemBase {
         System.out.println("Inner::pidGet(" + getPosition() + ")");
       return getPosition();
     }
-
 
     public void pidWrite(double output) {
       cycle_count++;

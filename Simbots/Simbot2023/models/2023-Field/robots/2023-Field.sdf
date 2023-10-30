@@ -2,9 +2,7 @@
 <sdf version="1.5">
   <model name="2023-Field">
     <pose>0 0 0.0115875 0 0 0</pose>
-    <plugin name="clock" filename="libgz_clock.so">
-      <topic>/gazebo/frc/time</topic>
-    </plugin>
+    
     <link name="Field">
       <gravity>1</gravity>
       <self_collide>0</self_collide>

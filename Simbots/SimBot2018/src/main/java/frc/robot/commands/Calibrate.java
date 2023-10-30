@@ -8,7 +8,6 @@ import frc.robot.Robot;
 import frc.robot.objects.PlotServer;
 import frc.robot.subsystems.DriveTrain;
 import utils.PathData;
-import utils.PlotUtils;
 
 public class Calibrate extends CommandBase {
   Timer m_timer;
@@ -52,7 +51,8 @@ public class Calibrate extends CommandBase {
     m_timer.reset();
   }
 
-  // Called just before this Command runs the first time
+  // Called just before this Command runs the first time 
+  @Override
   public void initialize() {
     m_drive.reset(); // reset encoders
     m_timer.start();
@@ -76,6 +76,7 @@ public class Calibrate extends CommandBase {
   }
 
   // Called repeatedly when this Command is scheduled to run
+  @Override
   public void execute() {
     elapsed = m_timer.get();
     if (elapsed > next_step) {
