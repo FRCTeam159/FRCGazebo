@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.5">
+  <model name="TapePatterns">
+    <pose>0 0 0.00254 0 0 0</pose>
+    <static>true</static>
+    <link name="All">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-11.2776 -4.572 -3.88230984051777E-14 0 0 0</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <visual name="All_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <material>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <emissive>0.2 0.2 0.2 1</emissive>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://TapePatterns/meshes/All.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>

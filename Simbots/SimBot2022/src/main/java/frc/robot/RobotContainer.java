@@ -14,7 +14,6 @@ import frc.robot.objects.CameraStreams;
 import frc.robot.subsystems.Targeting;
 //import utils.PlotServer;
 import frc.robot.subsystems.Autonomous;
-import frc.robot.subsystems.Cameras;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Shooting;
@@ -31,7 +30,6 @@ public class RobotContainer {
   
   // The robot's subsystems and commands are defined here...
   private final DriveTrain m_drivetrain = new DriveTrain();
-  private final Cameras m_cameras = new Cameras();
   private final Targeting m_targeting = new Targeting(m_drivetrain);
   private final CameraStreams m_streams = new CameraStreams(m_targeting);
 

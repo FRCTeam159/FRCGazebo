@@ -1,0 +1,7 @@
+#!/bin/bash
+rm -f tmp/*;
+#gazebo -u --verbose FRC2019.world &
+#gazebo -u --verbose robot_only.world &
+
+#gazebo --verbose with_hatch.world &
+gazebo --verbose tilted.world &
