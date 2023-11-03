@@ -16,7 +16,6 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
@@ -31,7 +30,9 @@ import frc.robot.objects.PlotServer;
 public class DrivePath extends CommandBase {
   /** Creates a new AutoTest. */
   private final ArrayList<PathData> pathdata = new ArrayList<PathData>();
-  private final RamseteController m_ramsete = new RamseteController(10,0.25);
+  //private final RamseteController m_ramsete = new RamseteController(5,0.5);
+  private final RamseteController m_ramsete = new RamseteController();
+
   private final DriveTrain m_drive;
   static public boolean plot_trajectory_motion = false;
   static public boolean plot_trajectory_dynamics = false;
@@ -42,7 +43,7 @@ public class DrivePath extends CommandBase {
   double elapsed = 0;
   int states;
   int intervals;
-  Timer m_timer=new Timer();
+  //Timer m_timer=new Timer();
 
   boolean reversed = false;
 
@@ -50,7 +51,7 @@ public class DrivePath extends CommandBase {
 
   public DrivePath() {
     m_drive = Robot.driveTrain;
-    m_timer.start();
+    //m_timer.start();
     addRequirements(m_drive);
   }
 
@@ -68,7 +69,8 @@ public class DrivePath extends CommandBase {
     if(m_trajectory==null)
       return;
 
-    m_timer.reset();
+    Robot.simulation.reset();
+    Robot.simulation.startAuto();
 
     PlotUtils.setInitialPose(m_trajectory.sample(0).poseMeters, DriveTrain.kTrackWidth);
 
@@ -93,8 +95,7 @@ public class DrivePath extends CommandBase {
   // =================================================
   @Override
   public void execute() {
-    //elapsed = m_timer.get();
-    elapsed = m_timer.get();
+    elapsed = Robot.simulation.getClockTime();
     if (elapsed < 0.02)
       return;
 
@@ -137,10 +138,10 @@ public class DrivePath extends CommandBase {
   // =================================================
   Trajectory programPath() {
     Rotation2d z=new Rotation2d(0);
-    Rotation2d t=new Rotation2d(Units.degreesToRadians(40));
+    Rotation2d t=new Rotation2d(Units.degreesToRadians(30));
     Pose2d pos1 = new Pose2d(0, 0, z);
-    Pose2d pos2 = new Pose2d(4.0, 0.75, t);
-    Pose2d pos3 = new Pose2d(5, 1.25, z);
+    Pose2d pos2 = new Pose2d(3.0, 0.7, t);
+    Pose2d pos3 = new Pose2d(4.5, 0.9, z);
 
     List<Pose2d> points = new ArrayList<Pose2d>();
 

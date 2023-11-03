@@ -1,11 +1,19 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="CargoMode" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="477" y="372"/>
+		<width>71</width>
+	</widget>
+	<widget field="AutoTime" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="257" y="366"/>
+		<width>102</width>
+	</widget>
 	<widget field="SendableChooser[0]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
 		<location x="697" y="283"/>
 	</widget>
 	<widget field="HatchMode" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
-		<location x="278" y="340"/>
-		<width>79</width>
+		<location x="384" y="370"/>
+		<width>76</width>
 	</widget>
 	<widget field="Back Climber" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
 		<location x="44" y="342"/>
@@ -14,10 +22,10 @@
 		<location x="44" y="368"/>
 	</widget>
 	<widget field="Reset" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="169" y="368"/>
+		<location x="128" y="365"/>
 	</widget>
 	<widget field="Gazebo" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="248" y="369"/>
+		<location x="186" y="365"/>
 	</widget>
 	<widget field="Elevator Target" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="568" y="341"/>
@@ -32,21 +40,16 @@
 		<width>96</width>
 		<property name="Font Size" value="16"/>
 	</widget>
-	<widget field="Elevator On" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
-		<location x="473" y="367"/>
-		<width>72</width>
-		<height>16</height>
-	</widget>
 	<widget field="Travel" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="16" y="306"/>
 		<width>109</width>
 	</widget>
 	<widget field="Grabber Tilted" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
-		<location x="365" y="342"/>
+		<location x="282" y="343"/>
 		<width>89</width>
 	</widget>
 	<widget field="Elevator Tilted" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
-		<location x="466" y="343"/>
+		<location x="383" y="342"/>
 		<width>83</width>
 		<height>14</height>
 	</widget>
@@ -59,7 +62,7 @@
 		<width>67</width>
 	</widget>
 	<widget field="Claw Open" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
-		<location x="371" y="366"/>
+		<location x="478" y="343"/>
 		<width>75</width>
 	</widget>
 	<widget field="Heading" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
@@ -87,7 +90,7 @@
 		<location x="8" y="6"/>
 		<width>415</width>
 		<height>281</height>
-		<property name="MJPG Server URL" value="http://localhost:9001/?action=stream"/>
+		<property name="MJPG Server URL" value="http://localhost:9002/?action=stream"/>
 	</static-widget>
 		<property name="Team Number/Host" value="localhost"/>
 		<property name="Automatically Show Widgets" value="false"/>
@@ -106,8 +109,8 @@
 	<hidden field="RightWheels"/>
 	<hidden field="LeftDistance"/>
 	<hidden field="SimClock"/>
-	<hidden field="AutoTime"/>
 	<hidden field="H offset"/>
+	<hidden field="Elevator On"/>
 	<hidden field="LeftWheels"/>
 	<hidden field="RightDistance"/>
 	<hidden field="Target Tilt"/>

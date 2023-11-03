@@ -21,7 +21,7 @@ public class RaiseElevator extends CommandBase {
   @Override
   public void initialize() {
     System.out.println("RaiseElevator initialized");
-    Robot.elevator.resetLevel();
+    Robot.elevator.setCargoHatchLevel();
     timer.reset();
   }
 

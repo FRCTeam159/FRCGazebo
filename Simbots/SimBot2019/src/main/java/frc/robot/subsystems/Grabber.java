@@ -107,5 +107,6 @@ public class Grabber extends SubsystemBase {
     SmartDashboard.putBoolean("Claw Open", clawOpen);
     SmartDashboard.putBoolean("Grabber Tilted", tilted);
     SmartDashboard.putBoolean("HatchMode", Robot.hatchMode);
+    SmartDashboard.putBoolean("CargoMode", Robot.cargoMode);
   }
 }

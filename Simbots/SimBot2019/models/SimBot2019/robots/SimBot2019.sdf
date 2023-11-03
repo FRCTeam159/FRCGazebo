@@ -2,7 +2,7 @@
 <sdf version="1.6">
   <model name="SimBot2019">
     <!--<pose>-6.0915 -5.02686 0.096895 0.000154 0.02014 -3.13006</pose>-->
-    
+
     <link name="Frame">
       <gravity>1</gravity>
       <self_collide>0</self_collide>

@@ -22,9 +22,14 @@
       <pose>0 0 0.226 0 0 0</pose>
     </include>
    
-   <include>
+    <include>
       <uri>model://HatchPlate</uri>
       <pose>-5.48 -5.0 0.994 0.0 0.0 -0.48</pose>
+    </include>
+
+    <include>
+      <uri>model://CargoBall</uri>
+      <pose>-5.4 -5.7 0.1 0.0 0.0 0</pose>
     </include>
 
     <include>

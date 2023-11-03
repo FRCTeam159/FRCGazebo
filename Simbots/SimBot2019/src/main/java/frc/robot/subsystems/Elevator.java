@@ -26,6 +26,7 @@ public class Elevator extends SubsystemBase {
   public static final double CARGO_HATCH_HEIGHT = 16;
   public static final double DELTA_TARGET_HEIGHT = 28;
   public static final double ROCKET_TOP_BALL_HEIGHT = 2*(DELTA_TARGET_HEIGHT)+ ROCKET_BALL_HEIGHT_LOW;
+  public static final double ROCKET_TOP_HATCH_HEIGHT = 2*(DELTA_TARGET_HEIGHT)+ CARGO_HATCH_HEIGHT;
 
   public static final double MAX_HEIGHT = ROCKET_TOP_BALL_HEIGHT;
   public static final double MIN_HEIGHT = BASE_HEIGHT;
@@ -46,6 +47,9 @@ public class Elevator extends SubsystemBase {
   double I = 0.01;
   double D = 6.0;
 
+  double min_ht=0;
+  double max_ht=0;
+
   double setpoint = BASE_HEIGHT;
 
   ElevatorStage stage1;
@@ -54,6 +58,7 @@ public class Elevator extends SubsystemBase {
 
   SimPiston tiltPneumatic = new SimPiston(3);
   boolean tilted=false;
+  boolean cargo_hatch_mode=true;
 
   public Elevator() {
     super();
@@ -68,7 +73,7 @@ public class Elevator extends SubsystemBase {
 
   public void init(){
     tiltElevator(false);
-    checkMode();
+    //checkMode();
     reset();
     checkLevel();
     enable();
@@ -160,29 +165,27 @@ public class Elevator extends SubsystemBase {
     return tilted;
   }
   public void checkMode(){
-    boolean isHatch=Robot.hatchMode;
-    if(isHatch){
-      min_level=1;
-      max_level=3;
-    }
-    else{
-      min_level=0;
-      max_level=4;
-    }
+    Robot.cargoMode=false;
+    System.out.println("Clearing Cargo Mode");
+    
   }
   void checkSetpoint(){
-    setpoint=setpoint<MIN_HEIGHT?MIN_HEIGHT:setpoint;
-    setpoint=setpoint>MAX_HEIGHT?MAX_HEIGHT:setpoint;
+    min_ht=MIN_HEIGHT;
+    max_ht=Robot.hatchMode?ROCKET_TOP_HATCH_HEIGHT:ROCKET_TOP_BALL_HEIGHT;
+    setpoint=setpoint<min_ht?min_ht:setpoint;
+    setpoint=setpoint>max_ht?max_ht:setpoint;
   }
   void checkLevel(){
     level=level<min_level?min_level:level;
     level=level>max_level?max_level:level;
   }
   public void stepUp(double v){
+    checkMode();
     setpoint += v * MOVE_RATE;
     setElevator();
   }
   public void stepDown(double v){
+    checkMode();
     setpoint -= v * MOVE_RATE;
     setElevator();
   }
@@ -207,16 +210,25 @@ public class Elevator extends SubsystemBase {
     checkLevel();
     setElevator();
   }
+  public void setCargoHatchLevel(){
+    setpoint = HATCH_HEIGHT;
+    cargo_hatch_mode=true;
+    level=0;
+    setElevator();
+  }
   public void resetLevel(){
-    checkMode();
-    if(Robot.hatchMode){
-      setpoint = HATCH_HEIGHT;
-      level=1;
+    if(Robot.cargoMode && cargo_hatch_mode){ 
+      setpoint = CARGO_BALL_HEIGHT;
+      System.out.println("Setting Cargo Ball Mode");
+      cargo_hatch_mode=false;
     }
     else{
-      setpoint = BASE_HEIGHT;
-      level=0;
+      cargo_hatch_mode=true;
+      System.out.println("Setting Cargo Hatch Mode");
+      setpoint = HATCH_HEIGHT;
     }
+    Robot.cargoMode=true;
+    level=0;
     setElevator();
   }
   public void setElevator(){
@@ -241,7 +253,6 @@ public class Elevator extends SubsystemBase {
     SmartDashboard.putBoolean("Elevator Tilted", tilted);
     SmartDashboard.putNumber("Elevator Target", Math.round(setpoint));
     SmartDashboard.putNumber("Elevator Actual", Math.round(getPosition()));
-
     SmartDashboard.putNumber("Elevator Level", level);
     SmartDashboard.putBoolean("Elevator On", enabled);
   }
@@ -260,9 +271,7 @@ public class Elevator extends SubsystemBase {
     
     public ElevatorStage(int i,double P1,double I1, double D1) {
       motor = new SimEncMotor(i);
-      //motor.configEncoderCodesPerRev(1); // deprecated in TalonSRX
       pid = new PIDController(P1, I1, D1);
-      //pid.setInputRange(0, max_stage_travel);
       stage=elevator_stage;
       elevator_stage=elevator_stage+1;
       motor.enable();

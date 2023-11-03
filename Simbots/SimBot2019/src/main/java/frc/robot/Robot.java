@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.AutonomousCommand;
 import frc.robot.objects.PlotServer;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Autonomous;
@@ -38,6 +37,7 @@ public class Robot extends TimedRobot {
 	public static boolean doAuto = true;
 	public static boolean haveAuto = true;
 	public static boolean hatchMode = true;
+	public static boolean cargoMode = true;
 
 	PlotServer plotsub=new PlotServer();
 
@@ -112,6 +112,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
+		simulation.endAuto();
 		System.out.println("teleopInit");
 		driveTrain.resetGyro();
 		isAuto = false;
@@ -121,6 +122,7 @@ public class Robot extends TimedRobot {
 	}
 
 	public static void reset(){
+		simulation.endAuto();
 		driveTrain.reset();
 		climber.reset();
 		grabber.init();

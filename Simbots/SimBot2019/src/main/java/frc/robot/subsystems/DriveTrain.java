@@ -39,8 +39,8 @@ public class DriveTrain extends SubsystemBase implements RobotMap {
 
 	boolean inlowgear = false;
 
-	public static double kMaxVelocity = 1.36; // meters per second
-	public static double kMaxAcceleration = 0.25; //  meters/second/second
+	public static double kMaxVelocity = 1.65; // meters per second
+	public static double kMaxAcceleration = 0.5; //  meters/second/second
 	public static double kMaxAngularSpeed = 720; // degrees per second
 
 	private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(2*kTrackWidth);
@@ -156,7 +156,6 @@ public class DriveTrain extends SubsystemBase implements RobotMap {
 
 	public void setLowGear() {
 		if (!inlowgear) {
-			// gearPneumaticgearPneumaticgearPneumatic.set(DoubleSolenoid.Value.kReverse);
 			System.out.println("Setting Low Gear");
 			inlowgear = true;
 		}
@@ -164,7 +163,6 @@ public class DriveTrain extends SubsystemBase implements RobotMap {
 
 	public void setHighGear() {
 		if (inlowgear) {
-			// gearPneumatic.set(DoubleSolenoid.Value.kForward);
 			System.out.println("Setting High Gear");
 			inlowgear = false;
 		}

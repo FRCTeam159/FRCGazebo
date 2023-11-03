@@ -110,8 +110,7 @@ public class Simulation extends SubsystemBase {
       if (!resetting) {
         resetting = true;
         if (m)
-          clear();       
-    
+          clear();
         m_timer.reset();
       } else if (m_timer.get() > 0.25) {
         if (!disabling) {
