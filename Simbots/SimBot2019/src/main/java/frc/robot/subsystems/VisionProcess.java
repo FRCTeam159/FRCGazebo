@@ -50,8 +50,6 @@ public class VisionProcess extends Thread {
 
   Camera camera;
 
-  static public Boolean debugHSV = false;
-
   public double getRange() {
     double meters = rangefinder.getVoltage();
     if(meters>=1)
@@ -66,14 +64,7 @@ public class VisionProcess extends Thread {
     SmartDashboard.putNumber("Target Tilt", 0);
     SmartDashboard.putNumber("Range", 0);
     SmartDashboard.putBoolean("Show HSV", false);
-    if(debugHSV){
-      SmartDashboard.putNumber("Hmin", GripPipeline.Hmin);
-      SmartDashboard.putNumber("Hmax", GripPipeline.Hmax);
-      SmartDashboard.putNumber("Smin", GripPipeline.Smin);
-      SmartDashboard.putNumber("Smax", GripPipeline.Smax);
-      SmartDashboard.putNumber("Vmin", GripPipeline.Vmin);
-      SmartDashboard.putNumber("Vmax", GripPipeline.Vmax);
-    }
+    
     System.out.println("fov " + Math.toDegrees(cameraFovW));
   }
 
@@ -83,13 +74,7 @@ public class VisionProcess extends Thread {
 
   public void run() {
     camera=new Camera(1);
-    // String videoStreamAddress = "http://localhost:9001/?action=stream";
-    // vcap = new VideoCapture();
-    // if (!vcap.open(videoStreamAddress))
-    //   System.out.println("Error opening video stream " + videoStreamAddress);
-    // else
-    //   System.out.println("Video Stream captured " + videoStreamAddress);
-
+    
     GripPipeline grip = new GripPipeline();
     CvSource outputStream = CameraServer.putVideo("Rectangle", 320, 240);
     Mat mat = new Mat();
@@ -111,21 +96,13 @@ public class VisionProcess extends Thread {
       if(mat==null)
         continue;
       
-      if(debugHSV){
-        GripPipeline.Hmin=SmartDashboard.getNumber("Hmin", GripPipeline.Hmin);
-        GripPipeline.Hmax=SmartDashboard.getNumber("Hmax", GripPipeline.Hmax);
-        GripPipeline.Smin=SmartDashboard.getNumber("Smin", GripPipeline.Smin);
-        GripPipeline.Smax=SmartDashboard.getNumber("Smax", GripPipeline.Smax);
-        GripPipeline.Vmin=SmartDashboard.getNumber("Vmin", GripPipeline.Vmin);
-        GripPipeline.Vmax=SmartDashboard.getNumber("Vmax", GripPipeline.Vmax);
-      }
-      double dt = timer.get() * 1000;
       grip.process(mat);
 
       Boolean show_hsv = SmartDashboard.getBoolean("Show HSV", false);
       if (show_hsv) {
-        Mat hsv = grip.hsvThresholdOutput(); // display HSV image
-        hsv.copyTo(mat);
+        //Mat hsv = grip.hsvThresholdOutput(); // display HSV image
+        //hsv.copyTo(mat);
+        mat = grip.hsvThresholdOutput();
       }
       ArrayList<MatOfPoint> contours = grip.filterContoursOutput();
       rects.clear();
@@ -177,7 +154,7 @@ public class VisionProcess extends Thread {
         r.points(vertices);
         for (int j = 0; j < 4; j++) {
           if (r == biggest)
-            Imgproc.line(mat, vertices[j], vertices[(j + 1) % 4], new Scalar(255, 255, 0), 2);
+            Imgproc.line(mat, vertices[j], vertices[(j + 1) % 4], new Scalar(0, 255, 0), 2);
           else
             Imgproc.line(mat, vertices[j], vertices[(j + 1) % 4], new Scalar(255, 255, 255), 1);
         }

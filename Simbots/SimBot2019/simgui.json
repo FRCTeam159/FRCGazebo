@@ -12,7 +12,22 @@
       "/SmartDashboard/SendableChooser[0]": "String Chooser"
     }
   },
-  "NetworkTables View": {
-    "visible": false
+  "NetworkTables": {
+    "retained": {
+      "gazebo": {
+        "open": true
+      }
+    },
+    "transitory": {
+      "gazebo": {
+        "encoder": {
+          "1": {
+            "open": true
+          },
+          "open": true
+        },
+        "open": true
+      }
+    }
   }
 }

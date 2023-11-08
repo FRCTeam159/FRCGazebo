@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.5">
+  <model name="SpikePanel">
+    <pose>0 0 -0.0022225 0 0 0</pose>
+    <plugin name="clock" filename="libgz_clock.so">
+      <topic>/gazebo/frc/time</topic>
+    </plugin>
+    <link name="Body">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.0159572483034872 1.69833100070219E-06 0.440047561902699 1.5707963267949 0 1.5707963267949</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>7.72039882701252</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0.547201616049299</ixx>
+          <ixy>4.17294553792346E-06</ixy>
+          <ixz>5.61858016192322E-07</ixz>
+          <iyy>0.410419981178167</iyy>
+          <iyz>0.00241449331858569</iyz>
+          <izz>0.942358427412752</izz>
+        </inertia>
+      </inertial>
+      <visual name="Body_visual">
+        <pose>-1.6983310007758E-06 -0.440047561902699 -0.915659538303487 0 0 0</pose>
+        <material>
+          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SpikePanel/meshes/Body.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>

@@ -30,3 +30,11 @@ target_link_libraries(sim_gyro ${GAZEBO_LIBRARIES})
 add_library(sim_clock SHARED sim_clock.cpp)
 target_link_libraries(sim_clock ${GAZEBO_LIBRARIES})
 
+add_library(sim_rangefinder SHARED sim_rangefinder.cpp)
+target_link_libraries(sim_rangefinder ${GAZEBO_LIBRARIES})
+
+add_library(sim_limitswitch SHARED sim_limitswitch.cpp)
+target_link_libraries(sim_limitswitch ${GAZEBO_LIBRARIES})
+
+
+

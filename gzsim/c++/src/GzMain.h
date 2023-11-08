@@ -29,6 +29,9 @@ class GzMain {
   std::shared_ptr<nt::NetworkTable> contacts;
   std::shared_ptr<nt::NetworkTable> gyros;
   std::shared_ptr<nt::NetworkTable> pistons;
+  std::shared_ptr<nt::NetworkTable> rangefinders;
+  std::shared_ptr<nt::NetworkTable> switches;
+
   std::shared_ptr<nt::NetworkTable> clock;
   std::list<GzNode *> nodes;
 

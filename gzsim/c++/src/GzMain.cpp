@@ -7,6 +7,8 @@
 #include "GzCamera.h"
 #include "GzContact.h"
 #include "GzPiston.h"
+#include "GzRangefinder.h"
+#include "GzSwitch.h"
 
 #include <condition_variable>
 #include <mutex>
@@ -140,6 +142,30 @@ void GzMain::genNodes() {
     std::shared_ptr<nt::NetworkTable> tbl = pistons->GetSubTable(keys[i]);
     int j = std::stoi(keys[i]);
     nodes.emplace_back(new GzPiston(j, tbl));
+  }
+
+  // build rangefinders
+  keys.clear();
+  rangefinders=table->GetSubTable("rangefinder");
+  keys = rangefinders->GetSubTables();
+  sortKeys(keys);
+  std::cout << "rangefinder:" << keys.size() << std::endl;
+  for (int i = 0; i < keys.size(); i++) {
+    std::shared_ptr<nt::NetworkTable> tbl = rangefinders->GetSubTable(keys[i]);
+    int j = std::stoi(keys[i]);
+    nodes.emplace_back(new GzRangefinder(j, tbl));
+  }
+
+  // build rangefinders
+  keys.clear();
+  switches=table->GetSubTable("switch");
+  keys = switches->GetSubTables();
+  sortKeys(keys);
+  std::cout << "switch:" << keys.size() << std::endl;
+  for (int i = 0; i < keys.size(); i++) {
+    std::shared_ptr<nt::NetworkTable> tbl = switches->GetSubTable(keys[i]);
+    int j = std::stoi(keys[i]);
+    nodes.emplace_back(new GzSwitch(j, tbl));
   }
 
    // build clock

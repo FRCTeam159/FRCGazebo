@@ -13,20 +13,9 @@
         <angular>0</angular>
       </velocity_decay>
       <inertial>
-         <mass>200</mass>
-       <!-- <pose>-0.00759376246486691 0.136328157591616 0.0242947917100101 0 0 0</pose> -->
+        <mass>200</mass>
         <pose>-0.00759376246486691 0.05 0.0 0 0 0</pose>
-        
-        <!--
-        <inertia>
-          <ixx>1.40287896</ixx>
-          <ixy>0.06862777</ixy>
-          <ixz>0.02446668</ixz>
-          <iyy>0.18210418</iyy>
-          <iyz>0.24909937</iyz>
-          <izz>1.34266984</izz>
-        </inertia>
-         -->
+       
       </inertial>
       <collision name="Body_collision">
         <pose>0 0 0 0 0 0</pose>
@@ -628,7 +617,7 @@
           <video>back.avi</video>
         </plugin>
       </sensor>
-<!--
+
       <sensor name="CarriageRangefinder" type="sonar">
         <always_on>1</always_on>
         <visualize>1</visualize>
@@ -639,7 +628,7 @@
           <radius>0.02</radius>
         </sonar>
       </sensor>
--->
+
     </link>
     <joint name="Elevator-Carriage" type="prismatic">
       <parent>Elevator</parent>
@@ -1175,12 +1164,12 @@
     <plugin name="clock" filename="sim_clock.dll">
       <topic>~/gazebo/frc/simulator/clock</topic>
     </plugin>
-<!--
-    <plugin name="TopFrame_rangefinder" filename="librangefinder.so">
-      <topic>/gazebo/frc/simulator/analog/2</topic>
+
+    <plugin name="TopFrame_rangefinder" filename="sim_rangefinder.dll">
+      <topic>~/gazebo/frc/simulator/rangefinder/2</topic>
       <sensor>CarriageRangefinder</sensor>
     </plugin>
--->
+
     <plugin name="Body_gyro" filename="sim_gyro.dll">
       <link>Body</link>
       <topic>~/gazebo/frc/simulator/gyro/0</topic>

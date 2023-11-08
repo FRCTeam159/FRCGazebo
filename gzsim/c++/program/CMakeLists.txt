@@ -27,6 +27,8 @@ add_executable(
 ../src/GzClock.cpp
 ../src/GzCamera.cpp
 ../src/GzContact.cpp
+../src/GzRangefinder.cpp
+../src/GzSwitch.cpp
 )
 target_link_libraries(GzProgram ${GAZEBO_LIBRARIES} ${NT_LIBS})
 

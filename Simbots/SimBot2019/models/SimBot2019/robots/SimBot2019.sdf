@@ -86,7 +86,7 @@
           <video>back.avi</video>
         </plugin>
       </sensor>
-      <!--
+   
       <sensor name="FrameRangefinder" type="sonar">
         <always_on>1</always_on>
         <visualize>1</visualize>
@@ -97,7 +97,7 @@
           <radius>0.02</radius>
         </sonar>
       </sensor>
-      -->
+      
     </link>
     <link name="R1Wheel">
       <gravity>1</gravity>
@@ -545,12 +545,12 @@
       <child>Bumpers</child>
       <pose>0.190499999999996 -3.79470760369927E-19 0.377815370943695 0 0 0</pose>
     </joint>
-    <!--
-    <plugin name="Frame_rangefinder" filename="librangefinder.so">
-      <topic>/gazebo/frc/simulator/analog/1</topic>
+
+    <plugin name="Frame_rangefinder" filename="sim_rangefinder.dll">
+      <topic>~/gazebo/frc/simulator/rangefinder/1</topic>
       <sensor>FrameRangefinder</sensor>
     </plugin>
-    -->
+    
     <plugin name="clock" filename="sim_clock.dll">
       <topic>~/gazebo/frc/simulator/clock</topic>
     </plugin>

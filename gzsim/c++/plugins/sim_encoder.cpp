@@ -13,7 +13,7 @@ GZ_REGISTER_MODEL_PLUGIN(Encoder)
 void Encoder::Load(gazebo::physics::ModelPtr model, sdf::ElementPtr sdf) {
   this->model = model;
 
-if (model->GetJointCount() == 0) {
+  if (model->GetJointCount() == 0) {
     std::cerr << "Invalid joint count, plugin not loaded\n";
     return;
   }
