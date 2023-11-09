@@ -912,24 +912,5 @@
       <low>0.1</low>
     </plugin>
 
-    <!--
-    <plugin name="BallPusher_fwdlimit" filename="liblimit_switch.so">
-      <joint>Chassis-BallPusher</joint>
-      <topic>/gazebo/frc/simulator/dio/10</topic>
-      <units>radians</units>
-      <type>internal</type>
-      <min>0.45</min>
-      <max>0.5</max>
-    </plugin>
-    <plugin name="BallPusher_revlimit" filename="liblimit_switch.so">
-      <joint>Chassis-BallPusher</joint>
-      <topic>/gazebo/frc/simulator/dio/9</topic>
-      <units>radians</units>
-      <type>internal</type>
-      <min>0</min>
-      <max>0.1</max>
-    </plugin>
-   -->
-
   </model>
 </sdf>

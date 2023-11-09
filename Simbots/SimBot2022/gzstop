@@ -1,6 +1,0 @@
-#!/bin/bash
-taskkill //F //IM "gzclient.exe"
-taskkill //F //IM "gzserver.exe"
-taskkill //F //IM "GzProgram.exe"
-taskkill //F //PID `jps -m | grep simulate | awk '{print $1;}'`
-taskkill //F //PID `jps -m | grep SmartDashboard | awk '{print $1;}'`

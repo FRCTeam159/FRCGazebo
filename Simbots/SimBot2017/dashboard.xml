@@ -1,5 +1,8 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="AutoTime" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="439" y="356"/>
+	</widget>
 	<widget field="SendableChooser[0]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
 		<location x="592" y="291"/>
 	</widget>
@@ -13,10 +16,10 @@
 		<location x="306" y="394"/>
 	</widget>
 	<widget field="Range" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="363" y="353"/>
+		<location x="303" y="357"/>
 	</widget>
 	<widget field="H offset" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="177" y="354"/>
+		<location x="162" y="354"/>
 	</widget>
 	<widget field="Targets" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="20" y="354"/>
@@ -68,7 +71,6 @@
 	<hidden field="RightWheels"/>
 	<hidden field="LeftDistance"/>
 	<hidden field="SimClock"/>
-	<hidden field="AutoTime"/>
 	<hidden field="LeftWheels"/>
 	<hidden field="RightDistance"/>
 	<hidden field="Target Tilt"/>

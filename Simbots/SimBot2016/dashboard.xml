@@ -1,0 +1,43 @@
+<xml version="1.0">
+<dashboard>
+	<widget field="Targets Available" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="172" y="311"/>
+		<width>158</width>
+	</widget>
+	<widget field="Target Acquired" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="37" y="371"/>
+		<width>198</width>
+	</widget>
+	<widget field="AutoTargeting" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="41" y="343"/>
+		<width>188</width>
+	</widget>
+	<widget field="ShowTargets" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="37" y="310"/>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
+		<location x="0" y="0"/>
+		<width>342</width>
+		<height>278</height>
+		<property name="Camera Choice" value="Rectangle"/>
+	</static-widget>
+</dashboard>
+<live-window>
+</live-window>
+	<hidden field="Ball present"/>
+	<hidden field="ToggleGate"/>
+	<hidden field="Rollers"/>
+	<hidden field="Lifter Angle"/>
+	<hidden field="Drive Right Speed"/>
+	<hidden field="Adjusting Shot"/>
+	<hidden field="Drive Left Speed"/>
+	<hidden field="Holder Initialized"/>
+	<hidden field="Loading"/>
+	<hidden field="Rectangles"/>
+	<hidden field="Shooter Angle"/>
+	<hidden field="Shooter Initialized"/>
+	<hidden field="Shooter FW Speed"/>
+	<hidden field="Drive Heading"/>
+	<hidden field="Gate Closed"/>
+	<hidden field="Gate Open"/>
+</xml>

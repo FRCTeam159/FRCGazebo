@@ -44,6 +44,7 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 		driveTrain.initDefaultCommand();
 		fuelSubsystem.initDefaultCommand();
+		gearSubsystem.initDefaultCommand();
 		System.out.println("robotInit");
 		fuelSubsystem.enable();
 		simulation.init();
@@ -103,7 +104,7 @@ public class Robot extends TimedRobot {
 	public static void reset(){
 		simulation.endAuto();
 		driveTrain.reset();
-
+		gearSubsystem.Close();
 	}
 	
 }

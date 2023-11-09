@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.GearPlateToggle;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import gazebo.SimPiston;
 
@@ -12,8 +13,12 @@ public class GearSubsystem extends SubsystemBase  {
 	public GearSubsystem(){
 		SmartDashboard.putBoolean("GearPlateOpen", isOpen);
 		piston = new SimPiston(2);
+		piston.enable();
 	}
 
+	public void initDefaultCommand() {
+		setDefaultCommand(new GearPlateToggle());
+	}
 	public void Open(){
 		piston.set(1);
 		isOpen=true;

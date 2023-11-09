@@ -9,7 +9,7 @@ import edu.wpi.first.math.controller.PIDController;
 /**
  *
  */
-public class DriveStraight extends CommandBase{
+public class DriveStraight extends TimedCommand{
 	static public double P = 0.3;
 	static public double I = 0.0;
 	static public double D = 0.0;
@@ -20,7 +20,8 @@ public class DriveStraight extends CommandBase{
 	boolean last_target = false;
 	static boolean debug = false;
 
-	public DriveStraight(double d) {
+	public DriveStraight(double t,double d) {
+		super(t);
 		addRequirements(Robot.driveTrain);
 		pid = new PIDController(P, I, D);
 		distance = d;
@@ -33,6 +34,7 @@ public class DriveStraight extends CommandBase{
 
 	// Called just before this Command runs the first time
 	public void initialize() {
+		super.initialize();
 		System.out.println("DriveStraight::initialize()");
 		last_target = false;
 		double p = SmartDashboard.getNumber("P", P);
@@ -63,7 +65,7 @@ public class DriveStraight extends CommandBase{
 		if (new_target && last_target)
 			return true;
 		last_target = new_target;
-		return false;
+		return super.isFinished();
 	}
 
 	// Called once after isFinished returns true

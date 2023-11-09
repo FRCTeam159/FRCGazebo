@@ -39,7 +39,7 @@ public class DriveTrain extends SubsystemBase implements RobotMap {
 
 	boolean inlowgear = false;
 
-	public static double kMaxVelocity = 1.65; // meters per second
+	public static double kMaxVelocity = 1.0; // meters per second
 	public static double kMaxAcceleration = 0.5; //  meters/second/second
 	public static double kMaxAngularSpeed = 720; // degrees per second
 

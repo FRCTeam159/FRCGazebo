@@ -1,0 +1,56 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <model name="ball">
+    <link name="link">
+      <inertial>
+        <mass>0.213</mass>
+        <inertia>
+          <ixx>0.003226667</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.003226667</iyy>
+          <iyz>0</iyz>
+          <izz>0.003226667</izz>
+        </inertia>
+      </inertial>
+
+      <visual name="visual">
+       <material>
+          <ambient>0.8 0.8 0.8 1</ambient>
+          <diffuse>0.8 0.8 0.8 1</diffuse>
+        </material>
+        <geometry>
+          <sphere>
+            <radius>0.127</radius>
+          </sphere>
+        </geometry>
+      </visual>
+
+      <collision name="collision">
+        <geometry>
+          <sphere>
+            <radius>0.127</radius>
+          </sphere>
+        </geometry>
+		<surface>
+		  <friction>
+			<ode>
+			  <mu>2</mu>
+			  <mu2>2</mu2>
+			</ode>
+		  </friction>
+		  <contact>
+			<ode>
+			  <max_vel>0.1</max_vel>
+			  <soft_cfm>0.8</soft_cfm>
+			  <soft_erp>0.8</soft_erp>
+			  <kd>200</kd>
+			  <kp>50000</kp>
+			  <min_depth>0.0001</min_depth>
+			</ode>
+		  </contact>
+		</surface>      
+     </collision>
+    </link>
+  </model>
+</sdf>

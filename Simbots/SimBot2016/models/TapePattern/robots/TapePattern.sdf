@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.5">
+  <model name="TapePattern">
+    <pose>0 0 -0.00253999999999999 0 0 0</pose>
+    <link name="Body">
+      <gravity>0</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.00127000000000008 -0.254 0.1016 1.5707963267949 0 -1.5707963267949</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <visual name="Body_visual">
+        <pose>0.0372830252811577 -0.0979872916795091 -0.00127 0 0 0</pose>
+        <material>
+          <ambient>1.0 1.0 1.0 1</ambient>
+          <diffuse>1.0 1.0 1.0 1</diffuse>
+          <emissive>0.2 1.0 1.0 1</emissive>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://TapePattern/meshes/Body.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>
