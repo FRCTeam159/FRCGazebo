@@ -12,36 +12,66 @@ public class SimGyro extends SimNode implements Gyro {
     private NetworkTableEntry roll_node;
     private NetworkTableEntry vel_node;
     private static NetworkTable objects;
-    private static NetworkTable objects_chnls;
+    private static NetworkTable channels;
+
+    public static enum Mode {
+		YAW,
+		PITCH,
+		ROLL,
+        THREE_AXIS
+	}
 
     private double zero;
     boolean enabled=false;
     boolean resetting=false;
     int chnl;
     public String idstr;
+
+    public Mode mode=Mode.YAW;
+    public SimGyro(int id, Mode m){
+       init(id,m);
+    }
     public SimGyro(int id){
+        init(id,Mode.YAW);
+    }
+
+    public void init(int id,Mode m){
         chnl=id;
+        mode=m;
         idstr="gyro/"+chnl;
         objects=table.getSubTable("gyro");
-        objects_chnls=objects.getSubTable(""+chnl);
-        ctrl_node= objects_chnls.getEntry("ctrl");
+        channels=objects.getSubTable(""+chnl);
+        ctrl_node= channels.getEntry("ctrl");
     
-        yaw_node= objects_chnls.getEntry("yaw");     
-        pitch_node= objects_chnls.getEntry("pitch");
-        roll_node= objects_chnls.getEntry("roll");
-        vel_node=objects_chnls.getEntry("velocity");
+        yaw_node= channels.getEntry("yaw");     
+        pitch_node= channels.getEntry("pitch");
+        roll_node= channels.getEntry("roll");
+        vel_node=channels.getEntry("velocity");
         yaw_node.setDouble(0.0);
         pitch_node.setDouble(0.0);
         roll_node.setDouble(0.0);
         vel_node.setDouble(0.0);
 
         ctrl_node.setString("new");
-        System.out.println("SimGyro");
+        System.out.println("SimGyro:"+id+" mode:"+mode);
+
     }
     
     public void reset(double d){
         resetting=true;
-        double offset=(yaw_node.getDouble(0.0));
+        double offset;
+        switch(mode){
+            default:
+            case YAW:
+            offset=(yaw_node.getDouble(0.0));
+            break;
+            case PITCH:
+            offset=(pitch_node.getDouble(0.0));
+            break;
+            case ROLL:
+            offset=(roll_node.getDouble(0.0));
+            break;
+        }
         zero=offset+d;
         System.out.println(offset+" "+d+" "+zero);
     }
@@ -65,21 +95,19 @@ public class SimGyro extends SimNode implements Gyro {
     }
    
     public double getHeading() {
-        if(!enabled)
-            return 0; 
         return (yaw_node.getDouble(0.0)-zero);
     }
     public double getRadians() {
         return -Math.PI*(yaw_node.getDouble(0.0))/180.0;
     }
     public double getYaw() {
-        return -yaw_node.getDouble(0.0); 
+        return -yaw_node.getDouble(0.0)-zero; 
     }
     public double getPitch() {
-        return pitch_node.getDouble(0.0); 
+        return pitch_node.getDouble(0.0)-zero; 
     }
     public double getRoll() {
-        return roll_node.getDouble(0.0); 
+        return-roll_node.getDouble(0.0)-zero; 
     }
     public double getY() {
         return pitch_node.getDouble(0.0); 
@@ -107,7 +135,17 @@ public class SimGyro extends SimNode implements Gyro {
 
     @Override
     public double getAngle() {
-        return getHeading();
+        if(!enabled)
+            return 0; 
+        switch(mode){
+            default:
+            case YAW:
+                return getHeading();
+            case PITCH:
+                return getPitch();
+            case ROLL:
+                return getRoll();
+        }
     }
     
 }

@@ -2,4 +2,7 @@
 rm -f tmp/*;
 
 #gazebo --verbose -u 2016-Robot.world &
-gazebo --verbose 2016-Robot-field.world &
+#gazebo --verbose 2016-Robot-field.world &
+gazebo 2016-All.world &
+
+

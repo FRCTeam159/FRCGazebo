@@ -20,7 +20,7 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.core.Core;
 
 import java.util.ArrayList;
-import frc.robot.objects.Camera;
+import objects.Camera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.networktables.NetworkTableInstance;

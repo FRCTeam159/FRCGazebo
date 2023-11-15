@@ -392,7 +392,7 @@
       <child>L4Wheel</child>
       <pose>0.0228600000000002 9.71445146547012E-17 2.22044604925031E-16 0 0 0</pose>
       <axis>
-        <xyz>-1 -3.45075536041802E-15 0</xyz>
+        <xyz>-1 0 0</xyz>
         <dynamics>
           <damping>1</damping>
           <friction>1</friction>
@@ -827,7 +827,7 @@
       </axis>
     </joint>
     
-     <plugin name="clock" filename="sim_clock.dll">
+    <plugin name="clock" filename="sim_clock.dll">
       <topic>~/gazebo/frc/simulator/clock</topic>
     </plugin>
     <plugin name="Body_gyro" filename="sim_gyro.dll">

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
-import frc.robot.objects.PlotServer;
+import objects.PlotServer;
 import frc.robot.subsystems.DriveTrain;
 import utils.PathData;
 import utils.PlotUtils;

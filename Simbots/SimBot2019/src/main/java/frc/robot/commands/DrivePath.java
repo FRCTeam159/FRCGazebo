@@ -22,7 +22,7 @@ import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain;
 import utils.PathData;
 import utils.PlotUtils;
-import frc.robot.objects.PlotServer;
+import objects.PlotServer;
 
 // =================================================
 // DrivePath: class constructor (called from RobotContainer)

@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import java.util.Random;
 
-import frc.robot.objects.PlotServer;
+import objects.PlotServer;
 import frc.robot.subsystems.AutoSelector;
 import frc.robot.subsystems.CubeHandler;
 import frc.robot.subsystems.DriveTrain;

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sdf version='1.5'>
   <world name='default'>
+   
     <light name='sun' type='directional'>
       <cast_shadows>0</cast_shadows>
       <pose frame=''>0 0 10 0 -0 0</pose>

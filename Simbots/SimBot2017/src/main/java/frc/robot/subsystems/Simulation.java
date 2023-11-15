@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import gazebo.SimClock;
 import frc.robot.Robot;
-import frc.robot.objects.SimControl;
+import objects.SimControl;
 import gazebo.SimCamera;
 
 public class Simulation extends SubsystemBase {

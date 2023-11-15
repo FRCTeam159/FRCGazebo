@@ -17,7 +17,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.objects.SwerveModule;
+import objects.SwerveModule;
 import gazebo.SimGyro;
 
 public class Drivetrain extends SubsystemBase {

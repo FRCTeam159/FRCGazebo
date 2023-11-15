@@ -4,7 +4,7 @@ import frc.robot.Constants;
 //import frc.robot.PathData;
 import frc.robot.PhysicalConstants;
 import frc.robot.Robot;
-import frc.robot.objects.PlotServer;
+import objects.PlotServer;
 
 import java.util.ArrayList;
 

@@ -1,43 +1,91 @@
 <xml version="1.0">
 <dashboard>
-	<widget field="Targets Available" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="172" y="311"/>
-		<width>158</width>
+	<widget field="Set FW Speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="303" y="419"/>
+		<width>126</width>
 	</widget>
-	<widget field="Target Acquired" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
-		<location x="37" y="371"/>
-		<width>198</width>
+	<widget field="FW Speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="442" y="418"/>
+		<width>115</width>
 	</widget>
-	<widget field="AutoTargeting" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
-		<location x="41" y="343"/>
-		<width>188</width>
+	<widget field="Lifter Angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="175" y="448"/>
+		<width>122</width>
 	</widget>
-	<widget field="ShowTargets" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="37" y="310"/>
+	<widget field="Lifter Set Angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="25" y="449"/>
+		<width>136</width>
+	</widget>
+	<widget field="Shooter Set Angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="15" y="417"/>
+		<width>148</width>
+	</widget>
+	<widget field="Shooting Mode" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="487" y="392"/>
+	</widget>
+	<widget field="Rollers" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="309" y="449"/>
+		<width>95</width>
+	</widget>
+	<widget field="Shooter Angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="167" y="418"/>
+		<width>125</width>
+	</widget>
+	<widget field="Ball present" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="501" y="452"/>
+	</widget>
+	<widget field="Gate Open" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="426" y="453"/>
+	</widget>
+	<widget field="Range" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="378" y="391"/>
+		<width>95</width>
+	</widget>
+	<widget field="Heading" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="254" y="392"/>
+		<width>111</width>
+	</widget>
+	<widget field="AutoTime" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="141" y="389"/>
+		<width>100</width>
+		<height>23</height>
+	</widget>
+	<widget field="Gazebo" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="80" y="389"/>
+	</widget>
+	<widget field="Reset" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="27" y="388"/>
 	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
-		<location x="0" y="0"/>
-		<width>342</width>
-		<height>278</height>
+		<location x="23" y="-26"/>
+		<width>539</width>
+		<height>404</height>
 		<property name="Camera Choice" value="Rectangle"/>
 	</static-widget>
+		<property name="Team Number/Host" value="localhost"/>
+		<property name="Automatically Show Widgets" value="false"/>
+		<property name="Grid Cell Width(s)" value="16"/>
+		<property name="Grid Cell Height(s)" value="16"/>
+		<property name="Window X Position" value="1310"/>
+		<property name="Window Y Position" value="94"/>
+		<property name="Window Width" value="606"/>
+		<property name="Window Height" value="548"/>
+		<property name="Save File" value="C:\Users\deans\Robotics\FRCTeamRepos\FRCGazebo\Simbots\SimBot2016\dashboard.xml"/>
 </dashboard>
 <live-window>
 </live-window>
-	<hidden field="Ball present"/>
-	<hidden field="ToggleGate"/>
-	<hidden field="Rollers"/>
-	<hidden field="Lifter Angle"/>
-	<hidden field="Drive Right Speed"/>
-	<hidden field="Adjusting Shot"/>
-	<hidden field="Drive Left Speed"/>
-	<hidden field="Holder Initialized"/>
+	<hidden field="SendableChooser[0]"/>
+	<hidden field="RightWheels"/>
+	<hidden field="SimClock"/>
+	<hidden field="LeftWheels"/>
+	<hidden field="Targets"/>
+	<hidden field="RightDistance"/>
+	<hidden field="Target Tilt"/>
+	<hidden field="HighGear"/>
+	<hidden field="Travel"/>
+	<hidden field="LeftDistance"/>
 	<hidden field="Loading"/>
-	<hidden field="Rectangles"/>
-	<hidden field="Shooter Angle"/>
-	<hidden field="Shooter Initialized"/>
-	<hidden field="Shooter FW Speed"/>
-	<hidden field="Drive Heading"/>
+	<hidden field="H offset"/>
+	<hidden field="Show HSV"/>
 	<hidden field="Gate Closed"/>
-	<hidden field="Gate Open"/>
 </xml>

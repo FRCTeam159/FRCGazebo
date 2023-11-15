@@ -25,7 +25,7 @@ import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.objects.PlotServer;
+import objects.PlotServer;
 import frc.robot.subsystems.TagDetector;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Drivetrain;
