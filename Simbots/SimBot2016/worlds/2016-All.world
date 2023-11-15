@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.4">
+  <world name="default">
+   <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>5.88521 0.940601 3.50767 0 0.631643 -2.33899</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+    </gui>
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+    <include>
+      <uri>model://2016-Robot</uri>
+      <pose>3.744 -0.14 0.06656 1.57 0 1.57</pose>
+    </include>
+    <include>
+      <uri>model://ball</uri>
+      <pose>3.49 -0.31 0.197 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://TapePattern</uri>
+      <pose>0.125288 -7.62138 2.11 0.000148 0.000257 0.52429</pose>
+    </include>
+    <include>
+      <uri>model://TapePattern</uri>
+      <pose>-0.57321 -7.5 2.11 0.0000 0.0000 1.553</pose>
+    </include>
+    <include>
+      <uri>model://frc2016_field</uri>
+      <pose>0 0 0.0 0 0 0</pose>
+    </include>
+    <!---->
+    <include>
+      <uri>model://field_elements</uri>
+      <pose>0 0 0 0 0 0</pose>
+    </include>
+    
+  </world>
+</sdf>
