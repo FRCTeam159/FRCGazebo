@@ -1,6 +1,5 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
@@ -21,39 +20,39 @@ public class ExecHolder extends CommandBase {
     static final double BALLDETECTIONDELAY = 0.5;
     static final double BALLREMOVEDELAY = 2.0;
 
-    double elapsed_time;
+    double elapsed;
+    double start_time;
+    double mark_time;
+
     boolean timing = false;
     boolean debug = true;
 
-    Timer timer = new Timer();
-    Timer delta_timer = new Timer();
+    //Timer timer = new Timer();
+    //Timer delta_timer = new Timer();
     double delta_time;
 
     public ExecHolder() {
         state = State.FIND_ZERO;
-        elapsed_time = 0;
+        elapsed = 0;
         addRequirements(Robot.holder);
-        timer.start();
-        delta_timer.start();
+        //timer.start();
+        //delta_timer.start();
     }
 
     void debugPrint(String msg) {
         if (debug)
-            System.out.format("Holder %1.2f %s\n",timeSinceInitialized(),msg);
-    }
-
-    double timeSinceInitialized() {
-        return timer.get();
+            System.out.format("Holder %1.2f %s\n",elapsed,msg);
     }
 
     void setDeltaTimeout(double t) {
         timing = true;
         delta_time = t;
-        delta_timer.reset();
+        mark_time=Robot.getTime()-start_time;
+        //delta_timer.reset();
     }
 
     boolean checkTimeout() {
-        if (delta_timer.get() > delta_time) {
+        if (elapsed-mark_time >= delta_time) {
             timing = false;
             return true;
         }
@@ -62,7 +61,7 @@ public class ExecHolder extends CommandBase {
 
     @Override
     public void initialize() {
-        timer.reset();
+        start_time = Robot.getTime();
         if (!Robot.holder.isInitialized()) {
             debugPrint("Initializing Holder");
             Robot.holder.initialize();
@@ -71,6 +70,9 @@ public class ExecHolder extends CommandBase {
 
     @Override
     public void execute() {
+        //if(Robot.inAuto())
+         //   return;
+        elapsed=Robot.getTime()-start_time;
         switch (state) {
             case FIND_ZERO:
                 findZero();

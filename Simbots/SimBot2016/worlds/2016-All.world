@@ -24,7 +24,7 @@
     </include>
     <include>
       <uri>model://TapePattern</uri>
-      <pose>0.125288 -7.62138 2.11 0.000148 0.000257 0.52429</pose>
+      <pose>0.174 -7.689 2.12 0.000148 0.000257 0.52429</pose>
     </include>
     <include>
       <uri>model://TapePattern</uri>

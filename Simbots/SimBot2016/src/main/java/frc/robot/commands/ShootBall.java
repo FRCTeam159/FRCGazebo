@@ -4,9 +4,9 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
+import frc.robot.subsystems.VisionProcess;
 
 public class ShootBall extends CommandBase {
 
@@ -15,13 +15,15 @@ public class ShootBall extends CommandBase {
   static final double PUSH_DELAY = 1;
   static final double RESET_DELAY = 0.1;
 
-  double elapsed_time;
+  double elapsed;
+  double start_time;
   double delta_time;
+  double mark_time;
 
   boolean timing = false;
   boolean finished = false;
   boolean debug = true;
-  Timer timer=new Timer();
+  boolean ok2shoot=false;
 
   enum State {
     OPEN_GATE,
@@ -35,22 +37,22 @@ public class ShootBall extends CommandBase {
 
   /** Creates a new ShootBall. */
   public ShootBall() {
-    timer.start();
     addRequirements(Robot.shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer.reset();
-    elapsed_time = 0;
+    start_time = Robot.getTime();
     state = State.OPEN_GATE;
     last_state=state;
+    ok2shoot=Robot.holder.isBallPresent();//&&VisionProcess.getNumTargets()>0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    elapsed=Robot.getTime()-start_time;
     switch (state) {
       case OPEN_GATE:
         openGate();
@@ -68,18 +70,17 @@ public class ShootBall extends CommandBase {
 
   void debugPrint(String msg) {
     if (debug)
-      System.out.format("ShootBall %1.2f %s\n",elapsed_time,msg);
+      System.out.format("%1.2f ShootBall %s\n",elapsed,msg);
   }
 
   void setDeltaTimeout(double t) {
     timing = true;
-    elapsed_time += t;
     delta_time = t;
-    timer.reset();
+    mark_time=Robot.getTime()-start_time;
   }
 
   boolean checkTimeout() {
-    if (timer.get() > delta_time) {
+    if (elapsed-mark_time >= delta_time) {
       timing = false;
       return true;
     }
@@ -96,7 +97,8 @@ public class ShootBall extends CommandBase {
   private void openGate() {
     Robot.holder.openGate();
     if (Robot.holder.isGateOpen()) {
-      debugPrint("Gate Open ");
+      debugPrint("Gate Open");
+      timing=false;
       state = State.TURN_FLYWHEELS_ON;
     }
   }
@@ -173,6 +175,6 @@ public class ShootBall extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return finished;
+    return finished || !ok2shoot;
   }
 }

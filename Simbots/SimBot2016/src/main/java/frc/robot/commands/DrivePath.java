@@ -30,8 +30,8 @@ import objects.PlotServer;
 public class DrivePath extends CommandBase {
   /** Creates a new AutoTest. */
   private final ArrayList<PathData> pathdata = new ArrayList<PathData>();
-  //private final RamseteController m_ramsete = new RamseteController(5,0.5);
-  private final RamseteController m_ramsete = new RamseteController();
+ private final RamseteController m_ramsete = new RamseteController(1,1.5);
+   //private final RamseteController m_ramsete = new RamseteController();
 
   private final DriveTrain m_drive;
   static public boolean plot_trajectory_motion = false;
@@ -43,15 +43,15 @@ public class DrivePath extends CommandBase {
   double elapsed = 0;
   int states;
   int intervals;
-  //Timer m_timer=new Timer();
 
   boolean reversed = false;
+  double start_time=0;
 
   int plot_type = PlotUtils.PLOT_DISTANCE;
+  //int plot_type = PlotUtils.PLOT_NONE;
 
   public DrivePath() {
     m_drive = Robot.driveTrain;
-    //m_timer.start();
     addRequirements(m_drive);
   }
 
@@ -80,12 +80,11 @@ public class DrivePath extends CommandBase {
     Pose2d p = m_trajectory.getInitialPose();
 
     m_drive.resetOdometry(p);
-
     m_drive.enable();
 
     pathdata.clear();
     //m_drive.startAuto();
-    elapsed=0;
+    start_time=Robot.getTime();
 
     System.out.println("runtime:" + runtime + " states:" + states + " intervals:" + intervals);
   }
@@ -95,7 +94,7 @@ public class DrivePath extends CommandBase {
   // =================================================
   @Override
   public void execute() {
-    elapsed = Robot.simulation.getClockTime();
+    elapsed = Robot.getTime()-start_time;
     if (elapsed < 0.02)
       return;
 
@@ -119,7 +118,7 @@ public class DrivePath extends CommandBase {
     showStatus("DrivePath.end");
     if (m_trajectory == null)
       return;
-    m_drive.reset();
+    //m_drive.reset();
 
     if (plot_type != utils.PlotUtils.PLOT_NONE)
       PlotServer.publish(pathdata, 6, plot_type);
@@ -138,10 +137,10 @@ public class DrivePath extends CommandBase {
   // =================================================
   Trajectory programPath() {
     Rotation2d z=new Rotation2d(0);
-    Rotation2d t=new Rotation2d(Units.degreesToRadians(30));
+    Rotation2d t=new Rotation2d(Units.degreesToRadians(40));
     Pose2d pos1 = new Pose2d(0, 0, z);
     Pose2d pos2 = new Pose2d(4, 0, z);
-    Pose2d pos3 = new Pose2d(5, 0, t);
+    Pose2d pos3 = new Pose2d(6, 0.7, t);
 
     List<Pose2d> points = new ArrayList<Pose2d>();
 

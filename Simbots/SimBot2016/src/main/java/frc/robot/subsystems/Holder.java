@@ -84,17 +84,17 @@ public class Holder extends SubsystemBase implements RobotMap {
   }
 
   public void openGate() {
-    if (!isGateOpen())
+    //if (!isGateOpen())
       gateMotor.set(GATE_OPEN_SPEED);
-    else
-      gateMotor.set(GATE_OFF_SPEED);
+    // else
+    //   gateMotor.set(GATE_OFF_SPEED);
   }
 
   public void closeGate() {
-    if (!isGateClosed())
+    //if (!isGateClosed())
       gateMotor.set(GATE_CLOSE_SPEED);
-    else
-      gateMotor.set(GATE_OFF_SPEED);
+    //else
+    //  gateMotor.set(GATE_OFF_SPEED);
   }
 
   public void pushBall() {

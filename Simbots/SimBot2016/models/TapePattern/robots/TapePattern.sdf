@@ -14,8 +14,8 @@
       <visual name="Body_visual">
         <pose>0.0372830252811577 -0.0979872916795091 -0.00127 0 0 0</pose>
         <material>
-          <ambient>1.0 1.0 1.0 1</ambient>
-          <diffuse>1.0 1.0 1.0 1</diffuse>
+          <ambient>0.0 1.0 1.0 1</ambient>
+          <diffuse>0.0 1.0 1.0 1</diffuse>
           <emissive>0.2 1.0 1.0 1</emissive>
         </material>
         <geometry>

@@ -45,6 +45,7 @@ public class Robot extends TimedRobot implements RobotMap {
 
 	public static Mode mode=Mode.SHOOTING;
 	boolean ball_was_present=true;
+	public static boolean in_auto=false;
 	/**
 	 * This function is run when the robot is first started up and should be used
 	 * for any initialization code.
@@ -74,11 +75,13 @@ public class Robot extends TimedRobot implements RobotMap {
 				mode = Mode.SHOOTING;
 			break;
 			case SHOOTING:
-			if(!m && ball_was_present)
+			//if(!m && ball_was_present)
+			if(!m)
 				mode = Mode.LOADING;
 			break;
 			case LOADING:
-			if(m && !ball_was_present)
+			//if(m && !ball_was_present)
+			if(m)
 				mode = Mode.SHOOTING;
 			break;
 		}
@@ -101,11 +104,13 @@ public class Robot extends TimedRobot implements RobotMap {
 	@Override
 	public void disabledInit() {
 
-		if (autonomousCommand != null)
-			autonomousCommand.cancel();
-		autonomousCommand=null;
-		CommandScheduler.getInstance().cancelAll();
-		reset();
+		// if (autonomousCommand != null)
+		// 	autonomousCommand.cancel();
+		// autonomousCommand=null;
+		//CommandScheduler.getInstance().cancelAll();
+		//reset();
+		in_auto=false;
+
 		System.out.println("disabledInit");
 	}
 
@@ -118,8 +123,10 @@ public class Robot extends TimedRobot implements RobotMap {
 	public void autonomousInit() {
 		driveTrain.resetGyro();
 		System.out.println("autonomousInit");
+		in_auto=true;
+
 		
-		CommandScheduler.getInstance().cancelAll();
+		//CommandScheduler.getInstance().cancelAll();
 		autonomousCommand =autonomous.getCommand();
 		// schedule the autonomous command (example)
 		if (autonomousCommand != null)
@@ -129,14 +136,18 @@ public class Robot extends TimedRobot implements RobotMap {
 	@Override
 	public void teleopInit() {
 		simulation.endAuto();
+		in_auto=false;
+
 		System.out.println("teleopInit");
-		driveTrain.resetGyro();
+		//driveTrain.resetGyro();
 
 		//CommandScheduler.getInstance().cancelAll();
 		
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();
 		autonomousCommand=null;
+
+		reset();
 
 	}
 
@@ -147,6 +158,7 @@ public class Robot extends TimedRobot implements RobotMap {
 		loader.reset();
 		holder.reset();
 		mode=Mode.SHOOTING;
+		in_auto=false;
 	}
 
 	void log(){
@@ -155,6 +167,18 @@ public class Robot extends TimedRobot implements RobotMap {
 		holder.log();
 		shooter.log();
 		loader.log();
+	}
+
+	public static double getTime(){
+		return simulation.getSimTime();
+	}
+	public static boolean inAuto(){
+		return in_auto;
+	}
+
+	public static void  endAuto(){
+		in_auto=false;
+		simulation.endAuto();
 	}
 	
 }

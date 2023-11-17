@@ -28,7 +28,7 @@ public class DriveTrain extends SubsystemBase implements RobotMap {
 
 	// private DoubleSolenoid gearPneumatic = new DoubleSolenoid(0,1);
 
-	static double WHEEL_DIAMETER = 6; // inches
+	static double WHEEL_DIAMETER = 7.5; // inches
 	public static final double f2m=0.3048; // feet to meters
 	static final double i2m=0.0254; // inches to meters
 
@@ -39,16 +39,16 @@ public class DriveTrain extends SubsystemBase implements RobotMap {
 
 	boolean inlowgear = false;
 
-	public static double kMaxVelocity = 2.0; // meters per second
-	public static double kMaxAcceleration = 1; //  meters/second/second
-	public static double kMaxAngularSpeed = 360; // degrees per second
+	public static double kMaxVelocity = 3.0; // meters per second
+	public static double kMaxAcceleration = 1.0; //  meters/second/second
+	public static double kMaxAngularSpeed = 2*720; // degrees per second
 
 	private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(2*kTrackWidth);
     final DifferentialDriveOdometry odometry;
 
 	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.1,1);
-	private final PIDController leftPIDController = new PIDController(0.5, 0.0, 0.0);
-	private final PIDController rightPIDController = new PIDController(0.5, 0.0, 0.0);
+	private final PIDController leftPIDController = new PIDController(0.2, 0.0, 0.0);
+	private final PIDController rightPIDController = new PIDController(0.2, 0.0, 0.0);
 
 	private final SlewRateLimiter speedLimiter = new SlewRateLimiter(kMaxVelocity);
 	private final SlewRateLimiter rotLimiter = new SlewRateLimiter(kMaxAngularSpeed);

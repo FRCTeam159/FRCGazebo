@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -25,6 +26,10 @@ public class ExecShooter extends CommandBase implements RobotMap{
 	GateState target_gate_state;
 
   Trigger yButton;
+  Trigger aButton;
+
+  Command aimAssist;
+  Command shootBall;
 
   boolean debug = true;
 
@@ -32,6 +37,10 @@ public class ExecShooter extends CommandBase implements RobotMap{
   /** Creates a new ExecShooter. */
   public ExecShooter() {
     addRequirements(Robot.shooter);
+    aButton=new JoystickButton(Robot.controller, AIM_ASSIST_BUTTON);
+    yButton = new JoystickButton(Robot.controller, SHOOT_BALL_BUTTON);
+    aimAssist=new AdjustShot(3.0);
+    shootBall=new ShootBall();
   }
 
   void debugPrint(String msg) {
@@ -55,9 +64,8 @@ public class ExecShooter extends CommandBase implements RobotMap{
       double right=stick.getRightTriggerAxis();
       boolean bButton=stick.getRawButtonPressed(GATE_TOGGLE_BUTTON);
       boolean xButton=stick.getRawButtonPressed(FW_TOGGLE_BUTTON);
-
-      yButton = new JoystickButton(stick, SHOOT_BALL_BUTTON);
-      yButton.onTrue(new ShootBall());
+      aButton.onTrue(aimAssist);
+      yButton.onTrue(shootBall);
       
       if(xButton)
         toggleFW();

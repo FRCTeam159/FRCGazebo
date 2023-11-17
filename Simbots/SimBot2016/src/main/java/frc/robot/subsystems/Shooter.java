@@ -21,7 +21,7 @@ public class Shooter extends SubsystemBase implements RobotMap {
     static final double FI = 0.02;
     static final double FD = 0.0;
 
-    static final double AP = 0.03;
+    static final double AP = 0.05;
     static final double AI = 0.002;
     static final double AD = 0.0001;
 
@@ -195,17 +195,21 @@ public class Shooter extends SubsystemBase implements RobotMap {
     }
     public double getMaxAngle() { return max_angle;}
 	public double getMinAngle() { return min_angle;}
-    @Override
-    public void periodic() {
-        //if(Robot.mode==Robot.Mode.SHOOTING){
+    public void adjustAngle(){
         double angle=getShooterAngle();
         double err=angle_pid.calculate(angle);
         angleMotor.set(err);
+    }
+    public void adjustSpeed(){
         double speed=getFWSpeed();
-        err=flywheel_pid.calculate(speed,flywheel_target);
-        //if(flywheel_target>0)
-        //System.out.println("FW speed:"+speed+" cor:"+err);
+        double err=flywheel_pid.calculate(speed,flywheel_target);
         flywheelMotor.set(err);
+    }
+    @Override
+    public void periodic() {
+        //if(Robot.mode==Robot.Mode.SHOOTING){
+        adjustAngle();
+        adjustSpeed();
         //}
         log();
     }

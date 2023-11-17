@@ -29,6 +29,6 @@ public class EndAuto extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         System.out.println("EndAuto end");
-        Robot.simulation.endAuto();
+        Robot.endAuto();
     }
 }

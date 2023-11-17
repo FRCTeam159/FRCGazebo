@@ -57,7 +57,7 @@ public class DriveWithGamepad extends CommandBase implements RobotMap {
       m_drive.enable();
       started=true;
     }
-    //m_drive.arcadeDrive(-zs,-xs);
+    //m_drive.arcadeDrive(-zs,xs);
     m_drive.odometryDrive(-zs,xs);
   }
 

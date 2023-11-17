@@ -148,19 +148,19 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0</angular>
+        <angular>0.001</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.563089722339735</mass>
+        <mass>0.2</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
-          <ixx>0.00128473699848457</ixx>
-          <ixy>8.45306973208419E-08</ixy>
-          <ixz>5.92558377875651E-08</ixz>
-          <iyy>0.00128284435761217</iyy>
-          <iyz>4.61662650870344E-07</iyz>
-          <izz>0.00217022940821745</izz>
-        </inertia>
+          <ixx>0.001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0</iyz>
+          <izz>0.002</izz>
+        </inertia>       
       </inertial>
       <collision name="L1Wheel_collision">
         <pose>0.556847338487177 -0.136554217850812 -0.482836291233057 0 0 0</pose>
@@ -218,19 +218,19 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0</angular>
+        <angular>0.001</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.563090205861152</mass>
+        <mass>0.2</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
-          <ixx>0.00128356016764174</ixx>
-          <ixy>9.23396482263744E-07</ixy>
-          <ixz>3.42107097070309E-07</ixz>
-          <iyy>0.00128402353546046</iyy>
-          <iyz>3.15330251315635E-07</iyz>
-          <izz>0.00217023168571162</izz>
-        </inertia>
+          <ixx>0.001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0</iyz>
+          <izz>0.002</izz>
+        </inertia>       
       </inertial>
       <collision name="L2Wheel_collision">
         <pose>0.35428565374848 -0.113290357370875 -0.482836286556769 0 0 0</pose>
@@ -288,19 +288,19 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0</angular>
+        <angular>0.001</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.563090205845957</mass>
+        <mass>0.2</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
-          <ixx>0.00128356016759542</ixx>
-          <ixy>9.23396523954833E-07</ixy>
-          <ixz>3.4210708388328E-07</ixz>
-          <iyy>0.00128402353541831</iyy>
-          <iyz>3.15330267068369E-07</iyz>
-          <izz>0.00217023168563123</izz>
-        </inertia>
+          <ixx>0.001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0</iyz>
+          <izz>0.002</izz>
+        </inertia>       
       </inertial>
       <collision name="L3Wheel_collision">
         <pose>0.151219518481655 -0.105915758510666 -0.482836286557211 0 0 0</pose>
@@ -358,19 +358,19 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0</angular>
+        <angular>0.001</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.563090139948893</mass>
+        <mass>0.2</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
-          <ixx>0.0012832668928907</ixx>
-          <ixy>7.94197569313527E-07</ixy>
-          <ixz>4.26488835306683E-07</ixz>
-          <iyy>0.00128431676319942</iyy>
-          <iyz>1.85963542209426E-07</iyz>
-          <izz>0.00217023164813031</izz>
-        </inertia>
+          <ixx>0.001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0</iyz>
+          <izz>0.002</izz>
+        </inertia>       
       </inertial>
       <collision name="L4Wheel_collision">
         <pose>-0.0522866175709424 -0.114380518121287 -0.482836287192248 0 0 0</pose>
@@ -428,19 +428,19 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0</angular>
+        <angular>0.001</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.563090205855883</mass>
+        <mass>0.2</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
-          <ixx>0.00128320297787333</ixx>
-          <ixy>7.48041643814086E-07</ixy>
-          <ixz>4.00451867668724E-07</ixz>
-          <iyy>0.00128438072523264</iyy>
-          <iyz>2.36872825130441E-07</iyz>
-          <izz>0.00217023168571774</izz>
-        </inertia>
+          <ixx>0.001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0</iyz>
+          <izz>0.002</izz>
+        </inertia>       
       </inertial>
       <collision name="R1Wheel_collision">
         <pose>0.547671314054335 -0.124577825549877 0.144116486671365 0 0 0</pose>
@@ -498,19 +498,19 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0</angular>
+        <angular>0.001</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.563089722324542</mass>
+        <mass>0.2</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
-          <ixx>0.00128473733920885</ixx>
-          <ixy>8.06253560326491E-08</ixy>
-          <ixz>1.89055806391865E-08</ixz>
-          <iyy>0.00128284401679942</iyy>
-          <iyz>4.65065842064345E-07</iyz>
-          <izz>0.00217022940813704</izz>
-        </inertia>
+          <ixx>0.001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0</iyz>
+          <izz>0.002</izz>
+        </inertia>       
       </inertial>
       <collision name="R2Wheel_collision">
         <pose>0.34454644531329 -0.108663618796606 0.144116491347968 0 0 0</pose>
@@ -568,19 +568,19 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0</angular>
+        <angular>0.001</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.563089722339744</mass>
+        <mass>0.2</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
-          <ixx>0.00128472234969803</ixx>
-          <ixy>1.86160532932712E-07</ixy>
-          <ixz>7.21304634287442E-09</ixz>
-          <iyy>0.00128285900639873</iyy>
-          <iyz>4.65394058277787E-07</iyz>
-          <izz>0.00217022940821746</izz>
-        </inertia>
+          <ixx>0.001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0</iyz>
+          <izz>0.002</izz>
+        </inertia>       
       </inertial>
       <collision name="R3Wheel_collision">
         <pose>0.141341814048373 -0.108663485798301 0.144116491347526 0 0 0</pose>
@@ -638,19 +638,19 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0</angular>
+        <angular>0.001</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.563089722324527</mass>
+        <mass>0.2</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
-          <ixx>0.00128472234969552</ixx>
-          <ixy>1.86160532931666E-07</ixy>
-          <ixz>7.21302584728866E-09</ixz>
-          <iyy>0.00128285900631276</iyy>
-          <iyz>4.65394059577841E-07</iyz>
-          <izz>0.00217022940813704</izz>
-        </inertia>
+          <ixx>0.001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0</iyz>
+          <izz>0.002</izz>
+        </inertia>       
       </inertial>
       <collision name="R4Wheel_collision">
         <pose>-0.0618581859535821 -0.124538485798352 0.144116491347967 0 0 0</pose>

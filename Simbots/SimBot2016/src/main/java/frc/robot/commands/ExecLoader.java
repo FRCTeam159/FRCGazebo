@@ -36,8 +36,9 @@ public class ExecLoader extends CommandBase implements RobotMap {
 
   void debugPrint(String msg) {
     if (debug)
-      System.out.format("Loader %s\n",msg);
+      System.out.format("Loader %s\n", msg);
   }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
@@ -53,7 +54,7 @@ public class ExecLoader extends CommandBase implements RobotMap {
       double left = stick.getLeftTriggerAxis();
       double right = stick.getRightTriggerAxis();
       boolean xButton = stick.getRawButtonPressed(ROLLERS_TOGGLE_BUTTON);
-      boolean yButton=stick.getRawButtonPressed(LOAD_TOGGLE_BUTTON);
+      boolean yButton = stick.getRawButtonPressed(LOAD_TOGGLE_BUTTON);
       if (yButton)
         toggleLoad();
       else if (xButton)
@@ -66,17 +67,19 @@ public class ExecLoader extends CommandBase implements RobotMap {
         setLoaderAngle(-incr_angle * left);
       else if (right > 0)
         setLoaderAngle(incr_angle * right);
-      // Robot.loader.execute();
-      switch (state) {
-        case LOW:
-          low();
-          break;
-        case LOAD:
-          load();
-          break;
-        case IDLE:
-          idle();
-          break;
+      if (!Robot.inAuto()) {
+        // Robot.loader.execute();
+        switch (state) {
+          case LOW:
+            low();
+            break;
+          case LOAD:
+            load();
+            break;
+          case IDLE:
+            idle();
+            break;
+        }
       }
     }
   }

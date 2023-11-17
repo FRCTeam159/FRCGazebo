@@ -17,10 +17,10 @@ public interface RobotMap {
 	// game controller Button IDs
 	public static final int LEFT_BUMPER_BUTTON = 4;
 	public static final int RIGHT_BUMPER_BUTTON = 5;
-	public static final int RIGHT_BUTTON = 3;
-	public static final int LEFT_BUTTON = 1;
+	public static final int RIGHT_BUTTON = 2;
+	public static final int LEFT_BUTTON = 3;
 	public static final int UP_BUTTON = 4;
-	public static final int DOWN_BUTTON = 2;
+	public static final int DOWN_BUTTON = 1;
 
 	public static final int A_BUTTON = DOWN_BUTTON;
 	public static final int B_BUTTON = RIGHT_BUTTON;
@@ -28,15 +28,14 @@ public interface RobotMap {
 	public static final int Y_BUTTON = UP_BUTTON;
 
 	// button mapping to function
-    public static final int MODE_TOGGLE_BUTTON = LEFT_BUTTON;
-
-	public static final int STEP_UP_BUTTON = RIGHT_BUMPER_BUTTON;
+   	public static final int STEP_UP_BUTTON = RIGHT_BUMPER_BUTTON;
 	public static final int STEP_DOWN_BUTTON = LEFT_BUMPER_BUTTON;
 
 	// mode = SHOOTING
 	public static final int SHOOT_BALL_BUTTON = UP_BUTTON;
 	public static final int GATE_TOGGLE_BUTTON = DOWN_BUTTON;
 	public static final int FW_TOGGLE_BUTTON = RIGHT_BUTTON;
+	public static final int AIM_ASSIST_BUTTON = LEFT_BUTTON;
 	
 	// mode = LOADING
 	public static final int LOAD_TOGGLE_BUTTON = UP_BUTTON;
