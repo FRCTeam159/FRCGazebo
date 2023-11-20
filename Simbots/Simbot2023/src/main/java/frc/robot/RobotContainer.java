@@ -12,7 +12,7 @@ import frc.robot.commands.DriveWithGamepad;
 import frc.robot.commands.PassThru;
 import frc.robot.commands.PoseDualArm;
 import frc.robot.commands.PoseOneArm;
-import frc.robot.objects.PlotServer;
+import objects.PlotServer;
 import frc.robot.subsystems.TagDetector;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Autonomous;

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.5">
+  <model name="Gear">
+    <pose>0 0 0 0 0 0</pose>
+   
+    <link name="Body">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.000248210358670798 2.41153515803368E-10 -0.0238125000194986 0 0 -2.82392136439869</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>2</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0.1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.1</iyy>
+          <iyz>0</iyz>
+          <izz>0.1</izz>
+        </inertia>
+      </inertial>
+      <collision name="Body_collision">
+        <pose>-0.000235791171914811 7.75300290118907E-05 1.94985582463651E-11 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Gear/meshes/Body_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+		  <contact>
+			<ode>
+			  <kd>1e4</kd>
+			  <kp>2e7</kp>
+			</ode>
+		  </contact>
+        </surface>
+      </collision>
+      <visual name="Body_visual">
+        <pose>-0.000235791171914811 7.75300290118907E-05 1.94985582463651E-11 0 0 0</pose>
+        <material>
+          <ambient>0.8 0.8 0.2 1</ambient>
+          <diffuse>0.8 0.8 0.2 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Gear/meshes/Body.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>

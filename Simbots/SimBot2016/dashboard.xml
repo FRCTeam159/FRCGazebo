@@ -1,0 +1,105 @@
+<xml version="1.0">
+<dashboard>
+	<widget field="SimClock" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="250" y="392"/>
+		<width>108</width>
+	</widget>
+	<widget field="Distance" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="383" y="16"/>
+		<width>108</width>
+	</widget>
+	<widget field="V Offset" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="147" y="12"/>
+		<width>104</width>
+	</widget>
+	<widget field="Targets" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="32" y="11"/>
+		<width>97</width>
+	</widget>
+	<widget field="H offset" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="271" y="13"/>
+		<width>96</width>
+	</widget>
+	<widget field="FW Speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="140" y="450"/>
+		<width>115</width>
+	</widget>
+	<widget field="Lifter Angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="456" y="419"/>
+		<width>122</width>
+	</widget>
+	<widget field="Lifter Set Angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="308" y="419"/>
+		<width>136</width>
+	</widget>
+	<widget field="Shooter Set Angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="15" y="417"/>
+		<width>148</width>
+	</widget>
+	<widget field="Shooting Mode" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="27" y="392"/>
+	</widget>
+	<widget field="Rollers" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="18" y="449"/>
+		<width>95</width>
+	</widget>
+	<widget field="Shooter Angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="167" y="418"/>
+		<width>125</width>
+	</widget>
+	<widget field="Ball present" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="357" y="454"/>
+	</widget>
+	<widget field="Gate Open" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="277" y="454"/>
+	</widget>
+	<widget field="Range" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="485" y="392"/>
+		<width>95</width>
+	</widget>
+	<widget field="Heading" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="365" y="392"/>
+		<width>111</width>
+	</widget>
+	<widget field="AutoTime" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="141" y="389"/>
+		<width>100</width>
+		<height>23</height>
+	</widget>
+	<widget field="Gazebo" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="509" y="451"/>
+	</widget>
+	<widget field="Reset" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="450" y="451"/>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
+		<location x="23" y="-26"/>
+		<width>539</width>
+		<height>404</height>
+		<property name="Camera Choice" value="Rectangle"/>
+	</static-widget>
+		<property name="Team Number/Host" value="localhost"/>
+		<property name="Automatically Show Widgets" value="false"/>
+		<property name="Grid Cell Width(s)" value="16"/>
+		<property name="Grid Cell Height(s)" value="16"/>
+		<property name="Window X Position" value="1310"/>
+		<property name="Window Y Position" value="94"/>
+		<property name="Window Width" value="606"/>
+		<property name="Window Height" value="548"/>
+		<property name="Save File" value="C:\Users\deans\Robotics\FRCTeamRepos\FRCGazebo\Simbots\SimBot2016\dashboard.xml"/>
+</dashboard>
+<live-window>
+</live-window>
+	<hidden field="SendableChooser[0]"/>
+	<hidden field="Status"/>
+	<hidden field="RightWheels"/>
+	<hidden field="LeftWheels"/>
+	<hidden field="RightDistance"/>
+	<hidden field="Set FW Speed"/>
+	<hidden field="HighGear"/>
+	<hidden field="Travel"/>
+	<hidden field="LeftDistance"/>
+	<hidden field="Loading"/>
+	<hidden field="Show HSV"/>
+	<hidden field="Gate Closed"/>
+</xml>

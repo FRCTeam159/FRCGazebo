@@ -1,0 +1,7 @@
+#!/bin/bash
+rm -f tmp/*;
+gazebo --verbose right.world &
+#gazebo --verbose center.world &
+#gazebo --verbose test.world &
+
+

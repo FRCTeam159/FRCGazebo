@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.4">
+  <world name="default">
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose frame=''>-4.95338 -6.6728 6.45539 -0 1.3058 0.46818</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+    </gui>
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+    <include>
+      <uri>model://FRC2017</uri>
+      <pose>0 0 -0.927 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://SimBot</uri>
+      <pose>-3.46933 -7.37274 0.022039 2.4e-05 0.000319 1.5851</pose>
+    </include>
+    <include>
+      <name>spike1</name>
+      <uri>model://SpikePanel</uri>
+      <pose>-0.25793 -4.9648 0.002057 -0.0185 -0.007 -0.5244</pose>
+    </include>
+    <include>
+      <name>spike2</name>
+      <uri>model://SpikePanel</uri>
+      <pose>-1.037 -5.412 0.00523 0 0 -1.56</pose>
+    </include>
+     <include>
+      <name>spike3</name>
+      <uri>model://SpikePanel</uri>
+      <pose>-1.8126 -4.97 0.026 0 0 -2.61</pose>
+    </include>
+    <include>
+      <name>tape1</name>
+      <uri>model://TAPE2017</uri>
+      <pose>-0.18536 -4.85795 0.41079 0.0116 -0.001119 -0.54</pose>
+    </include>
+    <include>
+      <name>tape2</name>
+      <uri>model://TAPE2017</uri>
+      <pose>-0.902837 -5.42368 0.4133 0.00 0.00 -1.56235</pose>
+    </include>
+     <include>
+      <name>tape3</name>
+      <uri>model://TAPE2017</uri>
+      <pose>-1.885 -4.858 0.41 0.00 0.00 0.51715</pose>
+    </include>
+      <include>
+      <name>gear</name>
+      <uri>model://Gear</uri>
+      <pose>-3.071 -7.42417 0.3869 1.562 0.336 0.0066</pose>
+    </include>
+</world>
+</sdf>

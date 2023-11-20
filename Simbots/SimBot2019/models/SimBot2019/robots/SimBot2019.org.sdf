@@ -1,0 +1,2808 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.6">
+  <model name="SimBot2019-4">
+    <pose>0 0 0.12446 0 0 0</pose>
+    <plugin name="clock" filename="libgz_clock.so">
+      <topic>/gazebo/frc/time</topic>
+    </plugin>
+    <link name="Frame">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.406400009399918 9.02389295287339E-17 8.71268615132043E-17 -1.5707963267949 0 1.5707963267949</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>30</mass>
+        <pose>0 0 -0.1 0 0 0</pose>
+        <inertia>
+          <ixx>2.1342895</ixx>
+          <ixy>0</ixy>
+          <ixz>0.0118497</ixz>
+          <iyy>4.3425222</iyy>
+          <iyz>0.0046367</iyz>
+          <izz>2.2127647</izz>
+        </inertia>
+      </inertial>
+      <collision name="Frame_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2019-4/meshes/Frame_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode><max_vel>0</max_vel></ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="Frame_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <material>
+          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2019-4/meshes/Frame.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <sensor name='FrameCamera' type='camera'>
+        <visualize>0</visualize>
+        <always_on>1</always_on>
+        <update_rate>20</update_rate>
+        <pose>0 -0.05 0.25 -1.5708 -1.5708 3.14</pose>
+        <camera name='Framecamera'>
+          <horizontal_fov>1.5708</horizontal_fov>
+          <image>
+            <width>320</width>
+            <height>240</height>
+          </image>
+          <clip>
+            <near>0.05</near>
+            <far>50</far>
+          </clip>
+          <save enabled="true">
+              <path>/tmp/target-camera</path>
+          </save>
+        </camera>
+      </sensor>
+      <sensor name="FrameRangefinder" type="sonar">
+        <always_on>1</always_on>
+        <visualize>1</visualize>
+        <pose>0.01 0 0.25 0.1 3.14 3.14</pose>
+        <sonar>
+          <min>0.1</min>
+          <max>1.0</max>
+          <radius>0.02</radius>
+        </sonar>
+      </sensor>
+    </link>
+    <link name="R1Wheel">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.673098427026752 0.303262709940696 0.00169521560482934 -1.5707963267949 0 1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.255325203825891</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <collision name="R1Wheel_collision">
+        <pose>-0.303262709940696 0.00169521560482919 -0.266698417626834 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2019-4/meshes/R1Wheel.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <max_vel>0</max_vel>
+              <kp>1000000</kp>
+              <kd>10</kd>
+            </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="R1Wheel_visual">
+        <pose>-0.303262709940696 0.00169521560482919 -0.266698417626834 0 0 0</pose>
+        <material>
+          <ambient>0.701960784313725 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0.701960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2019-4/meshes/R1Wheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Frame-R1Wheel" type="revolute">
+      <parent>Frame</parent>
+      <child>R1Wheel</child>
+      <pose>0 4.42156048210489E-05 -2.73638550629673E-06 0 0 0</pose>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>50</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="R2Wheel">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.405312662240039 0.303262709940696 -0.00385752270000407 -1.5707963267949 0 1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.255325203825891</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <collision name="R2Wheel_collision">
+        <pose>-0.303262709940696 -0.00385752270000415 0.00108734715987955 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2019-4/meshes/R2Wheel.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <max_vel>0</max_vel>
+              <kp>1000000</kp>
+              <kd>10</kd>
+            </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="R2Wheel_visual">
+        <pose>-0.303262709940696 -0.00385752270000415 0.00108734715987955 0 0 0</pose>
+        <material>
+          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2019-4/meshes/R2Wheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Frame-R2Wheel" type="revolute">
+      <parent>Frame</parent>
+      <child>R2Wheel</child>
+      <pose>0 4.38148899713098E-05 -6.5393372950496E-06 0 0 0</pose>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>50</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="R3Wheel">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.139700611281359 0.303199220635698 0.00169514092478139 -1.5707963267949 0 1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.255325203825891</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <collision name="R3Wheel_collision">
+        <pose>-0.303199220635698 0.00169514092478136 0.266699398118559 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2019-4/meshes/R3Wheel.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <max_vel>0</max_vel>
+              <kp>1000000</kp>
+              <kd>10</kd>
+            </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="R3Wheel_visual">
+        <pose>-0.303199220635698 0.00169514092478136 0.266699398118559 0 0 0</pose>
+        <material>
+          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2019-4/meshes/R3Wheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Frame-R3Wheel" type="revolute">
+      <parent>Frame</parent>
+      <child>R3Wheel</child>
+      <pose>0 4.41409247781261E-05 3.75316870410147E-06 0 0 0</pose>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>50</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="L1Wheel">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.673096884472197 -0.30326270994069 0.00169528357489406 -1.5707963267949 0 1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.255325203825891</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <collision name="L1Wheel_collision">
+        <pose>0.30326270994069 0.00169528357489391 -0.266696875072279 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2019-4/meshes/L1Wheel.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <max_vel>0</max_vel>
+              <kp>1000000</kp>
+              <kd>10</kd>
+            </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="L1Wheel_visual">
+        <pose>0.30326270994069 0.00169528357489391 -0.266696875072279 0 0 0</pose>
+        <material>
+          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2019-4/meshes/L1Wheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Frame-L1Wheel" type="revolute">
+      <parent>Frame</parent>
+      <child>L1Wheel</child>
+      <pose>0 4.42835748970557E-05 -1.21347009340855E-06 0 0 0</pose>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>50</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="L2Wheel">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.406431067254661 -0.303368868926877 -0.0036834982409925 -1.5707963267949 0 1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.255325203825891</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <collision name="L2Wheel_collision">
+        <pose>0.303368868926877 -0.00368349824099259 -3.10578547423262E-05 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2019-4/meshes/L2Wheel.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <max_vel>0</max_vel>
+              <kp>1000000</kp>
+              <kd>10</kd>
+            </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="L2Wheel_visual">
+        <pose>0.303368868926877 -0.00368349824099259 -3.10578547423262E-05 0 0 0</pose>
+        <material>
+          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2019-4/meshes/L2Wheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Frame-L2Wheel" type="revolute">
+      <parent>Frame</parent>
+      <child>L2Wheel</child>
+      <pose>0 4.10696537008477E-05 1.66069581911443E-05 0 0 0</pose>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>50</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="L3Wheel">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.139684826378901 -0.30326270994069 0.00169075891461175 -1.5707963267949 0 1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.255325203825891</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <collision name="L3Wheel_collision">
+        <pose>0.30326270994069 0.00169075891461172 0.266715183021017 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2019-4/meshes/L3Wheel.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <max_vel>0</max_vel>
+              <kp>1000000</kp>
+              <kd>10</kd>
+            </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="L3Wheel_visual">
+        <pose>0.30326270994069 0.00169075891461172 0.266715183021017 0 0 0</pose>
+        <material>
+          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2019-4/meshes/L3Wheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Frame-L3Wheel" type="revolute">
+      <parent>Frame</parent>
+      <child>L3Wheel</child>
+      <pose>0 3.97589146084862E-05 1.95380711622839E-05 0 0 0</pose>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>50</effort>
+        </limit>
+      </axis>
+    </joint>
+    <!--  
+    <link name="Climber1">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.323353974586063 0.00362463179526783 -0.0265995667576985 -1.5707963267949 0 1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>1.09137603293812</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <collision name="Climber1_collision">
+        <pose>-0.00362463179526776 -0.0265995667576986 0.0830460348138553 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2019-4/meshes/Climber1.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode><max_vel>0</max_vel></ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="Climber1_visual">
+        <pose>-0.00362463179526776 -0.0265995667576986 0.0830460348138553 0 0 0</pose>
+        <material>
+          <ambient>0 0 1 1</ambient>
+          <diffuse>0 0 1 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2019-4/meshes/Climber1.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Frame-Climber1" type="revolute">
+      <parent>Frame</parent>
+      <child>Climber1</child>
+      <pose>-1.36175792864179E-16 0.0146754332423 -0.265262701386064 0 6.28318530717959 3.14159265358979</pose>
+      <axis>
+        <xyz>1 1.4891775285408E-16 -6.11592854247524E-16</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <upper>2.4</upper>
+          <lower>0</lower>
+          <effort>150</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="Climber2">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.406400009399918 9.02389295287339E-17 8.71268615132043E-17-1.5708 0 1.5708</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.403193478176846</mass>
+        <pose>0.00362463179526282 0.0659461435902103 0.0193650485046986 0 0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <collision name="Climber2_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2019-4/meshes/Climber2.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode><max_vel>0</max_vel></ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="Climber2_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <material>
+          <ambient>0 0.250980392156863 0.501960784313725 1</ambient>
+          <diffuse>0 0.250980392156863 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2019-4/meshes/Climber2.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Climber1-Climber2" type="revolute">
+      <parent>Climber1</parent>
+      <child>Climber2</child>
+      <pose>0.00362463179526294 0.0235235511000238 0.261018975648933 0 5.21506836217076E-16 3.09090404763131</pose>
+      <axis>
+        <xyz>-0.998715607651152 -0.0506669027471588 -1.04234385304384E-15</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <upper>2.4</upper>
+          <lower>0</lower>
+          <effort>150</effort>
+        </limit>
+      </axis>
+    </joint>
+    <plugin name="Frame-Climber1_motor" filename="libgz_dc_motor.so">
+      <joint>Frame-Climber1</joint>
+      <topic>/gazebo/frc/simulator/pwm/5</topic>
+      <multiplier>150</multiplier>
+    </plugin>
+    <plugin name="Climber1-Climber2_motor" filename="libgz_dc_motor.so">
+      <joint>Climber1-Climber2</joint>
+      <topic>/gazebo/frc/simulator/pwm/5</topic>
+      <multiplier>150</multiplier>
+    </plugin>
+   
+    <include>
+    <uri>model://LegClimber</uri>
+    </include>
+   <joint name="Frame-Climber1" type="revolute">
+      <parent>Frame</parent>
+      <child>LegClimber::Climber1</child>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <upper>0</upper>
+          <lower>-2.4</lower>
+          <effort>150</effort>
+        </limit>
+      </axis>
+    </joint>
+     <plugin name="Frame-Climber1_motor" filename="libgz_dc_motor.so">
+      <joint>Frame-Climber1</joint>
+      <topic>/gazebo/frc/simulator/pwm/5</topic>
+      <multiplier>150</multiplier>
+    </plugin>
+     -->
+    <link name="Bumpers">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.4 0.021 0.0 -1.5707963267949 0 1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.413207943277132</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <collision name="Bumpers_collision">
+        <pose>-0.02 -0.02 -0.00318463845622289 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2019-4/meshes/Bumpers.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+         <contact>
+            <ode>
+              <max_vel>0</max_vel>
+              <kp>1000000</kp>
+              <kd>10</kd>
+            </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.1</mu>
+              <mu2>0.1</mu2>
+            </ode>
+          </friction>
+        </surface>
+        <max_contacts>10</max_contacts>
+      </collision>
+      <visual name="Bumpers_visual">
+        <pose>-0.02 -0.02 -0.00318463845622289 0 0 0</pose>
+        <material>
+          <ambient>1 0 0 1</ambient>
+          <diffuse>1 0 0 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2019-4/meshes/Bumpers.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Frame-Bumpers" type="fixed">
+      <parent>Frame</parent>
+      <child>Bumpers</child>
+      <pose>0.190499999999996 -3.79470760369927E-19 0.377815370943695 0 0 0</pose>
+    </joint>
+    <plugin name="Body_gyro" filename="libgyro.so">
+      <link>Frame</link>
+      <topic>/gazebo/frc/simulator/analog/3</topic>
+      <units>degrees</units>
+      <axis>yaw</axis>
+    </plugin>
+    <plugin name="Frame_rangefinder" filename="librangefinder.so">
+      <topic>/gazebo/frc/simulator/analog/1</topic>
+      <sensor>FrameRangefinder</sensor>
+    </plugin>
+    <plugin name="Frame-R1Wheel_motor" filename="libgz_dc_motor.so">
+      <joint>Frame-R1Wheel</joint>
+      <topic>/gazebo/frc/simulator/pwm/1</topic>
+      <multiplier>30</multiplier>
+    </plugin>
+    <plugin name="Frame-R2Wheel_motor" filename="libgz_dc_motor.so">
+      <joint>Frame-R2Wheel</joint>
+      <topic>/gazebo/frc/simulator/pwm/1</topic>
+      <multiplier>30</multiplier>
+    </plugin>
+    <plugin name="Frame-R3Wheel_motor" filename="libgz_dc_motor.so">
+      <joint>Frame-R3Wheel</joint>
+      <topic>/gazebo/frc/simulator/pwm/1</topic>
+      <multiplier>30</multiplier>
+    </plugin>
+    <plugin name="Body-RightWheel_encoder" filename="libencoder.so">
+      <joint>Frame-R2Wheel</joint>
+      <topic>/gazebo/frc/simulator/dio/1/2</topic>
+      <units>degrees</units>
+    </plugin>    
+    <plugin name="Frame-L1Wheel_motor" filename="libgz_dc_motor.so">
+      <joint>Frame-L1Wheel</joint>
+      <topic>/gazebo/frc/simulator/pwm/2</topic>
+      <multiplier>30</multiplier>
+    </plugin>
+    <plugin name="Frame-L2Wheel_motor" filename="libgz_dc_motor.so">
+      <joint>Frame-L2Wheel</joint>
+      <topic>/gazebo/frc/simulator/pwm/2</topic>
+      <multiplier>30</multiplier>
+    </plugin>
+    <plugin name="Frame-L3Wheel_motor" filename="libgz_dc_motor.so">
+      <joint>Frame-L3Wheel</joint>
+      <topic>/gazebo/frc/simulator/pwm/2</topic>
+      <multiplier>30</multiplier>
+    </plugin>
+    <plugin name="Body-LeftWheel_encoder" filename="libencoder.so">
+      <joint>Frame-L2Wheel</joint>
+      <topic>/gazebo/frc/simulator/dio/3/4</topic>
+      <units>degrees</units>
+    </plugin>
+   
+
+<!--
+    <include>
+      <uri>model://Elevator</uri>
+      <pose>-0.66 -0.265 0.03 3.14159 -0.003567 3.14159</pose>
+    </include>
+    <joint name="elevator_joint" type="fixed">
+      <child>Elevator::FrameBase</child>
+      <parent>Frame</parent>
+    </joint>
+ -->   
+    <model name='Elevator'>
+        <pose frame=''>-0.66 -0.265 0.03 3.14159 -0.003567 3.14159</pose>
+        <plugin name='clock' filename='libgz_clock.so'>
+          <topic>/gazebo/frc/time</topic>
+        </plugin>
+        <link name='FrameBase'>
+          <gravity>1</gravity>
+          <self_collide>0</self_collide>
+          <pose frame=''>-0.069233 0.266711 -0.01355 -1.5708 0 0</pose>
+          <must_be_base_link>0</must_be_base_link>
+          <velocity_decay>
+            <linear>0</linear>
+            <angular>0</angular>
+          </velocity_decay>
+          <inertial>
+            <mass>0.967597</mass>
+            <pose frame=''>0 0 0 0 -0 0</pose>
+            <inertia>
+              <ixx>0.00430893297758607</ixx>
+              <ixy>8.21391905398644E-06</ixy>
+              <ixz>2.89564781922371E-07</ixz>
+              <iyy>0.0187848870575196</iyy>
+              <iyz>1.69755410866406E-08</iyz>
+              <izz>0.0144997646753308</izz>
+            </inertia>
+          </inertial>
+          <collision name='FrameBase_collision'>
+            <pose frame=''>0.031133 -0.00085 -1.1e-05 0 -0 0</pose>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Elevator/meshes/FrameBase_col.STL</uri>
+              </mesh>
+            </geometry>
+            <surface>
+              <contact>
+                <ode><max_vel>0</max_vel></ode>
+              </contact>
+              <friction>
+                <ode>
+                  <mu>0</mu>
+                  <mu2>0</mu2>
+                </ode>
+                <torsional>
+                  <ode/>
+                </torsional>
+              </friction>
+              <bounce/>
+            </surface>
+            <max_contacts>10</max_contacts>
+          </collision>
+          <visual name='FrameBase_visual'>
+            <pose frame=''>0.031133 -0.00085 -1.1e-05 0 -0 0</pose>
+            <material>
+              <ambient>0.701961 0.701961 0.701961 1</ambient>
+              <diffuse>0.501961 0.501961 0.501961 1</diffuse>
+            </material>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Elevator/meshes/FrameBase.STL</uri>
+              </mesh>
+            </geometry>
+          </visual>
+          <enable_wind>0</enable_wind>
+          <kinematic>0</kinematic>
+        </link>
+        <link name='ElevatorBase'>
+          <gravity>1</gravity>
+          <self_collide>0</self_collide>
+          <pose frame=''>-0.048922 0.266697 -0.597377 -1.5708 0 0</pose>
+          <must_be_base_link>0</must_be_base_link>
+          <velocity_decay>
+            <linear>0</linear>
+            <angular>0</angular>
+          </velocity_decay>
+          <inertial>
+            <mass>6.13721489164084</mass>
+            <pose frame=''>0 0 0 0 -0 0</pose>
+            <inertia>
+              <ixx>0.794500746566667</ixx>
+              <ixy>0.0150648059255856</ixy>
+              <ixz>3.30955991569145E-06</ixz>
+              <iyy>0.258560332861873</iyy>
+              <iyz>4.88227096007879E-05</iyz>
+              <izz>0.542914454763162</izz>
+            </inertia>
+          </inertial>
+          <collision name='ElevatorBase_collision'>
+            <pose frame=''>0.010822 -0.584677 3e-06 0 -0 0</pose>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Elevator/meshes/ElevatorBase_col.STL</uri>
+              </mesh>
+            </geometry>
+            <surface>
+              <contact>
+                <ode><max_vel>0</max_vel></ode>
+              </contact>
+              <friction>
+                <ode>
+                  <mu>0</mu>
+                  <mu2>0</mu2>
+                </ode>
+                <torsional>
+                  <ode/>
+                </torsional>
+              </friction>
+              <bounce/>
+            </surface>
+            <max_contacts>10</max_contacts>
+          </collision>
+          <visual name='ElevatorBase_visual'>
+            <pose frame=''>0.010822 -0.584677 3e-06 0 -0 0</pose>
+            <material>
+              <ambient>0.701961 0.701961 0.701961 1</ambient>
+              <diffuse>0.501961 0.501961 0.501961 1</diffuse>
+            </material>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Elevator/meshes/ElevatorBase.STL</uri>
+              </mesh>
+            </geometry>
+          </visual>
+          <enable_wind>0</enable_wind>
+          <kinematic>0</kinematic>
+        </link>
+        <joint name='FrameBase-ElevatorBase' type='revolute'>
+          <parent>FrameBase</parent>
+          <child>ElevatorBase</child>
+          <pose frame=''>-0.039673 -0.568802 0 0 -0 0</pose>
+          <axis>
+            <xyz>0 0 1</xyz>
+            <dynamics>
+              <damping>1</damping>
+              <friction>1</friction>
+              <spring_reference>0</spring_reference>
+              <spring_stiffness>0</spring_stiffness>
+            </dynamics>
+            <limit>
+              <upper>0.6</upper>
+              <lower>0.0</lower>
+            </limit>
+            <use_parent_model_frame>0</use_parent_model_frame>
+          </axis>
+        </joint>
+        <link name='Stage1'>
+          <gravity>1</gravity>
+          <self_collide>0</self_collide>
+          <pose frame=''>-0.044951 0.268157 -0.614138 -1.5708 0 0</pose>
+          <must_be_base_link>0</must_be_base_link>
+          <velocity_decay>
+            <linear>0</linear>
+            <angular>0</angular>
+          </velocity_decay>
+          <inertial>
+            <mass>5.14333379372811</mass>
+            <pose frame=''>0 0 0 0 -0 0</pose>
+            <inertia>
+              <ixx>0.481771673218427</ixx>
+              <ixy>0.0174062674878509</ixy>
+              <ixz>0.000375739832185117</ixz>
+              <iyy>0.106616123645562</iyy>
+              <iyz>0.00366235395971953</iyz>
+              <izz>0.37969270586102</izz>
+            </inertia>
+          </inertial>
+          <collision name='Stage1_collision'>
+            <pose frame=''>0.006851 -0.601438 -0.001457 0 -0 0</pose>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Elevator/meshes/Stage1_col.STL</uri>
+              </mesh>
+            </geometry>
+            <surface>
+              <contact>
+                <ode><max_vel>0</max_vel></ode>
+              </contact>
+              <friction>
+                <ode>
+                  <mu>1</mu>
+                  <mu2>1</mu2>
+                </ode>
+                <torsional>
+                  <ode/>
+                </torsional>
+              </friction>
+              <bounce/>
+            </surface>
+          </collision>
+          <visual name='Stage1_visual'>
+            <pose frame=''>0.006851 -0.601438 -0.001457 0 -0 0</pose>
+            <material>
+              <ambient>0.701961 0.701961 0.701961 1</ambient>
+              <diffuse>0.501961 0.501961 0.501961 1</diffuse>
+            </material>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Elevator/meshes/Stage1.STL</uri>
+              </mesh>
+            </geometry>
+          </visual>
+          <enable_wind>0</enable_wind>
+          <kinematic>0</kinematic>
+        </link>
+        <joint name='ElevatorBase-Stage1' type='prismatic'>
+          <parent>ElevatorBase</parent>
+          <child>Stage1</child>
+          <pose frame=''>0.006851 -0 0.230369 0 -0 -1.5708</pose>
+          <axis>
+            <xyz>-1 0 0</xyz>
+            <dynamics>
+              <damping>1</damping>
+              <friction>1</friction>
+              <spring_reference>0</spring_reference>
+              <spring_stiffness>0</spring_stiffness>
+            </dynamics>
+            <limit>
+              <upper>0.85</upper>
+              <lower>0.0</lower>
+              <effort>500</effort>
+            </limit>
+            <use_parent_model_frame>0</use_parent_model_frame>
+          </axis>
+        </joint>
+        <link name='Stage2'>
+          <gravity>1</gravity>
+          <self_collide>0</self_collide>
+          <pose frame=''>-0.0381 0.266705 -0.630865 -1.5708 0 0</pose>
+          <must_be_base_link>0</must_be_base_link>
+          <velocity_decay>
+            <linear>0</linear>
+            <angular>0</angular>
+          </velocity_decay>
+          <inertial>
+            <mass>4.28522513417582</mass>
+            <pose frame=''>0 0 0 0 -0 0</pose>
+            <inertia>
+              <ixx>0.176009586432212</ixx>
+              <ixy>2.36115592393492E-09</ixy>
+              <ixz>5.79862967705012E-13</ixz>
+              <iyy>0.0234279109967537</iyy>
+              <iyz>9.4652964310717E-06</iyz>
+              <izz>0.15258167543546</izz>
+            </inertia>
+          </inertial>
+          <collision name='Stage2_collision'>
+            <pose frame=''>0 -0.618165 -5e-06 0 -0 0</pose>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Elevator/meshes/Stage2_col.STL</uri>
+              </mesh>
+            </geometry>
+            <surface>
+              <contact>
+                <ode><max_vel>0</max_vel></ode>
+              </contact>
+                <friction>
+                <ode>
+                  <mu>1</mu>
+                  <mu2>1</mu2>
+                </ode>
+                <torsional>
+                  <ode/>
+                </torsional>
+              </friction>
+              <bounce/>
+            </surface>
+            <max_contacts>10</max_contacts>
+          </collision>
+          <visual name='Stage2_visual'>
+            <pose frame=''>0 -0.618165 -5e-06 0 -0 0</pose>
+            <material>
+              <ambient>0.701961 0.701961 0.701961 1</ambient>
+              <diffuse>0.501961 0.501961 0.501961 1</diffuse>
+            </material>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Elevator/meshes/Stage2.STL</uri>
+              </mesh>
+            </geometry>
+          </visual>
+          <enable_wind>0</enable_wind>
+          <kinematic>0</kinematic>
+        </link>
+        <joint name='Stage1-Stage2' type='prismatic'>
+          <parent>Stage1</parent>
+          <child>Stage2</child>
+          <pose frame=''>0 -0 0.231821 0 -0 1.5708</pose>
+          <axis>
+            <xyz>1 0 0</xyz>
+            <dynamics>
+              <damping>1</damping>
+              <friction>1</friction>
+              <spring_reference>0</spring_reference>
+              <spring_stiffness>0</spring_stiffness>
+            </dynamics>
+            <limit>
+              <upper>0.95</upper>
+              <lower>0.0</lower>
+              <effort>200</effort>
+            </limit>
+            <use_parent_model_frame>0</use_parent_model_frame>
+          </axis>
+        </joint>
+        <link name='Carriage'>
+          <gravity>1</gravity>
+          <self_collide>0</self_collide>
+          <pose frame=''>-0.0381 0.2667 -0.281063 -1.5708 0 0</pose>
+          <must_be_base_link>0</must_be_base_link>
+          <velocity_decay>
+            <linear>0</linear>
+            <angular>0</angular>
+          </velocity_decay>
+          <inertial>
+            <mass>0.1</mass>
+            <pose frame=''>0 0 0 0 -0 0</pose>
+            <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+            </inertia>
+          </inertial>
+          <collision name='Carriage_collision'>
+            <pose frame=''>-0 -0.268363 -0 0 -0 0</pose>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Elevator/meshes/Carriage_col.STL</uri>
+              </mesh>
+            </geometry>
+            <surface>
+              <contact>
+                <ode><max_vel>0</max_vel></ode>
+              </contact>
+               <friction>
+                <ode>
+                  <mu>0</mu>
+                  <mu2>0</mu2>
+                </ode>
+                <torsional>
+                  <ode/>
+                </torsional>
+              </friction>
+              <bounce/>
+            </surface>
+            <max_contacts>10</max_contacts>
+          </collision>
+          <visual name='Carriage_visual'>
+            <pose frame=''>-0 -0.268363 -0 0 -0 0</pose>
+            <material>
+              <ambient>0.25098 0.501961 0.501961 1</ambient>
+              <diffuse>0.25098 0.501961 0.501961 1</diffuse>
+            </material>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Elevator/meshes/Carriage.STL</uri>
+              </mesh>
+            </geometry>
+          </visual>
+          <sensor name='CarriageCamera' type='camera'>
+            <visualize>0</visualize>
+            <always_on>1</always_on>
+            <update_rate>10</update_rate>
+            <pose frame=''>0.0381 0.0 -0 1.5708 3.14 3.14</pose>
+            <camera name='Carriagecamera'>
+              <horizontal_fov>1.5708</horizontal_fov>
+              <image>
+                <width>320</width>
+                <height>240</height>
+              </image>
+              <clip>
+                <near>0.05</near>
+                <far>50</far>
+              </clip>
+              <save enabled="true">
+                 <path>/tmp/driver-camera</path>
+              </save>
+            </camera>
+          </sensor>
+          <enable_wind>0</enable_wind>
+          <kinematic>0</kinematic>
+        </link>
+        <joint name='Stage2-Carriage' type='prismatic'>
+          <parent>Stage2</parent>
+          <child>Carriage</child>
+          <pose frame=''>-0 -0 0.231826 0 -0 1.5708</pose>
+          <axis>
+            <xyz>1 0 0</xyz>
+            <dynamics>
+              <damping>1</damping>
+              <friction>1</friction>
+              <spring_reference>0</spring_reference>
+              <spring_stiffness>1</spring_stiffness>
+            </dynamics>
+            <limit>
+              <upper>0.75</upper>
+              <lower>0.0</lower>
+              <effort>100</effort>
+            </limit>
+            <use_parent_model_frame>0</use_parent_model_frame>
+          </axis>
+        </joint>
+        <link name='TilterBaseArm'>
+          <gravity>1</gravity>
+          <self_collide>0</self_collide>
+          <pose frame=''>-0.39609 0.261767 -0.206919 -1.5708 0 0</pose>
+          <must_be_base_link>0</must_be_base_link>
+          <velocity_decay>
+            <linear>0</linear>
+            <angular>0</angular>
+          </velocity_decay>
+          <inertial>
+            <mass>0.414124</mass>
+            <pose frame=''>0 0 0 0 -0 0</pose>
+            <inertia>
+              <ixx>0.0131141</ixx>
+              <ixy>0.00161299</ixy>
+              <ixz>0.000129718</ixz>
+              <iyy>0.0131182</iyy>
+              <iyz>0.000129552</iyz>
+              <izz>0.00322598</izz>
+            </inertia>
+          </inertial>
+          <collision name='TilterBaseArm_collision'>
+            <pose frame=''>0.35799 -0.194219 0.004933 0 -0 0</pose>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Elevator/meshes/TilterBaseArm_col.STL</uri>
+              </mesh>
+            </geometry>
+            <surface>
+              <contact>
+                <ode><max_vel>0</max_vel></ode>
+              </contact>
+              <friction>
+                <ode>
+                  <mu>0</mu>
+                  <mu2>0</mu2>
+                </ode>
+                <torsional>
+                  <ode/>
+                </torsional>
+              </friction>
+              <bounce/>
+            </surface>
+            <max_contacts>10</max_contacts>
+          </collision>
+          <visual name='TilterBaseArm_visual'>
+            <pose frame=''>0.35799 -0.194219 0.004933 0 -0 0</pose>
+            <material>
+              <ambient>0.701961 0.701961 0.701961 1</ambient>
+              <diffuse>0.501961 0.501961 0.501961 1</diffuse>
+            </material>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Elevator/meshes/TilterBaseArm.STL</uri>
+              </mesh>
+            </geometry>
+          </visual>
+          <enable_wind>0</enable_wind>
+          <kinematic>0</kinematic>
+        </link>
+        <joint name='FrameBase-TilterBaseArm' type='revolute'>
+          <parent>FrameBase</parent>
+          <child>TilterBaseArm</child>
+          <pose frame=''>-0.18811 -0.187869 0 0 -0 0</pose>
+          <axis>
+            <xyz>0 0 -1</xyz>
+            <dynamics>
+              <damping>1</damping>
+              <friction>1</friction>
+              <spring_reference>0</spring_reference>
+              <spring_stiffness>0</spring_stiffness>
+            </dynamics>
+             <limit>
+              <upper>1</upper>
+              <lower>-1</lower>
+            </limit>
+            <use_parent_model_frame>0</use_parent_model_frame>
+          </axis>
+        </joint>
+        <joint name="TilterEleArm-TilterBaseArm" type="revolute">
+          <parent>TilterEleArm</parent>
+          <child>TilterBaseArm</child>
+          <pose>0.0634982471572795 0.0634171082765121 -1.24379673227537E-15 0 0 0</pose>
+          <axis>
+            <xyz>0 1 0</xyz>
+            <dynamics>
+              <damping>1</damping>
+              <friction>1</friction>
+            </dynamics>
+            <use_parent_model_frame>1</use_parent_model_frame>
+            <limit>
+              <upper>1.25</upper>
+              <lower>0</lower>
+            </limit>
+          </axis>   
+        </joint>
+        <link name='TilterEleArm'>
+          <gravity>1</gravity>
+          <self_collide>0</self_collide>
+          <pose frame=''>-0.185346 0.2667 -0.369993 -1.5708 0 0</pose>
+          <must_be_base_link>0</must_be_base_link>
+          <velocity_decay>
+            <linear>0</linear>
+            <angular>0</angular>
+          </velocity_decay>
+          <inertial>
+            <mass>0.514276</mass>
+            <pose frame=''>0 0 0 0 -0 0</pose>
+            <inertia>
+              <ixx>0.159756</ixx>
+              <ixy>0</ixy>
+              <ixz>0</ixz>
+              <iyy>0.159756</iyy>
+              <iyz>0</iyz>
+              <izz>0</izz>
+            </inertia>
+          </inertial>
+          <collision name='TilterEleArm_collision'>
+            <pose frame=''>0.147246 -0.357293 0 0 -0 0</pose>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Elevator/meshes/TilterEleArm_col.STL</uri>
+              </mesh>
+            </geometry>
+            <surface>
+              <contact>
+                <ode><max_vel>0</max_vel></ode>
+              </contact>
+                <friction>
+                <ode>
+                  <mu>0</mu>
+                  <mu2>0</mu2>
+                </ode>
+                <torsional>
+                  <ode/>
+                </torsional>
+              </friction>
+              <bounce/>
+            </surface>
+            <max_contacts>10</max_contacts>
+          </collision>
+          <visual name='TilterEleArm_visual'>
+            <pose frame=''>0.147246 -0.357293 0 0 -0 0</pose>
+            <material>
+              <ambient>0.701961 0.701961 0.701961 1</ambient>
+              <diffuse>0.501961 0.501961 0.501961 1</diffuse>
+            </material>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Elevator/meshes/TilterEleArm.STL</uri>
+              </mesh>
+            </geometry>
+          </visual>
+          <enable_wind>0</enable_wind>
+          <kinematic>0</kinematic>
+        </link>
+        <joint name='ElevatorBase-TilterEleArm' type='revolute'>
+          <parent>ElevatorBase</parent>
+          <child>TilterEleArm</child>
+          <pose frame=''>0.147246 0.099657 0 0 -0 0</pose>
+          <axis>
+            <xyz>0 0 1</xyz>
+            <dynamics>
+              <damping>1</damping>
+              <friction>1</friction>
+              <spring_reference>0</spring_reference>
+              <spring_stiffness>0</spring_stiffness>
+            </dynamics>
+            <limit>
+              <upper>3</upper>
+              <lower>-3</lower>
+              <effort>100</effort>
+            </limit>
+            <use_parent_model_frame>0</use_parent_model_frame>
+          </axis>
+        </joint>
+
+        <plugin name="TilterEleArm-TilterBaseArm_piston" filename="libpneumatic_piston.so">
+          <joint>TilterEleArm-TilterBaseArm</joint>
+          <topic>/gazebo/frc/simulator/pneumatic/1/1/1/2</topic>
+          <forward-force>50</forward-force>
+          <reverse-force>50</reverse-force>
+        </plugin>
+
+        <plugin name='ElevatorBase-Stage1_motor' filename='libgz_dc_motor.so'>
+          <joint>ElevatorBase-Stage1</joint>
+          <topic>/gazebo/frc/simulator/pwm/7</topic>
+          <multiplier>200</multiplier>
+        </plugin>
+        <plugin name="ElevatorBase-Stage1_encoder" filename="libencoder.so">
+          <joint>ElevatorBase-Stage1</joint>
+          <topic>/gazebo/frc/simulator/dio/13/14</topic>
+        </plugin>
+        <plugin name='Stage1-Stage2_motor' filename='libgz_dc_motor.so'>
+          <joint>Stage1-Stage2</joint>
+          <topic>/gazebo/frc/simulator/pwm/8</topic>
+          <multiplier>100</multiplier>
+        </plugin>
+        <plugin name="Stage1-Stage2_encoder" filename="libencoder.so">
+          <joint>Stage1-Stage2</joint>
+          <topic>/gazebo/frc/simulator/dio/15/16</topic>
+        </plugin>
+        <plugin name='Stage2-Carriage_motor' filename='libgz_dc_motor.so'>
+          <joint>Stage2-Carriage</joint>
+          <topic>/gazebo/frc/simulator/pwm/9</topic>
+          <multiplier>50</multiplier>
+        </plugin>
+        <plugin name="Stage2-Carriage_encoder" filename="libencoder.so">
+          <joint>Stage2-Carriage</joint>
+          <topic>/gazebo/frc/simulator/dio/17/18</topic>
+        </plugin>
+      <joint name="model1-model2" type="fixed">
+      <parent>Frame</parent>
+      <child>FrameBase</child>
+      </joint>
+      <model name="Grabber2">
+        <pose>-0.01 0.267 -0.25 0 0 0</pose>
+        <plugin name="clock" filename="libgz_clock.so">
+          <topic>/gazebo/frc/time</topic>
+        </plugin>
+        <link name="BasePlate">
+          <gravity>1</gravity>
+          <self_collide>0</self_collide>
+          <pose>0.0394096347676358 -0.00669160683587962 0.182263291258748 -1.5707963267949 0 -1.5707963267949</pose>
+          <must_be_base_link>1</must_be_base_link>
+          <velocity_decay>
+            <linear>0</linear>
+            <angular>0</angular>
+          </velocity_decay>
+          <inertial>
+            <mass>0.1</mass>
+            <pose>0 0 0 0 0 0</pose>
+            <inertia>
+              <ixx>0</ixx>
+              <ixy>0</ixy>
+              <ixz>0</ixz>
+              <iyy>0</iyy>
+              <iyz>0</iyz>
+              <izz>0</izz>
+            </inertia>
+          </inertial>
+          <collision name="BasePlate_collision">
+            <pose>-0.00669160683587963 -0.0209367087412525 -0.00681050686065914 0 0 0</pose>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/BasePlate_col.STL</uri>
+              </mesh>
+            </geometry>
+            <surface>
+              <contact>
+                <ode />
+              </contact>
+              <friction>
+                <ode>
+                  <mu>0</mu>
+                  <mu2>0</mu2>
+                </ode>
+              </friction>
+            </surface>
+          </collision>
+          <visual name="BasePlate_visual">
+            <pose>-0.00669160683587963 -0.0209367087412525 -0.00681050686065914 0 0 0</pose>
+            <material>
+              <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+              <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
+            </material>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/BasePlate.STL</uri>
+              </mesh>
+            </geometry>
+          </visual>
+        </link>
+        <link name="Piston">
+          <gravity>1</gravity>
+          <self_collide>0</self_collide>
+          <pose>0.142017211360412 3.57031174565772E-08 0.202177944136333 -1.5707963267949 0 -1.5707963267949</pose>
+          <must_be_base_link>0</must_be_base_link>
+          <velocity_decay>
+            <linear>0</linear>
+            <angular>0</angular>
+          </velocity_decay>
+          <inertial>
+            <mass>0.1</mass>
+            <pose>3.97046694025453E-23 0 0 0 0 0</pose>
+            <inertia>
+              <ixx>0.01</ixx>
+              <ixy>0</ixy>
+              <ixz>0</ixz>
+              <iyy>0.01</iyy>
+              <iyz>0</iyz>
+              <izz>0</izz>
+            </inertia>
+          </inertial>
+          <collision name="Piston_collision">
+            <pose>3.57031174269971E-08 -0.00102205586366754 -0.109418083453435 0 0 0</pose>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/Piston_col.STL</uri>
+              </mesh>
+            </geometry>
+            <surface>
+              <contact>
+                <ode />
+              </contact>
+              <friction>
+                <ode>
+                  <mu>0</mu>
+                  <mu2>0</mu2>
+                </ode>
+              </friction>
+            </surface>
+          </collision>
+          <visual name="Piston_visual">
+            <pose>3.57031174269971E-08 -0.00102205586366754 -0.109418083453435 0 0 0</pose>
+            <material>
+              <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+              <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+            </material>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/Piston.STL</uri>
+              </mesh>
+            </geometry>
+          </visual>
+        </link>
+        <joint name="BasePlate-Piston" type="prismatic">
+          <parent>BasePlate</parent>
+          <child>Piston</child>
+          <pose>3.57031174269971E-08 -0.00102205586366754 -0.0281129943618401 0 4.71238898038469 0</pose>
+          <axis>
+            <xyz>1 0 -2.22044604925031E-16</xyz>
+            <dynamics>
+              <damping>1.0</damping>
+              <friction>0.1</friction>
+            </dynamics>
+            <limit>
+              <upper>0</upper>
+              <lower>-1.5</lower>
+              <effort>500</effort>
+            </limit>
+          </axis>
+        </joint>
+        <link name="PistonTop">
+          <gravity>1</gravity>
+          <self_collide>0</self_collide>
+          <pose>0.107211628890243 -3.47405220951939E-15 0.109409337950045 -1.5707963267949 0 -1.5707963267949</pose>
+          <must_be_base_link>0</must_be_base_link>
+          <velocity_decay>
+            <linear>0</linear>
+            <angular>0</angular>
+          </velocity_decay>
+          <inertial>
+            <mass>0.01</mass>
+            <pose>0 0 0 0 0 0</pose>
+            <inertia>
+              <ixx>0</ixx>
+              <ixy>0</ixy>
+              <ixz>0</ixz>
+              <iyy>0</iyy>
+              <iyz>0</iyz>
+              <izz>0</izz>
+            </inertia>
+          </inertial>
+          <collision name="PistonTop_collision">
+            <pose>-3.49590388408064E-15 -0.0937906620499553 -0.0746125009832666 0 0 0</pose>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/PistonTop_col.STL</uri>
+              </mesh>
+            </geometry>
+            <surface>
+              <contact>
+                <ode />
+              </contact>
+              <friction>
+                <ode>
+                  <mu>0</mu>
+                  <mu2>0</mu2>
+                </ode>
+              </friction>
+            </surface>
+          </collision>
+          <visual name="PistonTop_visual">
+            <pose>-3.49590388408064E-15 -0.0937906620499553 -0.0746125009832666 0 0 0</pose>
+            <material>
+              <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+              <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+            </material>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/PistonTop.STL</uri>
+              </mesh>
+            </geometry>
+          </visual>
+        </link>
+        <joint name="Piston-PistonTop" type="revolute">
+          <parent>Piston</parent>
+          <child>PistonTop</child>
+          <pose>-1.81322211238313E-15 -0.0210831620499555 0 0 0 0</pose>
+          <axis>
+            <xyz>-1 0 0</xyz>
+            <dynamics>
+              <damping>0.9</damping>
+              <friction>0.1</friction>
+            </dynamics>
+            <limit>
+              <upper>0</upper>
+              <lower>-1.7</lower>
+            </limit>
+          </axis>
+        </joint>
+        <joint name="TopArmIn-PistonTop" type="revolute">
+          <parent>TopArmIn</parent>
+          <child>PistonTop</child>
+          <pose>-4.36079987370316E-19 0.0210831620499101 9.81742326322532E-10 0 0 0</pose>
+          <axis>
+            <xyz>-1 0 0</xyz>
+            <dynamics>
+              <damping>0.9</damping>
+              <friction>0.1</friction>
+            </dynamics>
+            <limit>
+              <upper>0</upper>
+              <lower>-0.8</lower>
+            </limit>
+          </axis>
+        </joint>
+        <link name="PistonLeft">
+          <gravity>1</gravity>
+          <self_collide>0</self_collide>
+          <pose>0.10721162889025 -0.0812250959730157 0.250095331024979 -1.5707963267949 0 -1.5707963267949</pose>
+          <must_be_base_link>0</must_be_base_link>
+          <velocity_decay>
+            <linear>0</linear>
+            <angular>0</angular>
+          </velocity_decay>
+          <inertial>
+            <mass>0.01</mass>
+            <pose>0 0 0 0 0 0</pose>
+            <inertia>
+              <ixx>0</ixx>
+              <ixy>0</ixy>
+              <ixz>0</ixz>
+              <iyy>0</iyy>
+              <iyz>0</iyz>
+              <izz>0</izz>
+            </inertia>
+          </inertial>
+          <collision name="PistonLeft_collision">
+            <pose>-0.0812250959730157 0.046895331024979 -0.0746125009832731 0 0 0</pose>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/PistonLeft_col.STL</uri>
+              </mesh>
+            </geometry>
+            <surface>
+              <contact>
+                <ode />
+              </contact>
+              <friction>
+                <ode>
+                  <mu>0</mu>
+                  <mu2>0</mu2>
+                </ode>
+              </friction>
+            </surface>
+          </collision>
+          <visual name="PistonLeft_visual">
+            <pose>-0.0812250959730157 0.046895331024979 -0.0746125009832731 0 0 0</pose>
+            <material>
+              <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+              <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+            </material>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/PistonLeft.STL</uri>
+              </mesh>
+            </geometry>
+          </visual>
+        </link>
+        <joint name="Piston-PistonLeft" type="revolute">
+          <parent>Piston</parent>
+          <child>PistonLeft</child>
+          <pose>-0.0182585539004344 0.0105415810094289 0 0 0 0</pose>
+          <axis>
+            <xyz>-0.500000000000005 -0.866025403784436 5.67847744670729E-16</xyz>
+            <dynamics>
+              <damping>0.9</damping>
+              <friction>0.1</friction>
+            </dynamics>
+            <limit>
+              <upper>1.7</upper>
+              <lower>0</lower>
+            </limit>
+          </axis>
+        </joint>
+        <joint name="LeftArmIn-PistonLeft" type="revolute">
+          <parent>LeftArmIn</parent>
+          <child>PistonLeft</child>
+          <pose>0.0182585539273601 -0.0105415810249748 -9.8327307407331E-10 0 0 0</pose>
+          <axis>
+            <xyz>-0.500000000000005 -0.866025403784436 5.67847744670729E-16</xyz>
+            <dynamics>
+              <damping>0.9</damping>
+              <friction>0.1</friction>
+            </dynamics>
+            <limit>
+              <upper>0.8</upper>
+              <lower>0</lower>
+            </limit>
+          </axis>
+        </joint>
+        <link name="PistonRight">
+          <gravity>1</gravity>
+          <self_collide>0</self_collide>
+          <pose>0.107211628890242 0.0812250959730234 0.250095331024977 -1.5707963267949 0 -1.5707963267949</pose>
+          <must_be_base_link>0</must_be_base_link>
+          <velocity_decay>
+            <linear>0</linear>
+            <angular>0</angular>
+          </velocity_decay>
+          <inertial>
+            <mass>0.01</mass>
+            <pose>0 0 0 0 0 0</pose>
+            <inertia>
+              <ixx>0</ixx>
+              <ixy>0</ixy>
+              <ixz>0</ixz>
+              <iyy>0</iyy>
+              <iyz>0</iyz>
+              <izz>0</izz>
+            </inertia>
+          </inertial>
+          <collision name="PistonRight_collision">
+            <pose>0.0812250959730234 0.0468953310249774 -0.0746125009832657 0 0 0</pose>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/PistonRight_col.STL</uri>
+              </mesh>
+            </geometry>
+            <surface>
+              <contact>
+                <ode />
+              </contact>
+              <friction>
+                <ode>
+                  <mu>0</mu>
+                  <mu2>0</mu2>
+                </ode>
+              </friction>
+            </surface>
+          </collision>
+          <visual name="PistonRight_visual">
+            <pose>0.0812250959730234 0.0468953310249774 -0.0746125009832657 0 0 0</pose>
+            <material>
+              <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+              <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+            </material>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/PistonRight.STL</uri>
+              </mesh>
+            </geometry>
+          </visual>
+        </link>
+        <joint name="Piston-PistonRight" type="revolute">
+          <parent>Piston</parent>
+          <child>PistonRight</child>
+          <pose>0.0182585539273665 0.0105415810249781 -9.83265718845772E-10 0 0 1.5707963267949</pose>
+          <axis>
+            <xyz>-0.866025403784444 -0.499999999999991 0</xyz>
+            <dynamics>
+              <damping>0.9</damping>
+              <friction>0.1</friction>
+            </dynamics>
+            <limit>
+              <upper>0</upper>
+              <lower>-1.7</lower>
+            </limit>
+          </axis>
+        </joint>
+        <joint name="RightArmIn-PistonRight" type="revolute">
+          <parent>RightArmIn</parent>
+          <child>PistonRight</child>
+          <pose>-0.0182585539245586 -0.0105415810233568 9.82013637074175E-10 0 1.45698559662089E-15 4.71238898038469</pose>
+          <axis>
+            <xyz>0.866025403784443 0.499999999999993 -1.95199056999166E-16</xyz>
+            <dynamics>
+              <damping>0.9</damping>
+              <friction>0.1</friction>
+            </dynamics>
+            <limit>
+              <upper>0</upper>
+              <lower>-0.8</lower>
+            </limit>
+          </axis>
+        </joint>
+        <link name="TopArmOut">
+          <gravity>1</gravity>
+          <self_collide>0</self_collide>
+          <pose>0.121621223933921 -1.34627185846477E-15 0.0339942303824916 -1.5707963267949 0 -1.5707963267949</pose>
+          <must_be_base_link>0</must_be_base_link>
+          <velocity_decay>
+            <linear>0</linear>
+            <angular>0</angular>
+          </velocity_decay>
+          <inertial>
+            <mass>0.1</mass>
+            <pose>0 0 0 0 0 0</pose>
+            <inertia>
+              <ixx>0.0</ixx>
+              <ixy>0</ixy>
+              <ixz>0</ixz>
+              <iyy>0</iyy>
+              <iyz>0</iyz>
+              <izz>0.0</izz>
+            </inertia>
+          </inertial>
+          <collision name="TopArmOut_collision">
+            <pose>-1.37132310586462E-15 -0.169205769617508 -0.089022096026944 0 0 0</pose>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/TopArmOut_col.STL</uri>
+              </mesh>
+            </geometry>
+            <surface>
+              <contact>
+                <ode />
+              </contact>
+              <friction>
+                <ode>
+                  <mu>0</mu>
+                  <mu2>0</mu2>
+                </ode>
+              </friction>
+            </surface>
+          </collision>
+          <visual name="TopArmOut_visual">
+            <pose>-1.37132310586462E-15 -0.169205769617508 -0.089022096026944 0 0 0</pose>
+            <material>
+              <ambient>0.250980392156863 0.501960784313725 0.501960784313725 1</ambient>
+              <diffuse>0.250980392156863 0.501960784313725 0.501960784313725 1</diffuse>
+            </material>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/TopArmOut.STL</uri>
+              </mesh>
+            </geometry>
+          </visual>
+        </link>
+        <joint name="BasePlate-TopArmOut" type="revolute">
+          <parent>BasePlate</parent>
+          <child>TopArmOut</child>
+          <pose>1.03165100201469E-17 -0.0383957696156085 -0.0699720960272001 0 0 3.14159265358979</pose>
+          <axis>
+            <xyz>1 0 0</xyz>
+            <dynamics>
+              <damping>0.9</damping>
+              <friction>0.1</friction>
+            </dynamics>
+            <limit>
+              <upper>0</upper>
+              <lower>-0.9</lower>
+            </limit>
+          </axis>
+        </joint>
+        <link name="RightArmOut">
+          <gravity>1</gravity>
+          <self_collide>0</self_collide>
+          <pose>0.121621223934715 0.146536494948683 0.287802884812847 -1.5707963267949 0 -1.5707963267949</pose>
+          <must_be_base_link>0</must_be_base_link>
+          <velocity_decay>
+            <linear>0</linear>
+            <angular>0</angular>
+          </velocity_decay>
+          <inertial>
+            <mass>0.1</mass>
+            <pose>0 0 0 0 0 0</pose>
+            <inertia>
+              <ixx>0.0</ixx>
+              <ixy>0.0</ixy>
+              <ixz>0</ixz>
+              <iyy>0.0</iyy>
+              <iyz>0</iyz>
+              <izz>0.0</izz>
+            </inertia>
+          </inertial>
+          <collision name="RightArmOut_collision">
+            <pose>0.146536494948683 0.0846028848128467 -0.0890220960277382 0 0 0</pose>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/RightArmOut_col.STL</uri>
+              </mesh>
+            </geometry>
+            <surface>
+              <contact>
+                <ode />
+              </contact>
+              <friction>
+                <ode>
+                  <mu>0</mu>
+                  <mu2>0</mu2>
+                </ode>
+              </friction>
+            </surface>
+          </collision>
+          <visual name="RightArmOut_visual">
+            <pose>0.146536494948683 0.0846028848128467 -0.0890220960277382 0 0 0</pose>
+            <material>
+              <ambient>0.250980392156863 0.501960784313725 0.501960784313725 1</ambient>
+              <diffuse>0.250980392156863 0.501960784313725 0.501960784313725 1</diffuse>
+            </material>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/RightArmOut.STL</uri>
+              </mesh>
+            </geometry>
+          </visual>
+        </link>
+        <joint name="BasePlate-RightArmOut" type="revolute">
+          <parent>BasePlate</parent>
+          <child>RightArmOut</child>
+          <pose>0.0332517118786002 0.0191978848124676 -0.0699720960316879 0 0 4.71238898038469</pose>
+          <axis>
+            <xyz>0.866025403784435 0.500000000000007 0</xyz>
+            <dynamics>
+              <damping>0.9</damping>
+              <friction>0.1</friction>
+            </dynamics>
+            <limit>
+              <upper>0</upper>
+              <lower>-0.9</lower>
+            </limit>
+          </axis>
+        </joint>
+        <link name="LeftArmOut">
+          <gravity>1</gravity>
+          <self_collide>0</self_collide>
+          <pose>0.121621223934282 -0.146536494947105 0.287802884813463 -1.5707963267949 0 -1.5707963267949</pose>
+          <must_be_base_link>0</must_be_base_link>
+          <velocity_decay>
+            <linear>0</linear>
+            <angular>0</angular>
+          </velocity_decay>
+          <inertial>
+            <mass>0.1</mass>
+            <pose>0 0 0 0 0 0</pose>
+            <inertia>
+              <ixx>0</ixx>
+              <ixy>0</ixy>
+              <ixz>0</ixz>
+              <iyy>0</iyy>
+              <iyz>0</iyz>
+              <izz>0</izz>
+            </inertia>
+          </inertial>
+          <collision name="LeftArmOut_collision">
+            <pose>-0.146536494947105 0.0846028848134631 -0.0890220960273056 0 0 0</pose>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/LeftArmOut_col.STL</uri>
+              </mesh>
+            </geometry>
+            <surface>
+              <contact>
+                <ode />
+              </contact>
+              <friction>
+                <ode>
+                  <mu>0</mu>
+                  <mu2>0</mu2>
+                </ode>
+              </friction>
+            </surface>
+          </collision>
+          <visual name="LeftArmOut_visual">
+            <pose>-0.146536494947105 0.0846028848134631 -0.0890220960273056 0 0 0</pose>
+            <material>
+              <ambient>0.250980392156863 0.501960784313725 0.501960784313725 1</ambient>
+              <diffuse>0.250980392156863 0.501960784313725 0.501960784313725 1</diffuse>
+            </material>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/LeftArmOut.STL</uri>
+              </mesh>
+            </geometry>
+          </visual>
+        </link>
+        <joint name="BasePlate-LeftArmOut" type="revolute">
+          <parent>BasePlate</parent>
+          <child>LeftArmOut</child>
+          <pose>-0.0332517118765194 0.0191978848130859 -0.069972096031864 0 0 1.5707963267949</pose>
+          <axis>
+            <xyz>-0.866025403784436 0.500000000000005 0</xyz>
+            <dynamics>
+              <damping>0.9</damping>
+              <friction>0.1</friction>
+            </dynamics>
+            <limit>
+              <upper>0.9</upper>
+              <lower>0</lower>
+            </limit>
+          </axis>
+        </joint>
+        <link name="TopGrabber">
+          <gravity>1</gravity>
+          <self_collide>0</self_collide>
+          <pose>0.30341463352278 0.000550207789379827 0.012109690419262 -1.5707963267949 0 -1.5707963267949</pose>
+          <must_be_base_link>0</must_be_base_link>
+          <velocity_decay>
+            <linear>0</linear>
+            <angular>0</angular>
+          </velocity_decay>
+          <inertial>
+            <mass>0.1</mass>
+            <pose>2.16840434497101E-19 -1.11022302462516E-16 -2.77555756156289E-16 0 0 0</pose>
+            <inertia>
+              <ixx>0</ixx>
+              <ixy>0</ixy>
+              <ixz>0</ixz>
+              <iyy>0</iyy>
+              <iyz>0</iyz>
+              <izz>0</izz>
+            </inertia>
+          </inertial>
+          <collision name="TopGrabber_collision">
+            <pose>0.000550207789379761 -0.191090309580738 -0.270815505615803 0 0 0</pose>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/TopGrabber_col.STL</uri>
+              </mesh>
+            </geometry>
+            <surface>
+              <contact>
+                <ode />
+              </contact>
+              <friction>
+                <ode>
+                  <mu>1</mu>
+                  <mu2>1</mu2>
+                </ode>
+              </friction>
+            </surface>
+          </collision>
+          <visual name="TopGrabber_visual">
+            <pose>0.000550207789379761 -0.191090309580738 -0.270815505615803 0 0 0</pose>
+            <material>
+              <ambient>0 0.250980392156863 0.250980392156863 1</ambient>
+              <diffuse>0 0.250980392156863 0.250980392156863 1</diffuse>
+            </material>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/TopGrabber.STL</uri>
+              </mesh>
+            </geometry>
+          </visual>
+        </link>
+        <joint name="TopArmOut-TopGrabber" type="revolute">
+          <parent>TopArmOut</parent>
+          <child>TopGrabber</child>
+          <pose>0 0.0165100000004933 -0.109928583574504 0 0 0</pose>
+          <axis>
+            <xyz>-1 0 0</xyz>
+            <dynamics>
+              <damping>0.9</damping>
+              <friction>0.1</friction>
+            </dynamics>
+            <limit>
+              <upper>0.9</upper>
+              <lower>0</lower>
+            </limit>
+          </axis>
+        </joint>
+        <joint name="TopArmIn-TopGrabber" type="revolute">
+          <parent>TopArmIn</parent>
+          <child>TopGrabber</child>
+          <pose>0 -0.0165100000004933 -0.109928583574504 0 0 0</pose>
+          <axis>
+            <xyz>-1 0 0</xyz>
+            <dynamics>
+              <damping>0.9</damping>
+              <friction>0.1</friction>
+            </dynamics>
+            <limit>
+              <upper>0.9</upper>
+              <lower>0</lower>
+            </limit>
+          </axis>
+        </joint>
+        <link name="RightGrabber">
+          <gravity>1</gravity>
+          <self_collide>0</self_collide>
+          <pose>0.303414635474732 0.165213955768811 0.299221652314552 -1.5707963267949 0 -1.5707963267949</pose>
+          <must_be_base_link>0</must_be_base_link>
+          <velocity_decay>
+            <linear>0</linear>
+            <angular>0</angular>
+          </velocity_decay>
+          <inertial>
+            <mass>0.1</mass>
+            <pose>3.05311331771918E-16 -4.16333634234434E-17 2.77555756156289E-16 0 0 0</pose>
+            <inertia>
+              <ixx>0</ixx>
+              <ixy>0</ixy>
+              <ixz>0</ixz>
+              <iyy>0</iyy>
+              <iyz>0</iyz>
+              <izz>0</izz>
+            </inertia>
+          </inertial>
+          <collision name="RightGrabber_collision">
+            <pose>0.165213955768811 0.0960216523145518 -0.270815507567756 0 0 0</pose>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/RightGrabber_col.STL</uri>
+              </mesh>
+            </geometry>
+            <surface>
+              <contact>
+                <ode />
+              </contact>
+              <friction>
+                <ode>
+                  <mu>1</mu>
+                  <mu2>1</mu2>
+                </ode>
+              </friction>
+            </surface>
+          </collision>
+          <visual name="RightGrabber_visual">
+            <pose>0.165213955768811 0.0960216523145518 -0.270815507567756 0 0 0</pose>
+            <material>
+              <ambient>0 0.250980392156863 0.250980392156863 1</ambient>
+              <diffuse>0 0.250980392156863 0.250980392156863 1</diffuse>
+            </material>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/RightGrabber.STL</uri>
+              </mesh>
+            </geometry>
+          </visual>
+        </link>
+        <joint name="RightArmOut-RightGrabber" type="revolute">
+          <parent>RightArmOut</parent>
+          <child>RightGrabber</child>
+          <pose>-0.0142980799909579 -0.00825500033167442 -0.109928585526126 0 0 4.71238898038469</pose>
+          <axis>
+            <xyz>0.866025403784444 0.499999999999991 0</xyz>
+            <dynamics>
+              <damping>0.9</damping>
+              <friction>0.1</friction>
+            </dynamics>
+            <limit>
+              <upper>0.9</upper>
+              <lower>0</lower>
+            </limit>
+          </axis>
+        </joint>
+        <joint name="RightArmIn-RightGrabber" type="revolute">
+          <parent>RightArmIn</parent>
+          <child>RightGrabber</child>
+          <pose>0.0142980788411829 0.00825499966785105 -0.109928585526199 0 0 4.71238898038469</pose>
+          <axis>
+            <xyz>0.866025403784444 0.49999999999999 0</xyz>
+            <dynamics>
+              <damping>0.9</damping>
+              <friction>0.1</friction>
+            </dynamics>
+            <limit>
+              <upper>0.9</upper>
+              <lower>0</lower>
+            </limit>
+          </axis>
+        </joint>
+        <link name="LeftGrabber">
+          <gravity>1</gravity>
+          <self_collide>0</self_collide>
+          <pose>0.303414633549958 -0.165764166655437 0.298268660755848 -1.5707963267949 0 -1.5707963267949</pose>
+          <must_be_base_link>0</must_be_base_link>
+          <velocity_decay>
+            <linear>0</linear>
+            <angular>0</angular>
+          </velocity_decay>
+          <inertial>
+            <mass>0.1</mass>
+            <pose>2.77555756156289E-16 -1.38777878078145E-17 -4.44089209850063E-16 0 0 0</pose>
+            <inertia>
+              <ixx>0</ixx>
+              <ixy>0</ixy>
+              <ixz>0</ixz>
+              <iyy>0</iyy>
+              <iyz>0</iyz>
+              <izz>0</izz>
+            </inertia>
+          </inertial>
+          <collision name="LeftGrabber_collision">
+            <pose>-0.165764166655437 0.0950686607558478 -0.270815505642981 0 0 0</pose>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/LeftGrabber_col.STL</uri>
+              </mesh>
+            </geometry>
+            <surface>
+              <contact>
+                <ode />
+              </contact>
+              <friction>
+                <ode>
+                  <mu>1</mu>
+                  <mu2>1</mu2>
+                </ode>
+              </friction>
+            </surface>
+          </collision>
+          <visual name="LeftGrabber_visual">
+            <pose>-0.165764166655437 0.0950686607558478 -0.270815505642981 0 0 0</pose>
+            <material>
+              <ambient>0 0.250980392156863 0.250980392156863 1</ambient>
+              <diffuse>0 0.250980392156863 0.250980392156863 1</diffuse>
+            </material>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/LeftGrabber.STL</uri>
+              </mesh>
+            </geometry>
+          </visual>
+        </link>
+        <joint name="LeftArmOut-LeftGrabber" type="revolute">
+          <parent>LeftArmOut</parent>
+          <child>LeftGrabber</child>
+          <pose>0.0142980795568851 -0.00825500008106252 -0.109928583601641 0 0 0</pose>
+          <axis>
+            <xyz>-0.500000000000003 -0.866025403784437 1.05313796828123E-15</xyz>
+            <dynamics>
+              <damping>0.9</damping>
+              <friction>0.1</friction>
+            </dynamics>
+            <limit>
+              <upper>0</upper>
+              <lower>-0.9</lower>
+            </limit>
+          </axis>
+        </joint>
+        
+        <joint name="LeftArmIn-LeftGrabber" type="revolute">
+          <parent>LeftArmIn</parent>
+          <child>LeftGrabber</child>
+          <pose>-0.0142980795568851 0.00825500008106252 -0.109928583601641 0 0 0</pose>
+          <axis>
+            <xyz>-0.500000000000004 -0.866025403784436 0</xyz>
+            <dynamics>
+              <damping>0.9</damping>
+              <friction>0.1</friction>
+            </dynamics>
+            <limit>
+              <upper>0</upper>
+              <lower>-0.9</lower>
+            </limit>
+          </axis>
+        </joint>
+        <link name="TopWheel">
+          <gravity>1</gravity>
+          <self_collide>0</self_collide>
+          <pose>0.40621104995321 0.0286687406039986 0.0121096904154314 -1.5707963267949 0 -1.5707963267949</pose>
+          <must_be_base_link>0</must_be_base_link>
+          <velocity_decay>
+            <linear>0</linear>
+            <angular>0</angular>
+          </velocity_decay>
+          <inertial>
+            <mass>0.00457804253609279</mass>
+            <pose>0 0 0 0 0 0</pose>
+            <inertia>
+              <ixx>0</ixx>
+              <ixy>0</ixy>
+              <ixz>0</ixz>
+              <iyy>0</iyy>
+              <iyz>0</iyz>
+              <izz>0</izz>
+            </inertia>
+          </inertial>
+          <collision name="TopWheel_collision">
+            <pose>0.0286687406039985 -0.191090309584569 -0.373611922046233 0 0 0</pose>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/TopWheel_col.STL</uri>
+              </mesh>
+            </geometry>
+            <surface>
+              <contact>
+                <ode />
+              </contact>
+              <friction>
+                <ode>
+                  <mu>1</mu>
+                  <mu2>1</mu2>
+                </ode>
+              </friction>
+            </surface>
+          </collision>
+          <visual name="TopWheel_visual">
+            <pose>0.0286687406039985 -0.191090309584569 -0.373611922046233 0 0 0</pose>
+            <material>
+              <ambient>0 0 1 1</ambient>
+              <diffuse>0 0 1 1</diffuse>
+            </material>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/TopWheel.STL</uri>
+              </mesh>
+            </geometry>
+          </visual>
+        </link>
+        <joint name="TopGrabber-TopWheel" type="revolute">
+          <parent>TopGrabber</parent>
+          <child>TopWheel</child>
+          <pose>0 -3.5344227544698E-12 4.17121892581918E-12 0 0 0</pose>
+          <axis>
+            <xyz>-1 0 0</xyz>
+            <dynamics>
+              <damping>1</damping>
+              <friction>0</friction>
+            </dynamics>
+          </axis>
+        </joint>
+        <link name="RightWheel">
+          <gravity>1</gravity>
+          <self_collide>0</self_collide>
+          <pose>0.40621105630917 0.151154688778214 0.323573020789361 -1.5707963267949 0 -1.5707963267949</pose>
+          <must_be_base_link>0</must_be_base_link>
+          <velocity_decay>
+            <linear>0</linear>
+            <angular>0</angular>
+          </velocity_decay>
+          <inertial>
+            <mass>0.0045780425360928</mass>
+            <pose>0 0 0 0 0 0</pose>
+            <inertia>
+              <ixx>0</ixx>
+              <ixy>0</ixy>
+              <ixz>0</ixz>
+              <iyy>0</iyy>
+              <iyz>0</iyz>
+              <izz>0</izz>
+            </inertia>
+          </inertial>
+          <collision name="RightWheel_collision">
+            <pose>0.151154688778214 0.120373020789361 -0.373611928402193 0 0 0</pose>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/RightWheel_col.STL</uri>
+              </mesh>
+            </geometry>
+            <surface>
+              <contact>
+                <ode />
+              </contact>
+              <friction>
+                <ode>
+                  <mu>1</mu>
+                  <mu2>1</mu2>
+                </ode>
+              </friction>
+            </surface>
+          </collision>
+          <visual name="RightWheel_visual">
+            <pose>0.151154688778214 0.120373020789361 -0.373611928402193 0 0 0</pose>
+            <material>
+              <ambient>0 0 1 1</ambient>
+              <diffuse>0 0 1 1</diffuse>
+            </material>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/RightWheel.STL</uri>
+              </mesh>
+            </geometry>
+          </visual>
+        </link>
+        <joint name="RightGrabber-RightWheel" type="revolute">
+          <parent>RightGrabber</parent>
+          <child>RightWheel</child>
+          <pose>4.30759425351646E-09 6.4512694492036E-09 -8.7538716275759E-09 0 1.78723566518379E-13 1.5707963267951</pose>
+          <axis>
+            <xyz>0.866025403784881 0.499999999999233 -2.39444176584257E-14</xyz>
+            <dynamics>
+              <damping>1</damping>
+              <friction>0</friction>
+            </dynamics>
+          </axis>
+        </joint>
+        <link name="LeftWheel">
+          <gravity>1</gravity>
+          <self_collide>0</self_collide>
+          <pose>0.406211049792121 -0.179823433157647 0.273917296777634 -1.5707963267949 0 -1.5707963267949</pose>
+          <must_be_base_link>0</must_be_base_link>
+          <velocity_decay>
+            <linear>0</linear>
+            <angular>0</angular>
+          </velocity_decay>
+          <inertial>
+            <mass>0.00457804253609279</mass>
+            <pose>0 0 0 0 0 0</pose>
+            <inertia>
+              <ixx>0</ixx>
+              <ixy>0</ixy>
+              <ixz>0</ixz>
+              <iyy>0</iyy>
+              <iyz>0</iyz>
+              <izz>0</izz>
+            </inertia>
+          </inertial>
+          <collision name="LeftWheel_collision">
+            <pose>-0.179823433157647 0.0707172967776338 -0.373611921885144 0 0 0</pose>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/LeftWheel_col.STL</uri>
+              </mesh>
+            </geometry>
+            <surface>
+              <contact>
+                <ode />
+              </contact>
+              <friction>
+                <ode>
+                  <mu>1</mu>
+                  <mu2>1</mu2>
+                </ode>
+              </friction>
+            </surface>
+          </collision>
+          <visual name="LeftWheel_visual">
+            <pose>-0.179823433157647 0.0707172967776338 -0.373611921885144 0 0 0</pose>
+            <material>
+              <ambient>0 0 1 1</ambient>
+              <diffuse>0 0 1 1</diffuse>
+            </material>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/LeftWheel.STL</uri>
+              </mesh>
+            </geometry>
+          </visual>
+        </link>
+        <joint name="LeftGrabber-LeftWheel" type="revolute">
+          <parent>LeftGrabber</parent>
+          <child>LeftWheel</child>
+          <pose>-4.10787792670675E-11 -3.71160102652368E-10 3.46951356533509E-10 0 8.86062342427415E-15 4.71238898038468</pose>
+          <axis>
+            <xyz>0.866025403784441 -0.499999999999995 -1.18709844548525E-15</xyz>
+            <dynamics>
+              <damping>1</damping>
+              <friction>0</friction>
+            </dynamics>
+          </axis>
+        </joint>
+        <link name="TopArmIn">
+          <gravity>1</gravity>
+          <self_collide>0</self_collide>
+          <pose>0.122050767731529 -3.48368510905875E-15 0.0678076269763273 -1.5707963267949 0 -1.5707963267949</pose>
+          <must_be_base_link>0</must_be_base_link>
+          <velocity_decay>
+            <linear>0</linear>
+            <angular>0</angular>
+          </velocity_decay>
+          <inertial>
+            <mass>0.1</mass>
+            <pose>0 0 0 0 0 0</pose>
+            <inertia>
+              <ixx>0</ixx>
+              <ixy>0</ixy>
+              <ixz>0</ixz>
+              <iyy>0</iyy>
+              <iyz>0</iyz>
+              <izz>0</izz>
+            </inertia>
+          </inertial>
+          <collision name="TopArmIn_collision">
+            <pose>-3.50883173434144E-15 -0.135392373023673 -0.0894516398245526 0 0 0</pose>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/TopArmIn_col.STL</uri>
+              </mesh>
+            </geometry>
+            <surface>
+              <contact>
+                <ode />
+              </contact>
+              <friction>
+                <ode>
+                  <mu>0</mu>
+                  <mu2>0</mu2>
+                </ode>
+              </friction>
+            </surface>
+          </collision>
+          <visual name="TopArmIn_visual">
+            <pose>-3.50883173434144E-15 -0.135392373023673 -0.0894516398245526 0 0 0</pose>
+            <material>
+              <ambient>0.250980392156863 0.501960784313725 0.501960784313725 1</ambient>
+              <diffuse>0.250980392156863 0.501960784313725 0.501960784313725 1</diffuse>
+            </material>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/TopArmIn.STL</uri>
+              </mesh>
+            </geometry>
+          </visual>
+        </link>
+        <joint name="BasePlate-TopArmIn" type="revolute">
+          <parent>BasePlate</parent>
+          <child>TopArmIn</child>
+          <pose>-1.74819967646914E-15 -0.037602373022236 -0.0704016398246771 0 0 3.14159265358979</pose>
+          <axis>
+            <xyz>1 0 0</xyz>
+            <dynamics>
+              <damping>0.9</damping>
+              <friction>0.1</friction>
+            </dynamics>
+            <limit>
+              <upper>0</upper>
+              <lower>-0.9</lower>
+            </limit>
+          </axis>
+        </joint>
+        <link name="LeftArmIn">
+          <gravity>1</gravity>
+          <self_collide>0</self_collide>
+          <pose>0.122050767731578 -0.117253234511133 0.270896186514885 -1.5707963267949 0 -1.5707963267949</pose>
+          <must_be_base_link>0</must_be_base_link>
+          <velocity_decay>
+            <linear>0</linear>
+            <angular>0</angular>
+          </velocity_decay>
+          <inertial>
+            <mass>0.1</mass>
+            <pose>0 0 0 0 0 0</pose>
+            <inertia>
+              <ixx>0</ixx>
+              <ixy>0</ixy>
+              <ixz>0</ixz>
+              <iyy>0</iyy>
+              <iyz>0</iyz>
+              <izz>0</izz>
+            </inertia>
+          </inertial>
+          <collision name="LeftArmIn_collision">
+            <pose>-0.117253234511133 0.0676961865148847 -0.0894516398246011 0 0 0</pose>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/LeftArmIn_col.STL</uri>
+              </mesh>
+            </geometry>
+            <surface>
+              <contact>
+                <ode />
+              </contact>
+              <friction>
+                <ode>
+                  <mu>0</mu>
+                  <mu2>0</mu2>
+                </ode>
+              </friction>
+            </surface>
+          </collision>
+          <visual name="LeftArmIn_visual">
+            <pose>-0.117253234511133 0.0676961865148847 -0.0894516398246011 0 0 0</pose>
+            <material>
+              <ambient>0.250980392156863 0.501960784313725 0.501960784313725 1</ambient>
+              <diffuse>0.250980392156863 0.501960784313725 0.501960784313725 1</diffuse>
+            </material>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/LeftArmIn.STL</uri>
+              </mesh>
+            </geometry>
+          </visual>
+        </link>
+        <joint name="BasePlate-LeftArmIn" type="revolute">
+          <parent>BasePlate</parent>
+          <child>LeftArmIn</child>
+          <pose>-0.0325646102736109 0.0188011865146311 -0.0704016398275667 0 0 1.5707963267949</pose>
+          <axis>
+            <xyz>-0.866025403784436 0.500000000000004 0</xyz>
+            <dynamics>
+              <damping>0.9</damping>
+              <friction>0.1</friction>
+            </dynamics>
+            <limit>
+              <upper>0.9</upper>
+              <lower>0</lower>
+            </limit>
+          </axis>
+        </joint>
+        <link name="RightArmIn">
+          <gravity>1</gravity>
+          <self_collide>0</self_collide>
+          <pose>0.122050767731794 0.117253234511941 0.270896186514521 -1.5707963267949 0 -1.5707963267949</pose>
+          <must_be_base_link>0</must_be_base_link>
+          <velocity_decay>
+            <linear>0</linear>
+            <angular>0</angular>
+          </velocity_decay>
+          <inertial>
+            <mass>0.1</mass>
+            <pose>0 0 0 0 0 0</pose>
+            <inertia>
+              <ixx>0</ixx>
+              <ixy>0</ixy>
+              <ixz>0</ixz>
+              <iyy>0</iyy>
+              <iyz>0</iyz>
+              <izz>0</izz>
+            </inertia>
+          </inertial>
+          <collision name="RightArmIn_collision">
+            <pose>0.117253234511941 0.067696186514521 -0.0894516398248171 0 0 0</pose>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/RightArmIn_col.STL</uri>
+              </mesh>
+            </geometry>
+            <surface>
+              <contact>
+                <ode />
+              </contact>
+              <friction>
+                <ode>
+                  <mu>0</mu>
+                  <mu2>0</mu2>
+                </ode>
+              </friction>
+            </surface>
+          </collision>
+          <visual name="RightArmIn_visual">
+            <pose>0.117253234511941 0.067696186514521 -0.0894516398248171 0 0 0</pose>
+            <material>
+              <ambient>0.250980392156863 0.501960784313725 0.501960784313725 1</ambient>
+              <diffuse>0.250980392156863 0.501960784313725 0.501960784313725 1</diffuse>
+            </material>
+            <geometry>
+              <mesh>
+                <scale>1 1 1</scale>
+                <uri>model://Grabber2/meshes/RightArmIn.STL</uri>
+              </mesh>
+            </geometry>
+          </visual>
+        </link>
+        <joint name="BasePlate-RightArmIn" type="revolute">
+          <parent>BasePlate</parent>
+          <child>RightArmIn</child>
+          <pose>0.0325646102746516 0.018801186514301 -0.0704016398274266 0 0 4.71238898038469</pose>
+          <axis>
+            <xyz>0.866025403784436 0.500000000000004 0</xyz>
+            <dynamics>
+              <damping>0.9</damping>
+              <friction>0.1</friction>
+            </dynamics>
+            <limit>
+              <upper>0</upper>
+              <lower>-0.9</lower>
+            </limit>
+          </axis> 
+        </joint>
+        <plugin name="BasePlate-Piston_piston" filename="libpneumatic_piston.so">
+          <joint>BasePlate-Piston</joint>
+          <topic>/gazebo/frc/simulator/pneumatic/1/2/1/3</topic>
+          <forward-force>500</forward-force>
+          <reverse-force>500</reverse-force>
+        </plugin>
+         
+        <plugin name='RightWheelMotor' filename='libgz_dc_motor.so'>
+          <joint>RightGrabber-RightWheel</joint>
+          <topic>/gazebo/frc/simulator/pwm/6</topic>
+          <multiplier>10</multiplier>
+        </plugin>
+        <plugin name='LeftWheelMotor' filename='libgz_dc_motor.so'>
+          <joint>LeftGrabber-LeftWheel</joint>
+          <topic>/gazebo/frc/simulator/pwm/6</topic>
+          <multiplier>10</multiplier>
+        </plugin>
+          <plugin name='TopWheelMotor' filename='libgz_dc_motor.so'>
+          <joint>TopGrabber-TopWheel</joint>
+          <topic>/gazebo/frc/simulator/pwm/6</topic>
+          <multiplier>10</multiplier>
+        </plugin>
+        <joint name="grabber-elevator" type="revolute">
+          <parent>Carriage</parent>
+          <child>BasePlate</child>
+          <pose>0 0.15 -0.05 0 0 0</pose>
+          <axis>
+            <xyz>-1 0 0</xyz>
+            <dynamics>
+              <damping>5</damping>
+              <friction>5</friction>
+            </dynamics>
+            <limit>
+              <upper>1.3</upper>
+              <lower>0</lower>
+            </limit>
+          </axis>
+        </joint>
+        <plugin name="grabber-elevator_piston" filename="libpneumatic_piston.so">
+          <joint>grabber-elevator</joint>
+          <topic>/gazebo/frc/simulator/pneumatic/1/4/1/5</topic>
+          <forward-force>100</forward-force>
+          <reverse-force>100</reverse-force>
+        </plugin>
+       </model>
+    </model>
+    
+  </model>
+  
+</sdf>

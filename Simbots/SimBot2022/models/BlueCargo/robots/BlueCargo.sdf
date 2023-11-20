@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.7">
+  <model name="BlueCargo">
+    <pose>0 0 0 0 0 0</pose>
+    <link name="Ball">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0 0 0 0 0 0</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <!---->
+      <velocity_decay>
+        <linear>0.00</linear>
+        <angular>0.01</angular>
+      </velocity_decay>
+      
+      
+      <inertial>
+        <mass>0.1</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <!---->
+        <inertia>
+          <ixx>0.0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.0</iyy>
+          <iyz>0</iyz>
+          <izz>0.0</izz>
+        </inertia>
+        
+      </inertial>
+      
+      <collision name="Ball_collision">
+        <pose>0 -0.12065 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>.95 .95 .95</scale>
+            <uri>model://BlueCargo/meshes/Ball_col.STL</uri>
+          </mesh>
+        </geometry>
+       <surface>
+        <bounce>
+          <restitution_coeeficient>0.5</restitution_coeeficient>
+        </bounce>
+        <friction>
+          <ode>
+            <mu>1</mu>
+            <mu2>1</mu2>
+          </ode>
+        </friction>
+        <contact>
+          <elastic_modulus>3</elastic_modulus>
+          <ode>
+            <max_vel>10</max_vel>
+            <soft_cfm>2.0</soft_cfm>
+            <kd>1</kd>
+            <kp>1e6</kp>
+            <min_depth>0.0001</min_depth>
+          </ode>
+        </contact>
+		  </surface>      
+      </collision>
+      <visual name="Ball_visual">
+        <pose>0 -0.12065 0 0 0 0</pose>
+        <material>
+          <ambient>0 0 1 1</ambient>
+          <diffuse>0 0 1 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>.95 .95 .95</scale>
+            <uri>model://BlueCargo/meshes/Ball.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>

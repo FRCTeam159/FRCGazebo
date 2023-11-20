@@ -1,0 +1,33 @@
+{
+  "HALProvider": {
+    "Other Devices": {
+      "window": {
+        "visible": false
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/SendableChooser[0]": "String Chooser"
+    }
+  },
+  "NetworkTables": {
+    "retained": {
+      "gazebo": {
+        "open": true
+      }
+    },
+    "transitory": {
+      "gazebo": {
+        "encoder": {
+          "1": {
+            "open": true
+          },
+          "open": true
+        },
+        "open": true
+      }
+    }
+  }
+}

@@ -1,0 +1,117 @@
+<xml version="1.0">
+<dashboard>
+	<widget field="CargoMode" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="477" y="372"/>
+		<width>71</width>
+	</widget>
+	<widget field="AutoTime" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="257" y="366"/>
+		<width>102</width>
+	</widget>
+	<widget field="SendableChooser[0]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="697" y="283"/>
+	</widget>
+	<widget field="HatchMode" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="384" y="370"/>
+		<width>76</width>
+	</widget>
+	<widget field="Back Climber" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="44" y="342"/>
+	</widget>
+	<widget field="Front Climber" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="44" y="368"/>
+	</widget>
+	<widget field="Reset" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="128" y="365"/>
+	</widget>
+	<widget field="Gazebo" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="186" y="365"/>
+	</widget>
+	<widget field="Elevator Target" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="568" y="341"/>
+		<width>134</width>
+	</widget>
+	<widget field="Elevator Actual" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="567" y="369"/>
+		<width>134</width>
+	</widget>
+	<widget field="Elevator Level" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="604" y="307"/>
+		<width>96</width>
+		<property name="Font Size" value="16"/>
+	</widget>
+	<widget field="Travel" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="16" y="306"/>
+		<width>109</width>
+	</widget>
+	<widget field="Grabber Tilted" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="282" y="343"/>
+		<width>89</width>
+	</widget>
+	<widget field="Elevator Tilted" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="383" y="342"/>
+		<width>83</width>
+		<height>14</height>
+	</widget>
+	<widget field="Input On" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="194" y="340"/>
+		<width>71</width>
+	</widget>
+	<widget field="Eject On" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="124" y="341"/>
+		<width>67</width>
+	</widget>
+	<widget field="Claw Open" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="478" y="343"/>
+		<width>75</width>
+	</widget>
+	<widget field="Heading" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="138" y="308"/>
+		<width>114</width>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
+		<location x="407" y="1"/>
+		<width>369</width>
+		<height>291</height>
+		<property name="Camera Choice" value=""/>
+	</static-widget>
+	<widget field="Show HSV" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="513" y="307"/>
+	</widget>
+	<widget field="Targets" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="398" y="306"/>
+		<width>98</width>
+	</widget>
+	<widget field="Range" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="271" y="307"/>
+		<width>108</width>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.MjpgStreamViewerImpl">
+		<location x="8" y="6"/>
+		<width>415</width>
+		<height>281</height>
+		<property name="MJPG Server URL" value="http://localhost:9002/?action=stream"/>
+	</static-widget>
+		<property name="Team Number/Host" value="localhost"/>
+		<property name="Automatically Show Widgets" value="false"/>
+		<property name="Grid Cell Width(s)" value="16"/>
+		<property name="Grid Cell Height(s)" value="16"/>
+		<property name="Window X Position" value="1016"/>
+		<property name="Window Y Position" value="84"/>
+		<property name="Window Width" value="849"/>
+		<property name="Window Height" value="481"/>
+		<property name="Save File" value="C:\Users\deans\Robotics\FRCTeamRepos\FRCGazebo\Simbots\SimBot2019\dashboard.xml"/>
+</dashboard>
+<live-window>
+</live-window>
+	<hidden field="HighGear"/>
+	<hidden field="Status"/>
+	<hidden field="RightWheels"/>
+	<hidden field="LeftDistance"/>
+	<hidden field="SimClock"/>
+	<hidden field="H offset"/>
+	<hidden field="Elevator On"/>
+	<hidden field="LeftWheels"/>
+	<hidden field="RightDistance"/>
+	<hidden field="Target Tilt"/>
+</xml>

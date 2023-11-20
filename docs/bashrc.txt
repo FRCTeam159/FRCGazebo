@@ -1,23 +1,43 @@
 # this fixes wierd characters in vscode gitbash terminal
 TERM=cygwin
+# fixes library path problem on windows
+source ${HOME}/miniconda3/etc/profile.d/conda.sh
+conda activate base
 
 alias lst='ls -ltr'
 alias swap='pushd +1'
 alias his='history'
 
-export GZ_SIM=/c/Users/Alpiner/Robotics/FRCTeam159Repos/FRCGazebo
-export GAZEBO_LIBRARY=/c/Users/Alpiner/miniconda3/Library
+export GAZEBO_IP=127.0.0.1
+export GZ_SIM=${HOME}/Robotics/FRCTeamRepos/FRCGazebo
+export GAZEBO_LIBRARY=${HOME}/miniconda3/Library
 export GAZEBO_TOOLS=$GAZEBO_LIBRARY/share/gazebo-11
-
+export GAZEBO_PLUGIN_PATH=$GAZEBO_TOOLS/plugins:$GZ_SIM/plugins
 export GAZEBO_MASTER_URI=${GAZEBO_MASTER_URI:-http://localhost:11345}
 export GAZEBO_MODEL_DATABASE_URI=http://models.gazebosim.org
-export GAZEBO_RESOURCE_PATH=$GAZEBO_TOOLS:$GZ_SIM/worlds
-export GAZEBO_PLUGIN_PATH=$GAZEBO_TOOLS/plugins:$GZ_SIM/plugins
-export GAZEBO_MODEL_PATH=$GAZEBO_TOOLS/models:$GZ_SIM/models
 export OGRE_RESOURCE_PATH=$GAZEBO_LIBRARY/bin
 
-export LD_LIBRARY_PATH=$OGRE_RESOURCE_PATH:$GAZEBO_PLUGIN_PATH
+# choose which robot project to simulate
+# 1) set GZPROJ by uncommenting one of the exports below
+# 2) open a new terminal in VS code
+# 3) in terminal enter "gzcomp" (switches directory to project)
+# 4) choose simulation world by editing "start_gazebo"
+# 5) run simulation by entering "gzstart"
+# 6) stop simulation by entering "gzstop"
 
-alias gztest='cd $GZ_SIM/gzsim/tests/SimDriveTest'
+export GZPROJ=$GZ_SIM/Simbots/SimBot2022
+#export GZPROJ=$GZ_SIM/Simbots/SimBot2023
+#export GZPROJ=$GZ_SIM/Simbots/SimWaffle
+
+export GAZEBO_RESOURCE_PATH=$GZPROJ/worlds:$GZ_SIM/worlds:$GAZEBO_TOOLS
+export GAZEBO_MODEL_PATH=$GAZEBO_TOOLS/models:$GZPROJ/models:$GZ_SIM/models
+
+export LD_LIBRARY_PATH=$OGRE_RESOURCE_PATH:$GAZEBO_PLUGIN_PATH
+export SMART_DASHBOARD=${HOME}/Robotics/SmartDashboard/build/libs/SmartDashboard-winx64.jar
+
+alias gzcomp='cd $GZPROJ'
+alias gztest='cd $GZ_SIM/gzsim/tests/SwerveDriveTest'
+alias gzdev='cd $GZ_SIM/gzsim/c++'
+alias waffle='cd $GZ_SIM/Simbots/SimWaffle'
 
 export PATH=.:$HOME/bin:$GZ_SIM/wpilib/libs:$PATH

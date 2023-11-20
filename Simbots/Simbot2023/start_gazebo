@@ -1,16 +1,8 @@
 #!/bin/bash
 rm -f tmp/*;
 
-#gazebo --verbose simswervebot-empty-field.world &
-#gazebo --verbose simswervebot-with-perim-tags-1.world &
-#gazebo --verbose simswervebot-with-front-tags.world &
-#gazebo --verbose simswervebot-with-single-tag.world &
-#gazebo -u --verbose simswervebot-2023-Field.world &
-#gazebo -u --verbose simswervebot-1arm-2023-Field.world &
-
 #gazebo --verbose simcompbot-empty-field.world &
-gazebo -u --verbose simcompbot-2023-field.world &
+gazebo  --verbose simcompbot-2023-field.world &
 #gazebo -u --verbose simcompbot-cone.world &
 #gazebo -u --verbose simcompbot-cube.world &
-
 #gazebo --verbose temp.world &
