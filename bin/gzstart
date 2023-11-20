@@ -13,5 +13,5 @@ echo position=$POSITION
 start_gazebo --verbose &
 GzProgram.exe &
 start_dashboard &
-sleep 2
+sleep 4
 simulate &

@@ -67,20 +67,19 @@ public class ExecLoader extends CommandBase implements RobotMap {
         setLoaderAngle(-incr_angle * left);
       else if (right > 0)
         setLoaderAngle(incr_angle * right);
-      if (!Robot.inAuto()) {
-        // Robot.loader.execute();
-        switch (state) {
-          case LOW:
-            low();
-            break;
-          case LOAD:
-            load();
-            break;
-          case IDLE:
-            idle();
-            break;
-        }
-      }
+      // if (!Robot.inAuto()) {
+      //   switch (state) {
+      //     case LOW:
+      //       low();
+      //       break;
+      //     case LOAD:
+      //       load();
+      //       break;
+      //     case IDLE:
+      //       idle();
+      //       break;
+      //   }
+      // }
     }
   }
 
