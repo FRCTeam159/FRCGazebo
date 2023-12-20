@@ -1,0 +1,33 @@
+{
+  "NetworkTables Settings": {
+    "mode": "Server",
+    "serverTeam": "localhost"
+  },
+  "Server": {
+    "open": true
+  },
+  "retained": {
+    "SmartDashboard": {
+      "open": true
+    }
+  },
+  "transitory": {
+    "Shuffleboard": {
+      "open": true
+    },
+    "SmartDashboard": {
+      "open": true
+    },
+    "gazebo": {
+      "motor": {
+        "1": {
+          "open": true
+        },
+        "2": {
+          "open": true
+        },
+        "open": true
+      }
+    }
+  }
+}
