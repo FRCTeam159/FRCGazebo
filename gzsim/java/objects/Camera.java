@@ -5,12 +5,16 @@
 package objects;
 
 import org.opencv.core.Mat;
+import org.opencv.core.Core;
 
 import edu.wpi.first.cscore.CvSink;
 import gazebo.SimCamera;
 
 /** Add your docs here. */
 public class Camera implements CameraInterface {
+    static {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+      }
 
     public int image_width = 640;
     public int image_height = 480;

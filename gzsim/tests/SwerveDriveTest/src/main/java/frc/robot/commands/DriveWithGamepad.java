@@ -7,7 +7,6 @@ package frc.robot.commands;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -66,16 +65,9 @@ public class DriveWithGamepad extends CommandBase {
             * Drivetrain.kMaxAngularSpeed;
    
     if(m_drive.disabled()){
-   //   if(m_drive.disabled() && (Math.abs(vx)>0 |System,out.print(".| Math.abs(vy)>0) ||  Math.abs(vr)>0){
         m_drive.enable();
     }
-  //System.out.print(".");
-    //m_drive.testDrive(xSpeed, rot);
-    //m_drive.turnInPlace(xSpeed);
-    //System.out.println("x:"+xSpeed+" y:"+ySpeed+" rot:"+rot);
-    m_drive.drive(xSpeed, ySpeed,rot,m_drive.isGyroEnabled());
-    //m_drive.drive(xSpeed, 0,0,true);
-
+    m_drive.drive(xSpeed, -ySpeed,-rot,m_drive.isGyroEnabled());
   }
 
   // Called once the command ends or is interrupted.

@@ -26,10 +26,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import objects.PlotServer;
-import frc.robot.subsystems.TagDetector;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.TargetMgr;
 import utils.PathData;
 import utils.PlotUtils;
 
@@ -167,7 +165,6 @@ public class DrivePath extends CommandBase {
     if (m_trajectory == null)
       return;
     m_drive.endAuto();
-    TagDetector.setBestTarget();
 
     //m_drive.reset();
     // m_drive.enable();
@@ -210,10 +207,7 @@ public class DrivePath extends CommandBase {
     PathConstraints constraints= new PathConstraints(maxV, maxA);
     // reversal not supported for swerve drive 
     PathPlannerTrajectory traj=PathPlanner.generatePath(constraints, reversed, p1, p2);
-    if(yPath>0 && TargetMgr.numTargets()>1)
-      TagDetector.setTargetId(1);
-    else
-      TagDetector.setTargetId(0);
+    
     return traj; 
   }
 

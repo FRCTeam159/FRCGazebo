@@ -88,6 +88,8 @@ public class TagDetector extends Thread {
   public void test() {
     Mat mat = Imgcodecs.imread(test_image);
     AprilTag[] tags = getTags(mat);
+    if(tags ==null)
+    return;
     for (int i = 0; i < tags.length; i++) {
       tags[i].print();
     }

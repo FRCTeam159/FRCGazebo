@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DriveWithGamepad;
 import objects.PlotServer;
-import frc.robot.subsystems.TagDetector;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Drivetrain;
 
@@ -24,7 +23,6 @@ public class RobotContainer {
   private final Drivetrain m_drivetrain = new Drivetrain();
   private final Autonomous m_autonomous = new Autonomous(m_drivetrain);
   private final XboxController m_controller = new XboxController(0);
-  private final TagDetector m_detector= new TagDetector(m_drivetrain);
   PlotServer m_plotsub=new PlotServer();
 
 
@@ -68,7 +66,6 @@ public class RobotContainer {
   public void robotInit(){
     m_drivetrain.setRobotDisabled(true);
     m_drivetrain.init();
-    m_detector.start();
     m_plotsub.start();
   }
 }

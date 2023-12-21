@@ -173,30 +173,5 @@ public class VisionProcess extends Thread {
     }
    // Process();
   }
-  // void Process() {
-  //   GetTargetInfo();
-  //   PublishTargetInfo();
-  // }
-  // class TargetInfo {
-	// 	Point Center;
-	// 	double Distance;
-	// 	double HorizontalOffset;
-	// 	double HorizontalAngle;
-	// 	double Height;
-	// 	double Width;
-	// 	double ActualWidth;
-	// 	double ActualHeight;
-	// 	int numrects;
-
-  //   void CalcTargetInfo(int n,Point top, Point bottom) {
-  //     Height=bottom.y-top.y; // screen y is inverted
-  //     Width=bottom.x-top.x;
-  //     Center.x=0.5*(bottom.x+top.x);
-  //     Center.y=0.5*(bottom.y+top.y);
-  //     HorizontalOffset=Center.x-imageWidth/2;
-  //     ActualHeight=5.0;
-  //     ActualWidth=(n==1?2.0:10.25);	//inches
-  //     Distance=cameraInfo.fovFactor*ActualHeight/Height;
-  //   }
-	// };
+ 
 }
