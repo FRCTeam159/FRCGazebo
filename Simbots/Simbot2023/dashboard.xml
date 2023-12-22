@@ -1,123 +1,78 @@
 <xml version="1.0">
 <dashboard>
-	<widget field="SendableChooser[0]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
-		<location x="342" y="-8"/>
-		<width>105</width>
-		<height>105</height>
+	<widget field="Distance" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="119" y="76"/>
+		<width>97</width>
 	</widget>
-	<widget field="Vision" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="184" y="71"/>
-		<width>105</width>
+	<widget field="Heading" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="12" y="77"/>
+		<width>95</width>
 	</widget>
-	<widget field="Tag" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="271" y="156"/>
-		<width>247</width>
+	<widget field="AutoTime" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="117" y="46"/>
+		<width>93</width>
 	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.MjpgStreamViewerImpl">
+		<location x="17" y="104"/>
+		<width>476</width>
+		<height>301</height>
+		<property name="MJPG Server URL" value="http://localhost:9000/?action=stream"/>
+	</static-widget>
 	<widget field="Gazebo" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
 		<location x="106" y="13"/>
 	</widget>
 	<widget field="Reset" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
 		<location x="51" y="12"/>
 	</widget>
-	<widget field="Field Oriented" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="172" y="12"/>
-	</widget>
-	<widget field="Start" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="531" y="157"/>
-		<width>119</width>
-	</widget>
-	<widget field="Detect" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="25" y="155"/>
-		<width>233</width>
-	</widget>
-	<widget field="Use Tags" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="665" y="158"/>
-	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
 		<location x="17" y="11"/>
 		<width>23</width>
 		<height>23</height>
 	</static-widget>
-	<widget field="Wheel " type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="411" y="100"/>
-		<width>257</width>
-	</widget>
-	<widget field="Y:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="107" y="69"/>
-		<width>69</width>
-	</widget>
-	<widget field="X:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="14" y="69"/>
-		<width>84</width>
-	</widget>
-	<widget field="H:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="242" y="44"/>
-		<width>70</width>
-	</widget>
-	<widget field="Arm" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="9" y="100"/>
-		<width>392</width>
-	</widget>
 	<widget field="SendableChooser[1]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
-		<location x="473" y="-10"/>
+		<location x="211" y="-4"/>
 	</widget>
 	<widget field="SendableChooser[2]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
-		<location x="779" y="3"/>
+		<location x="306" y="-5"/>
 	</widget>
 	<widget field="rPath" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="591" y="64"/>
+		<location x="413" y="60"/>
 		<width>77</width>
 	</widget>
 	<widget field="yPath" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="585" y="36"/>
+		<location x="409" y="33"/>
 		<width>82</width>
 		<height>20</height>
 	</widget>
 	<widget field="xPath" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="584" y="8"/>
+		<location x="405" y="7"/>
 		<width>85</width>
 	</widget>
-	<widget field="State" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="676" y="100"/>
-		<width>147</width>
-	</widget>
-	<widget field="maxA" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="686" y="38"/>
-		<width>77</width>
-	</widget>
-	<widget field="maxV" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="685" y="12"/>
-		<width>80</width>
-	</widget>
 	<widget field="SimClock" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="22" y="43"/>
-		<width>110</width>
-	</widget>
-	<widget field="SimTime" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="140" y="44"/>
-		<width>95</width>
+		<location x="11" y="47"/>
+		<width>92</width>
 	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
 		<location x="17" y="11"/>
 		<width>23</width>
 		<height>23</height>
 	</static-widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
-		<location x="13" y="97"/>
-		<width>884</width>
-		<height>716</height>
-		<property name="Camera Choice" value="testCamera"/>
-	</static-widget>
 		<property name="Team Number/Host" value="localhost"/>
+		<property name="Automatically Show Widgets" value="false"/>
 		<property name="Grid Cell Width(s)" value="16"/>
 		<property name="Grid Cell Height(s)" value="16"/>
-		<property name="Window X Position" value="401"/>
-		<property name="Window Y Position" value="95"/>
-		<property name="Window Width" value="947"/>
-		<property name="Window Height" value="874"/>
-		<property name="Save File" value="C:\Users\deans\Robotics\FRCTeamRepos\FRCGazebo\Simbots\Simbot2023\dashboard.xml"/>
+		<property name="Window X Position" value="1300"/>
+		<property name="Window Y Position" value="178"/>
+		<property name="Window Width" value="532"/>
+		<property name="Window Height" value="478"/>
+		<property name="Save File" value="C:\Users\deans\Robotics\FRCTeamRepos\FRCGazebo\Simbots\SimBot2023\dashboard.xml"/>
 </dashboard>
 <live-window>
 </live-window>
-	<hidden field="Field"/>
+	<hidden field="record"/>
+	<hidden field="front"/>
+	<hidden field="Velocity"/>
+	<hidden field="Enable gyro"/>
+	<hidden field="Arcade mode"/>
+	<hidden field="reversed"/>
 </xml>

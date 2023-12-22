@@ -17,8 +17,9 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import objects.SwerveModule;
+import frc.robot.objects.SwerveModule;
 import gazebo.SimGyro;
+import subsystems.Simulation;
 
 public class Drivetrain extends SubsystemBase {
 
@@ -94,8 +95,7 @@ public class Drivetrain extends SubsystemBase {
 		m_timer.start();
 		makeEstimator();
 
-		TargetMgr.init();
-		simulation = new Simulation(this);
+		simulation = new Simulation();
 		SmartDashboard.putBoolean("Field Oriented", enable_gyro);
 		SmartDashboard.putNumber("maxV", kMaxVelocity);
 		SmartDashboard.putNumber("maxA", kMaxAcceleration);
@@ -380,22 +380,7 @@ public class Drivetrain extends SubsystemBase {
 	public void updateOdometry() {
 		updatePositions();
 		m_poseEstimator.updateWithTime(getClockTime(),m_gyro.getRotation2d(), m_positions);
-		//m_poseEstimator.update(m_gyro.getRotation2d(), m_positions);
-
-		// Also apply vision measurements - this must be calculated based either on latency or timestamps.
-		if(TargetMgr.tagsPresent()){
-			Pose2d vision_pose=TagDetector.getLastPose();
-			if(vision_pose !=null){		
-				if(use_tags && vision_confidence>0){
-					try{
-						m_poseEstimator.addVisionMeasurement(vision_pose,getClockTime()-latency);
-					}catch(Exception e){
-						System.out.println("exception caught in addVisionMeasurement:"+e);
-					}
-					// TODO: determine actual latency from camera pose 
-				}
-			}
-		}			
+	
 		field_pose = getPose();
 		log();
 	}

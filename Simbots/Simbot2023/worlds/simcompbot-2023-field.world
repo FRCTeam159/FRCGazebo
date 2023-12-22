@@ -3,8 +3,8 @@
   <world name="default">
   <!-- -->
     <gui fullscreen='0'>
-       <camera name='user_camera'>
-        <pose>-6.41499 -6.6452 7.39775 0 0.947642 1.24419</pose>
+        <camera name='user_camera'>
+        <pose>-4.39163 -4.90859 1.48209 0 0.275643 2.35619</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>

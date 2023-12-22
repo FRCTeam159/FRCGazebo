@@ -10,6 +10,7 @@ alias his='history'
 
 export GAZEBO_IP=127.0.0.1
 export GZ_SIM=${HOME}/Robotics/FRCTeamRepos/FRCGazebo
+export GAZEBO_BIN=${GZ_SIM}/bin
 export GAZEBO_LIBRARY=${HOME}/miniconda3/Library
 export GAZEBO_TOOLS=$GAZEBO_LIBRARY/share/gazebo-11
 export GAZEBO_PLUGIN_PATH=$GAZEBO_TOOLS/plugins:$GZ_SIM/plugins
@@ -25,19 +26,24 @@ export OGRE_RESOURCE_PATH=$GAZEBO_LIBRARY/bin
 # 5) run simulation by entering "gzstart"
 # 6) stop simulation by entering "gzstop"
 
-export GZPROJ=$GZ_SIM/Simbots/SimBot2022
+#export GZPROJ=$GZ_SIM/Simbots/SimBot2022
 #export GZPROJ=$GZ_SIM/Simbots/SimBot2023
+#export GZPROJ=$GZ_SIM/Simbots/SimBot2019
+#export GZPROJ=$GZ_SIM/Simbots/SimBot2018
+#export GZPROJ=$GZ_SIM/Simbots/SimBot2017
+export GZPROJ=$GZ_SIM/Simbots/SimBot2016
+
 #export GZPROJ=$GZ_SIM/Simbots/SimWaffle
 
 export GAZEBO_RESOURCE_PATH=$GZPROJ/worlds:$GZ_SIM/worlds:$GAZEBO_TOOLS
 export GAZEBO_MODEL_PATH=$GAZEBO_TOOLS/models:$GZPROJ/models:$GZ_SIM/models
 
 export LD_LIBRARY_PATH=$OGRE_RESOURCE_PATH:$GAZEBO_PLUGIN_PATH
-export SMART_DASHBOARD=${HOME}/Robotics/SmartDashboard/build/libs/SmartDashboard-winx64.jar
+export SMART_DASHBOARD=${GAZEBO_BIN}/SmartDashboard-winx64.jar
 
 alias gzcomp='cd $GZPROJ'
 alias gztest='cd $GZ_SIM/gzsim/tests/SwerveDriveTest'
 alias gzdev='cd $GZ_SIM/gzsim/c++'
 alias waffle='cd $GZ_SIM/Simbots/SimWaffle'
 
-export PATH=.:$HOME/bin:$GZ_SIM/wpilib/libs:$PATH
+export PATH=.:$HOME/bin:$GZ_SIM/wpilib/libs:$GAZEBO_BIN:$PATH

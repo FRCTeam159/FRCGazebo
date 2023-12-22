@@ -9,6 +9,7 @@ import org.opencv.core.Mat;
 import edu.wpi.first.cscore.CvSink;
 import gazebo.SimCamera;
 import objects.MJpegReader;
+import objects.CameraInterface;
 
 /** Add your docs here. */
 public class Camera implements CameraInterface {

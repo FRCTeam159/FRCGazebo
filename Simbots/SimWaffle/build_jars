@@ -1,0 +1,9 @@
+#!/bin/bash
+gradlew compileJava
+pushd bin/main
+echo 'Main-Class: utils.PlotServer\n' > manifest.txt
+jar -xf /c/Users/Public/wpilib/2022/maven/edu/wpi/first/ntcore/ntcore-java/2022.1.1/ntcore-java-2022.1.1.jar
+jar -xf /c/Users/Public/wpilib/2022/maven/edu/wpi/first/wpiutil/wpiutil-java/2022.1.1/wpiutil-java-2022.1.1.jar
+jar -cfm gzsim.jar manifest.txt gazebo utils edu 
+mv gzsim.jar $GAZEBO_SIM/bin
+popd

@@ -31,13 +31,13 @@ public class StepShooterAngle extends CommandBase {
   public void initialize() {
     debugPrint("started target=" + angle);
     Robot.shooter.setTargetAngle(angle);
-    start_time=Robot.simulation.getClockTime();
+    start_time=Robot.simulation.getSimTime();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    elapsed=Robot.simulation.getClockTime()-start_time;
+    elapsed=Robot.simulation.getSimTime()-start_time;
   }
 
   // Called once the command ends or is interrupted.

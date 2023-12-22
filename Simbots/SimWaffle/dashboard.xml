@@ -1,0 +1,69 @@
+<xml version="1.0">
+<dashboard>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.MjpgStreamViewerImpl">
+		<location x="49" y="119"/>
+		<width>450</width>
+		<height>344</height>
+		<property name="MJPG Server URL" value="http://localhost:9000/?action=stream"/>
+	</static-widget>
+	<widget field="Gazebo" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="106" y="13"/>
+	</widget>
+	<widget field="Reset" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="51" y="12"/>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="17" y="11"/>
+		<width>23</width>
+		<height>23</height>
+	</static-widget>
+	<widget field="SendableChooser[1]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="234" y="1"/>
+	</widget>
+	<widget field="SendableChooser[2]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="346" y="-1"/>
+	</widget>
+	<widget field="rPath" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="450" y="72"/>
+		<width>84</width>
+	</widget>
+	<widget field="yPath" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="447" y="43"/>
+		<width>87</width>
+		<height>20</height>
+	</widget>
+	<widget field="xPath" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="450" y="14"/>
+		<width>85</width>
+	</widget>
+	<widget field="SimClock" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="22" y="43"/>
+		<width>94</width>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="17" y="11"/>
+		<width>23</width>
+		<height>23</height>
+	</static-widget>
+		<property name="Team Number/Host" value="localhost"/>
+		<property name="Automatically Show Widgets" value="false"/>
+		<property name="Grid Cell Width(s)" value="16"/>
+		<property name="Grid Cell Height(s)" value="16"/>
+		<property name="Window X Position" value="1343"/>
+		<property name="Window Y Position" value="98"/>
+		<property name="Window Width" value="587"/>
+		<property name="Window Height" value="574"/>
+		<property name="Save File" value="C:\Users\deans\Robotics\FRCTeamRepos\FRCGazebo\Simbots\SimWaffle\dashboard.xml"/>
+</dashboard>
+<live-window>
+</live-window>
+	<hidden field="Heading"/>
+	<hidden field="AutoTime"/>
+	<hidden field="record"/>
+	<hidden field="front"/>
+	<hidden field="Velocity"/>
+	<hidden field="Enable gyro"/>
+	<hidden field="Arcade mode"/>
+	<hidden field="reversed"/>
+	<hidden field="Distance"/>
+</xml>

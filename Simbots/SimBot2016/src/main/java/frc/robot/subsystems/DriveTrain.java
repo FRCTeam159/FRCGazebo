@@ -40,13 +40,13 @@ public class DriveTrain extends SubsystemBase implements RobotMap {
 	boolean inlowgear = false;
 
 	public static double kMaxVelocity = 3.0; // meters per second
-	public static double kMaxAcceleration = 1.0; //  meters/second/second
+	public static double kMaxAcceleration = 1.5; //  meters/second/second
 	public static double kMaxAngularSpeed = 2*720; // degrees per second
 
 	private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(2*kTrackWidth);
     final DifferentialDriveOdometry odometry;
 
-	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.1,1);
+	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.4,1);
 	private final PIDController leftPIDController = new PIDController(0.2, 0.0, 0.0);
 	private final PIDController rightPIDController = new PIDController(0.2, 0.0, 0.0);
 

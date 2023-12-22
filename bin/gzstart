@@ -10,6 +10,7 @@ if [ "$#" -eq 1 ]; then
 fi
 
 echo position=$POSITION
+mkdir -p tmp
 start_gazebo --verbose &
 GzProgram.exe &
 start_dashboard &

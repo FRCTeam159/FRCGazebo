@@ -10,7 +10,7 @@ import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.FuelSubsystem;
 import frc.robot.subsystems.GearSubsystem;
-import frc.robot.subsystems.Simulation;
+import subsystems.Simulation;
 import frc.robot.subsystems.VisionProcess;
 
 /**

@@ -11,7 +11,7 @@ import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Grabber;
-import frc.robot.subsystems.Simulation;
+import subsystems.Simulation;
 import frc.robot.subsystems.VisionProcess;
 
 /**

@@ -11,6 +11,7 @@ import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.UsbCamera;
 import frc.robot.Robot;
 import gazebo.SimCamera;
+import objects.MJpegReader;
 
 /** Add your docs here. */
 public class Camera implements CameraInterface {
