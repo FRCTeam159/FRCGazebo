@@ -9,6 +9,7 @@ import org.opencv.core.Mat;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import objects.VideoInterface;
 
 /** Add your docs here. */
 public class TargetDetector implements VideoInterface{

@@ -15,7 +15,7 @@ import frc.robot.subsystems.AutoSelector;
 import frc.robot.subsystems.CubeHandler;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Simulation;
+import subsystems.Simulation;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -75,7 +75,7 @@ public class Robot extends TimedRobot implements RobotMap, PhysicalConstants, Co
     elevator = new Elevator();
     cubeHandler = new CubeHandler();
     autoSelector = new AutoSelector();
-    simulation = new Simulation(driveTrain);
+    simulation = new Simulation();
     controller = new XboxController(0);
     
     driveTrain.initDefaultCommand();

@@ -73,7 +73,7 @@ public class Calibrate extends CommandBase {
 
   // Called repeatedly when this Command is scheduled to run
   public void execute() {
-    elapsed = Robot.simulation.getClockTime();
+    elapsed = Robot.simulation.getSimTime();
     if (elapsed > next_step) {
       if (max_vel > 0.1 && (max_vel - last_max_vel) / (max_vel) > 0.05)
         max_power = set_value;

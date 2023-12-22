@@ -17,15 +17,14 @@ public class Simulation extends SubsystemBase {
   static public boolean debug=true;
   /** Creates a new SimulationControl. */
   private SimControl m_simcontrol = new SimControl();
-  private boolean resetting = false;
   boolean auto_running=false;
   double auto_start_time=0;
 
-  //private final Field2d m_fieldSim = new Field2d();
-
   private final Timer m_timer = new Timer();
-  private boolean running = false;
-  private boolean disabling = false;
+
+  public static boolean running = false;
+  public static boolean resetting = false;
+  public static boolean disabling = false;
 
   private SimClock m_simclock = new SimClock();
   private ArrayList<SimCamera> m_cameras;
@@ -48,15 +47,14 @@ public class Simulation extends SubsystemBase {
   }
 
   public void startAuto(){
-    auto_start_time=getClockTime();
+    auto_start_time=getSimTime();
     auto_running=true;
   }
   public void endAuto(){
     auto_running=false;
   }
   public double getClockTime() {
-    //return m_timer.get();
-    return getSimTime();
+    return m_timer.get();
   }
 
   public void reset() {
@@ -117,10 +115,9 @@ public class Simulation extends SubsystemBase {
       camera.disable();
   }
 
- 
   public void start() {
     if(debug)
-    System.out.println("Simulation.start");
+      System.out.println("Simulation.start");
     m_simclock.reset();
     m_simclock.enable();
     running = true;
@@ -128,23 +125,23 @@ public class Simulation extends SubsystemBase {
 
   public void enable() {
     if(debug)
-    System.out.println("Simulation.enable");
+      System.out.println("Simulation.enable");
   }
 
   public void end() {
     if(debug)
-    System.out.println("Simulation.end");
+      System.out.println("Simulation.end");
     m_simclock.disable();
     running = false;
   }
 
   public void simulationPeriodic() {
     if (running)
-      SmartDashboard.putNumber("SimClock", getClockTime());
+      SmartDashboard.putNumber("SimClock", getSimTime());
     else
       SmartDashboard.putNumber("SimClock", 0);
     if(auto_running)
-      SmartDashboard.putNumber("AutoTime", getClockTime()-auto_start_time);
+      SmartDashboard.putNumber("AutoTime", getSimTime()-auto_start_time);
     
     boolean m = SmartDashboard.getBoolean("Gazebo", false);
     boolean b = SmartDashboard.getBoolean("Reset", false);
@@ -152,8 +149,7 @@ public class Simulation extends SubsystemBase {
       if (!resetting) {
         resetting = true;
         if (m)
-          clear();       
-    
+          clear();
         m_timer.reset();
       } else if (m_timer.get() > 0.25) {
         if (!disabling) {

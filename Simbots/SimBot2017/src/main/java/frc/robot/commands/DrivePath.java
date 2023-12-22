@@ -95,7 +95,7 @@ public class DrivePath extends CommandBase {
   // =================================================
   @Override
   public void execute() {
-    elapsed = Robot.simulation.getClockTime();
+    elapsed = Robot.simulation.getSimTime();
     if (elapsed < 0.02)
       return;
 

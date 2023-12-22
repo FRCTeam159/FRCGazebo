@@ -27,9 +27,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import objects.AprilTag;
 import objects.Camera;
-
-import frc.robot.objects.AprilTag;
 
 public class TagDetector extends Thread {
   static {
