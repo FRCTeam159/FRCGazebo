@@ -17,3 +17,9 @@ Runtime problems
   leaves indexer incomplete (cant goto definition etc)
   work-around: delete all folders in : C:\Users\Public\wpilib\2023\vscode\data\user-data\User\workspaceStorage
                and restart vs code
+4) For some reason FRCGazebo binaries (plugin .dlls and GZProgram.exe) don't always work when run on different subsystems
+   than the one they were originally built for: get 'not found' errors when loading dlls from start_gazebo 
+   - had a case where execs were built on win11 desktop and pushed to repo - then win10 desktop failed to run
+   - another case where win11 projects failed to work using execs built on another win11 laptop 
+   - may be some kind of caching problem because sometimes things seem to work (??)
+   - workaround: add *.dll and *.exe to .gitignore (will need to force add them if those execs need to be changed)

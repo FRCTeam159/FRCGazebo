@@ -1,0 +1,26 @@
+Dummy starter robot project for programming using simulation for software testers
+Problems
+Project 1 (tankBot)
+    1) copy FRCGazebo/gzsim/tests/StarterRobot to: <direcory containing FRCGazebo>/Testers/[tester_name]/Robots
+    2) rename project e.g. TankBot
+    3) modify project to include a drivetrain[tank] subsystem and a teleop command
+    4) add a simple autonomous command (e.g. drive for time, turn in place)
+    5) add a programmed path auto command (using Trajectory)
+Project 2 (swervebot)
+    1) copy FRCGazebo/gzsim/tests/StarterRobot to: <direcory containing FRCGazebo>/Testers/[tester_name]/Robots
+    2) rename project e.g. SwerveBot
+    3) modify project to include a drivetrain[swerve] subsystem and a teleop command
+    4) add a simple autonomous command (e.g. drive for distance, turn in place)
+    5) add a programmed path auto command (using Trajectory)
+Project 3 (vision tests)
+    1) for either of the previous robots add a GRIP vision tageting subsystem and display detected targets on dashboard
+    2) add a front/back switchable camera subsystem
+Project 4 (robot with manipulator)
+    1) copy FRCGazebo/gzsim/tests/StarterRobot to: <direcory containing FRCGazebo>/Testers/[tester_name]/Robots
+    2) rename project as approprate e.g. ElevatorBot
+    3) choose a robot from a previous game (2016...2023 in FRCGazebo/SimBots)
+       - copy appropriate world and models files from SimBot to current project
+    4) write a simple subsystem to control all the features os the manipulator
+       - map controls to game controller
+    5) write an autonomous command that uses the manipulator to do something
+

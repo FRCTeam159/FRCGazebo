@@ -1,0 +1,26 @@
+System requirements
+ 1) windows-10 or windows-11 laptop (or desktop)
+ 2) nvidia graphics card
+
+System setup
+ 1) choose or create a tester user (no spaces in name !)
+ 2) install miniconda3 in user home directory
+    - (optional) install Firefox browser
+ 3) install latest (2023) wpilib tools (visual studio etc)
+   - follow install instructions in FRC documentation
+ 4) install Gazebo using instructions in README.md file
+ 5) clone FRCGazebo from https://github.com/FRCTeam159/FRCGazebo into subdirectory (e.g. Robotics)
+ 6) create or midify a .bashrc in users home directory (copy all text from bashrc.txt)
+
+Tester setup
+ 1) create a test project directory tree in home directory
+   - root should be in same dirctory as FRCGazebo (eg.g. Testers)
+   - <testers>/<tester_name>/Robots/<project_name>
+   - names are arbitrary but FRCGazebo should exist for levels up from each project
+ 2) create a simple robot starting project as dscribed in tester-projects.txt
+
+Validation tests
+ 1) run gzsim/tests/StarterBot from vscode (gzstart)
+ 2) run Simbots/[2016..2023] from vscode (gzstart)
+ 3) run tester starter project
+
