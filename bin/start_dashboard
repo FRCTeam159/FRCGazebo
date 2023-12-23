@@ -1,2 +1,2 @@
 #!/bin/bash
-java -jar ${SMART_DASHBOARD} ip localhost file "${GZPROJ}/dashboard.xml"
+java -jar ${SMART_DASHBOARD} ip localhost file "./dashboard.xml"
