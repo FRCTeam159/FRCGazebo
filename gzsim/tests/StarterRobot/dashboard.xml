@@ -1,0 +1,40 @@
+<xml version="1.0">
+<dashboard>
+	<widget field="Gazebo" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="118" y="10"/>
+	</widget>
+	<widget field="Reset" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="61" y="11"/>
+	</widget>
+	<widget field="AutoTime" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="292" y="14"/>
+		<width>109</width>
+	</widget>
+	<widget field="SimClock" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="182" y="13"/>
+		<width>102</width>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.MjpgStreamViewerImpl">
+		<location x="-10" y="58"/>
+		<width>522</width>
+		<height>361</height>
+		<property name="MJPG Server URL" value="http://localhost:9000/?action=stream"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="13" y="12"/>
+		<width>23</width>
+		<height>23</height>
+	</static-widget>
+		<property name="Team Number/Host" value="localhost"/>
+		<property name="Automatically Show Widgets" value="false"/>
+		<property name="Grid Cell Width(s)" value="16"/>
+		<property name="Grid Cell Height(s)" value="16"/>
+		<property name="Window X Position" value="1310"/>
+		<property name="Window Y Position" value="94"/>
+		<property name="Window Width" value="535"/>
+		<property name="Window Height" value="512"/>
+		<property name="Save File" value=".\dashboard.xml"/>
+</dashboard>
+<live-window>
+</live-window>
+</xml>
