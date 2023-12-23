@@ -42,3 +42,12 @@ tmp/
 generatedCVS/
 generatedJSON/
 
+*.exe
+*.dll
+.Glass/
+.OutlineViewer/
+*.lock
+
+
+
+
