@@ -6,6 +6,3 @@ gazebo  --verbose simcompbot-2023-field.world &
 #gazebo -u --verbose simcompbot-cone.world &
 #gazebo -u --verbose simcompbot-cube.world &
 #gazebo --verbose temp.world &
-
-
-

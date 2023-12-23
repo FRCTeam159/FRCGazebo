@@ -1,5 +1,8 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="Show HSV" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="35" y="50"/>
+	</widget>
 	<widget field="SimClock" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="250" y="392"/>
 		<width>108</width>
@@ -91,15 +94,13 @@
 <live-window>
 </live-window>
 	<hidden field="SendableChooser[0]"/>
-	<hidden field="Status"/>
-	<hidden field="RightWheels"/>
-	<hidden field="LeftWheels"/>
-	<hidden field="RightDistance"/>
-	<hidden field="Set FW Speed"/>
 	<hidden field="HighGear"/>
 	<hidden field="Travel"/>
+	<hidden field="RightWheels"/>
 	<hidden field="LeftDistance"/>
 	<hidden field="Loading"/>
-	<hidden field="Show HSV"/>
+	<hidden field="LeftWheels"/>
+	<hidden field="RightDistance"/>
 	<hidden field="Gate Closed"/>
+	<hidden field="Set FW Speed"/>
 </xml>

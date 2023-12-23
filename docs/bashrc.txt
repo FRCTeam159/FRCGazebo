@@ -44,4 +44,4 @@ alias gztest='cd $GZ_SIM/gzsim/tests/TankDriveTest'
 alias gzdev='cd $GZ_SIM/gzsim/c++'
 alias waffle='cd $GZ_SIM/Simbots/SimWaffle'
 
-export PATH=.:$HOME/bin:$GZ_SIM/wpilib/libs:$PATH
+export PATH=.:$HOME/bin:$GZ_SIM/wpilib/libs:$GAZEBO_BIN:$PATH

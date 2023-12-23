@@ -100,6 +100,8 @@ public class VisionProcess extends Thread implements RobotMap {
       Boolean show_hsv = SmartDashboard.getBoolean("Show HSV", false);
       if (show_hsv) {
         mat = grip.hsvThresholdOutput();
+        outputStream.putFrame(mat);
+        continue;
       }
       ArrayList<MatOfPoint> contours = grip.filterContoursOutput();
       rects.clear();

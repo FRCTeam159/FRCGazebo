@@ -1,0 +1,47 @@
+C:\Users\deans\miniconda3/share/rubygems/bin:
+/c/Users/deans/miniconda3:
+/c/Users/deans/miniconda3/Library/mingw-w64/bin:
+/c/Users/deans/miniconda3/Library/usr/bin:
+/c/Users/deans/miniconda3/Library/bin:
+/c/Users/deans/miniconda3/Scripts:
+/c/Users/deans/miniconda3/bin:
+/c/Users/deans/miniconda3/condabin:
+.:
+/c/Users/deans/bin:/c/Users/deans/Robotics/FRCGazebo/bin:
+/c/Users/deans/miniconda3/Library/bin
+/c/Users/deans/Robotics/FRCGazebo/wpilib/libs:
+/c/Users/deans/bin:/mingw64/bin:/usr/local/bin:
+/usr/bin:
+/usr/bin:
+/mingw64/bin:/usr/bin:
+/c/Users/deans/bin:
+/c/Users/Public/wpilib/2023/jdk/bin:
+/c/Users/Public/wpilib/2023/jdk/bin:
+/c/Program Files (x86)/Intel/Intel(R) Management Engine Components/iCLS:
+/c/Program Files/Intel/Intel(R) Management Engine Components/iCLS:
+/c/Windows/system32:
+/c/Windows:
+/c/Windows/System32/Wbem:
+/c/Windows/System32/WindowsPowerShell/v1.0:
+/c/Windows/System32/OpenSSH:
+/c/Program Files (x86)/Intel/Intel(R) Management Engine Components/DAL:
+/c/Program Files/Intel/Intel(R) Management Engine Components/DAL:
+/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/c/HashiCorp/Vagrant/bin:
+/c/Program Files/NVIDIA Corporation/NVIDIA NvDLISR:
+/cmd:/c/WINDOWS/system32:
+/c/WINDOWS:
+/c/WINDOWS/System32/Wbem:
+/c/WINDOWS/System32/WindowsPowerShell/v1.0:/c/WINDOWS/System32/OpenSSH:
+/c/Program Files/CMake/bin:
+/c/Program Files/dotnet:
+/c/Program Files (x86)/Windows Kits/8.1/Windows Performance Toolkit:
+/c/Users/deans/miniconda3:
+/c/Users/deans/miniconda3/Library/mingw-w64/bin:
+/c/Users/deans/miniconda3/Library/usr/bin:
+/c/Users/deans/miniconda3/Library/bin:
+/c/Users/deans/miniconda3/Scripts:
+/c/Users/Public/wpilib/2022/jdk/bin:
+/c/Ruby30-x64/bin:
+/c/Users/deans/AppData/Local/Microsoft/WindowsApps:
+/c/Users/deans/.dotnet/tools:/usr/bin/vendor_perl:
+/usr/bin/core_perl
