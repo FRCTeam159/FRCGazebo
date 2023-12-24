@@ -3,14 +3,24 @@ System requirements
  2) nvidia graphics card
 
 System setup
- 1) choose or create a tester user (no spaces in name !)
- 2) install miniconda3 in user home directory
-    - (optional) install Firefox browser
- 3) install latest (2023) wpilib tools (visual studio etc)
+ 1) choose or create a Tester user (no spaces in name !)
+  - settings/Family & other users/add someone to this pc
+   name: Tester
+   password:159GoAlpine!
+   first school: PHS
+   pets name: Spot
+   nickname: Alpine
+  - chamge account type: Administrator
+ 2) configue network to support wireless downloads
+  - DELL precision M6800: make sure wireless switch on front right side of computer is on !!
+ 3) (optional) install Firefox browser (can also use edge or chrome)
+ 4) install git bash
+ 5) install miniconda3 in user home directory
+ 6) install latest (2023) wpilib tools (visual studio etc)
    - follow install instructions in FRC documentation
- 4) install Gazebo using instructions in README.md file
- 5) clone FRCGazebo from https://github.com/FRCTeam159/FRCGazebo into subdirectory (e.g. Robotics)
- 6) create or midify a .bashrc in users home directory (copy all text from bashrc.txt)
+ 7) clone FRCGazebo from https://github.com/FRCTeam159/FRCGazebo into subdirectory (e.g. Robotics)
+ 8) install Gazebo using instructions in README.md file
+ 9) create or midify a .bashrc in users home directory (copy all text from bashrc.txt)
 
 Tester setup
  1) create a test project directory tree in home directory

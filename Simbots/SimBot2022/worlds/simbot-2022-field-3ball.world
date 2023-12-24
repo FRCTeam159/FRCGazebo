@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sdf version="1.7">
   <world name="default">
+    <scene><shadows>0</shadows></scene>
+
   <frame name="explicit_frame"/>
   <physics type="ode">
       <ode>

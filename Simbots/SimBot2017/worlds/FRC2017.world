@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sdf version="1.4">
   <world name="default">
+    <scene><shadows>0</shadows></scene>
     <gui fullscreen='0'>
       <camera name='user_camera'>
         <pose frame=''>0.821739 -6.99642 4.81856 0 1.4978 1.26421</pose>
