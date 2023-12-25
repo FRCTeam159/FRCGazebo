@@ -1,20 +1,43 @@
-Dummy starter robot project for programming using simulation for software testers
-Problems
+Programming using simulation for software testers
+
+Setup
+    1) open visual studio from desktop or taskbar icon
+    3) open a terminal and "cd" to target project directory (see Explore and Projects below)
+
+Running a simulation
+    1) in a terminal showing target project directory enter "gzstart" to start simulation
+      - should see 3 windows appear:
+        o gazebo (displays a robot and other items)
+        o Smartdashboard
+        o simulated driver station (simDS)
+    2) to test-drive a robot in teleop mode, select "teleoperated" from sim driver station and use game controller to move the robot
+    3) to reset to the starting configuration press disable in DS and then the "Reset" checkbox in Smartdashboard
+    4) to test auto, first reset scene and then press "Autonomous" in simDS
+    5) to end the simulation enter "gzstop" in the terminal
+
+Explore (run all simulations from previous games)
+   1) in vscode open a file called ~/.bashrc
+   2) follow directions starting at line 20 of this file
+
+Projects
 Project 1 (tankBot)
-    1) copy FRCGazebo/gzsim/tests/StarterRobot to: <direcory containing FRCGazebo>/Testers/[tester_name]/Robots
+    1) copy FRCGazebo/gzsim/tests/StarterRobot to: <direcory-containing-FRCGazebo>/Testers/[tester_name]/Projects
     2) rename project e.g. TankBot
     3) modify project to include a drivetrain[tank] subsystem and a teleop command
     4) add a simple autonomous command (e.g. drive for time, turn in place)
     5) add a programmed path auto command (using Trajectory)
+
 Project 2 (swervebot)
-    1) copy FRCGazebo/gzsim/tests/StarterRobot to: <direcory containing FRCGazebo>/Testers/[tester_name]/Robots
+    1) copy FRCGazebo/gzsim/tests/StarterRobot to: <direcory-containing-FRCGazebo>/Testers/[tester_name]/Projects
     2) rename project e.g. SwerveBot
     3) modify project to include a drivetrain[swerve] subsystem and a teleop command
     4) add a simple autonomous command (e.g. drive for distance, turn in place)
     5) add a programmed path auto command (using Trajectory)
+    
 Project 3 (vision tests)
     1) for either of the previous robots add a GRIP vision tageting subsystem and display detected targets on dashboard
     2) add a front/back switchable camera subsystem
+
 Project 4 (robot with manipulator)
     1) copy FRCGazebo/gzsim/tests/StarterRobot to: <direcory containing FRCGazebo>/Testers/[tester_name]/Robots
     2) rename project as approprate e.g. ElevatorBot

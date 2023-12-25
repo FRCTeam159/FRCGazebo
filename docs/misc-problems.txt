@@ -27,3 +27,11 @@ Runtime problems
    workaround: disable shadows by adding the following to each world file (after <world> token):
    <scene><shadows>0</shadows></scene>
    - note: never see any shadows in simulation even on other systems without the workaround (maybe shadows are broken)
+6) after several days of sucessful testing on 2 dell precision laptops the graphics performance on both became very poor
+   - e.g. gazebo realtime factor <0.1 (should be ~0.8)
+   - other programs also appear to have suffered degraded performance (e.g. pressing start button taks a few seconds to popup menu)
+   - installing windows update and new graphics drivers didn't fix problem
+   problem fixed (itself ?) did the following:
+   - enabled 3d in display options (somehow was turned off)
+   - used function key (fn-f8) to direct all graphics to external monitor (otherwize lots of flickering)
+  
