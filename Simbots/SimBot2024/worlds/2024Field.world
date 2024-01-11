@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.4">
+  <world name="default">
+   <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>2.48591 -9.1542 5.3289 0 0.447642 2.1482</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+    </gui>
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+    <!---->
+    <include>
+      <uri>model://2024Field</uri>
+       <pose>-5.6701 -4.30335 0.00038 0 -0 0</pose>
+    </include>
+    
+    <include>
+      <uri>model://TapeLines</uri>
+        <pose>-5.79 -3.44 0 0 0</pose>
+    </include>
+    <!---->
+    <include>
+      <name>Stage1</name>
+      <uri>model://Stage</uri>
+        <pose>-4 0.20 0.01 0 0</pose>
+    </include>
+    <include>
+      <name>Stage2</name>
+      <uri>model://Stage</uri>
+       <pose>4 0.20 0 0.01 0 3.1415</pose>
+    </include>
+
+    <include>
+      <name>Note1</name>
+      <uri>model://Note</uri>
+        <pose>-4.58 0.245 0 1.58 0 0</pose>
+    </include>
+    <include>
+      <name>Note2</name>
+      <uri>model://Note</uri>
+        <pose>-4.58 -1.21 0 1.58 0 0</pose>
+    </include>
+    <include>
+      <name>Note3</name>
+      <uri>model://Note</uri>
+        <pose>-4.58 -2.64 0 1.58 0 0</pose>
+    </include>
+  </world>
+</sdf>

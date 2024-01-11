@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.5">
+  <model name="EndWall">
+    <pose>0 0 0 0 0 0</pose>
+    <plugin name="clock" filename="libgz_clock.so">
+      <topic>/gazebo/frc/time</topic>
+    </plugin>
+    <link name="Body">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.224611814761393 0.926374333821322 3.74960102918076 0 0 0</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>225.437696699107</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>1160.40561444238</ixx>
+          <ixy>2.67319930400095</ixy>
+          <ixz>1.06410659565769</ixz>
+          <iyy>1106.66477080876</iyy>
+          <iyz>1.47853910350282</iyz>
+          <izz>58.7597520716012</izz>
+        </inertia>
+      </inertial>
+      <collision name="Body_collision">
+        <pose>0.0532006852386071 -0.926374333821322 -0.219001029180756 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://EndWall/meshes/Body_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="Body_visual">
+        <pose>0.0532006852386071 -0.926374333821322 -0.219001029180756 0 0 0</pose>
+        <material>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://EndWall/meshes/Body.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>

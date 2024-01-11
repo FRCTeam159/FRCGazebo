@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.5">
+  <model name="Speaker">
+    <pose>0 0 9.60840403886835E-17 0 0 0</pose>
+    <plugin name="clock" filename="libgz_clock.so">
+      <topic>/gazebo/frc/time</topic>
+    </plugin>
+    <link name="Body">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>1.02085341262996 0.00216020032020092 -1.18285485825132 -1.5707963267949 -6.89607448541859E-15 1.5707963267949</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>125.122699814822</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>114.887427073099</ixx>
+          <ixy>0.0463460868437101</ixy>
+          <ixz>0.0373895345881823</ixz>
+          <iyy>58.9800228408217</iyy>
+          <iyz>20.1071719950558</iyz>
+          <izz>109.807987701156</izz>
+        </inertia>
+      </inertial>
+      <collision name="Body_collision">
+        <pose>-0.972318372250886 -0.347135305450926 -1.0983557439895 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Speaker/meshes/Body_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="Body_visual">
+        <pose>-0.972318372250886 -0.347135305450926 -1.0983557439895 0 0 0</pose>
+        <material>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Speaker/meshes/Body.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>

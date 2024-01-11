@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.5">
+  <model name="2024Field">
+    <pose>0 0 -0.00253999999996003 0 0 0</pose>
+   
+    <link name="All">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>5.47669606214717 4.24359134272466 0.806055631037761 1.5707963267949 -3.49148133884313E-15 -8.32563198069109E-16</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>1203.38820839705</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>12420.4996481438</ixx>
+          <ixy>0.611622292929965</ixy>
+          <ixz>244.412559413775</ixz>
+          <iyy>65934.1903395012</iyy>
+          <iyz>146.335781517919</iyz>
+          <izz>54402.8830461818</izz>
+        </inertia>
+      </inertial>
+      <!---->
+      <collision name="All_collision">
+        <pose>0.0355484378709587 -0.810830831041717 -0.295436753629572 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://2024Field/meshes/All_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="All_visual">
+        <pose>0.0355484378709587 -0.810830831041717 -0.295436753629572 0 0 0</pose>
+        <material>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://2024Field/meshes/All.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+     <joint name="fiels-World" type="fixed">
+      <parent>world</parent>
+      <child>All</child>
+   </joint>
+  </model>
+</sdf>

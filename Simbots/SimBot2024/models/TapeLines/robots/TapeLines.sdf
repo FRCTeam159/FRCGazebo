@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.5">
+  <model name="TapeLines">
+    <pose>0 0 0 0 0 0</pose>
+   
+    <link name="NewLink">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>5.48960124421663 3.76133635863295 0.00124228152536165 1.5707963267949 0 0</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>5.52469766769733</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>13.0705538995519</ixx>
+          <ixy>0.000715105604197241</ixy>
+          <ixz>2.95998983447857</ixz>
+          <iyy>83.935524760579</iyy>
+          <iyz>0.000678675429991097</iyz>
+          <izz>70.8649735222867</izz>
+        </inertia>
+      </inertial>
+      <!--
+      <collision name="NewLink_collision">
+        <pose>0.213143255802087 -0.00601748152550113 0.0811707622869506 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://TapeLines/meshes/NewLink_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      -->
+      <visual name="NewLink_visual">
+        <pose>0.213143255802087 -0.00601748152550113 0.0811707622869506 0 0 0</pose>
+        <material>
+          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://TapeLines/meshes/NewLink.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="tape-World" type="fixed">
+      <parent>world</parent>
+      <child>NewLink</child>
+   </joint>
+  </model>
+</sdf>

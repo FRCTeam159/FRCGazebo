@@ -18,29 +18,40 @@ export GAZEBO_MASTER_URI=${GAZEBO_MASTER_URI:-http://localhost:11345}
 export GAZEBO_MODEL_DATABASE_URI=http://models.gazebosim.org
 export OGRE_RESOURCE_PATH=$GAZEBO_LIBRARY/bin
 
-# choose which robot project to simulate
+# basic robot simulations 
+# 1) uncomment one the following aliases
+
+alias gztest='cd $GZ_SIM/gzsim/tests/TankDriveTest'
+#alias gztest='cd $GZ_SIM/gzsim/tests/SwerveDriveTest'
+
+# 2) open a new terminal in VS code
+# 3) enter "gztest" in the terminal to switch to the test project directory
+# 4) enter "gzstart" to start the simulation
+# 5) enter "gzstop" to end the simulation
+
+# previous game simulations
 # 1) set GZPROJ by uncommenting one of the exports below
 # 2) open a new terminal in VS code
 # 3) in terminal enter "gzcomp" (switches directory to project)
-# 4) choose simulation world by editing "start_gazebo"
+# 4) (optional) choose simulation world setup by editing "start_gazebo"
 # 5) run simulation by entering "gzstart"
 # 6) stop simulation by entering "gzstop"
 
-export GZPROJ=$GZ_SIM/Simbots/SimBot2023
+#export GZPROJ=$GZ_SIM/Simbots/SimBot2023
 #export GZPROJ=$GZ_SIM/Simbots/SimBot2022
 #export GZPROJ=$GZ_SIM/Simbots/SimBot2019
 #export GZPROJ=$GZ_SIM/Simbots/SimBot2018
 #export GZPROJ=$GZ_SIM/Simbots/SimBot2017
-#export GZPROJ=$GZ_SIM/Simbots/SimBot2016
+export GZPROJ=$GZ_SIM/Simbots/SimBot2016
 
+alias gzcomp='cd $GZPROJ'
+
+export GZPROJ=$GZ_SIM/Simbots/SimBot2016
 export GAZEBO_RESOURCE_PATH=./worlds:$GZ_SIM/worlds:$GZPROJ/worlds:$GAZEBO_TOOLS
 export GAZEBO_MODEL_PATH=./models:$GAZEBO_TOOLS/models:$GZ_SIM/models
-
 export LD_LIBRARY_PATH=$OGRE_RESOURCE_PATH:$GAZEBO_PLUGIN_PATH
 export SMART_DASHBOARD=${GAZEBO_BIN}/SmartDashboard-winx64.jar
 
-alias gzcomp='cd $GZPROJ'
-alias gztest='cd $GZ_SIM/gzsim/tests/TankDriveTest'
 alias gzdev='cd $GZ_SIM/gzsim/c++'
 alias waffle='cd $GZ_SIM/Simbots/SimWaffle'
 

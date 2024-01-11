@@ -1,0 +1,4 @@
+#!/bin/bash
+rm -f tmp/*;
+
+gazebo --verbose 2024Field.world &
