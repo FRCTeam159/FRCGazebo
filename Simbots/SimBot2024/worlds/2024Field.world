@@ -27,12 +27,12 @@
     <!---->
     <include>
       <name>Stage1</name>
-      <uri>model://Stage</uri>
+      <uri>model://StageDF</uri>
         <pose>-4 0.20 0.01 0 0</pose>
     </include>
     <include>
       <name>Stage2</name>
-      <uri>model://Stage</uri>
+      <uri>model://StageDF</uri>
        <pose>4 0.20 0 0.01 0 3.1415</pose>
     </include>
 
