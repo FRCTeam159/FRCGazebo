@@ -2,31 +2,30 @@
 <sdf version="1.5">
   <model name="2024Field">
     <pose>0 0 -0.00253999999996003 0 0 0</pose>
-   
+    
     <link name="All">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>5.47669606214717 4.24359134272466 0.806055631037761 1.5707963267949 -3.49148133884313E-15 -8.32563198069109E-16</pose>
+      <pose>5.22998423422701 4.20095100452097 0.830642909302267 1.5707963267949 -3.49148133884313E-15 -8.32563198069109E-16</pose>
       <must_be_base_link>1</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
         <angular>0</angular>
       </velocity_decay>
       <inertial>
-        <mass>1203.38820839705</mass>
+        <mass>1105.50364821282</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
-          <ixx>12420.4996481438</ixx>
-          <ixy>0.611622292929965</ixy>
-          <ixz>244.412559413775</ixz>
-          <iyy>65934.1903395012</iyy>
-          <iyz>146.335781517919</iyz>
-          <izz>54402.8830461818</izz>
+          <ixx>10054.3641532325</ixx>
+          <ixy>29.8232539716383</ixy>
+          <ixz>1423.69264452819</ixz>
+          <iyy>60521.5846654579</iyy>
+          <iyz>37.107799388331</iyz>
+          <izz>51169.2558842683</izz>
         </inertia>
       </inertial>
-      <!---->
       <collision name="All_collision">
-        <pose>0.0355484378709587 -0.810830831041717 -0.295436753629572 0 0 0</pose>
+        <pose>0.282260265791117 -0.835418109306224 -0.338077091833266 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
@@ -46,7 +45,7 @@
         </surface>
       </collision>
       <visual name="All_visual">
-        <pose>0.0355484378709587 -0.810830831041717 -0.295436753629572 0 0 0</pose>
+        <pose>0.282260265791117 -0.835418109306224 -0.338077091833266 0 0 0</pose>
         <material>
           <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
           <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
@@ -59,9 +58,9 @@
         </geometry>
       </visual>
     </link>
-     <joint name="fiels-World" type="fixed">
-      <parent>world</parent>
-      <child>All</child>
+    <joint name="Field-World" type="fixed">
+      <parent>All</parent>
+      <child>Field</child>
    </joint>
   </model>
 </sdf>
