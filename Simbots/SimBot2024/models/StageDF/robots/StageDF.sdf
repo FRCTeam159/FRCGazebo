@@ -1,31 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sdf version="1.5">
   <model name="StageDF">
-    <pose>0 0 -5.50123080977081E-21 0 0 0</pose>
-    
+    <pose>0 0 0 0 0 0</pose>
+    <plugin name="clock" filename="libgz_clock.so">
+      <topic>/gazebo/frc/time</topic>
+    </plugin>
     <link name="Body">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>1.24510849687276 0.0138041018860111 1.29041218518041 1.57079632679488 8.62567991024157E-15 1.0471975511966</pose>
+      <pose>3.41866966331912 1.28555950831927 -4.49039309301697E-05 0 0 0</pose>
       <must_be_base_link>1</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
         <angular>0</angular>
       </velocity_decay>
       <inertial>
-        <mass>231.254876961586</mass>
+        <mass>229.201132019243</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
-          <ixx>32.1066469352562</ixx>
-          <ixy>14.6559811350207</ixy>
-          <ixz>2.5309773829689</ixz>
-          <iyy>99.0713389326612</iyy>
-          <iyz>2.16532541083186</iyz>
-          <izz>100.735011972514</izz>
+          <ixx>123.388078535741</ixx>
+          <ixy>6.8275201419122</ixy>
+          <ixz>0.0354480194593931</ixz>
+          <iyy>220.472965126754</iyy>
+          <iyz>0.0547666220662019</iyz>
+          <izz>136.817722560262</izz>
         </inertia>
       </inertial>
       <collision name="Body_collision">
-        <pose>-3.41968150478831 -1.29359988535584 -0.00187568780168965 0 0 0</pose>
+        <pose>-3.41866966331912 -1.28555950831927 4.49039309301697E-05 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
@@ -45,7 +47,7 @@
         </surface>
       </collision>
       <visual name="Body_visual">
-        <pose>-3.41968150478831 -1.29359988535584 -0.00187568780168965 0 0 0</pose>
+        <pose>-3.41866966331912 -1.28555950831927 4.49039309301697E-05 0 0 0</pose>
         <material>
           <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
           <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
@@ -58,10 +60,5 @@
         </geometry>
       </visual>
     </link>
-    
-     <joint name="Stage-World" type="fixed">
-      <parent>world</parent>
-      <child>Body</child>
-      </joint>
   </model>
 </sdf>
