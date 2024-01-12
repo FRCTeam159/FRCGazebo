@@ -24,6 +24,7 @@
           <izz>51169.2558842683</izz>
         </inertia>
       </inertial>
+      <!---->
       <collision name="All_collision">
         <pose>0.282260265791117 -0.835418109306224 -0.338077091833266 0 0 0</pose>
         <geometry>
@@ -58,9 +59,10 @@
         </geometry>
       </visual>
     </link>
+    <!---->
     <joint name="Field-World" type="fixed">
-      <parent>All</parent>
-      <child>Field</child>
+      <parent>world</parent>
+      <child>All</child>
    </joint>
   </model>
 </sdf>

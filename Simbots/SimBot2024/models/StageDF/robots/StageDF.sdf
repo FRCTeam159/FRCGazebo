@@ -2,9 +2,7 @@
 <sdf version="1.5">
   <model name="StageDF">
     <pose>0 0 0 0 0 0</pose>
-    <plugin name="clock" filename="libgz_clock.so">
-      <topic>/gazebo/frc/time</topic>
-    </plugin>
+    
     <link name="Body">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
@@ -60,5 +58,9 @@
         </geometry>
       </visual>
     </link>
+     <joint name="Field-World" type="fixed">
+      <parent>world</parent>
+      <child>Body</child>
+   </joint> 
   </model>
 </sdf>

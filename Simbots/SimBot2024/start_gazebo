@@ -1,4 +1,4 @@
 #!/bin/bash
 rm -f tmp/*;
 
-gazebo -u --verbose 2024Field.world &
+gazebo --verbose 2024Field.world &
