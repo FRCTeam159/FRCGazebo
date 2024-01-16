@@ -73,7 +73,7 @@ public class SimGyro extends SimNode implements Gyro {
             break;
         }
         zero=offset+d;
-        System.out.println(offset+" "+d+" "+zero);
+        System.out.println("Gyro reset offset:"+d+" "+zero);
     }
     public void reset(){
         reset(0);

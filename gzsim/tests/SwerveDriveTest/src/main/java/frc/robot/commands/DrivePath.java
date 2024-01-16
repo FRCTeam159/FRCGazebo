@@ -227,9 +227,14 @@ public class DrivePath extends CommandBase {
 
       List<State> states = trajectory.getStates();
       for(int i=0;i<states.size();i++){
-        State state=states.get(i);
-        Pose2d psi=state.poseMeters.relativeTo(p0);
-        state.poseMeters=psi;
+        PathPlannerTrajectory.PathPlannerState state=trajectory.getState(i);
+        Pose2d p=state.poseMeters;
+        Rotation2d h=state.holonomicRotation;
+        Pose2d pr=p.relativeTo(p0);
+        if(i==0)
+         pr=new Pose2d(pr.getTranslation(),new Rotation2d()); // 
+        state.holonomicRotation=h.plus(new Rotation2d(Math.toRadians(180))); 
+        state.poseMeters=pr;
       }
       return trajectory;
     } catch (Exception ex) {

@@ -9,8 +9,8 @@
       <pose>1.47609413931829 0.00019965113432675 1.12469210153128 1.5707963267949 -1.74689243811446E-16 -3.14159265358979</pose>
       <must_be_base_link>1</must_be_base_link>
       <velocity_decay>
-        <linear>0</linear>
-        <angular>0</angular>
+        <linear>0.1</linear>
+        <angular>0.1</angular>
       </velocity_decay>
       <inertial>
         <mass>289.009279075633</mass>
@@ -38,8 +38,8 @@
           </contact>
           <friction>
             <ode>
-              <mu>0</mu>
-              <mu2>0</mu2>
+              <mu>2</mu>
+              <mu2>2</mu2>
             </ode>
           </friction>
         </surface>
@@ -58,11 +58,11 @@
         </geometry>
       </visual>
     </link>
-    <!--
+    <!---->
      <joint name="stage-World" type="fixed">
       <parent>world</parent>
       <child>Stage</child>
    </joint>
-   -->
+   
   </model>
 </sdf>

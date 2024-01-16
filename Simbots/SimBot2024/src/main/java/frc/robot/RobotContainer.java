@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DriveWithGamepad;
 import objects.PlotServer;
@@ -19,6 +20,8 @@ import frc.robot.subsystems.Drivetrain;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  static boolean resetting=false;
+
   // The robot's subsystems and commands are defined here...
   private final Drivetrain m_drivetrain = new Drivetrain();
   private final Autonomous m_autonomous = new Autonomous(m_drivetrain);
@@ -54,18 +57,36 @@ public class RobotContainer {
   public void teleopInit(){
     m_drivetrain.setRobotDisabled(false);
     m_drivetrain.setFieldOriented(m_drivetrain.isGyroEnabled());
+    m_drivetrain.endAuto();
   }
   public void autonomousInit(){
     m_drivetrain.setRobotDisabled(false);
     m_drivetrain.setFieldOriented(true);
+    m_drivetrain.startAuto();
   }
   public void disabledInit(){
     m_drivetrain.setRobotDisabled(true);
     m_drivetrain.disable();
+    m_drivetrain.endAuto();
   }
   public void robotInit(){
     m_drivetrain.setRobotDisabled(true);
     m_drivetrain.init();
     m_plotsub.start();
   }
+  public void reset(){
+    System.out.println("Robot reset");
+    m_drivetrain.reset();
+  }
+  public void simulationPeriodic(){
+  boolean b = SmartDashboard.getBoolean("Reset", false);
+  if(b &&  !resetting){
+    resetting=true;
+    reset();
+  }
+  else if(!b && resetting){
+    resetting=false;
+    m_drivetrain.resetPose();
+  }
+}
 }

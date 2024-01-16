@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.Calibrate;
 import frc.robot.commands.DriveBack;
 import frc.robot.commands.DrivePath;
-import frc.robot.commands.TurnToAngle;
 import utils.PlotUtils;
 
 public class Autonomous extends SequentialCommandGroup  {
@@ -22,9 +21,9 @@ public class Autonomous extends SequentialCommandGroup  {
 
   public static final int CALIBRATE = 0;
   public static final int PROGRAM = 1;
-  public static final int AUTOTEST = 2;
-  public static final int PATHWEAVER = 3;
-  public static final int PATHPLANNER = 4;
+  public static final int PROGRAMPP = 2;
+  public static final int PATHPLANNER = 3;
+  public static final int AUTOTEST = 4;
 
   boolean reversed=false;
  
@@ -43,16 +42,14 @@ public class Autonomous extends SequentialCommandGroup  {
     m_auto_plot_option.addOption("Plot Position", PlotUtils.PLOT_POSITION);
 
     m_path_chooser.setDefaultOption("Program", PROGRAM);
-	  m_path_chooser.addOption("AutoTest", AUTOTEST);
-    m_path_chooser.addOption("PathPlanner", PATHPLANNER);
+    m_path_chooser.addOption("ProgramPP", PROGRAMPP);
+	  m_path_chooser.addOption("PathPlanner", PATHPLANNER);
+    m_path_chooser.addOption("AutoTest", AUTOTEST);
     m_path_chooser.addOption("Calibrate", CALIBRATE);
 
-    //SmartDashboard.putBoolean("reversed", reversed);
-    //SmartDashboard.putBoolean("debug", false);
-
-    SmartDashboard.putNumber("xPath", 5);
-    SmartDashboard.putNumber("yPath", -3);
-    SmartDashboard.putNumber("rPath", 30.0);
+    SmartDashboard.putNumber("xPath", -1.5);
+    SmartDashboard.putNumber("yPath", -2);
+    SmartDashboard.putNumber("rPath", 58.0);
    
 		SmartDashboard.putData(m_path_chooser);
     SmartDashboard.putData(m_auto_plot_option);
@@ -60,7 +57,6 @@ public class Autonomous extends SequentialCommandGroup  {
   public SequentialCommandGroup  getCommand(){
     PlotUtils.auto_plot_option=m_auto_plot_option.getSelected();
     selected_path=m_path_chooser.getSelected();
-    //reversed = SmartDashboard.getBoolean("reversed", reversed);
     
     //clearGroupedCommands();
       
@@ -68,9 +64,11 @@ public class Autonomous extends SequentialCommandGroup  {
     case CALIBRATE:
       return new SequentialCommandGroup(new Calibrate(m_drive));
     case PROGRAM:
-      return new SequentialCommandGroup(new DrivePath(m_drive,PROGRAM,reversed));
+      return new SequentialCommandGroup(new DrivePath(m_drive,PROGRAM));
+    case PROGRAMPP:
+      return new SequentialCommandGroup(new DrivePath(m_drive,PROGRAMPP));
     case PATHPLANNER:
-      return new SequentialCommandGroup(new DrivePath(m_drive,PATHPLANNER,reversed));
+      return new SequentialCommandGroup(new DrivePath(m_drive,PATHPLANNER));
    case AUTOTEST:
      //return new SequentialCommandGroup(new TurnToAngle(m_drive,45.0));
       return new SequentialCommandGroup(
