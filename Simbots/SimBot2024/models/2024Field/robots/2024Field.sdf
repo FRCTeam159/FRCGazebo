@@ -2,31 +2,32 @@
 <sdf version="1.5">
   <model name="2024Field">
     <pose>0 0 -0.00253999999996003 0 0 0</pose>
-    
+    <plugin name="clock" filename="libgz_clock.so">
+      <topic>/gazebo/frc/time</topic>
+    </plugin>
     <link name="All">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>5.22998423422701 4.20095100452097 0.830642909302267 1.5707963267949 -3.49148133884313E-15 -8.32563198069109E-16</pose>
+      <pose>4.99354306719658 3.97358857381025 0.837145431810104 1.5707963267949 -3.49148133884313E-15 -8.32563198069109E-16</pose>
       <must_be_base_link>1</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
         <angular>0</angular>
       </velocity_decay>
       <inertial>
-        <mass>1105.50364821282</mass>
+        <mass>2000</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
-          <ixx>10054.3641532325</ixx>
-          <ixy>29.8232539716383</ixy>
-          <ixz>1423.69264452819</ixz>
-          <iyy>60521.5846654579</iyy>
-          <iyz>37.107799388331</iyz>
-          <izz>51169.2558842683</izz>
+          <ixx>10951.5490496326</ixx>
+          <ixy>22.2569259541954</ixy>
+          <ixz>270.556070510388</ixz>
+          <iyy>65752.9278080079</iyy>
+          <iyz>18.0095080159372</iyz>
+          <izz>55613.78863438</izz>
         </inertia>
       </inertial>
-      <!---->
       <collision name="All_collision">
-        <pose>0.282260265791117 -0.835418109306224 -0.338077091833266 0 0 0</pose>
+        <pose>0.518701432821543 -0.841920631814062 -0.565439522543987 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
@@ -39,14 +40,14 @@
           </contact>
           <friction>
             <ode>
-              <mu>0</mu>
-              <mu2>0</mu2>
+              <mu>2</mu>
+              <mu2>2</mu2>
             </ode>
           </friction>
         </surface>
       </collision>
       <visual name="All_visual">
-        <pose>0.282260265791117 -0.835418109306224 -0.338077091833266 0 0 0</pose>
+        <pose>0.518701432821543 -0.841920631814062 -0.565439522543987 0 0 0</pose>
         <material>
           <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
           <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
@@ -59,10 +60,5 @@
         </geometry>
       </visual>
     </link>
-    <!---->
-    <joint name="Field-World" type="fixed">
-      <parent>world</parent>
-      <child>All</child>
-   </joint>
   </model>
 </sdf>
