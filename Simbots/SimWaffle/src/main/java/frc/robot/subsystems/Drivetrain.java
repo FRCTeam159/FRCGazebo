@@ -80,7 +80,7 @@ public class Drivetrain extends SubsystemBase {
 	double latency=0.05;
 	double vision_confidence=0.00;
 	double pose_error=0;
-	boolean use_tags=true;
+	boolean use_tags=false;
 
 	boolean m_disabled = true;
 	SwerveDrivePoseEstimator m_poseEstimator;

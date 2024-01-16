@@ -67,7 +67,7 @@ public class DriveWithGamepad extends CommandBase {
     if(m_drive.disabled()){
         m_drive.enable();
     }
-    m_drive.drive(xSpeed, -ySpeed,-rot,m_drive.isGyroEnabled());
+    m_drive.drive(-xSpeed, -ySpeed,-rot,m_drive.isGyroEnabled());
   }
 
   // Called once the command ends or is interrupted.

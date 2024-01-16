@@ -52,7 +52,7 @@ public class SimEncoder extends SimNode{
     public void reset(){
         resetting=true;
         zero=pos_node.getDouble(0.0);
-        //System.out.println("Reset Encoder "+chnl+" zero:"+zero);
+        System.out.println("Reset Encoder "+chnl+" zero:"+zero);
     }
     public void setDistancePerRotation(double d){
         distancePerRotation = d;

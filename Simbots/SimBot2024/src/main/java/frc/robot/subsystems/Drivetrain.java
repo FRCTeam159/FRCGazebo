@@ -44,8 +44,6 @@ public class Drivetrain extends SubsystemBase {
 	private final SwerveModule m_backLeft = new SwerveModule(5, 6,3);
 	private final SwerveModule m_backRight = new SwerveModule(7, 8,4); 
 	
-	//final PIDController m_controller=new PIDController(1,0.1,0.0);
-
 	public static String chnlnames[] = { "BR", "BL", "FL", "FR" };
 
 	private final SwerveModulePosition[] m_positions={
@@ -82,6 +80,7 @@ public class Drivetrain extends SubsystemBase {
 	double vision_confidence=0.00;
 	double pose_error=0;
 	boolean use_tags=true;
+	boolean simstarted=false;
 
 	boolean m_disabled = true;
 	SwerveDrivePoseEstimator m_poseEstimator;
@@ -123,26 +122,23 @@ public class Drivetrain extends SubsystemBase {
 		robot_disabled=f;
 	}
 	public double getTime() {
+		//return simulation.getSimTime();
 		return simulation.getSimTime();
 	}
 
 	public double getClockTime() {
-		//return simulation.getClockTime();
 		return Timer.getFPGATimestamp();
-		//return m_timer.get();
 	}
 	public void startAuto() {
-		simulation.reset();
-		simulation.start();
+		simulation.startAuto();
 		enable();
 	}
 
 	public void endAuto() {
-		if(debug)
+		//if(debug)
 		System.out.println("Drivetrain.endAuto");
-		setRobotDisabled(true);
-		//simulation.end();
-		//disable();
+		simulation.endAuto();
+		
 	}
 	public void init() {
 		if(debug)
@@ -183,7 +179,7 @@ public class Drivetrain extends SubsystemBase {
 	}
 
 	public void reset() {
-		m_disabled = true;
+		//m_disabled = true;
 		if(debug)
 		System.out.println("Drivetrain.reset");
 		m_frontLeft.reset();
@@ -193,10 +189,12 @@ public class Drivetrain extends SubsystemBase {
 
 		m_gyro.reset();
 		last_heading = 0;
+		//resetPositions();
 		//makeEstimator();
 	}
 
 	public void resetPose() {
+		reset();
 		last_heading = 0;
 		resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
 		field_pose = getPose();
@@ -269,6 +267,8 @@ public class Drivetrain extends SubsystemBase {
 	}
 
 	public void log() {
+		if(!simstarted)
+		return;
 
 		SmartDashboard.putNumber("Distance", getDistance());
 		SmartDashboard.putNumber("Velocity", getVelocity());
@@ -282,16 +282,16 @@ public class Drivetrain extends SubsystemBase {
 		kMaxVelocity=SmartDashboard.getNumber("maxV", kMaxVelocity);
 		kMaxAcceleration=SmartDashboard.getNumber("maxA", kMaxAcceleration);
 
-		use_tags = SmartDashboard.getBoolean("Use Tags", use_tags);
-		SmartDashboard.putNumber("Error", pose_error);
+		// use_tags = SmartDashboard.getBoolean("Use Tags", use_tags);
+		// SmartDashboard.putNumber("Error", pose_error);
 
-		latency=SmartDashboard.getNumber("Latency", 0);
-		double conf=SmartDashboard.getNumber("Conf", vision_confidence);
-		if(Math.abs(conf-vision_confidence)>0.001){
-			vision_confidence=conf;
-			double vmult=1.0/vision_confidence;
-			m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(vmult*x_std, vmult*y_std, Units.degreesToRadians(vmult*h_std)));
-		}
+		// latency=SmartDashboard.getNumber("Latency", 0);
+		// double conf=SmartDashboard.getNumber("Conf", vision_confidence);
+		// if(Math.abs(conf-vision_confidence)>0.001){
+		// 	vision_confidence=conf;
+		// 	double vmult=1.0/vision_confidence;
+		// 	m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(vmult*x_std, vmult*y_std, Units.degreesToRadians(vmult*h_std)));
+		// }
 		if(debug_angles)
 			displayAngles();	
 	}
@@ -303,6 +303,10 @@ public class Drivetrain extends SubsystemBase {
 
 	@Override
 	public void simulationPeriodic() {
+		if(!simstarted && simulation.started()){
+			reset();
+			simstarted=true;
+		}
 		if(robot_disabled)
 			drive(0.0,0.0,0,true); // stay in place
 		updateOdometry();
@@ -391,7 +395,7 @@ public class Drivetrain extends SubsystemBase {
 		m_positions[2]=m_backLeft.getPosition();
 		m_positions[3]=m_backRight.getPosition();
 	}
-	public void resetPositions(){
+	public void resetPositions(){	
 		m_positions[0]=new SwerveModulePosition();
 		m_positions[1]=new SwerveModulePosition();
 		m_positions[2]=new SwerveModulePosition();
@@ -399,15 +403,16 @@ public class Drivetrain extends SubsystemBase {
 	}
 	public void resetOdometry(Pose2d pose) {
 		//reset();
-		last_heading = 0;
-		m_gyro.reset();
-		resetPositions();
+		//last_heading = 0;
+		//m_gyro.reset();
+		updatePositions();
+		//resetPositions();
 		m_kinematics = new SwerveDriveKinematics(
 			m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 		m_poseEstimator.resetPosition(gyroRotation2d(), m_positions,pose);
 
 		System.out.println("reset odometry:"+getPose());
-		updateOdometry();
+		//updateOdometry();
 	}
 
 	public Pose2d getPose() {

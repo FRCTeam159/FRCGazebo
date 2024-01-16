@@ -1,15 +1,31 @@
 <xml version="1.0">
 <dashboard>
-	<widget field="H:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="128" y="74"/>
+	<widget field="Pathplanner" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="502" y="87"/>
+	</widget>
+	<widget field="AutoTime" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="123" y="66"/>
 		<width>92</width>
 	</widget>
+	<widget field="Y:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="122" y="89"/>
+		<width>76</width>
+	</widget>
+	<widget field="X:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="39" y="90"/>
+		<width>76</width>
+		<height>20</height>
+	</widget>
+	<widget field="H:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="205" y="89"/>
+		<width>74</width>
+	</widget>
 	<widget field="maxA" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="224" y="72"/>
+		<location x="229" y="65"/>
 		<width>79</width>
 	</widget>
 	<widget field="maxV" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="223" y="44"/>
+		<location x="225" y="41"/>
 		<width>83</width>
 	</widget>
 	<widget field="Field Oriented" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
@@ -19,7 +35,7 @@
 		<location x="396" y="-6"/>
 	</widget>
 	<widget field="SimClock" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="13" y="71"/>
+		<location x="15" y="65"/>
 		<width>102</width>
 	</widget>
 	<widget field="Distance" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
@@ -27,20 +43,20 @@
 		<width>99</width>
 	</widget>
 	<widget field="Velocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="125" y="42"/>
+		<location x="127" y="42"/>
 		<width>90</width>
 	</widget>
 	<widget field="yPath" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="489" y="42"/>
+		<location x="493" y="31"/>
 		<width>85</width>
 	</widget>
 	<widget field="xPath" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="490" y="13"/>
+		<location x="492" y="8"/>
 		<width>86</width>
 		<height>20</height>
 	</widget>
 	<widget field="rPath" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="491" y="67"/>
+		<location x="496" y="54"/>
 		<width>81</width>
 		<height>21</height>
 	</widget>
@@ -59,9 +75,9 @@
 		<height>23</height>
 	</static-widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.MjpgStreamViewerImpl">
-		<location x="3" y="106"/>
+		<location x="3" y="120"/>
 		<width>571</width>
-		<height>375</height>
+		<height>361</height>
 		<property name="MJPG Server URL" value="http://localhost:9000/?action=stream"/>
 	</static-widget>
 		<property name="Team Number/Host" value="localhost"/>
@@ -76,11 +92,8 @@
 </dashboard>
 <live-window>
 </live-window>
-	<hidden field="Y:"/>
-	<hidden field="X:"/>
 	<hidden field="Conf"/>
 	<hidden field="Use Tags"/>
-	<hidden field="AutoTime"/>
 	<hidden field="Error"/>
 	<hidden field="Latency"/>
 </xml>

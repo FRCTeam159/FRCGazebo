@@ -32,7 +32,10 @@ public class SimClock extends SimNode {
         System.out.println("SimClock.stop");
         ctrl_node.setString("stop");
     }
-    public double getTime() {
+    public boolean started(){
+        return time_node.getDouble(0.0)==0?false:true;
+    }
+    public double getTime() {      
         return time_node.getDouble(0.0)-zero; 
     } 
 }

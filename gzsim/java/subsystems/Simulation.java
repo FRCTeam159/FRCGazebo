@@ -169,6 +169,10 @@ public class Simulation extends SubsystemBase {
     end();
   }
   
+  public boolean started(){
+    return m_simclock.started();
+
+  }
   public void init() {
     m_simcontrol.init();
     m_simclock.disable();

@@ -60,7 +60,7 @@
 
     <include>
       <uri>model://SimSwerveBot</uri>
-      <pose>-6.059 -1.25 0.09 1.57078 0 3.14</pose>
+      <pose>-6.816 -2.34 0.09 1.57078 0 2.095</pose>
     </include>
   </world>
 </sdf>
