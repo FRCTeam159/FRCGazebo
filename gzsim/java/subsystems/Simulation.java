@@ -151,10 +151,10 @@ public class Simulation extends SubsystemBase {
         if (m)
           clear();
         m_timer.reset();
-      } else if (m_timer.get() > 0.25) {
+      } else if (m_timer.get() > 0.5) {
         if (!disabling) {
           disabling = true;
-        } else if (m_timer.get() > 0.5) {
+        } else if (m_timer.get() > 1) {
           SmartDashboard.putBoolean("Reset", false);
           resetting = false;
           disabling = false;

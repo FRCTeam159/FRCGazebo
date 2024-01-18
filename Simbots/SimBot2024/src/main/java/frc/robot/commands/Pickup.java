@@ -29,31 +29,44 @@ public class Pickup extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drive.reset();
-    m_drive.resetPose();
+    //m_drive.reset();
+   // m_drive.resetPose();
     m_timer.reset();
     starttm=0;//m_drive.getClockTime();
     //m_drive.resetPose();
     System.out.println("Pickup.init");
+   //SmartDashboard.putBoolean("Gazebo", false);
+    //SmartDashboard.putBoolean("Reset", true);
     // SmartDashboard.putBoolean("Gazebo", false);
     // SmartDashboard.putBoolean("Reset", true);
+   //m_drive.disable();
+    m_drive.resetWheels();
     resetting=true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //m_drive.updateOdometry();
-   // if(m_timer.get()>1 && !resetting){
+    if(!m_drive.wheelsReset()){
+      m_drive.allignWheels();
+    }
+    //m_drive.disable();
+
+    //m_drive.reset();
+    //m_drive.resetPose();
+   //if(m_timer.get()>1 && !resetting){
       //m_drive.resetPose();
    //   System.out.println("Pickup.started");
-   //   resetting=true;
+     // resetting=true;
    // }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    //m_drive.disable();
+    m_drive.resetPose();
+   // m_drive.driveForward(0.1);
     //SmartDashboard.putBoolean("Gazebo", true);
 
   }
@@ -64,6 +77,10 @@ public class Pickup extends CommandBase {
     double tm=m_timer.get();//m_drive.getClockTime();
     if(tm-starttm>timeout){
       System.out.println("Pickup - timout expired");
+      return true;
+    }
+    if(m_drive.wheelsReset()){
+      System.out.println("Pickup - wheels alligned at:"+(tm-starttm>timeout));
       return true;
     }
     //return m_timer.get()>=timeout;

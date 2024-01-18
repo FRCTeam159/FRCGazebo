@@ -41,12 +41,13 @@
       <uri>model://StageDF</uri>
        <pose>-1.06015 0.024695 -0.003173 1.5708 6e-06 9.2e-05</pose>
     </include>
-
+<!---->
     <include>
       <name>Note1</name>
       <uri>model://Note</uri>
         <pose>-4.58 0.245 0.01 1.58 0 0</pose>
     </include>
+    
     <include>
       <name>Note2</name>
       <uri>model://Note</uri>

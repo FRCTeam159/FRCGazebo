@@ -17,6 +17,7 @@ public class SimEncoder extends SimNode{
     boolean enabled=false;
     private double zero;
     boolean resetting=false;
+    static public boolean debug=false;
 
     public SimEncoder(int id){
         chnl=id;
@@ -30,6 +31,7 @@ public class SimEncoder extends SimNode{
         pos_node.setDouble(0.0);
         vel_node= objects_chnls.getEntry("velocity");
         vel_node.setDouble(0.0);
+        if(debug)
         System.out.println("SimEncoder:"+id);
         zero=0;
     }
@@ -43,7 +45,7 @@ public class SimEncoder extends SimNode{
     }
     public void disable(){
         enabled=false;
-        pos_node.setNumber(0);
+        //pos_node.setNumber(0);
         //resetting=false;
 
        // ctrl_node.setString("stop");
@@ -52,6 +54,7 @@ public class SimEncoder extends SimNode{
     public void reset(){
         resetting=true;
         zero=pos_node.getDouble(0.0);
+        if(debug)
         System.out.println("Reset Encoder "+chnl+" zero:"+zero);
     }
     public void setDistancePerRotation(double d){
@@ -60,7 +63,9 @@ public class SimEncoder extends SimNode{
     public double getDistancePerRotation() {
         return distancePerRotation;
     }
-   
+    public double getAbsPosition() {
+        return pos_node.getDouble(0.0);
+    }
     public double getDistance() {
         //if(resetting)
         //  zero=pos_node.getDouble(0.0); 

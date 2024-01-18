@@ -13,6 +13,7 @@ public class SimGyro extends SimNode implements Gyro {
     private NetworkTableEntry vel_node;
     private static NetworkTable objects;
     private static NetworkTable channels;
+    static public boolean debug=true;
 
     public static enum Mode {
 		YAW,
@@ -35,7 +36,7 @@ public class SimGyro extends SimNode implements Gyro {
         init(id,Mode.YAW);
     }
 
-    public void init(int id,Mode m){
+    private void init(int id,Mode m){
         chnl=id;
         mode=m;
         idstr="gyro/"+chnl;
@@ -53,7 +54,8 @@ public class SimGyro extends SimNode implements Gyro {
         vel_node.setDouble(0.0);
 
         ctrl_node.setString("new");
-        System.out.println("SimGyro:"+id+" mode:"+mode);
+        if(debug)
+            System.out.println("SimGyro:"+id+" mode:"+mode);
 
     }
     
@@ -73,6 +75,7 @@ public class SimGyro extends SimNode implements Gyro {
             break;
         }
         zero=offset+d;
+        if(debug)
         System.out.println("Gyro reset offset:"+d+" "+zero);
     }
     public void reset(){

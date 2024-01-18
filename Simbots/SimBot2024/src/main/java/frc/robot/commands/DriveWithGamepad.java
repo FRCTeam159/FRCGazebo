@@ -18,7 +18,7 @@ public class DriveWithGamepad extends CommandBase {
 
   private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(0.5);
   private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(0.5);
-  private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(0.5);
+  private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(0.2);
 
   /**
    * Creates a new ExampleCommand.
@@ -53,21 +53,22 @@ public class DriveWithGamepad extends CommandBase {
     double vx=m_controller.getLeftY();
     double vy=m_controller.getLeftX();
     double vr=m_controller.getRightX();
-    final var xSpeed = -m_xspeedLimiter.calculate(MathUtil.applyDeadband(vx, 0.2))
+    final var xSpeed = -m_xspeedLimiter.calculate(MathUtil.applyDeadband(vx, 0.3))
             * Drivetrain.kMaxVelocity;
 
     // Get the y speed or sideways/strafe speed. 
-    final var ySpeed = m_yspeedLimiter.calculate(MathUtil.applyDeadband(vy, 0.2))
+    final var ySpeed = m_yspeedLimiter.calculate(MathUtil.applyDeadband(vy, 0.3))
             * Drivetrain.kMaxVelocity;
 
     // Get the rate of angular rotation. 
-    final var rot = m_rotLimiter.calculate(MathUtil.applyDeadband(vr, 0.2))
+    final var rot = m_rotLimiter.calculate(MathUtil.applyDeadband(vr, 0.3))
             * Drivetrain.kMaxAngularSpeed;
    
     if(m_drive.disabled()){
         m_drive.enable();
     }
-    m_drive.drive(-xSpeed, -ySpeed,-rot,m_drive.isGyroEnabled());
+    m_drive.drive(-xSpeed, -ySpeed,-rot,m_drive.fieldOriented());
+
   }
 
   // Called once the command ends or is interrupted.

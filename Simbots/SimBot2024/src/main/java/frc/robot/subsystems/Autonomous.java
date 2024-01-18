@@ -31,7 +31,7 @@ public class Autonomous extends SequentialCommandGroup  {
   static double i2m=0.0254;
 
   static double y=100*i2m;
-  static double x=10*i2m; // should be 23 ??
+  static double x=5*i2m; // should be 23 ??
 
   static double cos=Math.cos(d2r*angle);
   static double sin=Math.sin(d2r*angle);
@@ -95,9 +95,12 @@ public class Autonomous extends SequentialCommandGroup  {
         y = xp * sin + yp * cos;
         System.out.println("forward x:" + (y) + " y:" + x);
         return new SequentialCommandGroup(
-              new DrivePath(m_drive, opt, -yp, xp, 60),
-              new Pickup(m_drive, 4),
-              new DrivePath(m_drive, opt, y, x, -60)
+              // new DrivePath(m_drive, opt, -yp, xp, 60),
+              // new Pickup(m_drive, 5),
+              // new DrivePath(m_drive, opt, y, x, -60)
+              new DrivePath(m_drive, opt, -1.5, -2.4, 60),
+              new Pickup(m_drive, 2),
+              new DrivePath(m_drive, opt, 3.0, -0.3, -60)
         );
       }
     }

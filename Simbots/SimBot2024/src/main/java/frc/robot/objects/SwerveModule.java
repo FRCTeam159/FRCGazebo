@@ -153,13 +153,16 @@ public class SwerveModule {
       velocity,state.speedMetersPerSecond,set_drive,Math.toDegrees(turn_angle), state.angle.getDegrees(), set_turn); 
       SmartDashboard.putString(name, s);
     }
-    
       m_driveMotor.set(set_drive);
       m_turnMotor.set(set_turn);
-   
-
   }
-
+  public void resetWheel(){
+    m_turnMotor.setPosition(0);
+    m_turnMotor.setPosition();
+  }
+  public boolean wheelReset(){
+    return m_turnMotor.atTarget();
+  }
   // just apply a voltage to the turn motor
   public void turn(double value){
     m_turnMotor.set(value);

@@ -41,22 +41,22 @@ import utils.PlotUtils;
 // =================================================
 public class DrivePath extends CommandBase {
 
-  static boolean using_pathplanner=false;
+  boolean using_pathplanner=false;
 
   /** Creates a new AutoTest. */
   private ArrayList<PathData> pathdata = new ArrayList<PathData>();
 
   public boolean holotest=true;
-  //private final RamseteController m_ramsete = new RamseteController();
-  private final PPHolonomicDriveController m_ppcontroller=new PPHolonomicDriveController(
-      new PIDController(1, 0, 0), new PIDController(1, 0, 0), new PIDController(0.5, 0, 0));
+  private PPHolonomicDriveController m_ppcontroller=new PPHolonomicDriveController(
+      new PIDController(1, 0, 0), new PIDController(1, 0, 0), new PIDController(2, 0, 0));
+  TrapezoidProfile.Constraints c=new TrapezoidProfile.Constraints(1*6.3, 1*3.15);
 
-  private final HolonomicDriveController m_hcontroller=new HolonomicDriveController(new PIDController(1, 0, 0), new PIDController(1, 0, 0),
-  new ProfiledPIDController(5, 0, 0,
-    new TrapezoidProfile.Constraints(6.28, 3.14)));
-
-  private final Timer m_timer = new Timer();
-  private final Drivetrain m_drive;
+  private ProfiledPIDController ppc=new ProfiledPIDController(4, 0, 0,c);
+  
+  private HolonomicDriveController m_hcontroller=new HolonomicDriveController(new PIDController(2, 0, 0), new PIDController(2, 0, 0),ppc);
+  
+  private Timer m_timer = new Timer();
+  private Drivetrain m_drive;
   static public boolean plot_trajectory_motion = false;
   static public boolean plot_trajectory_dynamics = false;
 
@@ -91,8 +91,7 @@ public class DrivePath extends CommandBase {
     m_drive = drive;
     xPath=x;
     yPath=y; 
-    rPath=r;
-    
+    rPath=r;    
     addRequirements(drive);
   }
   // =================================================
@@ -113,6 +112,8 @@ public class DrivePath extends CommandBase {
     using_pathplanner=(trajectory_option == Autonomous.PATHPLANNER || trajectory_option == Autonomous.PROGRAMPP);
     if(!using_pathplanner && xPath<0)
       reversed=true;
+    else
+      reversed=false;
 
     PlotUtils.initPlot();
 
@@ -133,7 +134,7 @@ public class DrivePath extends CommandBase {
     //m_drive.resetOdometry(p);
 
     //System.out.println(p);
-    m_drive.reset();
+   //m_drive.reset();
     m_timer.reset();
     m_timer.start();
     
@@ -141,6 +142,7 @@ public class DrivePath extends CommandBase {
     m_drive.startAuto();
     elapsed=0;
     m_drive.resetPose();
+    m_drive.enable();
   
     System.out.println("runtime:" + runtime + " states:" + states + " intervals:" + intervals);
   }
@@ -167,7 +169,7 @@ public class DrivePath extends CommandBase {
     else{
       speeds= m_hcontroller.calculate(m_drive.getPose(), reference,reference.poseMeters.getRotation());
     }
-    m_drive.drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, false);
+    m_drive.drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, 2*speeds.omegaRadiansPerSecond, false);
   
     if(plot_type == PlotUtils.PLOT_LOCATION)
       plotLocation((Trajectory.State)reference);
@@ -188,7 +190,7 @@ public class DrivePath extends CommandBase {
     //m_drive.endAuto();
 
     //m_drive.reset();
-    //m_drive.enable();
+    //m_drive.disable();
     if (plot_type != utils.PlotUtils.PLOT_NONE)
       PlotServer.publish(pathdata, 6, plot_type);
   }

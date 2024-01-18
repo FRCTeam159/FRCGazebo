@@ -1,14 +1,21 @@
 package gazebo;
 
+import edu.wpi.first.math.controller.PIDController;
+
 // convenience class that combines an encoder and a motor (e.g. SparkMax)
 public class SimEncMotor {
     SimMotor motor;
     SimEncoder encoder;
     double setval=0;
     boolean enabled=false;
+    double target;
+    int id;
+    final PIDController pid=new PIDController(30,10.0,0.0);
     public SimEncMotor(int id){
         motor=new SimMotor(id);
         encoder=new SimEncoder(id);
+        pid.setTolerance(0.003,0.001);
+        this.id=id;
     }
     public void setInverted(){
         encoder.setInverted();
@@ -47,5 +54,19 @@ public class SimEncMotor {
     }
     public double getRate() {
         return encoder.getRate();
+    }
+    public void setPosition(double d){
+        target=d;
+        pid.setSetpoint(d);
+    }
+    public void setPosition(){
+        double a=encoder.getAbsPosition();
+        double err=pid.calculate(a);
+        //if(id==2)
+        //    System.out.println(id+" a:"+a+" err:"+err);
+        motor.setAbs(err);
+    }
+    public boolean atTarget(){
+       return pid.atSetpoint();
     }
 }

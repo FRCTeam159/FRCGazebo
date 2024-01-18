@@ -2,7 +2,7 @@
 
 #define BIT_ON(a,b)  a|=(b)
 #define BIT_OFF(a,b) a &=~(b)
-#define DEBUG_CNTRL
+//#define DEBUG_CNTRL
 
 GzNode::GzNode(std::string s,std::shared_ptr<nt::NetworkTable> t) {
     gz_topic=s;

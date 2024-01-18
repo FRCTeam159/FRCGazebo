@@ -25,7 +25,7 @@ public class Drivetrain extends SubsystemBase {
 
 	// square frame geometry
 
-	static public boolean debug=true;
+	static public boolean debug=false;
 	static public boolean debug_angles=false;
 
 	public static double front_wheel_base = 23.22; // distance beteen front wheels
@@ -66,7 +66,8 @@ public class Drivetrain extends SubsystemBase {
 	public static double kMaxAngularSpeed = Math.toRadians(360); // degrees per second
 	public static double kMaxAngularAcceleration = Math.toRadians(90);// degrees per second per second
 
-	boolean enable_gyro = true;
+	boolean field_oriented = false;
+	boolean alligning=false;
 	double last_heading = 0;
 	Pose2d field_pose;
 
@@ -95,7 +96,7 @@ public class Drivetrain extends SubsystemBase {
 		makeEstimator();
 
 		simulation = new Simulation();
-		SmartDashboard.putBoolean("Field Oriented", enable_gyro);
+		SmartDashboard.putBoolean("Field Oriented", field_oriented);
 		SmartDashboard.putNumber("maxV", kMaxVelocity);
 		SmartDashboard.putNumber("maxA", kMaxAcceleration);
 		SmartDashboard.putBoolean("Use Tags", use_tags);
@@ -215,11 +216,15 @@ public class Drivetrain extends SubsystemBase {
 	}
 
 	public void setFieldOriented(boolean t){
-		m_gyro.setEnabled(t);
+		field_oriented=t;
+		//m_gyro.setEnabled(t);
 	}
 
+	public boolean fieldOriented(){
+		return field_oriented;
+	}
 	public boolean isGyroEnabled(){
-		return enable_gyro;
+		return true;
 	}
 	public double getHeading() {
 		return getRotation2d().getDegrees();
@@ -278,7 +283,7 @@ public class Drivetrain extends SubsystemBase {
 		SmartDashboard.putNumber("X:", t.getX());
 		SmartDashboard.putNumber("Y:", t.getY());
 
-		enable_gyro = SmartDashboard.getBoolean("Field Oriented", enable_gyro);
+		field_oriented = SmartDashboard.getBoolean("Field Oriented", field_oriented);
 		kMaxVelocity=SmartDashboard.getNumber("maxV", kMaxVelocity);
 		kMaxAcceleration=SmartDashboard.getNumber("maxA", kMaxAcceleration);
 
@@ -375,7 +380,37 @@ public class Drivetrain extends SubsystemBase {
 		m_backRight.setDesiredState(swerveModuleStates[3]);
 		updateOdometry();
 	}
-
+    public void resetWheels(){
+		//if(!alligning){
+			System.out.println("Drivetrain-ALLIGNING_WHEELS");
+			alligning=true;
+		//}
+		m_frontLeft.resetWheel();
+		m_frontRight.resetWheel();
+		m_backLeft.resetWheel();
+		m_backRight.resetWheel();
+	}
+	public void allignWheels(){
+		m_frontLeft.resetWheel();
+		m_frontRight.resetWheel();
+		m_backLeft.resetWheel();
+		m_backRight.resetWheel();
+	}
+	public boolean wheelsReset(){
+		if(!m_frontLeft.wheelReset())
+			return false;
+		if(!m_frontRight.wheelReset())
+			return false;
+		if(!m_backLeft.wheelReset())
+			return false;
+		if(!m_backRight.wheelReset())
+			return false;
+		if(alligning){
+			System.out.println("Drivetrain-WHEELS_ALLIGNED");
+			alligning=false;
+		}
+		return true;
+	}
 	// A teleop drive method that uses odometry and kinematics
     public void odometryDrive(double xSpeed, double rot) {
 		drive(xSpeed, 0, rot, false);
@@ -412,7 +447,7 @@ public class Drivetrain extends SubsystemBase {
 		m_poseEstimator.resetPosition(gyroRotation2d(), m_positions,pose);
 
 		System.out.println("reset odometry:"+getPose());
-		//updateOdometry();
+		updateOdometry();
 	}
 
 	public Pose2d getPose() {

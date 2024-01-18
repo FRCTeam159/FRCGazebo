@@ -56,12 +56,12 @@ public class RobotContainer {
   }
   public void teleopInit(){
     m_drivetrain.setRobotDisabled(false);
-    m_drivetrain.setFieldOriented(m_drivetrain.isGyroEnabled());
+   // m_drivetrain.setFieldOriented(m_drivetrain.isGyroEnabled());
     m_drivetrain.endAuto();
   }
   public void autonomousInit(){
     m_drivetrain.setRobotDisabled(false);
-    m_drivetrain.setFieldOriented(true);
+    //m_drivetrain.setFieldOriented(false);
     m_drivetrain.startAuto();
   }
   public void disabledInit(){
@@ -82,11 +82,15 @@ public class RobotContainer {
   boolean b = SmartDashboard.getBoolean("Reset", false);
   if(b &&  !resetting){
     resetting=true;
-    reset();
+    m_drivetrain.resetWheels();
   }
   else if(!b && resetting){
     resetting=false;
     m_drivetrain.resetPose();
   }
+  else if(resetting && ! m_drivetrain.wheelsReset()){
+    m_drivetrain.allignWheels();
+  }
 }
 }
+

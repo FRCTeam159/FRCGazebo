@@ -43,6 +43,10 @@ public class SimMotor extends SimNode {
     public void reset(){
         ctrl_node.setString("reset");
     }
+    public void setAbs(double v){
+        set_node.setDouble(sign*v);
+    }
+
     public void set(double v){
         if(enabled)
             set_node.setDouble(sign*v);
