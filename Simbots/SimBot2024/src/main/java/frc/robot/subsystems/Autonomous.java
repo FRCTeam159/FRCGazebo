@@ -87,9 +87,11 @@ public class Autonomous extends SequentialCommandGroup  {
         int opt=use_pathplanner?PROGRAMPP:PROGRAM;
         System.out.println("pathplanner=" + use_pathplanner);
 
-        double xp = x * cos + y * sin;
-        double yp = -x * sin + y * cos;
-        System.out.println("reverse x:" + (-yp) + " y:" + xp);
+        // double xp = x * cos + y * sin;
+        // double yp = -x * sin + y * cos;
+        double xp = -2.4;
+        double yp = -1.5;
+        System.out.println("reverse x:" + (yp) + " y:" + xp);
 
         x = xp * cos - yp * sin;
         y = xp * sin + yp * cos;
