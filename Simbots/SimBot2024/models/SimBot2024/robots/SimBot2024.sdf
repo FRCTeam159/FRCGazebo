@@ -569,8 +569,8 @@
       <visual name="CircuitBoard_visual">
         <pose>0.912457940108451 0.667939464938621 0.669622619640251 0 0 0</pose>
         <material>
-          <ambient>0 0.250980392156863 1 1</ambient>
-          <diffuse>0 0.250980392156863 1 1</diffuse>
+          <ambient>0 0.250980392156863 1 0.5</ambient>
+          <diffuse>0 0.250980392156863 1 0.5</diffuse>
         </material>
         <geometry>
           <mesh>
@@ -586,6 +586,69 @@
       <pose>-0.0213670614507397 0.2924745437338 0.00882076935956078 0 0 0</pose>
       <axis>
         <xyz>0 1 0</xyz>
+      </axis>
+    </joint>
+    <link name="Bumpers">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.00829312000370586 0.015 0.00476250000000045 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>1</mass>
+        <pose>0 0 0 0 0 0</pose>
+        
+      </inertial>
+      <!---->
+      <collision name="Bumpers_collision">
+        <pose>0.911816732685752 0.648630566736356 0.655169025032963 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2024/meshes/Bumpers.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      
+      <visual name="Bumpers_visual">
+        <pose>0.911816732685752 0.648630566736356 0.655169025032963 0 0 0</pose>
+        <material>
+          <ambient>0 0 1 1</ambient>
+          <diffuse>0 0 1 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2024/meshes/Bumpers.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Body-Bumpers" type="fixed">
+      <parent>Body</parent>
+      <child>Bumpers</child>
+      <pose>1.11022302462516E-15 0.063499999999874 0.364902750000056 0 0 0</pose>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+        </dynamics>
+       
       </axis>
     </joint>
    <plugin name="clock" filename="sim_clock.dll">

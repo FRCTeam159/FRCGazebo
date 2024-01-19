@@ -100,7 +100,7 @@ public class Autonomous extends SequentialCommandGroup  {
               // new DrivePath(m_drive, opt, -yp, xp, 60),
               // new Pickup(m_drive, 5),
               // new DrivePath(m_drive, opt, y, x, -60)
-              new DrivePath(m_drive, opt, -1.5, -2.4, 60),
+              new DrivePath(m_drive, opt, -1.6, -2.2, 60),
               new Pickup(m_drive, 2),
               new DrivePath(m_drive, opt, 3.0, -0.3, -60)
         );

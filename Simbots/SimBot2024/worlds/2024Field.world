@@ -61,7 +61,7 @@
 
     <include>
       <uri>model://SimBot2024</uri>
-      <pose>-6.816 -2.34 0.09 1.57078 0 2.095</pose>
+      <pose>-6.78 -2.37 0.09 1.57078 0 2.095</pose>
     </include>
   </world>
 </sdf>
