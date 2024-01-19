@@ -49,11 +49,11 @@ public class DrivePath extends CommandBase {
   public boolean holotest=true;
   private PPHolonomicDriveController m_ppcontroller=new PPHolonomicDriveController(
       new PIDController(1, 0, 0), new PIDController(1, 0, 0), new PIDController(2, 0, 0));
-  TrapezoidProfile.Constraints c=new TrapezoidProfile.Constraints(1*6.3, 1*3.15);
+  TrapezoidProfile.Constraints c=new TrapezoidProfile.Constraints(0.5*6.3, 0.5*3.15);
 
   private ProfiledPIDController ppc=new ProfiledPIDController(4, 0, 0,c);
   
-  private HolonomicDriveController m_hcontroller=new HolonomicDriveController(new PIDController(2, 0, 0), new PIDController(2, 0, 0),ppc);
+  private HolonomicDriveController m_hcontroller=new HolonomicDriveController(new PIDController(1, 0, 0), new PIDController(1, 0, 0),ppc);
   
   private Timer m_timer = new Timer();
   private Drivetrain m_drive;
@@ -79,6 +79,7 @@ public class DrivePath extends CommandBase {
 
   public DrivePath(Drivetrain drive, int opt) {
     trajectory_option=opt;
+
     m_drive = drive;
     xPath = SmartDashboard.getNumber("xPath", xPath);
     yPath = SmartDashboard.getNumber("yPath", yPath);

@@ -1,0 +1,710 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.5">
+  <model name="SimBot2024">
+    <pose>0 0 0.664764464938621 0 0 0</pose>
+    <plugin name="clock" filename="libgz_clock.so">
+      <topic>/gazebo/frc/time</topic>
+    </plugin>
+    <link name="Body">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.912457940108451 0.664764464938621 0.669622619640251 0 0 0</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>3.3547385565604</mass>
+        <pose>-0.892994123738397 -0.386786244018043 -0.40364125979582 0 0 0</pose>
+        <inertia>
+          <ixx>0.23932276</ixx>
+          <ixy>6.533E-05</ixy>
+          <ixz>0.00010447</ixz>
+          <iyy>0.4760426</iyy>
+          <iyz>1.19E-06</iyz>
+          <izz>0.24112727</izz>
+        </inertia>
+      </inertial>
+      <collision name="Body_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2024/meshes/Body_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="Body_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <material>
+          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2024/meshes/Body.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <sensor name="BodyCamera" type="camera">
+        <visualize>1</visualize>
+        <always_on>1</always_on>
+        <pose>-0.547631076668716 -0.349114921204846 -0.400972279916409 0 0 0</pose>
+        <camera name="Bodycamera">
+          <horizontal_fov>1.22173047639603</horizontal_fov>
+          <image>
+            <width>320</width>
+            <height>240</height>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+        </camera>
+      </sensor>
+    </link>
+    <link name="FRdrive">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.285104465187053 -0.000891877261577911 0.30432973469854 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.100976551309598</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>7.74573280283047E-05</ixx>
+          <ixy>1.27159913741819E-08</ixy>
+          <ixz>2.76115812608617E-07</ixz>
+          <iyy>3.66618098563602E-05</iyy>
+          <iyz>1.68727225182987E-06</iyz>
+          <izz>4.07996775010862E-05</izz>
+        </inertia>
+      </inertial>
+      <visual name="FRdrive_visual">
+        <pose>0.627353474921398 0.665656342200199 0.36529288494171 0 0 0</pose>
+        <material>
+          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2024/meshes/FRdrive.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Body-FRdrive" type="revolute">
+      <parent>Body</parent>
+      <child>FRdrive</child>
+      <pose>-4.59233155580829E-06 0.292474545001828 0.0082115346610237 0 0 0</pose>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>50</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="FRwheel">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.285099767507856 -0.0422657782960008 0.305374631380306 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.123981366006225</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>3.88278352520194E-06</ixx>
+          <ixy>2.45178744082358E-09</ixy>
+          <ixz>3.039597965146E-08</ixz>
+          <iyy>3.86178892347231E-06</iyy>
+          <iyz>1.19329957459288E-08</iyz>
+          <izz>2.19913716679374E-08</izz>
+        </inertia>
+      </inertial>
+      <collision name="FRwheel_collision">
+        <pose>0.627358172600595 0.707030243234621 0.364247988259944 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2024/meshes/FRwheel_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="FRwheel_visual">
+        <pose>0.627358172600595 0.707030243234621 0.364247988259944 0 0 0</pose>
+        <material>
+          <ambient>0 1 0 1</ambient>
+          <diffuse>0 1 0 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2024/meshes/FRwheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="FRdrive-FRwheel" type="revolute">
+      <parent>FRdrive</parent>
+      <child>FRwheel</child>
+      <pose>0.00188473746241014 -0.0209082194012553 0.257378213612007 0 0 0</pose>
+      <axis>
+        <xyz>0.00753194032505162 -5.39495021367634E-16 0.99997163453517</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>25</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="FLdrive">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.285096556835301 -0.000891877254056483 -0.292125757014884 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.100976551288815</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>7.74583192098658E-05</ixx>
+          <ixy>9.18614710144883E-09</ixy>
+          <ixz>1.99759426428185E-07</ixz>
+          <iyy>3.6661809858455E-05</iyy>
+          <iyz>1.68729517806079E-06</iyz>
+          <izz>4.07986862768511E-05</izz>
+        </inertia>
+      </inertial>
+      <visual name="FLdrive_visual">
+        <pose>0.62736138327315 0.665656342192677 0.961748376655134 0 0 0</pose>
+        <material>
+          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2024/meshes/FLdrive.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Body-FLdrive" type="revolute">
+      <parent>Body</parent>
+      <child>FLdrive</child>
+      <pose>3.31602018788235E-06 0.292474543733801 0.00821152637444644 0 0 0</pose>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>50</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="FLwheel">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.285124814005293 -0.0422613391768113 -0.29108075611794 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.123981363237597</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>3.88123093123931E-06</ixx>
+          <ixy>6.20012767170932E-09</ixy>
+          <ixz>2.4578630402584E-08</ixz>
+          <iyy>3.8634261615411E-06</iyy>
+          <iyz>1.14534871756211E-08</iyz>
+          <izz>2.19057994070646E-08</izz>
+        </inertia>
+      </inertial>
+      <collision name="FLwheel_collision">
+        <pose>0.627333126103158 0.707025804115432 0.960703375758191 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2024/meshes/FLwheel_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="FLwheel_visual">
+        <pose>0.627333126103158 0.707025804115432 0.960703375758191 0 0 0</pose>
+        <material>
+          <ambient>0 1 0 1</ambient>
+          <diffuse>0 1 0 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2024/meshes/FLwheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="FLdrive-FLwheel" type="revolute">
+      <parent>FLdrive</parent>
+      <child>FLwheel</child>
+      <pose>-0.00142333153961982 -0.0209126585204442 0.26381926390746 0 0 0</pose>
+      <axis>
+        <xyz>-0.00544848904353577 5.40638311670226E-16 0.999985156873412</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>25</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="BRdrive">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.292738710749348 -0.000891875992105717 0.303111257451075 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.100976546501433</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>7.74580408578834E-05</ixx>
+          <ixy>1.02738677367779E-08</ixy>
+          <ixz>2.23016815793433E-07</ixz>
+          <iyy>3.66618029347841E-05</iyy>
+          <iyz>1.68729362315878E-06</iyz>
+          <izz>4.07989512834283E-05</izz>
+        </inertia>
+      </inertial>
+      <visual name="BRdrive_visual">
+        <pose>1.2051966508578 0.665656340930726 0.366511362189176 0 0 0</pose>
+        <material>
+          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2024/meshes/BRdrive.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Body-BRdrive" type="revolute">
+      <parent>Body</parent>
+      <child>BRdrive</child>
+      <pose>-0.0213633507013851 0.292474543543085 0.00943001190848541 0 0 0</pose>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>50</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="BRwheel">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.29273249879448 -0.042265778296819 0.302066370684938 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.123981364545111</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>3.88286314956974E-06</ixx>
+          <ixy>2.43450099756843E-09</ixy>
+          <ixz>2.48038534872797E-08</ixz>
+          <iyy>3.86178859585561E-06</iyy>
+          <iyz>1.19365329137191E-08</iyz>
+          <izz>2.19114196808325E-08</izz>
+        </inertia>
+      </inertial>
+      <collision name="BRwheel_collision">
+        <pose>1.20519043890293 0.70703024323544 0.367556248955313 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2024/meshes/BRwheel_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="BRwheel_visual">
+        <pose>1.20519043890293 0.70703024323544 0.367556248955313 0 0 0</pose>
+        <material>
+          <ambient>0 1 0 1</ambient>
+          <diffuse>0 1 0 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2024/meshes/BRwheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="BRdrive-BRwheel" type="revolute">
+      <parent>BRdrive</parent>
+      <child>BRwheel</child>
+      <pose>-0.0198673495422277 -0.0209082194004371 0.25740005606243 0 0 0</pose>
+      <axis>
+        <xyz>-0.0060835652850478 5.43691585820102E-16 -0.999981494945493</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>25</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="BLdrive">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.292739593177212 -0.000891875993563773 -0.293344236536098 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.100976546506172</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>7.74573179066143E-05</ixx>
+          <ixy>1.27177465598461E-08</ixy>
+          <ixz>2.76113151674E-07</ixz>
+          <iyy>3.66618029242929E-05</iyy>
+          <iyz>1.68727697300059E-06</iyz>
+          <izz>4.07996742320807E-05</izz>
+        </inertia>
+      </inertial>
+      <visual name="BLdrive_visual">
+        <pose>1.20519753328566 0.665656340932185 0.962966856176349 0 0 0</pose>
+        <material>
+          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2024/meshes/BLdrive.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Body-BLdrive" type="revolute">
+      <parent>Body</parent>
+      <child>BLdrive</child>
+      <pose>-0.0213624682735285 0.292474543542958 0.00943000589567766 0 0 0</pose>
+      <axis>
+        <xyz>3.58500303568355E-28 -1 2.60682066918018E-14</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>50</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="BLwheel">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.292734894652229 -0.042265778296026 -0.294389131380278 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.123981366006225</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>3.88278352520211E-06</ixx>
+          <ixy>2.45178744083526E-09</ixy>
+          <ixz>3.03959796516774E-08</ixz>
+          <iyy>3.86178892347247E-06</iyy>
+          <iyz>1.19329957460295E-08</iyz>
+          <izz>2.19913716679608E-08</izz>
+        </inertia>
+      </inertial>
+      <collision name="BLwheel_collision">
+        <pose>1.20519283476068 0.707030243234647 0.964011751020529 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2024/meshes/BLwheel_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="BLwheel_visual">
+        <pose>1.20519283476068 0.707030243234647 0.964011751020529 0 0 0</pose>
+        <material>
+          <ambient>0 1 0 1</ambient>
+          <diffuse>0 1 0 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2024/meshes/BLwheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="BLdrive-BLwheel" type="revolute">
+      <parent>BLdrive</parent>
+      <child>BLwheel</child>
+      <pose>-0.0194586160113885 -0.020908219401248 0.263862018511229 0 0 0</pose>
+      <axis>
+        <xyz>-0.0075319403250586 -2.66069622763693E-14 -0.99997163453517</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>25</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="gyro">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.00239033409729017 0.00999999999999934 0.00725534380777826 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.0149162507870566</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <collision name="gyro_collision">
+        <pose>0.910067606011161 0.654764464938621 0.662367275832473 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2024/meshes/gyro_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="gyro_visual">
+        <pose>0.910067606011161 0.654764464938621 0.662367275832473 0 0 0</pose>
+        <material>
+          <ambient>0 0 0.501960784313725 1</ambient>
+          <diffuse>0 0 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2024/meshes/gyro.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Body-gyro" type="prismatic">
+      <parent>Body</parent>
+      <child>gyro</child>
+      <pose>-0.0237573955480299 0.292474543733779 0.00156542555178252 0 0 0</pose>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+        </dynamics>
+        <limit>
+          <upper>0</upper>
+          <lower>0</lower>
+          <effort>1</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="CircuitBoard">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0 -0.00317499999999993 0 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>2.30930602653999</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <collision name="CircuitBoard_collision">
+        <pose>0.912457940108451 0.667939464938621 0.669622619640251 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2024/meshes/CircuitBoard_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="CircuitBoard_visual">
+        <pose>0.912457940108451 0.667939464938621 0.669622619640251 0 0 0</pose>
+        <material>
+          <ambient>0 0.250980392156863 1 1</ambient>
+          <diffuse>0 0.250980392156863 1 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2024/meshes/CircuitBoard.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Body-CircuitBoard" type="prismatic">
+      <parent>Body</parent>
+      <child>CircuitBoard</child>
+      <pose>-0.0213670614507397 0.2924745437338 0.00882076935956078 0 0 0</pose>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+        </dynamics>
+        <limit>
+          <upper>0</upper>
+          <lower>0</lower>
+          <effort>1</effort>
+        </limit>
+      </axis>
+    </joint>
+    <plugin name="gyro_gyro" filename="libgz_gyro.so">
+      <link>gyro</link>
+      <topic>/gazebo/frc/simulator/analog/0</topic>
+      <units>degrees</units>
+      <axis>yaw</axis>
+    </plugin>
+  </model>
+</sdf>
