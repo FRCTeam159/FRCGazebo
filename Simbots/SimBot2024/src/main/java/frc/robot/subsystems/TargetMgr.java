@@ -95,7 +95,7 @@ public class TargetMgr {
     public static void setStartPose(AprilTag[] tags) {
         start_position = UNKNOWN;
         alliance = UNKNOWN;
-        start_pose_set=true;
+       // start_pose_set=true;
         if (tags.length > 0) {
             AprilTag closest = tags[0];
             double dp = 0;
@@ -105,28 +105,27 @@ public class TargetMgr {
             switch (closest.getTagId()) {
             default:
                 break;
-            case 3:
+            case 3: // offset tag red
                 alliance = RED;
                 start_position = INSIDE;
                 break;
-            case 4:
+            case 4: // center tag red
                 alliance = RED;
                 if (dp > 2)
                     start_position = OUTSIDE;
                 else if (dp > 0)
                     start_position = CENTER;
                 break;
-            case 7:
+            case 7: // center tag blue
                 alliance = BLUE;
-                start_position = INSIDE;
                 if (dp > 2)
-                    start_position = OUTSIDE;
+                    start_position = INSIDE;
                 else if (dp > 0)
                     start_position = CENTER;
                 break;
-            case 8:
+            case 8: // offset tag blue
                 alliance = BLUE;
-                start_position = INSIDE;
+                start_position = OUTSIDE;
                 break;
             }
         }

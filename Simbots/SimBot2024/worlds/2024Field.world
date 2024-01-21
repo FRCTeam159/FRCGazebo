@@ -3,14 +3,36 @@
   <world name="default">
    <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose>2.48591 -9.1542 5.3289 0 0.447642 2.1482</pose>
+        <pose>2.67876 1.37769 5.63694 0 0.951639 -1.0518</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
     </gui>
+    <light name='sun' type='directional'>
+      <cast_shadows>0</cast_shadows>
+      <pose>0 0 10 0 -0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>0.5 0.1 -0.9</direction>
+      <spot>
+        <inner_angle>0</inner_angle>
+        <outer_angle>0</outer_angle>
+        <falloff>0</falloff>
+      </spot>
+    </light>
+    <!--
     <include>
       <uri>model://sun</uri>
+      <pose>0.5 0 10 0 -0 0</pose>
+      <direction>-0.5 0.1 -0.9</direction>
     </include>
+    -->
     <include>
       <uri>model://ground_plane</uri>
     </include>
@@ -39,7 +61,7 @@
     <include>
       <name>Stage2</name>
       <uri>model://StageDF</uri>
-       <pose>-1.06015 0.024695 -0.003173 1.5708 6e-06 9.2e-05</pose>
+       <pose>-1.06015 0.158 -0.003173 1.5708 6e-06 9.2e-05</pose>
     </include>
 <!---->
     <include>
@@ -54,17 +76,34 @@
         <pose>-4.58 -1.21 0 1.58 0 0</pose>
     </include>
     <include>
-      <name>Note3</name>
+    <name>Note3</name>
       <uri>model://Note</uri>
         <pose>-4.58 -2.64 0 1.58 0 0</pose>
     </include>
 
     <include>
-      <uri>model://SimSwerveBot</uri>
-      <pose>-6.78 -2.37 0.09 1.57078 0 2.095</pose>
+      <name>Note4</name>
+      <uri>model://Note</uri>
+        <pose>4.4 0.245 0.01 1.58 0 0</pose>
     </include>
-<!----> 
-     <include>
+
+    <include>
+      <name>Note5</name>
+      <uri>model://Note</uri>
+        <pose>4.4 -1.21 0 1.58 0 0</pose>
+    </include>
+    <include>
+    <name>Note6</name>
+      <uri>model://Note</uri>
+        <pose>4.4 -2.64 0 1.58 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://SimSwerveBot</uri>
+      <pose>6.43744 -2.31222 0.09235 1.56996 0.000843 1.04796</pose>
+    </include>
+
+    <include>
       <uri>model://Apriltag16_05_00003</uri>
       <pose>-7.54 -0.637 1.44 0 0 1.57</pose>
     </include>
@@ -72,6 +111,16 @@
     <include>
       <uri>model://Apriltag16_05_00004</uri>
       <pose>-7.54 -1.2 1.44 0 0 1.57</pose>
+    </include>
+
+     <include>
+      <uri>model://Apriltag16_05_00008</uri>
+      <pose>7.15 -1.69022 1.46021 0 0 -1.60641</pose>
+    </include>
+
+    <include>
+      <uri>model://Apriltag16_05_00007</uri>
+       <pose>7.15 -1.1033 1.4659 0 0 -1.55425</pose>
     </include>
    
   </world>

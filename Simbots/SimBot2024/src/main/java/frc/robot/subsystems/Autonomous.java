@@ -24,18 +24,15 @@ public class Autonomous extends SequentialCommandGroup  {
   public static final int PROGRAMPP = 2;
   public static final int PATHPLANNER = 3;
   public static final int AUTOTEST = 4;
-
-  static double angle=-60;
   
   static double d2r=2*Math.PI/360;
   static double i2m=0.0254;
 
-  static double y=100*i2m;
-  static double x=5*i2m; // should be 23 ??
+  // blue outside path
+  static double xp=-1.0;
+  static double yp=1.3;
+  static double rp=-60;
 
-  static double cos=Math.cos(d2r*angle);
-  static double sin=Math.sin(d2r*angle);
- 
   public int selected_path=PROGRAM;
 
   public static boolean debug_commands=false;
@@ -55,10 +52,9 @@ public class Autonomous extends SequentialCommandGroup  {
     m_path_chooser.addOption("AutoTest", AUTOTEST);
     m_path_chooser.addOption("Calibrate", CALIBRATE);
 
-    SmartDashboard.putNumber("xPath", -1.6);
-    SmartDashboard.putNumber("yPath", -2.2);
-    SmartDashboard.putNumber("rPath", 60.0);
-    
+    SmartDashboard.putNumber("xPath", xp);
+    SmartDashboard.putNumber("yPath", yp);
+    SmartDashboard.putNumber("rPath", rp);
     SmartDashboard.putBoolean("Pathplanner", false);
 
 		SmartDashboard.putData(m_path_chooser);
@@ -72,6 +68,14 @@ public class Autonomous extends SequentialCommandGroup  {
 
     boolean use_pathplanner=SmartDashboard.getBoolean("Pathplanner", false);
 
+    System.out.println("reverse x:" + (xp) + " y:" + yp);
+
+    double cos=Math.cos(d2r*rp);
+    double sin=Math.sin(d2r*rp);
+    double x = yp * cos + xp * sin;
+    double y = -yp * sin + xp * cos;
+    System.out.println("forward x:" + (x) + " y:" + y);
+
     switch (selected_path) {
       case CALIBRATE:
         return new SequentialCommandGroup(new Calibrate(m_drive));
@@ -83,26 +87,12 @@ public class Autonomous extends SequentialCommandGroup  {
       case PATHPLANNER:
         return new SequentialCommandGroup(new DrivePath(m_drive, PATHPLANNER));
       case AUTOTEST: {
-
         int opt=use_pathplanner?PROGRAMPP:PROGRAM;
         System.out.println("pathplanner=" + use_pathplanner);
-
-        // double xp = x * cos + y * sin;
-        // double yp = -x * sin + y * cos;
-        double xp = -2.4;
-        double yp = -1.5;
-        System.out.println("reverse x:" + (yp) + " y:" + xp);
-
-        x = xp * cos - yp * sin;
-        y = xp * sin + yp * cos;
-        System.out.println("forward x:" + (y) + " y:" + x);
         return new SequentialCommandGroup(
-              // new DrivePath(m_drive, opt, -yp, xp, 60),
-              // new Pickup(m_drive, 5),
-              // new DrivePath(m_drive, opt, y, x, -60)
-              new DrivePath(m_drive, opt, -1.6, -2.2, 60),
+              new DrivePath(m_drive, opt, xp, yp, rp),
               new Pickup(m_drive, 2),
-              new DrivePath(m_drive, opt, 3.0, -0.3, -60)
+              new DrivePath(m_drive, opt, x, y,-rp)
         );
       }
     }
