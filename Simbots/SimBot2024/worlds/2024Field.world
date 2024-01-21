@@ -60,8 +60,19 @@
     </include>
 
     <include>
-      <uri>model://SimBot2024</uri>
+      <uri>model://SimSwerveBot</uri>
       <pose>-6.78 -2.37 0.09 1.57078 0 2.095</pose>
     </include>
+<!----> 
+     <include>
+      <uri>model://Apriltag16_05_00003</uri>
+      <pose>-7.54 -0.637 1.44 0 0 1.57</pose>
+    </include>
+
+    <include>
+      <uri>model://Apriltag16_05_00004</uri>
+      <pose>-7.54 -1.2 1.44 0 0 1.57</pose>
+    </include>
+   
   </world>
 </sdf>

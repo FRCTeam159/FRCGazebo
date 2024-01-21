@@ -67,7 +67,7 @@ public class DriveWithGamepad extends CommandBase {
     if(m_drive.disabled()){
         m_drive.enable();
     }
-    m_drive.drive(-xSpeed, -ySpeed,-rot,m_drive.fieldOriented());
+    m_drive.drive(xSpeed, -ySpeed,-rot,m_drive.fieldOriented());
 
   }
 

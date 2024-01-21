@@ -1,7 +1,28 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="Position" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="368" y="96"/>
+		<width>93</width>
+	</widget>
+	<widget field="Alliance" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="290" y="97"/>
+		<width>72</width>
+	</widget>
+	<widget field="Tag" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="177" y="123"/>
+		<width>286</width>
+	</widget>
+	<widget field="Use Tags" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="93" y="122"/>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
+		<location x="17" y="122"/>
+		<width>557</width>
+		<height>410</height>
+		<property name="Camera Choice" value=""/>
+	</static-widget>
 	<widget field="Pathplanner" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="502" y="87"/>
+		<location x="498" y="81"/>
 	</widget>
 	<widget field="AutoTime" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="123" y="66"/>
@@ -74,26 +95,20 @@
 		<width>23</width>
 		<height>23</height>
 	</static-widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.MjpgStreamViewerImpl">
-		<location x="3" y="120"/>
-		<width>571</width>
-		<height>361</height>
-		<property name="MJPG Server URL" value="http://localhost:9000/?action=stream"/>
-	</static-widget>
 		<property name="Team Number/Host" value="localhost"/>
 		<property name="Automatically Show Widgets" value="false"/>
 		<property name="Grid Cell Width(s)" value="16"/>
 		<property name="Grid Cell Height(s)" value="16"/>
 		<property name="Window X Position" value="1310"/>
 		<property name="Window Y Position" value="94"/>
-		<property name="Window Width" value="606"/>
-		<property name="Window Height" value="548"/>
+		<property name="Window Width" value="597"/>
+		<property name="Window Height" value="600"/>
 		<property name="Save File" value=".\dashboard.xml"/>
 </dashboard>
 <live-window>
 </live-window>
 	<hidden field="Conf"/>
-	<hidden field="Use Tags"/>
 	<hidden field="Error"/>
+	<hidden field="Detect"/>
 	<hidden field="Latency"/>
 </xml>

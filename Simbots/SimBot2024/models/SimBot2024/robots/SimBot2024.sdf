@@ -53,7 +53,7 @@
       <sensor name="BodyCamera" type="camera">
         <visualize>1</visualize>
         <always_on>1</always_on>
-        <pose>-0.912457940108451 -0.664764464938621 -0.669622619640251 4.7124 0 0.8</pose>
+        <pose>-0.912457940108451 -0.664764464938621 -0.669622619640251 4.7124 0 0.7</pose>
         <camera name="Bodycamera">
           <horizontal_fov>1.22173047639603</horizontal_fov>
           <image>
@@ -217,9 +217,6 @@
           <damping>2</damping>
           <friction>1</friction>
         </dynamics>
-        <limit>
-          <effort>50</effort>
-        </limit>
       </axis>
     </joint>
     <link name="FLwheel">
@@ -503,10 +500,6 @@
       <self_collide>0</self_collide>
       <pose>0.00239033409729017 0.00999999999999934 0.00725534380777826 0 0 0</pose>
       <must_be_base_link>0</must_be_base_link>
-      <velocity_decay>
-        <linear>0</linear>
-        <angular>0</angular>
-      </velocity_decay>
       <inertial>
         <mass>0.0149162507870566</mass>
         <pose>0 0 0 0 0 0</pose>
@@ -600,9 +593,7 @@
       <inertial>
         <mass>1</mass>
         <pose>0 0 0 0 0 0</pose>
-        
       </inertial>
-      <!---->
       <collision name="Bumpers_collision">
         <pose>0.911816732685752 0.648630566736356 0.655169025032963 0 0 0</pose>
         <geometry>
@@ -644,11 +635,6 @@
       <pose>1.11022302462516E-15 0.063499999999874 0.364902750000056 0 0 0</pose>
       <axis>
         <xyz>1 0 0</xyz>
-        <dynamics>
-          <damping>0</damping>
-          <friction>0</friction>
-        </dynamics>
-       
       </axis>
     </joint>
    <plugin name="clock" filename="sim_clock.dll">

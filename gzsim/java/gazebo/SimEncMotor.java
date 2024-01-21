@@ -10,11 +10,11 @@ public class SimEncMotor {
     boolean enabled=false;
     double target;
     int id;
-    final PIDController pid=new PIDController(30,10.0,0.0);
+    final PIDController pid=new PIDController(5,0.0,0.0);
     public SimEncMotor(int id){
         motor=new SimMotor(id);
         encoder=new SimEncoder(id);
-        pid.setTolerance(0.003,0.001);
+        pid.setTolerance(0.001,0.001);
         this.id=id;
     }
     public void setInverted(){
@@ -61,7 +61,7 @@ public class SimEncMotor {
     }
     public void setPosition(){
         double a=encoder.getAbsPosition();
-        double err=pid.calculate(a);
+        double err=10*pid.calculate(a);
         //if(id==2)
         //    System.out.println(id+" a:"+a+" err:"+err);
         motor.setAbs(err);

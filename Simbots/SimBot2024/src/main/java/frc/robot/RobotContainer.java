@@ -12,6 +12,7 @@ import frc.robot.commands.DriveWithGamepad;
 import objects.PlotServer;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.TagDetector;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -26,8 +27,8 @@ public class RobotContainer {
   private final Drivetrain m_drivetrain = new Drivetrain();
   private final Autonomous m_autonomous = new Autonomous(m_drivetrain);
   private final XboxController m_controller = new XboxController(0);
+  private final TagDetector m_detector= new TagDetector(m_drivetrain);
   PlotServer m_plotsub=new PlotServer();
-
 
   private DriveWithGamepad m_driveCommand = null; // TODO
  
@@ -73,6 +74,7 @@ public class RobotContainer {
     m_drivetrain.setRobotDisabled(true);
     m_drivetrain.init();
     m_plotsub.start();
+    m_detector.start();
   }
   public void reset(){
     System.out.println("Robot reset");

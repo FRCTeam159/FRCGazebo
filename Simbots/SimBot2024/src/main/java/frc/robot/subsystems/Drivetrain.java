@@ -94,6 +94,7 @@ public class Drivetrain extends SubsystemBase {
 	public Drivetrain() {
 		m_timer.start();
 		makeEstimator();
+		TargetMgr.init();
 
 		simulation = new Simulation();
 		SmartDashboard.putBoolean("Field Oriented", field_oriented);
@@ -287,7 +288,7 @@ public class Drivetrain extends SubsystemBase {
 		kMaxVelocity=SmartDashboard.getNumber("maxV", kMaxVelocity);
 		kMaxAcceleration=SmartDashboard.getNumber("maxA", kMaxAcceleration);
 
-		// use_tags = SmartDashboard.getBoolean("Use Tags", use_tags);
+		use_tags = SmartDashboard.getBoolean("Use Tags", use_tags);
 		// SmartDashboard.putNumber("Error", pose_error);
 
 		// latency=SmartDashboard.getNumber("Latency", 0);
