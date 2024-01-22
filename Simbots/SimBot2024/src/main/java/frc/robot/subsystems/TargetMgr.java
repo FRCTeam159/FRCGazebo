@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import objects.AprilTag;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -32,9 +31,7 @@ public class TargetMgr {
     public static double targetSize=0.1524; //0.371; side of inner rectangle of apriltag (meters)
 
     public static Translation3d field_center_offset=new Translation3d(325.4,157,0); 
-   // public static Translation3d robot_offset_tag_7=new Translation3d (89,108,15);
-   // public static Rotation3d robot_rotation_tag7=new Rotation3d(0,0,Math.toRadians(180.0));
-
+   
     public static Translation3d robot_offset=new Translation3d(0,0,0);
     public static Rotation3d robot_rotation=new Rotation3d(0,0,0);
     public static Translation3d field_center=field_center_offset.times(Units.inchesToMeters(1));
@@ -42,7 +39,7 @@ public class TargetMgr {
     static int type=FIELD_TAGS;  // changed by init function
 
     static int alliance=UNKNOWN;
-    static int start_position=UNKNOWN;
+    static int position=UNKNOWN;
 
     static Pose2d start_pose=new Pose2d();
     static boolean start_pose_set=false;
@@ -78,7 +75,7 @@ public class TargetMgr {
         return alliance;
     }
     public static int getStartPosition(){
-        return start_position;
+        return position;
     }
 
     public static boolean startPoseSet(){
@@ -93,7 +90,7 @@ public class TargetMgr {
     }
     
     public static void setStartPose(AprilTag[] tags) {
-        start_position = UNKNOWN;
+        position = UNKNOWN;
         alliance = UNKNOWN;
        // start_pose_set=true;
         if (tags.length > 0) {
@@ -107,30 +104,30 @@ public class TargetMgr {
                 break;
             case 3: // offset tag red
                 alliance = RED;
-                start_position = INSIDE;
+                position = INSIDE;
                 break;
             case 4: // center tag red
                 alliance = RED;
                 if (dp > 2)
-                    start_position = OUTSIDE;
+                    position = OUTSIDE;
                 else if (dp > 0)
-                    start_position = CENTER;
+                    position = CENTER;
                 break;
             case 7: // center tag blue
                 alliance = BLUE;
                 if (dp > 2)
-                    start_position = INSIDE;
+                    position = INSIDE;
                 else if (dp > 0)
-                    start_position = CENTER;
+                    position = CENTER;
                 break;
             case 8: // offset tag blue
                 alliance = BLUE;
-                start_position = OUTSIDE;
+                position = OUTSIDE;
                 break;
             }
         }
         SmartDashboard.putString("Alliance", aStrings[alliance]);
-        SmartDashboard.putString("Position", pStrings[start_position]);
+        SmartDashboard.putString("Position", pStrings[position]);
     }
     static void setFieldTargets(){
         // data taken from inset in field drawing 4 of 6

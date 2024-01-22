@@ -28,10 +28,17 @@ public class Autonomous extends SequentialCommandGroup  {
   static double d2r=2*Math.PI/360;
   static double i2m=0.0254;
 
-  // blue outside path
   static double xp=-1.0;
   static double yp=1.3;
   static double rp=-60;
+
+  static double XR=-1;
+  static double XF=1.5;
+  static double YR=1.3;
+  static double YF=0.6;
+  static double R=60;
+
+  static boolean test_coord_rotation=false;
 
   public int selected_path=PROGRAM;
 
@@ -68,14 +75,12 @@ public class Autonomous extends SequentialCommandGroup  {
 
     boolean use_pathplanner=SmartDashboard.getBoolean("Pathplanner", false);
 
-    System.out.println("reverse x:" + (xp) + " y:" + yp);
-
-    double cos=Math.cos(d2r*rp);
-    double sin=Math.sin(d2r*rp);
-    double x = yp * cos + xp * sin;
-    double y = -yp * sin + xp * cos;
-    System.out.println("forward x:" + (x) + " y:" + y);
-
+    // TODO
+    // 1) calulate forward & reverse paths based on starting position and alliance
+    // 2) use field geometry of robot starting position and closest note to constuct paths
+    // 3) use pathplanner paths ?
+  
+    
     switch (selected_path) {
       case CALIBRATE:
         return new SequentialCommandGroup(new Calibrate(m_drive));
@@ -89,10 +94,46 @@ public class Autonomous extends SequentialCommandGroup  {
       case AUTOTEST: {
         int opt=use_pathplanner?PROGRAMPP:PROGRAM;
         System.out.println("pathplanner=" + use_pathplanner);
+        int alliance=TargetMgr.alliance;
+        int position=TargetMgr.position;
+        // set up default for center case
+        double xr=XR;
+        double yr=0;
+        double rr=0;
+        double xf=-XR;
+        double yf=0;
+        double rf=0;
+        // for a simple curved path blue-outside=red-inside and blue-inside=red-outside
+        if((alliance==TargetMgr.RED && position==TargetMgr.OUTSIDE) ||
+           (alliance==TargetMgr.BLUE && position==TargetMgr.INSIDE)){
+            yr=-YR;
+            xf=XF;
+            yf=-YF;
+            rr=R;
+        }
+        if((alliance==TargetMgr.BLUE && position==TargetMgr.OUTSIDE) ||
+           (alliance==TargetMgr.RED && position==TargetMgr.INSIDE)){
+            yr=YR;
+            xf=XF;
+            yf=YF;
+            rr=-R;
+        }
+        rf=-rr;
+        if(test_coord_rotation){
+          double xrot=xr;
+          double yrot=yr;
+          double rrot=rr;
+          double cos=Math.cos(d2r*rrot);
+          double sin=Math.sin(d2r*rrot);
+          double x = yrot * cos + xrot * sin;
+          double y = -yrot * sin + xrot * cos;
+          System.out.println("reverse x:" + xr + " y:" + yr + " r:"+rr);
+          System.out.println("forward x:" + (x) + " y:" + y+ " r:"+rf);
+        }
         return new SequentialCommandGroup(
-              new DrivePath(m_drive, opt, xp, yp, rp),
+              new DrivePath(m_drive, opt, xr, yr, rr),
               new Pickup(m_drive, 2),
-              new DrivePath(m_drive, opt, x, y,-rp)
+              new DrivePath(m_drive, opt, xf, yf,rf)
         );
       }
     }
