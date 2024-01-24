@@ -12,6 +12,7 @@ fi
 echo position=$POSITION
 mkdir -p tmp
 start_gazebo --verbose &
+sleep 1
 GzProgram.exe &
 start_dashboard &
 sleep 4

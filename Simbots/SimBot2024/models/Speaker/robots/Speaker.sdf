@@ -2,9 +2,7 @@
 <sdf version="1.5">
   <model name="Speaker">
     <pose>0 0 9.60840403886835E-17 0 0 0</pose>
-    <plugin name="clock" filename="libgz_clock.so">
-      <topic>/gazebo/frc/time</topic>
-    </plugin>
+   
     <link name="Body">
       <gravity>1</gravity>
       <self_collide>0</self_collide>

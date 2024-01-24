@@ -17,19 +17,20 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.objects.SwerveModule;
 import gazebo.SimGyro;
 import subsystems.Simulation;
 
-public class Drivetrain extends SubsystemBase {
+public class Drivetrain extends SubsystemBase implements Constants {
 
 	// square frame geometry
 
 	static public boolean debug=false;
 	static public boolean debug_angles=false;
 
-	public static double front_wheel_base = 23.22; // distance beteen front wheels
-	public static double side_wheel_base = 23.22; // distance beteen side wheels
+	public static double front_wheel_base = 29; // distance beteen front wheels
+	public static double side_wheel_base = 29; // distance beteen side wheels
 
 	public static double dely = Units.inchesToMeters(0.5 * side_wheel_base); // 0.2949 metters
 	public static double delx = Units.inchesToMeters(0.5 * front_wheel_base);
@@ -39,12 +40,16 @@ public class Drivetrain extends SubsystemBase {
 	private final Translation2d m_backLeftLocation = new Translation2d(-delx, dely);
 	private final Translation2d m_backRightLocation = new Translation2d(-delx, -dely);
 
-	private final SwerveModule m_frontLeft = new SwerveModule(1, 2,1);
-	private final SwerveModule m_frontRight = new SwerveModule(3, 4,2);
-	private final SwerveModule m_backLeft = new SwerveModule(5, 6,3);
-	private final SwerveModule m_backRight = new SwerveModule(7, 8,4); 
+	private final SwerveModule m_frontLeft = new SwerveModule(FL_DRIVE, FL_TURN,FL_ID);
+	private final SwerveModule m_frontRight = new SwerveModule(FR_DRIVE, FR_TURN,FR_ID);
+	private final SwerveModule m_backLeft = new SwerveModule(BL_DRIVE, BL_TURN,BL_ID);
+	private final SwerveModule m_backRight = new SwerveModule(BR_DRIVE, BR_TURN,BR_ID); 
+
+	// private final SwerveModule m_frontLeft = new SwerveModule(1, 2,1);
+	// private final SwerveModule m_frontRight = new SwerveModule(3, 4,2);
+	// private final SwerveModule m_backLeft = new SwerveModule(5, 6,3);
+	// private final SwerveModule m_backRight = new SwerveModule(7, 8,4); 
 	
-	public static String chnlnames[] = { "BR", "BL", "FL", "FR" };
 
 	private final SwerveModulePosition[] m_positions={
 		new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition()

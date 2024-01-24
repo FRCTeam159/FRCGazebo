@@ -1,5 +1,9 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="Arm" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="108" y="118"/>
+		<width>80</width>
+	</widget>
 	<widget field="Position" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="368" y="96"/>
 		<width>93</width>
@@ -8,17 +12,13 @@
 		<location x="290" y="97"/>
 		<width>72</width>
 	</widget>
-	<widget field="Tag" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="177" y="123"/>
-		<width>286</width>
-	</widget>
 	<widget field="Use Tags" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="93" y="122"/>
+		<location x="20" y="116"/>
 	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
-		<location x="17" y="122"/>
-		<width>557</width>
-		<height>410</height>
+		<location x="-16" y="144"/>
+		<width>599</width>
+		<height>412</height>
 		<property name="Camera Choice" value=""/>
 	</static-widget>
 	<widget field="Pathplanner" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
@@ -99,10 +99,10 @@
 		<property name="Automatically Show Widgets" value="false"/>
 		<property name="Grid Cell Width(s)" value="16"/>
 		<property name="Grid Cell Height(s)" value="16"/>
-		<property name="Window X Position" value="1310"/>
-		<property name="Window Y Position" value="94"/>
-		<property name="Window Width" value="597"/>
-		<property name="Window Height" value="600"/>
+		<property name="Window X Position" value="617"/>
+		<property name="Window Y Position" value="152"/>
+		<property name="Window Width" value="621"/>
+		<property name="Window Height" value="644"/>
 		<property name="Save File" value=".\dashboard.xml"/>
 </dashboard>
 <live-window>

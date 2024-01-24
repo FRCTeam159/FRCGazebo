@@ -1,0 +1,648 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.5">
+  <model name="CompBot">
+    <pose>0 0 0.04699 0 0 0</pose>
+    
+    <link name="Body">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.0284926778434316 -0.0203805071771881 0.0563044087715344 1.5707963267949 0 1.5707963267949</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>150</mass>
+        <pose>0 0 0 0 0 0</pose>
+      </inertial>
+      <collision name="Body_collision">
+        <pose>0.371831241530718 -0.0385221299073051 0.274055062165705 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot/meshes/Body_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="Body_visual">
+        <pose>0.371831241530718 -0.0385221299073051 0.274055062165705 0 0 0</pose>
+        <material>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot/meshes/Body.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+   
+    <link name="FLdrive">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.322273557462555 0.308455549680306 0.045990455353307 1.5707963267949 0 1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0.02</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.2</mass>
+        <pose>0 0 0 0 0 0</pose>
+      </inertial>
+       
+      <visual name="FLdrive_visual">
+        <pose>0.0429951846732238 -0.0282081764890775 -0.0767111731402816 0 0 0</pose>
+        <material>
+          <ambient>0.752941176470588 0.752941176470588 1 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 1 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot/meshes/FLdrive.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Body-FLdrive" type="revolute">
+      <parent>Body</parent>
+      <child>FLdrive</child>
+      <pose>-0.000480549680306634 3.46944695195361E-18 -2.6234681147902E-06 0 0 0</pose>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <dynamics>
+          <damping>2</damping>
+          <friction>1</friction>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name="FRdrive">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.32226731982067 -0.353092149903436 0.045990455573376 1.5707963267949 0 1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0.02</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.0814304850393228</mass>
+        <pose>0 0 0 0 0 0</pose>
+      </inertial>
+      
+      <visual name="FRdrive_visual">
+        <pose>0.704542884256967 -0.0282081767091465 -0.0767049354983975 0 0 0</pose>
+        <material>
+          <ambient>1 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>1 0.752941176470588 0.752941176470588 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot/meshes/FRdrive.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Body-FRdrive" type="revolute">
+      <parent>Body</parent>
+      <child>FRdrive</child>
+      <pose>-0.000480542889371494 -6.93889390390723E-18 3.61417376945616E-06 0 0 0</pose>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>
+              </axis>
+    </joint>
+    <link name="BLdrive">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.307971385632127 0.307494456747141 0.0459904553438287 1.5707963267949 0 1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0.02</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.2</mass>
+        <pose>0 0 0 0 0 0</pose>
+      </inertial>
+      
+      <visual name="BLdrive_visual">
+        <pose>0.0439562776063889 -0.0282081764795995 0.5535337699544 0 0 0</pose>
+        <material>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot/meshes/BLdrive.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Body-BLdrive" type="revolute">
+      <parent>Body</parent>
+      <child>BLdrive</child>
+      <pose>0.000480543252869871 3.46944695195361E-18 -3.61436787332803E-06 0 0 0</pose>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <dynamics>
+          <damping>2</damping>
+          <friction>1</friction>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name="BRdrive">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.307972081658941 -0.354053240777726 0.0459904553457399 1.5707963267949 0 1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0.02</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.123981363237599</mass>
+        <pose>0 0 0 0 0 0</pose>
+      </inertial>
+      
+      <visual name="BRdrive_visual">
+        <pose>0.705503975131256 -0.0282081764815107 0.553534465981214 0 0 0</pose>
+        <material>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot/meshes/BRdrive.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Body-BRdrive" type="revolute">
+      <parent>Body</parent>
+      <child>BRdrive</child>
+      <pose>0.000480547984922919 1.04083408558608E-17 -2.91834106536104E-06 0 0 0</pose>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <dynamics>
+          <damping>2</damping>
+          <friction>1</friction>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name="FLwheel">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.322295875144104 0.306320756117942 0.0053636608231891 1.5707963267949 0 1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0.002</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.2</mass>
+        <pose>0 0 0 0 0 0</pose>
+      </inertial>
+      <collision name="FLwheel_collision">
+        <pose>0.045129978235588 0.0124186180410403 -0.0767334908218308 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot/meshes/FLwheel_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="FLwheel_visual">
+        <pose>0.045129978235588 0.0124186180410403 -0.0767334908218308 0 0 0</pose>
+        <material>
+          <ambient>0 1 0 1</ambient>
+          <diffuse>0 1 0 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot/meshes/FLwheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="FLdrive-FLwheel" type="revolute">
+      <parent>FLdrive</parent>
+      <child>FLwheel</child>
+      <pose>1.84997501845308E-07 0.000109856338369411 -3.39534051441714E-05 0 0 0</pose>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <dynamics>
+          <damping>2</damping>
+          <friction>1</friction>
+        </dynamics>
+       </axis>
+    </joint>
+    <link name="FRwheel">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.322270828646663 -0.355226824173114 0.0053592217039994 1.5707963267949 0 1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0.002</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.123981366006225</mass>
+        <pose>0 0 0 0 0 0</pose>
+      </inertial>
+      <collision name="FRwheel_collision">
+        <pose>0.706677558526644 0.01242305716023 -0.0767084443243902 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot/meshes/FRwheel_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <max_vel>0.1</max_vel>
+              <soft_cfm>0.8</soft_cfm>
+              <soft_erp>0.8</soft_erp>
+              <kd>25</kd>
+              <kp>1e6</kp>
+              <min_depth>0.0001</min_depth>
+            </ode>          
+          </contact>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="FRwheel_visual">
+        <pose>0.706677558526644 0.01242305716023 -0.0767084443243902 0 0 0</pose>
+        <material>
+          <ambient>0 1 0 1</ambient>
+          <diffuse>0 1 0 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot/meshes/FRwheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="FRdrive-FRwheel" type="revolute">
+      <parent>FRdrive</parent>
+      <child>FRwheel</child>
+      <pose>9.46325305895002E-08 0.000114295457558363 1.25638072462492E-05 0 0 0</pose>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <dynamics>
+          <damping>2</damping>
+          <friction>1</friction>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name="BLwheel">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.307974894652223 0.309629131380317 0.00535922170400169 1.5707963267949 0 1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0.002</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.2</mass>
+        <pose>0 0 0 0 0 0</pose>
+      </inertial>
+      <collision name="BLwheel_collision">
+        <pose>0.0418216029732134 0.0124230571602276 0.553537278974497 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot/meshes/BLwheel_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="BLwheel_visual">
+        <pose>0.0418216029732134 0.0124230571602276 0.553537278974497 0 0 0</pose>
+        <material>
+          <ambient>0 1 0 1</ambient>
+          <diffuse>0 1 0 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot/meshes/BLwheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="BLdrive-BLwheel" type="revolute">
+      <parent>BLdrive</parent>
+      <child>BLwheel</child>
+      <pose>-9.46325307490947E-08 0.00011429545755836 -1.25638072462353E-05 0 0 0</pose>
+      <axis>
+        <xyz>0.99997163453517 -5.23364362502435E-16 -0.00753194032504285</xyz>
+        <dynamics>
+          <damping>2</damping>
+          <friction>1</friction>
+        </dynamics>
+              </axis>
+    </joint>
+    <link name="BRwheel">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.307972498794488 -0.351918563477744 0.00535922170318334 1.5707963267949 0 1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0.002</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.123981364545113</mass>
+        <pose>0 0 0 0 0 0</pose>
+      </inertial>
+      <collision name="BRwheel_collision">
+        <pose>0.703369297831275 0.0124230571610459 0.553534883116761 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot/meshes/BRwheel_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <max_vel>0.1</max_vel>
+              <soft_cfm>0.8</soft_cfm>
+              <soft_erp>0.8</soft_erp>
+              <kd>25</kd>
+              <kp>1e6</kp>
+              <min_depth>0.0001</min_depth>
+            </ode>          
+          </contact>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="BRwheel_visual">
+        <pose>0.703369297831275 0.0124230571610459 0.553534883116761 0 0 0</pose>
+        <material>
+          <ambient>0 1 0 1</ambient>
+          <diffuse>0 1 0 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot/meshes/BRwheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="BRdrive-BRwheel" type="revolute">
+      <parent>BRdrive</parent>
+      <child>BRwheel</child>
+      <pose>-7.64349050719204E-08 0.000114295458376691 -1.25639304106029E-05 0 0 0</pose>
+      <axis>
+        <xyz>0.999981494945493 5.471689450125E-16 -0.00608356528504267</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>1</friction>
+        </dynamics>      
+      </axis>
+    </joint>
+    <link name="Arm">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <!--<pose>-0.0226557483404929 -0.0132738463964044 0.131523597185842 1.5707963267949 0.0 1.5707963267949</pose>-->
+      <pose>-0.0930 -0.0132738463964044 0.259 0.7 0.0 1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0.0005</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.5</mass>
+        <pose>0 0 0 0 0 0</pose>
+      </inertial>
+      
+      <visual name="Arm_visual">
+        <pose>0.364724580749935 -0.113741318321613 0.268218132662766 0 0 0</pose>
+        <material>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot/meshes/Arm.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <sensor name="ArmCamera" type="camera">
+        <visualize>1</visualize>
+        <always_on>1</always_on>
+        <pose>-1.77635683940025E-15 0.0484771306348522 0.397121878939425 0 0.0579385310088889 1.5707963267949</pose>
+        <camera name="Armcamera">
+          <horizontal_fov>0.7</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+        </camera>
+        <plugin name="camera1" filename="sim_camera.dll">
+          <topic>~/gazebo/frc/simulator/camera/0</topic>
+          <port>9000</port>
+          <fps>20</fps>
+          <enabled>true</enabled>
+          <savepath>tmp</savepath>
+          <maxframes>1</maxframes>
+      </plugin>
+      </sensor>
+    </link>
+    <joint name="Body-Arm" type="revolute">
+      <parent>Body</parent>
+      <child>Arm</child>
+      <pose>-2.77555756156289E-16 -0.00997359718584385 -0.171948347322002 0 0 0</pose>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <dynamics>
+          <damping>1.0</damping>
+          <friction>0.0</friction>
+        </dynamics>
+        <limit>
+          <upper>1</upper>
+          <lower>-1</lower>
+        </limit>
+      </axis>
+    </joint>
+
+    <plugin name="clock" filename="sim_clock.dll">
+      <topic>~/gazebo/frc/simulator/clock</topic>
+    </plugin>
+    <plugin name="Body_gyro" filename="sim_gyro.dll">
+      <link>Body</link>
+      <topic>~/gazebo/frc/simulator/gyro/0</topic>
+      <units>degrees</units>
+      <axis>yaw</axis>
+    </plugin>
+
+    <plugin name="Body-FL-drive_motor" filename="sim_motor.dll">
+      <joint>FLdrive-FLwheel</joint>
+      <topic>~/gazebo/frc/simulator/motor/1</topic>
+      <multiplier>25</multiplier>
+    </plugin>
+    <plugin name="Body-FL-drive_encoder" filename="sim_encoder.dll">
+        <joint>FLdrive-FLwheel</joint>
+        <topic>~/gazebo/frc/simulator/encoder/1</topic>
+        <multiplier>1</multiplier>
+    </plugin> 
+    <plugin name="Body-FL-turn_motor" filename="sim_motor.dll">
+        <joint>Body-FLdrive</joint>
+        <topic>~/gazebo/frc/simulator/motor/2</topic>
+        <multiplier>25</multiplier>
+    </plugin>
+    <plugin name="Body-FL-turn_encoder" filename="sim_encoder.dll">
+      <joint>Body-FLdrive</joint>
+       <topic>~/gazebo/frc/simulator/encoder/2</topic>
+      <multiplier>1</multiplier>
+    </plugin>
+ 
+    <plugin name="Body-FR-drive_motor" filename="sim_motor.dll">
+        <joint>FRdrive-FRwheel</joint>
+        <topic>~/gazebo/frc/simulator/motor/3</topic>
+        <multiplier>25</multiplier>
+    </plugin>
+    <plugin name="Body-FR-drive_encoder" filename="sim_encoder.dll">
+        <joint>FRdrive-FRwheel</joint>
+        <topic>~/gazebo/frc/simulator/encoder/3</topic>
+        <multiplier>1</multiplier>
+    </plugin> 
+    <plugin name="Body-FR-turn_motor" filename="sim_motor.dll">
+        <joint>Body-FRdrive</joint>
+        <topic>~/gazebo/frc/simulator/motor/4</topic>
+        <multiplier>25</multiplier>
+    </plugin>
+    <plugin name="Body-FR-turn_encoder" filename="sim_encoder.dll">
+      <joint>Body-FRdrive</joint>
+       <topic>~/gazebo/frc/simulator/encoder/4</topic>
+      <multiplier>1</multiplier>
+    </plugin>
+
+    <plugin name="Body-BL-drive_motor" filename="sim_motor.dll">
+        <joint>BLdrive-BLwheel</joint>
+        <topic>~/gazebo/frc/simulator/motor/5</topic>
+        <multiplier>25</multiplier>
+    </plugin>
+    <plugin name="Body-BL-drive_encoder" filename="sim_encoder.dll">
+        <joint>BLdrive-BLwheel</joint>
+        <topic>~/gazebo/frc/simulator/encoder/5</topic>
+        <multiplier>1</multiplier>
+    </plugin> 
+    <plugin name="Body-BL-turn_motor" filename="sim_motor.dll">
+        <joint>Body-BLdrive</joint>
+        <topic>~/gazebo/frc/simulator/motor/6</topic>
+        <multiplier>25</multiplier>
+    </plugin>
+    <plugin name="Body-BL-turn_encoder" filename="sim_encoder.dll">
+        <joint>Body-BLdrive</joint>
+        <topic>~/gazebo/frc/simulator/encoder/6</topic>
+        <multiplier>1</multiplier>
+    </plugin>
+
+    <plugin name="Body-BR-drive_motor" filename="sim_motor.dll">
+        <joint>BRdrive-BRwheel</joint>
+        <topic>~/gazebo/frc/simulator/motor/7</topic>
+        <multiplier>25</multiplier>
+    </plugin>
+      <plugin name="Body-BR-drive_encoder" filename="sim_encoder.dll">
+        <joint>BRdrive-BRwheel</joint>
+        <topic>~/gazebo/frc/simulator/encoder/7</topic>
+        <multiplier>1</multiplier>
+    </plugin> 
+    <plugin name="Body-BR-turn_motor" filename="sim_motor.dll">
+        <joint>Body-BRdrive</joint>
+        <topic>~/gazebo/frc/simulator/motor/8</topic>
+        <multiplier>25</multiplier>
+    </plugin>
+    <plugin name="Body-BR-turn_encoder" filename="sim_encoder.dll">
+        <joint>Body-BRdrive</joint>
+        <topic>~/gazebo/frc/simulator/encoder/8</topic>
+        <multiplier>1</multiplier>
+    </plugin>
+
+    <plugin name="Arm_motor" filename="sim_motor.dll">
+        <joint>Body-Arm</joint>
+        <topic>~/gazebo/frc/simulator/motor/9</topic>
+        <multiplier>50</multiplier>
+    </plugin>
+    <plugin name="Arm_encoder" filename="sim_encoder.dll">
+        <joint>Body-Arm</joint>
+        <topic>~/gazebo/frc/simulator/encoder/9</topic>
+        <multiplier>1</multiplier>
+    </plugin>
+
+
+    <plugin name="Arm_llimit" filename="sim_limitswitch.dll">
+      <joint>Body-Arm</joint>
+      <topic>~/gazebo/frc/simulator/switch/2</topic>
+      <units>radians</units>
+      <low>-0.99</low>
+      <high>0.99</high>
+    </plugin>
+  </model>
+</sdf>

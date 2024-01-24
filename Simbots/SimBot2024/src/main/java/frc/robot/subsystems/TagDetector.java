@@ -70,20 +70,7 @@ public class TagDetector extends Thread {
   public TagDetector(Drivetrain drivetrain) {
     m_drivetrain = drivetrain;
 
-    cam = new Camera(0, 640, 480, 40); // specs for Gazebo camera
-
-    wpi_detector = new AprilTagDetector();
-    wpi_detector.addFamily("tag16h5",0);
-    AprilTagDetector.Config config=new AprilTagDetector.Config();
-    //config.quadSigma=0.1f;
-    //config.quadDecimate=1.0f;
-    //wpi_detector.setConfig(config);
-
-    wpi_poseEstConfig = new AprilTagPoseEstimator.Config(TargetMgr.targetSize, cam.fx, cam.fy, cam.cx, cam.cy);
-    wpi_pose_estimator = new AprilTagPoseEstimator(wpi_poseEstConfig);
-
-    ouputStream = CameraServer.putVideo("testCamera", cam.image_width, cam.image_height);
-    test();
+    //test();
   }
 
   // test tag detection jni using an image file
@@ -210,6 +197,15 @@ public class TagDetector extends Thread {
 
   @Override
   public void run() {
+    cam = new Camera(0, 640, 480, 40); // specs for Gazebo camera
+
+    wpi_detector = new AprilTagDetector();
+    wpi_detector.addFamily("tag16h5",0);
+   
+    wpi_poseEstConfig = new AprilTagPoseEstimator.Config(TargetMgr.targetSize, cam.fx, cam.fy, cam.cx, cam.cy);
+    wpi_pose_estimator = new AprilTagPoseEstimator(wpi_poseEstConfig);
+
+    ouputStream = CameraServer.putVideo("testCamera", cam.image_width, cam.image_height);
     cam.start();
 
     while (!Thread.interrupted()) {
@@ -255,27 +251,27 @@ public class TagDetector extends Thread {
           TargetMgr.setStartPose(tags);
         target_tag=tags[0];
         last_pose = null;
-        if (target_tag != null) {
-          last_pose = getRobotPoseFromTag(target_tag, m_drivetrain.gyroRotation2d());
-          if (last_pose != null) { // could be an incorrect tag identifier (index out of bounds for expected tag_id)
-            Translation2d trans = last_pose.getTranslation(); 
-            if(m_drivetrain.useTags()){        
-            String str = String.format("id:%d D:%-2.2f P:%-2.1f H:%-2.1f Robot: X:%-2.1f Y:%-2.1f",
-                target_tag.getTagId(), target_tag.getDistance(), target_tag.getPitch(), target_tag.getYaw(),
-                trans.getX(), trans.getY());
-              SmartDashboard.putString("Tag", str);
-            }
-            Translation2d start_trans=TargetMgr.startPose().getTranslation();
-            trans=start_trans.minus(trans);
-            last_pose=new Pose2d(trans,last_pose.getRotation());
-          }
-        } else {
-          SmartDashboard.putString("Tag", "no target tag");
-        }
+        // if (target_tag != null) {
+        //   last_pose = getRobotPoseFromTag(target_tag, m_drivetrain.gyroRotation2d());
+        //   if (last_pose != null) { // could be an incorrect tag identifier (index out of bounds for expected tag_id)
+        //     Translation2d trans = last_pose.getTranslation(); 
+        //     if(m_drivetrain.useTags()){        
+        //     String str = String.format("id:%d D:%-2.2f P:%-2.1f H:%-2.1f Robot: X:%-2.1f Y:%-2.1f",
+        //         target_tag.getTagId(), target_tag.getDistance(), target_tag.getPitch(), target_tag.getYaw(),
+        //         trans.getX(), trans.getY());
+        //       SmartDashboard.putString("Tag", str);
+        //     }
+        //     Translation2d start_trans=TargetMgr.startPose().getTranslation();
+        //     trans=start_trans.minus(trans);
+        //     last_pose=new Pose2d(trans,last_pose.getRotation());
+        //   }
+        // } else {
+        //   SmartDashboard.putString("Tag", "no target tag");
+        // }
 
         for (int i = 0; i < tags.length; i++) {
-          if (target_id != BEST && i != target_id)
-            continue;
+          //if (target_id != BEST && i != target_id)
+          //  continue;
           AprilTag tag = tags[i];
           if (first)
             tag.print();
@@ -305,7 +301,7 @@ public class TagDetector extends Thread {
 
         ouputStream.putFrame(mat);
       } catch (Exception ex) {
-        //System.out.println("exception:" + ex);
+        System.out.println("exception:" + ex);
       }
     }
   }

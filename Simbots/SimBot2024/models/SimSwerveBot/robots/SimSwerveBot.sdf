@@ -72,7 +72,6 @@
           <enabled>true</enabled>
           <savepath>tmp</savepath>
           <maxframes>1</maxframes>
-          <!--<video>front.avi</video>-->
       </plugin>
       </sensor>
     </link>
@@ -319,7 +318,7 @@
       <child>BRdrive</child>
       <pose>3.71059319737022E-06 5.55111512312578E-17 0.000609242247311931 0 0 0</pose>
       <axis>
-        <xyz>0 1 0</xyz>
+        <xyz>0 -1 0</xyz>
         <dynamics>
           <damping>2</damping>
           <friction>1</friction>
@@ -424,7 +423,7 @@
       <child>BLdrive</child>
       <pose>4.5930206116207E-06 0 0.00060923623457787 0 0 0</pose>
       <axis>
-        <xyz>0 1 0</xyz>
+        <xyz>0 -1 0</xyz>
         <dynamics>
           <damping>2</damping>
           <friction>1</friction>
@@ -626,7 +625,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://SimBot2024/meshes/Bumpers.STL</uri>
+            <uri>model://SimSwerveBot/meshes/Bumpers.STL</uri>
           </mesh>
         </geometry>
       </visual>
@@ -648,6 +647,7 @@
       <units>degrees</units>
       <axis>yaw</axis>
     </plugin>
+
     <plugin name="Frame-FL-drive_motor" filename="sim_motor.dll">
       <joint>FLdrive-FLwheel</joint>
       <topic>~/gazebo/frc/simulator/motor/1</topic>
