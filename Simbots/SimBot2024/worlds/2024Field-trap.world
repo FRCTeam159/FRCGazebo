@@ -3,7 +3,7 @@
   <world name="default">
    <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose>2.67876 1.37769 5.63694 0 0.951639 -1.0518</pose>
+        <pose>-0.769656 -2.45406 1.23892 0 0.247637 1.95221</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
@@ -19,7 +19,7 @@
         <linear>0.01</linear>
         <quadratic>0.001</quadratic>
       </attenuation>
-      <direction>0.5 0.1 -0.9</direction>
+      <direction>-0.5 0.1 -0.9</direction>
       <spot>
         <inner_angle>0</inner_angle>
         <outer_angle>0</outer_angle>
@@ -101,7 +101,7 @@
     <include>
       <name>HeldNote</name>
       <uri>model://Note</uri>
-        <pose>6.28 -2.66 0.7377 -1.41 -0 -0.389</pose>
+      <pose>-0.8244 0.39 0.728 -1.6721 -0.0154 -1.583</pose>
     </include>
 <!--
     <include>
@@ -111,7 +111,7 @@
 -->
    <include>
       <uri>model://CompBot</uri>
-       <pose>6.45 -2.365 0.06617 0 0 -2.068</pose>
+       <pose>-1.17 0.39 0.044955 -6.7e-05 -9.7e-05 -0.051712</pose>
     </include>
      
     <include>  

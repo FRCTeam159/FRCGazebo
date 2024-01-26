@@ -6,9 +6,10 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
 
-public class ControlArm extends CommandBase {
+public class ControlArm extends CommandBase implements Constants {
   Arm m_arm;
   XboxController m_controller;
   /** Creates a new ControlArm. 
@@ -29,7 +30,19 @@ public class ControlArm extends CommandBase {
     double left=m_controller.getLeftTriggerAxis();
     double right=m_controller.getRightTriggerAxis();
 
-    if (left > 0)
+    if(m_controller.getRightBumperPressed())
+      m_arm.togglePusher();
+    else if(m_controller.getLeftBumperPressed())
+      m_arm.toggleShooter();
+    else if(m_controller.getXButtonPressed())
+      m_arm.togglePickup();
+    else if(m_controller.getAButtonPressed())
+      m_arm.setTargetAngle(PICKUP_ANGLE);
+    else if(m_controller.getBButtonPressed())
+      m_arm.setTargetAngle(AMP_SHOOT_ANGLE);
+    else if(m_controller.getYButtonPressed())
+      m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE);
+    else if (left > 0)
         m_arm.stepDown(left);
     else if (right > 0)
         m_arm.stepUp(right);

@@ -359,12 +359,19 @@
         </geometry>
         <surface>
           <contact>
-            <ode />
+            <ode>
+              <max_vel>0.1</max_vel>
+              <soft_cfm>0.8</soft_cfm>
+              <soft_erp>0.8</soft_erp>
+              <kd>25</kd>
+              <kp>1e6</kp>
+              <min_depth>0.0001</min_depth>
+            </ode>          
           </contact>
           <friction>
             <ode>
-              <mu>0</mu>
-              <mu2>0</mu2>
+              <mu>1</mu>
+              <mu2>1</mu2>
             </ode>
           </friction>
         </surface>
@@ -464,15 +471,17 @@
     <link name="Arm">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <!--<pose>-0.0226557483404929 -0.0132738463964044 0.131523597185842 1.5707963267949 0.0 1.5707963267949</pose>-->
-      <pose>-0.0930 -0.0132738463964044 0.259 0.7 0.0 1.5707963267949</pose>
+      <!--<pose>-0.0226557483404929 -0.0132738463964044 0.131523597185842 1.5707963267949 0.0 1.5707963267949</pose>
+      <pose>-0.0930 -0.0132738463964044 0.259 0.7 0.0 1.5707963267949</pose>-->
+      <pose>-0.02 -0.0132738463964044 0.1 1.7 0.0 1.5707963267949</pose>
+
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
         <angular>0.0005</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.5</mass>
+        <mass>0.2</mass>
         <pose>0 0 0 0 0 0</pose>
       </inertial>
       
@@ -490,9 +499,12 @@
         </geometry>
       </visual>
       <sensor name="ArmCamera" type="camera">
-        <visualize>1</visualize>
+        <visualize>0</visualize>
         <always_on>1</always_on>
+        <!--
         <pose>-1.77635683940025E-15 0.0484771306348522 0.397121878939425 0 0.0579385310088889 1.5707963267949</pose>
+        -->
+        <pose>0 0.7 0.1 0 1.5 1.5707963267949</pose>
         <camera name="Armcamera">
           <horizontal_fov>0.7</horizontal_fov>
           <image>
@@ -510,7 +522,7 @@
           <fps>20</fps>
           <enabled>true</enabled>
           <savepath>tmp</savepath>
-          <maxframes>1</maxframes>
+          <maxframes>5</maxframes>
       </plugin>
       </sensor>
     </link>
@@ -521,13 +533,434 @@
       <axis>
         <xyz>-1 0 0</xyz>
         <dynamics>
-          <damping>1.0</damping>
-          <friction>0.0</friction>
+          <damping>12.0</damping>
+          <friction>1.0</friction>
         </dynamics>
+        <!---->
         <limit>
-          <upper>1</upper>
-          <lower>-1</lower>
+          <upper>2</upper>
+          <lower>-0.9</lower>
         </limit>
+      </axis>
+    </joint>
+
+     <link name="TopShootWheels">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <!--
+      <pose>0.0730466913375898 -0.0132738463964082 0.81181219652375 1.5707963267949 0 1.5707963267949</pose>-->
+      <pose>0.162 -0.01 0.762 1.5707963267949 0 1.5707963267949</pose>
+
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.1</mass>
+        <pose>0 0 0 0 0 0</pose>
+        
+      </inertial>
+      <collision name="TopShootWheels_collision">
+        <pose>0.364724580749939 -0.79402991765952 0.172515692984683 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot2/meshes/TopShootWheels_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <max_vel>0.1</max_vel>
+              <soft_cfm>0.8</soft_cfm>
+              <soft_erp>0.8</soft_erp>
+              <kd>25</kd>
+              <kp>1e6</kp>
+              <min_depth>0.0001</min_depth>
+            </ode>          
+          </contact>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="TopShootWheels_visual">
+        <pose>0.364724580749939 -0.79402991765952 0.172515692984683 0 0 0</pose>
+        <material>
+          <ambient>0 0.5 0 1</ambient>
+          <diffuse>0 0.5 0 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot/meshes/TopShootWheels.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Arm-TopShootWheels" type="revolute">
+      <parent>Arm</parent>
+      <child>TopShootWheels</child>
+      <pose>0 -1.66533453693773E-15 9.99200722162641E-16 0 0 0</pose>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <dynamics>
+          <damping>2</damping>
+          <friction>0</friction>
+        </dynamics>
+       
+      </axis>
+    </joint>
+    <link name="BotShootWheels">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <!--
+      <pose>0.0689920469452736 -0.0108744137642757 0.710293134969516 1.5707963267949 0 1.5707963267949</pose>-->
+       <pose>0.146 -0.008 0.662 1.5707963267949 0 1.5707963267949</pose>
+
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.1</mass>
+        <pose>0 0 0 0 0 0</pose>
+       
+      </inertial>
+      <collision name="BotShootWheels_collision">
+        <pose>0.362325148117806 -0.692510856105287 0.176570337376999 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot/meshes/BotShootWheels_col.STL</uri>
+          </mesh>
+        </geometry>
+       <surface>
+          <contact>
+            <ode>
+              <max_vel>0.1</max_vel>
+              <soft_cfm>0.8</soft_cfm>
+              <soft_erp>0.8</soft_erp>
+              <kd>25</kd>
+              <kp>1e6</kp>
+              <min_depth>0.0001</min_depth>
+            </ode>          
+          </contact>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="BotShootWheels_visual">
+        <pose>0.362325148117806 -0.692510856105287 0.176570337376999 0 0 0</pose>
+        <material>
+         <ambient>0 0.5 0 1</ambient>
+         <diffuse>0 0.5 0 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot/meshes/BotShootWheels.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Arm-BotShootWheels" type="revolute">
+      <parent>Arm</parent>
+      <child>BotShootWheels</child>
+      <pose>0 4.44089209850063E-16 2.27595720048157E-15 0 0 0</pose>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <dynamics>
+          <damping>2</damping>
+          <friction>0</friction>
+        </dynamics>
+       
+      </axis>
+    </joint>
+
+    <link name="PickupTop">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <!--
+      <pose>0.351891775732708 -0.0132080074782259 0.794336950803785 1.5707963267949 0 1.5707963267949</pose>-->
+      <pose>0.435 -0.0132080074782259 0.71 1.5707963267949 0 1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.01</mass>
+        <pose>0 0 0 0 0 0</pose>
+      </inertial>
+      <collision name="PickupTop_collision">
+        <pose>0.364658741831756 -0.776554671939556 -0.106329391410435 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot/meshes/PickupTop_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <max_vel>0.1</max_vel>
+              <soft_cfm>0.8</soft_cfm>
+              <soft_erp>0.8</soft_erp>
+              <kd>25</kd>
+              <kp>1e6</kp>
+              <min_depth>0.0001</min_depth>
+            </ode>          
+          </contact>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="PickupTop_visual">
+        <pose>0.364658741831756 -0.776554671939556 -0.106329391410435 0 0 0</pose>
+        <material>
+          <ambient>0 1 0 1</ambient>
+          <diffuse>0 1 0 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot2/meshes/PickupTop.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Arm-PickupTop" type="revolute">
+      <parent>Arm</parent>
+      <child>PickupTop</child>
+      <pose>1.66533453693773E-16 -1.70876150531463E-05 6.80868523425526E-06 0 0 0</pose>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>0</friction>
+        </dynamics>
+       
+      </axis>
+    </joint>
+    <link name="PickupBot">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <!--
+      <pose>0.348354063217224 -0.0136822219235139 0.705472250955676 1.5707963267949 0 1.5707963267949</pose>-->
+      <pose>0.42 -0.0136822219235139 0.62 1.5707963267949 0 1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.01</mass>
+        <pose>0 0 0 0 0 0</pose>
+      </inertial>
+      <collision name="PickupBot_collision">
+        <pose>0.365132956277044 -0.687689972091446 -0.102791678894951 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot/meshes/PickupBot_col.STL</uri>
+          </mesh>
+        </geometry>
+         <surface>
+          <contact>
+            <ode>
+              <max_vel>0.1</max_vel>
+              <soft_cfm>0.8</soft_cfm>
+              <soft_erp>0.8</soft_erp>
+              <kd>25</kd>
+              <kp>1e6</kp>
+              <min_depth>0.0001</min_depth>
+            </ode>          
+          </contact>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="PickupBot_visual">
+        <pose>0.365132956277044 -0.687689972091446 -0.102791678894951 0 0 0</pose>
+        <material>
+          <ambient>0 1 0 1</ambient>
+          <diffuse>0 1 0 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot2/meshes/PickupBot.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Arm-PickupBot" type="revolute">
+      <parent>Arm</parent>
+      <child>PickupBot</child>
+      <pose>1.11022302462516E-16 1.84333731033659E-05 -3.29264255684303E-06 0 0 0</pose>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>0</friction>
+        </dynamics>
+       
+      </axis>
+    </joint>
+    <link name="MidRollersTop">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <!--
+      <pose>0.209984137503508 -0.00669565982451603 0.799998170050727 1.5707963267949 0 1.5707963267949</pose>-->
+      <pose>0.296 -0.00669565982451603 0.734 1.5707963267949 0 1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.01</mass>
+        <pose>0 0 0 0 0 0</pose>
+      </inertial>
+      <collision name="MidRollersTop_collision">
+        <pose>0.358146394178046 -0.782215891186498 0.0355782468187643 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot/meshes/MidRollersTop_col.STL</uri>
+          </mesh>
+        </geometry>
+         <surface>
+          <contact>
+            <ode>
+              <max_vel>0.1</max_vel>
+              <soft_cfm>0.8</soft_cfm>
+              <soft_erp>0.8</soft_erp>
+              <kd>25</kd>
+              <kp>1e6</kp>
+              <min_depth>0.0001</min_depth>
+            </ode>          
+          </contact>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="MidRollersTop_visual">
+        <pose>0.358146394178046 -0.782215891186498 0.0355782468187643 0 0 0</pose>
+        <material>
+           <ambient>0 0.5 0.2 1</ambient>
+          <diffuse>0 0.5 0.2 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot/meshes/MidRollersTop.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Arm-MidRollersTop" type="revolute">
+      <parent>Arm</parent>
+      <child>MidRollersTop</child>
+      <pose>2.77555756156289E-16 -1.06238165595851E-05 8.57101320122372E-06 0 0 0</pose>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>0</friction>
+        </dynamics>
+      
+      </axis>
+    </joint>
+    <link name="MidRollersBot">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <!--
+      <pose>0.206438983708922 -0.0110539823268657 0.711170671377556 1.5707963267949 0 1.5707963267949</pose>-->
+      <pose>0.28 -0.0110539823268657 0.646 1.5707963267949 0 1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.01</mass>
+        <pose>0 0 0 0 0 0</pose>
+      </inertial>
+      <collision name="MidRollersBot_collision">
+        <pose>0.362504716680396 -0.693388392513327 0.0391234006133506 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot2/meshes/MidRollersBot_col.STL</uri>
+          </mesh>
+        </geometry>
+         <surface>
+          <contact>
+            <ode>
+              <max_vel>0.1</max_vel>
+              <soft_cfm>0.8</soft_cfm>
+              <soft_erp>0.8</soft_erp>
+              <kd>25</kd>
+              <kp>1e6</kp>
+              <min_depth>0.0001</min_depth>
+            </ode>          
+          </contact>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="MidRollersBot_visual">
+        <pose>0.362504716680396 -0.693388392513327 0.0391234006133506 0 0 0</pose>
+        <material>
+          <ambient>0 0.5 0.2 1</ambient>
+          <diffuse>0 0.5 0.2 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot2/meshes/MidRollersBot.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Arm-MidRollersBot" type="revolute">
+      <parent>Arm</parent>
+      <child>MidRollersBot</child>
+      <pose>-1.11022302462516E-16 -1.23040033411792E-05 5.91096451127426E-06 0 0 0</pose>
+      <axis>
+        <xyz>-1 0 9.01599997908948E-15</xyz>
+        <dynamics>
+          <damping>1</damping>
+          <friction>0</friction>
+        </dynamics>
+       
       </axis>
     </joint>
 
@@ -636,13 +1069,53 @@
         <multiplier>1</multiplier>
     </plugin>
 
+    <plugin name="intake_motor" filename="sim_motor.dll">
+        <joint>Arm-PickupTop</joint>
+        <topic>~/gazebo/frc/simulator/motor/10</topic>
+        <multiplier>50</multiplier>
+    </plugin>
+
+    <plugin name="intake_motor" filename="sim_motor.dll">
+        <joint>Arm-PickupBot</joint>
+        <topic>~/gazebo/frc/simulator/motor/10</topic>
+        <multiplier>50</multiplier>
+    </plugin>
+
+     <plugin name="shooter_motor" filename="sim_motor.dll">
+        <joint>Arm-TopShootWheels</joint>
+        <topic>~/gazebo/frc/simulator/motor/11</topic>
+        <multiplier>100</multiplier>
+    </plugin>
+
+    <plugin name="shooter_motor" filename="sim_motor.dll">
+        <joint>Arm-BotShootWheels</joint>
+        <topic>~/gazebo/frc/simulator/motor/11</topic>
+        <multiplier>100</multiplier>
+    </plugin>
+
+     <plugin name="Shooterencoder" filename="sim_encoder.dll">
+        <joint>Arm-TopShootWheels</joint>
+        <topic>~/gazebo/frc/simulator/encoder/11</topic>
+    </plugin>
+
+    <plugin name="pusher_motor" filename="sim_motor.dll">
+        <joint>Arm-MidRollersTop</joint>
+        <topic>~/gazebo/frc/simulator/motor/12</topic>
+        <multiplier>50</multiplier>
+    </plugin>
+
+    <plugin name="pusher_motor" filename="sim_motor.dll">
+        <joint>Arm-MidRollersBot</joint>
+        <topic>~/gazebo/frc/simulator/motor/12</topic>
+        <multiplier>50</multiplier>
+    </plugin>
 
     <plugin name="Arm_llimit" filename="sim_limitswitch.dll">
       <joint>Body-Arm</joint>
       <topic>~/gazebo/frc/simulator/switch/2</topic>
       <units>radians</units>
-      <low>-0.99</low>
-      <high>0.99</high>
+      <low>-0.82</low>
+      <high>2</high>
     </plugin>
   </model>
 </sdf>

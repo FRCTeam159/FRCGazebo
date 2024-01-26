@@ -55,6 +55,8 @@ public class MJpegReader implements VideoInterface {
     @Override
     public Mat getFrame() {
         Mat mat = new Mat();
+        if(!connected)
+            return mat;
         if (use_vcap) {
             if (!vcap.read(mat))
                 return null;

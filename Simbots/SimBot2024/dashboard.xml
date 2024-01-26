@@ -1,5 +1,18 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="ShooterSpeed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="375" y="120"/>
+		<width>121</width>
+	</widget>
+	<widget field="Pusher" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="262" y="124"/>
+	</widget>
+	<widget field="Pickup" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="321" y="125"/>
+	</widget>
+	<widget field="Shooter" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="203" y="123"/>
+	</widget>
 	<widget field="Arm" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="108" y="118"/>
 		<width>80</width>
@@ -99,8 +112,8 @@
 		<property name="Automatically Show Widgets" value="false"/>
 		<property name="Grid Cell Width(s)" value="16"/>
 		<property name="Grid Cell Height(s)" value="16"/>
-		<property name="Window X Position" value="617"/>
-		<property name="Window Y Position" value="152"/>
+		<property name="Window X Position" value="1292"/>
+		<property name="Window Y Position" value="62"/>
 		<property name="Window Width" value="621"/>
 		<property name="Window Height" value="644"/>
 		<property name="Save File" value=".\dashboard.xml"/>
@@ -109,6 +122,5 @@
 </live-window>
 	<hidden field="Conf"/>
 	<hidden field="Error"/>
-	<hidden field="Detect"/>
 	<hidden field="Latency"/>
 </xml>

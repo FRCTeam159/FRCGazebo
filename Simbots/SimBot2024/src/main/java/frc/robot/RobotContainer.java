@@ -85,10 +85,12 @@ public class RobotContainer {
     m_drivetrain.reset();
   }
   public void simulationPeriodic(){
+    
   boolean b = SmartDashboard.getBoolean("Reset", false);
   if(b &&  !resetting){
     resetting=true;
     m_drivetrain.resetWheels();
+    m_arm.reset();
   }
   else if(!b && resetting){
     resetting=false;

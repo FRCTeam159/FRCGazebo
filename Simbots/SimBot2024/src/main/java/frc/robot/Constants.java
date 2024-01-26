@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-
 /** Add your docs here. */
 public interface Constants {
 
@@ -28,21 +27,15 @@ public interface Constants {
     public static final int BR_TURN = 8;
 
     public static final int ARM = 9;
-    public static final int INTAKE = 10;
+    public static final int PICKUP = 10;
     public static final int SHOOTER = 11;
+    public static final int PUSHER = 12;
 
     public static final int ARM_LIMIT = 2;
 
-    public static double SPEAKER_SHOOT_ANGLE=20;
-    public static double AMP_SHOOT_ANGLE=90;
+    public static double PICKUP_ANGLE=-2;
+    public static double SPEAKER_SHOOT_ANGLE=24;
+    public static double AMP_SHOOT_ANGLE=95;
   
-    // xbox controller keys
-
-    public static final int LEFT_BUMPER = 5;
-	public static final int RIGHT_BUMPER = 6;
-
-    public static final int LEFT_TRIGGER = 2;
-	public static final int RIGHT_TRIGGER = 3;
-
 }
 
