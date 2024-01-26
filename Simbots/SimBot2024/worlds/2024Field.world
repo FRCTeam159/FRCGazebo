@@ -97,23 +97,34 @@
       <uri>model://Note</uri>
         <pose>4.4 -2.64 0 1.58 0 0</pose>
     </include>
-
+<!--
     <include>
       <name>HeldNote</name>
       <uri>model://Note</uri>
         <pose>6.28 -2.66 0.7377 -1.41 -0 -0.389</pose>
     </include>
-<!--
+
     <include>
       <uri>model://SimSwerveBot</uri>
       <pose>6.43744 -2.31222 0.09235 1.56996 0.000843 1.04796</pose>
     </include>
--->
+
+
    <include>
       <uri>model://CompBot</uri>
        <pose>6.45 -2.365 0.06617 0 0 -2.068</pose>
     </include>
-     
+-->    
+
+    <include>
+      <name>HeldNote</name>
+      <uri>model://Note</uri>
+      <pose>6.34 -2.6 0.839508 -1.51095 -0 -0.389</pose>
+    </include>
+    <include>
+      <uri>model://CompBot</uri>
+       <pose>6.45 -2.365 0.06617 0 0 -2.068</pose>
+    </include>
     <include>  
       <uri>model://Apriltag16_05_00003</uri>
       <pose>-7.54 -0.637 1.44 0 0 1.57</pose>

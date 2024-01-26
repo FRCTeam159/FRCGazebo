@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.Calibrate;
 import frc.robot.commands.DrivePath;
 import frc.robot.commands.Pickup;
+import frc.robot.commands.Shoot;
 import utils.PlotUtils;
 
 public class Autonomous extends SequentialCommandGroup  {
@@ -18,6 +19,7 @@ public class Autonomous extends SequentialCommandGroup  {
   SendableChooser<Integer> m_auto_plot_option = new SendableChooser<>();
 
   Drivetrain m_drive;
+  Arm m_arm;
 
   public static final int CALIBRATE = 0;
   public static final int PROGRAM = 1;
@@ -28,15 +30,24 @@ public class Autonomous extends SequentialCommandGroup  {
   static double d2r=2*Math.PI/360;
   static double i2m=0.0254;
 
-  static double xp=-1.0;
-  static double yp=1.3;
+  static double xp=0.9;
+  static double yp=-1.3;
   static double rp=-60;
 
-  static double XR=-1;
-  static double XF=1.5;
+  static double XF=0.9;
+  static double YF=-1.2;
+  static double RF=-60;
+
   static double YR=1.3;
-  static double YF=0.6;
-  static double R=60;
+  static double XR=-1;
+  static double RR=60;
+
+  // static double XR=-1;
+  // static double XF=1.5;
+  // static double YR=1.3;
+  // static double YF=0.6;
+  // static double R=60;
+
 
   static boolean test_coord_rotation=false;
 
@@ -46,8 +57,9 @@ public class Autonomous extends SequentialCommandGroup  {
 
   SendableChooser<Integer> m_path_chooser = new SendableChooser<Integer>();
   /** Creates a new AutoCommands. */
-  public Autonomous(Drivetrain drive) {
+  public Autonomous(Drivetrain drive,Arm arm) {
     m_drive=drive;
+    m_arm=arm;
    
     m_auto_plot_option.setDefaultOption("No Plot", PlotUtils.PLOT_NONE);
     m_auto_plot_option.addOption("Plot Dynamics", PlotUtils.PLOT_DYNAMICS);
@@ -106,17 +118,25 @@ public class Autonomous extends SequentialCommandGroup  {
         // for a simple curved path blue-outside=red-inside and blue-inside=red-outside
         if((alliance==TargetMgr.RED && position==TargetMgr.OUTSIDE) ||
            (alliance==TargetMgr.BLUE && position==TargetMgr.INSIDE)){
-            yr=-YR;
             xf=XF;
             yf=-YF;
-            rr=R;
+            rf=-RF;
+            xr=XR;
+            yr=-YR;
+            rr=-RR;
+            // yr=-YR;
+            // xf=XF;
+            // yf=-YF;
+            // rr=RR;
         }
         if((alliance==TargetMgr.BLUE && position==TargetMgr.OUTSIDE) ||
            (alliance==TargetMgr.RED && position==TargetMgr.INSIDE)){
-            yr=YR;
             xf=XF;
             yf=YF;
-            rr=-R;
+            rf=RF;
+            xr=XR;
+            yr=YR;
+            rr=RR;
         }
         rf=-rr;
         if(test_coord_rotation){
@@ -130,10 +150,12 @@ public class Autonomous extends SequentialCommandGroup  {
           System.out.println("reverse x:" + xr + " y:" + yr + " r:"+rr);
           System.out.println("forward x:" + (x) + " y:" + y+ " r:"+rf);
         }
+      
         return new SequentialCommandGroup(
-              new DrivePath(m_drive, opt, xr, yr, rr),
-              new Pickup(m_drive, 2),
-              new DrivePath(m_drive, opt, xf, yf,rf)
+              new Shoot(m_arm),
+              new DrivePath(m_drive, opt, xf, yf, rf),
+              new Pickup(m_drive, m_arm, 2)//,
+              //new DrivePath(m_drive, opt, xr,yr,rr)
         );
       }
     }

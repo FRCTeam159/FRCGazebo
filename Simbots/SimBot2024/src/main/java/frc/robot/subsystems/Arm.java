@@ -24,8 +24,9 @@ public class Arm extends SubsystemBase implements Constants{
   private boolean initialized=false;
   static int cnt=0;
   static public double SHOOT_POWER=10;
-  static public double PICKUP_POWER=1;
+  static public double PICKUP_POWER=0.5;
   static public double PUSH_POWER=1;
+  static public double TARGET_SHOOTER_SPEED=90;
 
   public static final double MOVE_RATE=0.1;
 
@@ -51,8 +52,15 @@ public class Arm extends SubsystemBase implements Constants{
     shooter_on=false;
     pickup_on=false;
     pusher_on=false;
-    target_angle=SPEAKER_SHOOT_ANGLE;
+    //target_angle=SPEAKER_SHOOT_ANGLE;
 
+  }
+
+  public void setShooterOn(){
+    shooter_on=true;
+  }
+  public void setShooterOFf(){
+    shooter_on=false;
   }
 
   public void toggleShooter(){
@@ -63,9 +71,23 @@ public class Arm extends SubsystemBase implements Constants{
     pickup_on=pickup_on?false:true;
   }
 
+  public void setPickupOn(){
+    pickup_on=true;
+  }
+  public void setPickupOFf(){
+    pickup_on=false;
+  }
   public void togglePusher(){
     pusher_on=pusher_on?false:true;
   }
+
+  public void setPusherOn(){
+    pusher_on=true;
+  }
+  public void setPusherOFf(){
+    pusher_on=false;
+  }
+
   public boolean atLowerLimit() {
     return armLimit.lowLimit();
   }
@@ -89,6 +111,12 @@ public class Arm extends SubsystemBase implements Constants{
   }
   public double getTargetAngle(){
     return target_angle;
+  }
+  public double getShooterSpeed(){
+    return shooter.getRate();
+  }
+  public boolean atTargetSpeed(){
+    return  getShooterSpeed()>=TARGET_SHOOTER_SPEED?true:false;
   }
   @Override
   public void periodic() {
@@ -119,11 +147,11 @@ public class Arm extends SubsystemBase implements Constants{
       if(pickup_on)
         pickup.set(PICKUP_POWER);
       else
-        pickup.set(-0.05);
+        pickup.set(0.02);
       if(pusher_on)
         pusher.set(PUSH_POWER);
       else
-        pusher.set(-0.0);
+        pusher.set(-0.02);
     }
     cnt++;
     SmartDashboard.putNumber("Arm", angle);

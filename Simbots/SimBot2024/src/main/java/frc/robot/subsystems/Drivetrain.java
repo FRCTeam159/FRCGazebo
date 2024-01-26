@@ -85,7 +85,7 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	double latency=0.05;
 	double vision_confidence=0.00;
 	double pose_error=0;
-	boolean use_tags=false;
+	boolean use_tags=true;
 	boolean simstarted=false;
 
 	boolean m_disabled = true;

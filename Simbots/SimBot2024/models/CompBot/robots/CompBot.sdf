@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sdf version="1.5">
-  <model name="CompBot">
+  <model name="CompBot2">
     <pose>0 0 0.04699 0 0 0</pose>
     
     <link name="Body">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>-0.0284926778434316 -0.0203805071771881 0.0563044087715344 1.5707963267949 0 1.5707963267949</pose>
+      <pose>-0.0240421506857467 -0.0115168248329588 0.0384756490139345 1.5707963267949 0 1.5707963267949</pose>
       <must_be_base_link>1</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
@@ -15,9 +15,9 @@
       <inertial>
         <mass>150</mass>
         <pose>0 0 0 0 0 0</pose>
-      </inertial>
+              </inertial>
       <collision name="Body_collision">
-        <pose>0.371831241530718 -0.0385221299073051 0.274055062165705 0 0 0</pose>
+        <pose>0.362967559186486 -0.0206933701497099 0.254398490688035 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
@@ -37,7 +37,7 @@
         </surface>
       </collision>
       <visual name="Body_visual">
-        <pose>0.371831241530718 -0.0385221299073051 0.274055062165705 0 0 0</pose>
+        <pose>0.362967559186486 -0.0206933701497099 0.254398490688035 0 0 0</pose>
         <material>
           <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
           <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
@@ -50,11 +50,10 @@
         </geometry>
       </visual>
     </link>
-   
     <link name="FLdrive">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>0.322273557462555 0.308455549680306 0.045990455353307 1.5707963267949 0 1.5707963267949</pose>
+      <pose>0.30706751314257 0.308455549680304 0.0459904553533022 1.5707963267949 0 1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
@@ -63,13 +62,13 @@
       <inertial>
         <mass>0.2</mass>
         <pose>0 0 0 0 0 0</pose>
-      </inertial>
-       
+              </inertial>
+      
       <visual name="FLdrive_visual">
         <pose>0.0429951846732238 -0.0282081764890775 -0.0767111731402816 0 0 0</pose>
         <material>
-          <ambient>0.752941176470588 0.752941176470588 1 1</ambient>
-          <diffuse>0.752941176470588 0.752941176470588 1 1</diffuse>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
         </material>
         <geometry>
           <mesh>
@@ -82,19 +81,19 @@
     <joint name="Body-FLdrive" type="revolute">
       <parent>Body</parent>
       <child>FLdrive</child>
-      <pose>-0.000480549680306634 3.46944695195361E-18 -2.6234681147902E-06 0 0 0</pose>
+      <pose>-0.000480549680306641 -1.73472347597681E-17 -2.62346811480407E-06 0 0 4.71238898038469</pose>
       <axis>
-        <xyz>0 1 0</xyz>
+        <xyz>-1 0 0</xyz>
         <dynamics>
           <damping>2</damping>
           <friction>1</friction>
         </dynamics>
-      </axis>
+              </axis>
     </joint>
     <link name="FRdrive">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>0.32226731982067 -0.353092149903436 0.045990455573376 1.5707963267949 0 1.5707963267949</pose>
+      <pose>0.30706127445237 -0.328843214809227 0.0459904540447738 1.5707963267949 0 1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
@@ -103,13 +102,13 @@
       <inertial>
         <mass>0.0814304850393228</mass>
         <pose>0 0 0 0 0 0</pose>
-      </inertial>
+              </inertial>
       
       <visual name="FRdrive_visual">
-        <pose>0.704542884256967 -0.0282081767091465 -0.0767049354983975 0 0 0</pose>
+        <pose>0.680293949162755 -0.0282081751805492 -0.0767049344500819 0 0 0</pose>
         <material>
-          <ambient>1 0.752941176470588 0.752941176470588 1</ambient>
-          <diffuse>1 0.752941176470588 0.752941176470588 1</diffuse>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
         </material>
         <geometry>
           <mesh>
@@ -122,19 +121,19 @@
     <joint name="Body-FRdrive" type="revolute">
       <parent>Body</parent>
       <child>FRdrive</child>
-      <pose>-0.000480542889371494 -6.93889390390723E-18 3.61417376945616E-06 0 0 0</pose>
+      <pose>-0.000480545103756058 3.46944695195361E-18 3.61522208874865E-06 0 6.28318530717959 4.71238898038469</pose>
       <axis>
-        <xyz>0 1 0</xyz>
+        <xyz>-1 0 0</xyz>
         <dynamics>
-          <damping>1</damping>
+          <damping>2</damping>
           <friction>1</friction>
         </dynamics>
-              </axis>
+      </axis>
     </joint>
     <link name="BLdrive">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>-0.307971385632127 0.307494456747141 0.0459904553438287 1.5707963267949 0 1.5707963267949</pose>
+      <pose>-0.30797138582623 0.307494457110633 0.0459904555733718 1.5707963267949 0 1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
@@ -143,10 +142,10 @@
       <inertial>
         <mass>0.2</mass>
         <pose>0 0 0 0 0 0</pose>
-      </inertial>
+              </inertial>
       
       <visual name="BLdrive_visual">
-        <pose>0.0439562776063889 -0.0282081764795995 0.5535337699544 0 0 0</pose>
+        <pose>0.0439562772428945 -0.0282081767091473 0.538327725828519 0 0 0</pose>
         <material>
           <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
           <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
@@ -162,19 +161,19 @@
     <joint name="Body-BLdrive" type="revolute">
       <parent>Body</parent>
       <child>BLdrive</child>
-      <pose>0.000480543252869871 3.46944695195361E-18 -3.61436787332803E-06 0 0 0</pose>
+      <pose>0.000480542889371591 0 -3.61417376959494E-06 0 2.11147054026647E-16 4.71238898038469</pose>
       <axis>
-        <xyz>0 1 0</xyz>
+        <xyz>-1 0 0</xyz>
         <dynamics>
           <damping>2</damping>
           <friction>1</friction>
         </dynamics>
-      </axis>
+              </axis>
     </joint>
     <link name="BRdrive">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>-0.307972081658941 -0.354053240777726 0.0459904553457399 1.5707963267949 0 1.5707963267949</pose>
+      <pose>-0.308882191132753 -0.329804309750062 0.0459904540467044 1.5707963267949 0 1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
@@ -183,10 +182,10 @@
       <inertial>
         <mass>0.123981363237599</mass>
         <pose>0 0 0 0 0 0</pose>
-      </inertial>
+              </inertial>
       
       <visual name="BRdrive_visual">
-        <pose>0.705503975131256 -0.0282081764815107 0.553534465981214 0 0 0</pose>
+        <pose>0.68125504410359 -0.0282081751824799 0.539238531135041 0 0 0</pose>
         <material>
           <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
           <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
@@ -202,19 +201,19 @@
     <joint name="Body-BRdrive" type="revolute">
       <parent>Body</parent>
       <child>BRdrive</child>
-      <pose>0.000480547984922919 1.04083408558608E-17 -2.91834106536104E-06 0 0 0</pose>
+      <pose>0.000480549837083788 3.46944695195361E-18 -2.91919297701337E-06 0 3.46944695195361E-16 4.71238898038469</pose>
       <axis>
-        <xyz>0 1 0</xyz>
+        <xyz>-1 0 0</xyz>
         <dynamics>
           <damping>2</damping>
           <friction>1</friction>
         </dynamics>
-      </axis>
+     </axis>
     </joint>
     <link name="FLwheel">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>0.322295875144104 0.306320756117942 0.0053636608231891 1.5707963267949 0 1.5707963267949</pose>
+      <pose>0.307089830824119 0.306320756117939 0.00536366082318432 1.5707963267949 0 1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
@@ -223,7 +222,7 @@
       <inertial>
         <mass>0.2</mass>
         <pose>0 0 0 0 0 0</pose>
-      </inertial>
+              </inertial>
       <collision name="FLwheel_collision">
         <pose>0.045129978235588 0.0124186180410403 -0.0767334908218308 0 0 0</pose>
         <geometry>
@@ -234,12 +233,19 @@
         </geometry>
         <surface>
           <contact>
-            <ode />
+            <ode>
+              <max_vel>0.1</max_vel>
+              <soft_cfm>0.8</soft_cfm>
+              <soft_erp>0.8</soft_erp>
+              <kd>25</kd>
+              <kp>1e6</kp>
+              <min_depth>0.0001</min_depth>
+            </ode>          
           </contact>
           <friction>
             <ode>
-              <mu>0</mu>
-              <mu2>0</mu2>
+              <mu>1</mu>
+              <mu2>1</mu2>
             </ode>
           </friction>
         </surface>
@@ -247,8 +253,8 @@
       <visual name="FLwheel_visual">
         <pose>0.045129978235588 0.0124186180410403 -0.0767334908218308 0 0 0</pose>
         <material>
-          <ambient>0 1 0 1</ambient>
-          <diffuse>0 1 0 1</diffuse>
+          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
         </material>
         <geometry>
           <mesh>
@@ -261,19 +267,19 @@
     <joint name="FLdrive-FLwheel" type="revolute">
       <parent>FLdrive</parent>
       <child>FLwheel</child>
-      <pose>1.84997501845308E-07 0.000109856338369411 -3.39534051441714E-05 0 0 0</pose>
+      <pose>1.84997501866124E-07 0.000109856338369409 -3.39534051441853E-05 0 0 0</pose>
       <axis>
         <xyz>1 0 0</xyz>
         <dynamics>
-          <damping>2</damping>
-          <friction>1</friction>
+          <damping>0</damping>
+          <friction>0</friction>
         </dynamics>
-       </axis>
+              </axis>
     </joint>
     <link name="FRwheel">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>0.322270828646663 -0.355226824173114 0.0053592217039994 1.5707963267949 0 1.5707963267949</pose>
+      <pose>0.307064784326682 -0.330977891293289 0.00535922170399944 1.5707963267949 0 1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
@@ -282,9 +288,9 @@
       <inertial>
         <mass>0.123981366006225</mass>
         <pose>0 0 0 0 0 0</pose>
-      </inertial>
+              </inertial>
       <collision name="FRwheel_collision">
-        <pose>0.706677558526644 0.01242305716023 -0.0767084443243902 0 0 0</pose>
+        <pose>0.682428625646816 0.0124230571602252 -0.076708444324394 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
@@ -311,7 +317,7 @@
         </surface>
       </collision>
       <visual name="FRwheel_visual">
-        <pose>0.706677558526644 0.01242305716023 -0.0767084443243902 0 0 0</pose>
+        <pose>0.682428625646816 0.0124230571602252 -0.076708444324394 0 0 0</pose>
         <material>
           <ambient>0 1 0 1</ambient>
           <diffuse>0 1 0 1</diffuse>
@@ -327,30 +333,30 @@
     <joint name="FRdrive-FRwheel" type="revolute">
       <parent>FRdrive</parent>
       <child>FRwheel</child>
-      <pose>9.46325305895002E-08 0.000114295457558363 1.25638072462492E-05 0 0 0</pose>
+      <pose>-0.0242488382472968 0.000114295457559203 1.25638072394074E-05 0 0 0</pose>
       <axis>
         <xyz>1 0 0</xyz>
         <dynamics>
           <damping>2</damping>
           <friction>1</friction>
         </dynamics>
-      </axis>
+              </axis>
     </joint>
     <link name="BLwheel">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>-0.307974894652223 0.309629131380317 0.00535922170400169 1.5707963267949 0 1.5707963267949</pose>
+      <pose>-0.307974894652223 0.30962913138031 0.00535922170399523 1.5707963267949 0 1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.002</angular>
+        <angular>0</angular>
       </velocity_decay>
       <inertial>
         <mass>0.2</mass>
         <pose>0 0 0 0 0 0</pose>
-      </inertial>
+              </inertial>
       <collision name="BLwheel_collision">
-        <pose>0.0418216029732134 0.0124230571602276 0.553537278974497 0 0 0</pose>
+        <pose>0.0418216029732173 0.0124230571602293 0.538331234654511 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
@@ -377,10 +383,10 @@
         </surface>
       </collision>
       <visual name="BLwheel_visual">
-        <pose>0.0418216029732134 0.0124230571602276 0.553537278974497 0 0 0</pose>
+        <pose>0.0418216029732173 0.0124230571602293 0.538331234654511 0 0 0</pose>
         <material>
-          <ambient>0 1 0 1</ambient>
-          <diffuse>0 1 0 1</diffuse>
+          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
+          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
         </material>
         <geometry>
           <mesh>
@@ -393,7 +399,7 @@
     <joint name="BLdrive-BLwheel" type="revolute">
       <parent>BLdrive</parent>
       <child>BLwheel</child>
-      <pose>-9.46325307490947E-08 0.00011429545755836 -1.25638072462353E-05 0 0 0</pose>
+      <pose>0.000114433137145625 0.000114295457558453 -1.3426448042142E-05 0 0 0</pose>
       <axis>
         <xyz>0.99997163453517 -5.23364362502435E-16 -0.00753194032504285</xyz>
         <dynamics>
@@ -405,18 +411,18 @@
     <link name="BRwheel">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>-0.307972498794488 -0.351918563477744 0.00535922170318334 1.5707963267949 0 1.5707963267949</pose>
+      <pose>-0.308882609120212 -0.32766963059792 0.00535922170317728 1.5707963267949 0 1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.002</angular>
+        <angular>0</angular>
       </velocity_decay>
       <inertial>
         <mass>0.123981364545113</mass>
         <pose>0 0 0 0 0 0</pose>
-      </inertial>
+              </inertial>
       <collision name="BRwheel_collision">
-        <pose>0.703369297831275 0.0124230571610459 0.553534883116761 0 0 0</pose>
+        <pose>0.679120364951447 0.0124230571610472 0.5392389491225 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
@@ -443,7 +449,7 @@
         </surface>
       </collision>
       <visual name="BRwheel_visual">
-        <pose>0.703369297831275 0.0124230571610459 0.553534883116761 0 0 0</pose>
+        <pose>0.679120364951447 0.0124230571610472 0.5392389491225 0 0 0</pose>
         <material>
           <ambient>0 1 0 1</ambient>
           <diffuse>0 1 0 1</diffuse>
@@ -459,34 +465,51 @@
     <joint name="BRdrive-BRwheel" type="revolute">
       <parent>BRdrive</parent>
       <child>BRwheel</child>
-      <pose>-7.64349050719204E-08 0.000114295458376691 -1.25639304106029E-05 0 0 0</pose>
+      <pose>-0.0241611432290119 0.000114295458376401 0.000134424216811202 0 0 0</pose>
       <axis>
         <xyz>0.999981494945493 5.471689450125E-16 -0.00608356528504267</xyz>
         <dynamics>
           <damping>1</damping>
           <friction>1</friction>
-        </dynamics>      
-      </axis>
+        </dynamics>
+              </axis>
     </joint>
     <link name="Arm">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <!--<pose>-0.0226557483404929 -0.0132738463964044 0.131523597185842 1.5707963267949 0.0 1.5707963267949</pose>
-      <pose>-0.0930 -0.0132738463964044 0.259 0.7 0.0 1.5707963267949</pose>-->
-      <pose>-0.02 -0.0132738463964044 0.1 1.7 0.0 1.5707963267949</pose>
-
+      <pose>0.0968953204761871 -0.00135483637824102 0.60410719159625 1.5707963267949 0 1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.0005</angular>
+        <angular>0</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.2</mass>
+        <mass>0.5</mass>
         <pose>0 0 0 0 0 0</pose>
       </inertial>
+       <collision name="Arm_collision">
+        <pose>0.352805570731768 -0.586324912732025 0.133461019526101 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot/meshes/Arm_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
       
       <visual name="Arm_visual">
-        <pose>0.364724580749935 -0.113741318321613 0.268218132662766 0 0 0</pose>
+        <pose>0.352805570731768 -0.586324912732025 0.133461019526101 0 0 0</pose>
         <material>
           <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
           <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
@@ -501,10 +524,9 @@
       <sensor name="ArmCamera" type="camera">
         <visualize>0</visualize>
         <always_on>1</always_on>
-        <!--
-        <pose>-1.77635683940025E-15 0.0484771306348522 0.397121878939425 0 0.0579385310088889 1.5707963267949</pose>
-        -->
-        <pose>0 0.7 0.1 0 1.5 1.5707963267949</pose>
+        
+        <!--<pose>0 0.7 0.1 0 1.5 1.5707963267949</pose>-->
+        <pose>0.0 0.29 0.0 0 1.57 1.5707963267949</pose>
         <camera name="Armcamera">
           <horizontal_fov>0.7</horizontal_fov>
           <image>
@@ -529,44 +551,39 @@
     <joint name="Body-Arm" type="revolute">
       <parent>Body</parent>
       <child>Arm</child>
-      <pose>-2.77555756156289E-16 -0.00997359718584385 -0.171948347322002 0 0 0</pose>
+      <pose>-0.0121244664399145 -0.482557191596254 -0.291499416138689 0 0 3.14159265358979</pose>
       <axis>
-        <xyz>-1 0 0</xyz>
+        <xyz>1 0 0</xyz>
         <dynamics>
           <damping>12.0</damping>
           <friction>1.0</friction>
         </dynamics>
-        <!---->
         <limit>
-          <upper>2</upper>
-          <lower>-0.9</lower>
-        </limit>
+          <upper>0.8</upper>
+          <lower>-1.1</lower>
+                  </limit>
       </axis>
     </joint>
-
-     <link name="TopShootWheels">
+    <link name="TopShootWheels">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <!--
-      <pose>0.0730466913375898 -0.0132738463964082 0.81181219652375 1.5707963267949 0 1.5707963267949</pose>-->
-      <pose>0.162 -0.01 0.762 1.5707963267949 0 1.5707963267949</pose>
-
+      <pose>0.0460576027304631 -0.00117023634675095 0.821679124275062 1.5707963267949 0 1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
         <angular>0</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.1</mass>
+        <mass>0.629822998132586</mass>
         <pose>0 0 0 0 0 0</pose>
         
       </inertial>
       <collision name="TopShootWheels_collision">
-        <pose>0.364724580749939 -0.79402991765952 0.172515692984683 0 0 0</pose>
+        <pose>0.352620970700278 -0.803896845410837 0.184298737271825 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://CompBot2/meshes/TopShootWheels_col.STL</uri>
+            <uri>model://CompBot/meshes/TopShootWheels_col.STL</uri>
           </mesh>
         </geometry>
         <surface>
@@ -589,7 +606,7 @@
         </surface>
       </collision>
       <visual name="TopShootWheels_visual">
-        <pose>0.364724580749939 -0.79402991765952 0.172515692984683 0 0 0</pose>
+        <pose>0.352620970700278 -0.803896845410837 0.184298737271825 0 0 0</pose>
         <material>
           <ambient>0 0.5 0 1</ambient>
           <diffuse>0 0.5 0 1</diffuse>
@@ -605,23 +622,20 @@
     <joint name="Arm-TopShootWheels" type="revolute">
       <parent>Arm</parent>
       <child>TopShootWheels</child>
-      <pose>0 -1.66533453693773E-15 9.99200722162641E-16 0 0 0</pose>
+      <pose>0 -1.55431223447522E-15 1.22124532708767E-15 0 6.28318530717958 3.14159265358979</pose>
       <axis>
-        <xyz>1 0 0</xyz>
+        <xyz>-1 0 0</xyz>
         <dynamics>
           <damping>2</damping>
           <friction>0</friction>
         </dynamics>
-       
+        
       </axis>
     </joint>
     <link name="BotShootWheels">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <!--
-      <pose>0.0689920469452736 -0.0108744137642757 0.710293134969516 1.5707963267949 0 1.5707963267949</pose>-->
-       <pose>0.146 -0.008 0.662 1.5707963267949 0 1.5707963267949</pose>
-
+      <pose>0.045945730855344 0.00119767281869604 0.720079185866204 1.5707963267949 0 1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
@@ -630,17 +644,17 @@
       <inertial>
         <mass>0.1</mass>
         <pose>0 0 0 0 0 0</pose>
-       
+        
       </inertial>
       <collision name="BotShootWheels_collision">
-        <pose>0.362325148117806 -0.692510856105287 0.176570337376999 0 0 0</pose>
+        <pose>0.350253061534831 -0.702296907001979 0.184410609146944 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
             <uri>model://CompBot/meshes/BotShootWheels_col.STL</uri>
           </mesh>
         </geometry>
-       <surface>
+        <surface>
           <contact>
             <ode>
               <max_vel>0.1</max_vel>
@@ -660,10 +674,10 @@
         </surface>
       </collision>
       <visual name="BotShootWheels_visual">
-        <pose>0.362325148117806 -0.692510856105287 0.176570337376999 0 0 0</pose>
+        <pose>0.350253061534831 -0.702296907001979 0.184410609146944 0 0 0</pose>
         <material>
-         <ambient>0 0.5 0 1</ambient>
-         <diffuse>0 0.5 0 1</diffuse>
+          <ambient>0 0.5 0 1</ambient>
+          <diffuse>0 0.5 0 1</diffuse>
         </material>
         <geometry>
           <mesh>
@@ -676,23 +690,20 @@
     <joint name="Arm-BotShootWheels" type="revolute">
       <parent>Arm</parent>
       <child>BotShootWheels</child>
-      <pose>0 4.44089209850063E-16 2.27595720048157E-15 0 0 0</pose>
+      <pose>0 -1.4432899320127E-15 1.19348975147204E-15 0 6.28318530717958 3.14159265358979</pose>
       <axis>
-        <xyz>-1 0 0</xyz>
+        <xyz>1 0 0</xyz>
         <dynamics>
           <damping>2</damping>
           <friction>0</friction>
         </dynamics>
-       
+        
       </axis>
     </joint>
-
     <link name="PickupTop">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <!--
-      <pose>0.351891775732708 -0.0132080074782259 0.794336950803785 1.5707963267949 0 1.5707963267949</pose>-->
-      <pose>0.435 -0.0132080074782259 0.71 1.5707963267949 0 1.5707963267949</pose>
+      <pose>0.32537080630824 -0.00108354103831498 0.815038370446375 1.5707963267949 0 1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
@@ -701,9 +712,9 @@
       <inertial>
         <mass>0.01</mass>
         <pose>0 0 0 0 0 0</pose>
-      </inertial>
+              </inertial>
       <collision name="PickupTop_collision">
-        <pose>0.364658741831756 -0.776554671939556 -0.106329391410435 0 0 0</pose>
+        <pose>0.352534275391842 -0.79725609158215 -0.0950144663059523 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
@@ -730,7 +741,7 @@
         </surface>
       </collision>
       <visual name="PickupTop_visual">
-        <pose>0.364658741831756 -0.776554671939556 -0.106329391410435 0 0 0</pose>
+        <pose>0.352534275391842 -0.79725609158215 -0.0950144663059523 0 0 0</pose>
         <material>
           <ambient>0 1 0 1</ambient>
           <diffuse>0 1 0 1</diffuse>
@@ -738,7 +749,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://CompBot2/meshes/PickupTop.STL</uri>
+            <uri>model://CompBot/meshes/PickupTop.STL</uri>
           </mesh>
         </geometry>
       </visual>
@@ -746,22 +757,20 @@
     <joint name="Arm-PickupTop" type="revolute">
       <parent>Arm</parent>
       <child>PickupTop</child>
-      <pose>1.66533453693773E-16 -1.70876150531463E-05 6.80868523425526E-06 0 0 0</pose>
+      <pose>0 -1.68105137269281E-05 7.46668675344342E-06 0 6.28318530717958 3.14159265358979</pose>
       <axis>
-        <xyz>1 0 0</xyz>
+        <xyz>-1 0 0</xyz>
         <dynamics>
           <damping>1</damping>
           <friction>0</friction>
         </dynamics>
-       
+        
       </axis>
     </joint>
     <link name="PickupBot">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <!--
-      <pose>0.348354063217224 -0.0136822219235139 0.705472250955676 1.5707963267949 0 1.5707963267949</pose>-->
-      <pose>0.42 -0.0136822219235139 0.62 1.5707963267949 0 1.5707963267949</pose>
+      <pose>0.325284319821112 -0.00157859770445706 0.726103645441941 1.5707963267949 0 1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
@@ -770,16 +779,16 @@
       <inertial>
         <mass>0.01</mass>
         <pose>0 0 0 0 0 0</pose>
-      </inertial>
+              </inertial>
       <collision name="PickupBot_collision">
-        <pose>0.365132956277044 -0.687689972091446 -0.102791678894951 0 0 0</pose>
+        <pose>0.353029332057984 -0.708321366577716 -0.0949279798188243 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
             <uri>model://CompBot/meshes/PickupBot_col.STL</uri>
           </mesh>
         </geometry>
-         <surface>
+        <surface>
           <contact>
             <ode>
               <max_vel>0.1</max_vel>
@@ -799,7 +808,7 @@
         </surface>
       </collision>
       <visual name="PickupBot_visual">
-        <pose>0.365132956277044 -0.687689972091446 -0.102791678894951 0 0 0</pose>
+        <pose>0.353029332057984 -0.708321366577716 -0.0949279798188243 0 0 0</pose>
         <material>
           <ambient>0 1 0 1</ambient>
           <diffuse>0 1 0 1</diffuse>
@@ -807,7 +816,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://CompBot2/meshes/PickupBot.STL</uri>
+            <uri>model://CompBot/meshes/PickupBot.STL</uri>
           </mesh>
         </geometry>
       </visual>
@@ -815,22 +824,20 @@
     <joint name="Arm-PickupBot" type="revolute">
       <parent>Arm</parent>
       <child>PickupBot</child>
-      <pose>1.11022302462516E-16 1.84333731033659E-05 -3.29264255684303E-06 0 0 0</pose>
+      <pose>5.55111512312578E-17 1.79683829570898E-05 -3.93471684780045E-06 0 6.28318530717958 3.14159265358979</pose>
       <axis>
-        <xyz>-1 0 0</xyz>
+        <xyz>1 0 0</xyz>
         <dynamics>
           <damping>1</damping>
           <friction>0</friction>
         </dynamics>
-       
+        
       </axis>
     </joint>
     <link name="MidRollersTop">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <!--
-      <pose>0.209984137503508 -0.00669565982451603 0.799998170050727 1.5707963267949 0 1.5707963267949</pose>-->
-      <pose>0.296 -0.00669565982451603 0.734 1.5707963267949 0 1.5707963267949</pose>
+      <pose>0.18335058650393 0.00523056122855137 0.81518797077711 1.5707963267949 0 1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
@@ -839,16 +846,16 @@
       <inertial>
         <mass>0.01</mass>
         <pose>0 0 0 0 0 0</pose>
-      </inertial>
+              </inertial>
       <collision name="MidRollersTop_collision">
-        <pose>0.358146394178046 -0.782215891186498 0.0355782468187643 0 0 0</pose>
+        <pose>0.346220173124976 -0.797405691912885 0.0470057534983583 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
             <uri>model://CompBot/meshes/MidRollersTop_col.STL</uri>
           </mesh>
         </geometry>
-         <surface>
+        <surface>
           <contact>
             <ode>
               <max_vel>0.1</max_vel>
@@ -868,9 +875,9 @@
         </surface>
       </collision>
       <visual name="MidRollersTop_visual">
-        <pose>0.358146394178046 -0.782215891186498 0.0355782468187643 0 0 0</pose>
+        <pose>0.346220173124976 -0.797405691912885 0.0470057534983583 0 0 0</pose>
         <material>
-           <ambient>0 0.5 0.2 1</ambient>
+          <ambient>0 0.5 0.2 1</ambient>
           <diffuse>0 0.5 0.2 1</diffuse>
         </material>
         <geometry>
@@ -884,22 +891,20 @@
     <joint name="Arm-MidRollersTop" type="revolute">
       <parent>Arm</parent>
       <child>MidRollersTop</child>
-      <pose>2.77555756156289E-16 -1.06238165595851E-05 8.57101320122372E-06 0 0 0</pose>
+      <pose>0 -1.00335475828883E-05 8.75890554602465E-06 0 6.28318530717958 3.14159265358979</pose>
       <axis>
-        <xyz>1 0 0</xyz>
+        <xyz>-1 0 0</xyz>
         <dynamics>
           <damping>1</damping>
           <friction>0</friction>
         </dynamics>
-      
+        
       </axis>
     </joint>
     <link name="MidRollersBot">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <!--
-      <pose>0.206438983708922 -0.0110539823268657 0.711170671377556 1.5707963267949 0 1.5707963267949</pose>-->
-      <pose>0.28 -0.0110539823268657 0.646 1.5707963267949 0 1.5707963267949</pose>
+      <pose>0.183255228506357 0.000978049615793564 0.726289763540079 1.5707963267949 0 1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
@@ -908,16 +913,16 @@
       <inertial>
         <mass>0.01</mass>
         <pose>0 0 0 0 0 0</pose>
-      </inertial>
+              </inertial>
       <collision name="MidRollersBot_collision">
-        <pose>0.362504716680396 -0.693388392513327 0.0391234006133506 0 0 0</pose>
+        <pose>0.350472684737734 -0.708507484675855 0.0471011114959307 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://CompBot2/meshes/MidRollersBot_col.STL</uri>
+            <uri>model://CompBot/meshes/MidRollersBot_col.STL</uri>
           </mesh>
         </geometry>
-         <surface>
+        <surface>
           <contact>
             <ode>
               <max_vel>0.1</max_vel>
@@ -937,7 +942,7 @@
         </surface>
       </collision>
       <visual name="MidRollersBot_visual">
-        <pose>0.362504716680396 -0.693388392513327 0.0391234006133506 0 0 0</pose>
+        <pose>0.350472684737734 -0.708507484675855 0.0471011114959307 0 0 0</pose>
         <material>
           <ambient>0 0.5 0.2 1</ambient>
           <diffuse>0 0.5 0.2 1</diffuse>
@@ -945,7 +950,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://CompBot2/meshes/MidRollersBot.STL</uri>
+            <uri>model://CompBot/meshes/MidRollersBot.STL</uri>
           </mesh>
         </geometry>
       </visual>
@@ -953,14 +958,14 @@
     <joint name="Arm-MidRollersBot" type="revolute">
       <parent>Arm</parent>
       <child>MidRollersBot</child>
-      <pose>-1.11022302462516E-16 -1.23040033411792E-05 5.91096451127426E-06 0 0 0</pose>
+      <pose>1.11022302462516E-16 -1.17724183026358E-05 6.22901238853807E-06 0 6.28318530717958 3.14159265358979</pose>
       <axis>
-        <xyz>-1 0 9.01599997908948E-15</xyz>
+        <xyz>1 0 0</xyz>
         <dynamics>
           <damping>1</damping>
           <friction>0</friction>
         </dynamics>
-       
+        
       </axis>
     </joint>
 
@@ -1114,7 +1119,7 @@
       <joint>Body-Arm</joint>
       <topic>~/gazebo/frc/simulator/switch/2</topic>
       <units>radians</units>
-      <low>-0.82</low>
+      <low>-0.9</low>
       <high>2</high>
     </plugin>
   </model>

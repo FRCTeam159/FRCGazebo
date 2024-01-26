@@ -28,7 +28,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain m_drivetrain = new Drivetrain();
   private final Arm m_arm = new Arm();
-  private final Autonomous m_autonomous = new Autonomous(m_drivetrain);
+  private final Autonomous m_autonomous = new Autonomous(m_drivetrain,m_arm);
   private final XboxController m_controller = new XboxController(0);
   private final TagDetector m_detector= new TagDetector(m_drivetrain);
   PlotServer m_plotsub=new PlotServer();

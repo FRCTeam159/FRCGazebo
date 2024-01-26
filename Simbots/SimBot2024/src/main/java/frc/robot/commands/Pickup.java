@@ -5,19 +5,21 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 
 public class Pickup extends CommandBase {
   private final Timer m_timer = new Timer();
   private final Drivetrain m_drive;
+  private final Arm m_arm;
   double timeout;
   boolean resetting=false;
   double starttm;
 
-  public Pickup(Drivetrain drive, double tm) {
+  public Pickup(Drivetrain drive, Arm arm, double tm) {
     m_drive=drive;
+    m_arm=arm;
     timeout=tm;
     m_timer.start();
     
@@ -29,17 +31,13 @@ public class Pickup extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //m_drive.reset();
-   // m_drive.resetPose();
+ 
     m_timer.reset();
     starttm=0;//m_drive.getClockTime();
     //m_drive.resetPose();
     System.out.println("Pickup.init");
-   //SmartDashboard.putBoolean("Gazebo", false);
-    //SmartDashboard.putBoolean("Reset", true);
-    // SmartDashboard.putBoolean("Gazebo", false);
-    // SmartDashboard.putBoolean("Reset", true);
-   //m_drive.disable();
+    m_arm.setPickupOn();
+  
     m_drive.resetWheels();
     resetting=true;
   }
