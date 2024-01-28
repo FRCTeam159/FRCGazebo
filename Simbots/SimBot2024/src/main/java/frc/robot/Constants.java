@@ -33,8 +33,8 @@ public interface Constants {
 
     public static final int ARM_LIMIT = 2;
 
-    public static double PICKUP_ANGLE=-5;
-    public static double SPEAKER_SHOOT_ANGLE=15;
+    public static double PICKUP_ANGLE=-10;
+    public static double SPEAKER_SHOOT_ANGLE=8;
     public static double AMP_SHOOT_ANGLE=95;
   
 }

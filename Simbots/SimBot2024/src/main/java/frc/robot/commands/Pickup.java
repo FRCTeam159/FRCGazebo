@@ -6,10 +6,11 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 
-public class Pickup extends CommandBase {
+public class Pickup extends CommandBase implements Constants{
   private final Timer m_timer = new Timer();
   private final Drivetrain m_drive;
   private final Arm m_arm;
@@ -39,6 +40,7 @@ public class Pickup extends CommandBase {
     m_arm.setPickupOn();
   
     m_drive.resetWheels();
+    Arm.status="Pickup";
     resetting=true;
   }
 
@@ -48,15 +50,8 @@ public class Pickup extends CommandBase {
     if(!m_drive.wheelsReset()){
       m_drive.allignWheels();
     }
-    //m_drive.disable();
-
-    //m_drive.reset();
-    //m_drive.resetPose();
-   //if(m_timer.get()>1 && !resetting){
-      //m_drive.resetPose();
-   //   System.out.println("Pickup.started");
-     // resetting=true;
-   // }
+    // m_drive.drive(0,0,0,false);
+   
   }
 
   // Called once the command ends or is interrupted.
@@ -64,6 +59,7 @@ public class Pickup extends CommandBase {
   public void end(boolean interrupted) {
     //m_drive.disable();
     m_drive.resetPose();
+    m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE);
    // m_drive.driveForward(0.1);
     //SmartDashboard.putBoolean("Gazebo", true);
 
@@ -79,6 +75,10 @@ public class Pickup extends CommandBase {
     }
     if(m_drive.wheelsReset()){
       System.out.println("Pickup - wheels alligned at:"+(tm-starttm>timeout));
+      return true;
+    }
+    if(m_arm.isNoteCaptured()){
+      System.out.println("Pickup - note captured");
       return true;
     }
     //return m_timer.get()>=timeout;

@@ -31,6 +31,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import objects.PlotServer;
+import frc.robot.objects.SwerveModule;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Drivetrain;
 import utils.PathData;
@@ -49,11 +51,11 @@ public class DrivePath extends CommandBase {
   public boolean holotest=true;
   private PPHolonomicDriveController m_ppcontroller=new PPHolonomicDriveController(
       new PIDController(1, 0, 0), new PIDController(1, 0, 0), new PIDController(2, 0, 0));
-  TrapezoidProfile.Constraints c=new TrapezoidProfile.Constraints(0.5*6.3, 0.5*3.15);
+  TrapezoidProfile.Constraints c=new TrapezoidProfile.Constraints(0.25*6.3, 0.25*3.15);
 
   private ProfiledPIDController ppc=new ProfiledPIDController(4, 0, 0,c);
   
-  private HolonomicDriveController m_hcontroller=new HolonomicDriveController(new PIDController(1, 0, 0), new PIDController(1, 0, 0),ppc);
+  private HolonomicDriveController m_hcontroller=new HolonomicDriveController(new PIDController(0.5, 0, 0), new PIDController(0.5, 0, 0),ppc);
   
   private Timer m_timer = new Timer();
   private Drivetrain m_drive;
@@ -138,12 +140,18 @@ public class DrivePath extends CommandBase {
    //m_drive.reset();
     m_timer.reset();
     m_timer.start();
+
+  //  if(xPath>0)
+  //     SwerveModule.optimize=false;
+  //   else
+  //     SwerveModule.optimize=true;
     
     pathdata.clear();
     m_drive.startAuto();
     elapsed=0;
     m_drive.resetPose();
     m_drive.enable();
+    Arm.status="DrivePath";
   
     System.out.println("runtime:" + runtime + " states:" + states + " intervals:" + intervals);
   }

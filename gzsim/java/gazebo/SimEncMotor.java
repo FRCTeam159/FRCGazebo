@@ -10,7 +10,7 @@ public class SimEncMotor {
     boolean enabled=false;
     double target;
     int id;
-    final PIDController pid=new PIDController(5,0.0,0.0);
+    final PIDController pid=new PIDController(5,0.1,0.0);
     public SimEncMotor(int id){
         motor=new SimMotor(id);
         encoder=new SimEncoder(id);
@@ -63,7 +63,7 @@ public class SimEncMotor {
         double a=encoder.getAbsPosition();
         double err=10*pid.calculate(a);
         //if(id==2)
-        //    System.out.println(id+" a:"+a+" err:"+err);
+         //   System.out.println(id+" a:"+a+" err:"+err);
         motor.setAbs(err);
     }
     public boolean atTarget(){

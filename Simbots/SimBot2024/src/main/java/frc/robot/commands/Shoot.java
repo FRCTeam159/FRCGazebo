@@ -9,18 +9,23 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Drivetrain;
 
 public class Shoot extends CommandBase implements Constants{
   /** Creates a new Shoot. 
    * @param m_arm */
   Arm m_arm;
+  Drivetrain m_drive;
   boolean shooter_ready=false;
   boolean shooting=false;
   Timer m_timer=new Timer();
-  public Shoot(Arm arm) {
+  boolean ok2shoot=false;
+  public Shoot(Drivetrain drive, Arm arm) {
     m_arm=arm;
+    m_drive=drive;
     addRequirements(arm);
     m_timer.start();
+    ok2shoot=m_arm.isNoteCaptured();
   }
 
   // Called when the command is initially scheduled.
@@ -28,6 +33,9 @@ public class Shoot extends CommandBase implements Constants{
   public void initialize() {
     m_timer.reset();
     m_arm.setShooterOn();
+    m_arm.setPickupOff();
+    m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE);
+    //m_drive.disable();
    
   }
 
@@ -39,7 +47,9 @@ public class Shoot extends CommandBase implements Constants{
       m_arm.setPusherOn();
       m_timer.reset();
       shooting=true;
+      Arm.status="Shooting";
     }
+    m_drive.drive(0,0,0,false);
   }
 
   // Called once the command ends or is interrupted.
@@ -48,12 +58,18 @@ public class Shoot extends CommandBase implements Constants{
     m_arm.setShooterOFf();
     m_arm.setPusherOFf();
     m_arm.setTargetAngle(PICKUP_ANGLE);
+    m_drive.enable();
+    Arm.status="End";
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(shooting && m_timer.get()>1 && !m_arm.isNoteCaptured())
+      return true;
     if(shooting && m_timer.get()>5)
+      return true;
+    if(!ok2shoot)
       return true;
     return false;
   }

@@ -49,6 +49,9 @@ public class TargetMgr {
     static public void init(){ 
         setFieldTargets();  
     }
+    public static String getStartString(){
+        return aStrings[alliance]+"-"+pStrings[position];
+    }
     public static boolean FRCfield(){
         return true;
     }
@@ -94,7 +97,7 @@ public class TargetMgr {
         alliance = UNKNOWN;
         if(tags==null)
             return;
-       // start_pose_set=true;
+        start_pose_set=true;
         if (tags.length > 0) {
             AprilTag closest = tags[0];
             double dp = 0;

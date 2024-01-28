@@ -12,6 +12,7 @@ import frc.robot.Constants;
 import gazebo.SimEncMotor;
 import gazebo.SimMotor;
 import gazebo.SimSwitch;
+import gazebo.SimContact;
 
 public class Arm extends SubsystemBase implements Constants{
 
@@ -20,8 +21,10 @@ public class Arm extends SubsystemBase implements Constants{
   private SimEncMotor shooter=new SimEncMotor(SHOOTER);
   private SimMotor pickup=new SimMotor(PICKUP);
   private SimMotor pusher=new SimMotor(PUSHER);
-  SimSwitch armLimit = new SimSwitch(ARM_LIMIT);
-  private boolean initialized=false;
+  private SimSwitch armLimit = new SimSwitch(ARM_LIMIT);
+  private SimContact noteContact= new SimContact(0);
+  private static boolean at_starting_position=false;
+  private static boolean initialized=false;
   static int cnt=0;
   static public double SHOOT_POWER=10;
   static public double PICKUP_POWER=0.5;
@@ -33,8 +36,9 @@ public class Arm extends SubsystemBase implements Constants{
   boolean shooter_on=false;
   boolean pickup_on=false; 
   boolean pusher_on=false;
+  public static String status;
 
-  final PIDController pid=new PIDController(0.1,0.00,0.00);
+  final PIDController pid=new PIDController(0.2,0.00,0.00);
 
   double target_angle=0.0;
   public Arm() {
@@ -46,16 +50,21 @@ public class Arm extends SubsystemBase implements Constants{
     pickup.enable();
     pusher.enable();
     armLimit.enable();
+    noteContact.enable();
+    pid.setTolerance(1,1);
   }
 
   public void reset(){
     shooter_on=false;
     pickup_on=false;
     pusher_on=false;
+    init();
     //target_angle=SPEAKER_SHOOT_ANGLE;
-
   }
 
+  public boolean isNoteCaptured() {
+    return noteContact.inContact();
+  }
   public void setShooterOn(){
     shooter_on=true;
   }
@@ -74,7 +83,7 @@ public class Arm extends SubsystemBase implements Constants{
   public void setPickupOn(){
     pickup_on=true;
   }
-  public void setPickupOFf(){
+  public void setPickupOff(){
     pickup_on=false;
   }
   public void togglePusher(){
@@ -97,7 +106,7 @@ public class Arm extends SubsystemBase implements Constants{
  
   public void stepUp(double v){
     if(!atUpperLimit())
-    target_angle += v * MOVE_RATE;
+      target_angle += v * MOVE_RATE;
   }
   public void stepDown(double v){
     if(!atLowerLimit())
@@ -118,9 +127,20 @@ public class Arm extends SubsystemBase implements Constants{
   public boolean atTargetSpeed(){
     return  getShooterSpeed()>=TARGET_SHOOTER_SPEED?true:false;
   }
+  public boolean atTargetAngle(){
+    return pid.atSetpoint();
+  }
+  public static boolean atStartingPosition(){
+    return at_starting_position;
+
+  }
+  public static void init(){
+    initialized=false;
+    at_starting_position=false;
+  }
   @Override
   public void periodic() {
-     double angle = getAngle();
+    double angle = getAngle();
 
     if (!initialized) {
        motor.set(-1);
@@ -130,14 +150,18 @@ public class Arm extends SubsystemBase implements Constants{
         motor.reset();
         target_angle = SPEAKER_SHOOT_ANGLE;
         pid.setSetpoint(target_angle);
+        status="Initializing .. ";
       }
     }
     else{
       pid.setSetpoint(target_angle);
       double corr = pid.calculate(angle);
-      //double err=angle-target_angle;
-      //if (cnt % 100 == 0) 
-      //  System.out.println("target:"+target_angle+" angle:" + angle +" err:"+err+" corr:" + corr);
+      if(!at_starting_position){
+        if(atTargetAngle()){
+          at_starting_position=true;
+          status="Ready";
+        }
+      }
       
       motor.set(corr);
       if(shooter_on)
@@ -155,9 +179,11 @@ public class Arm extends SubsystemBase implements Constants{
     }
     cnt++;
     SmartDashboard.putNumber("Arm", angle);
-    SmartDashboard.putBoolean("Shooter", shooter_on);
+    SmartDashboard.putBoolean("Shooting", shooter_on);
     SmartDashboard.putBoolean("Pickup", pickup_on);
-    SmartDashboard.putBoolean("Pusher", pusher_on);
-    SmartDashboard.putNumber("ShooterSpeed", shooter.getRate());
+    SmartDashboard.putBoolean("Pushing", pusher_on);
+    SmartDashboard.putBoolean("Note", isNoteCaptured());
+    SmartDashboard.putNumber("Shooter", shooter.getRate());
+    SmartDashboard.putString("Status", status);
   }
 }

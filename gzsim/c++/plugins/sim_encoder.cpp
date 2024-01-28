@@ -10,6 +10,8 @@ GZ_REGISTER_MODEL_PLUGIN(Encoder)
 
 #define ROTATIONS 0.5/M_PI;
 
+//#define DEBUG
+
 void Encoder::Load(gazebo::physics::ModelPtr model, sdf::ElementPtr sdf) {
   this->model = model;
 
@@ -40,8 +42,9 @@ void Encoder::Load(gazebo::physics::ModelPtr model, sdf::ElementPtr sdf) {
 
   if (sdf->HasElement("multiplier"))
     multiplier = sdf->Get<double>("multiplier");
-
+  #ifdef DEBUG
   std::cout << "Initializing sim_encoder: " << topic << " joint=" << joint->GetName()<< multiplier << std::endl;
+  #endif
   
   // Connect to Gazebo transport for messaging
 
@@ -70,7 +73,9 @@ void Encoder::Update(const gazebo::common::UpdateInfo& info) {
 
 void Encoder::Callback(ConstGzStringPtr  & msg) {
   std::string command = msg->data();
+  #ifdef DEBUG
   std::cout << "Encoder plugin received command:" << command << std::endl;
+  #endif
   /*
   if (command == "reset") {
     zero = GetAngle();

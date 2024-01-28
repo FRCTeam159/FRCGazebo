@@ -175,14 +175,14 @@ public class TagDetector extends Thread {
         SmartDashboard.putString("Detect", s);
             
         if (!TargetMgr.tagsPresent() || tags==null) {
-          TargetMgr.setStartPose(tags);
+          //TargetMgr.setStartPose(tags);
           ouputStream.putFrame(mat);
           continue;
         }
         target_tag = null;
 
         Arrays.sort(tags, new SortbyDistance());
-        if(!TargetMgr.startPoseSet())
+        if(Arm.atStartingPosition() && !TargetMgr.startPoseSet())
           TargetMgr.setStartPose(tags);
         target_tag=tags[0];
       

@@ -30,24 +30,18 @@ public class Autonomous extends SequentialCommandGroup  {
   static double d2r=2*Math.PI/360;
   static double i2m=0.0254;
 
-  static double xp=0.9;
-  static double yp=-1.3;
-  static double rp=-60;
-
+  
   static double XF=0.9;
-  static double YF=-1.2;
+  static double YF=-1.3;
   static double RF=-60;
 
-  static double YR=1.3;
-  static double XR=-1;
+  static double YR=-0.5;
+  static double XR=-1.3;
   static double RR=60;
 
-  // static double XR=-1;
-  // static double XF=1.5;
-  // static double YR=1.3;
-  // static double YF=0.6;
-  // static double R=60;
-
+  static double xp=XF;
+  static double yp=YF;
+  static double rp=RF;
 
   static boolean test_coord_rotation=false;
 
@@ -92,7 +86,6 @@ public class Autonomous extends SequentialCommandGroup  {
     // 2) use field geometry of robot starting position and closest note to constuct paths
     // 3) use pathplanner paths ?
   
-    
     switch (selected_path) {
       case CALIBRATE:
         return new SequentialCommandGroup(new Calibrate(m_drive));
@@ -115,7 +108,8 @@ public class Autonomous extends SequentialCommandGroup  {
         double xf=-XR;
         double yf=0;
         double rf=0;
-        // for a simple curved path blue-outside=red-inside and blue-inside=red-outside
+        System.out.println(TargetMgr.getStartString());
+        //for a simple curved path blue-outside=red-inside and blue-inside=red-outside
         if((alliance==TargetMgr.RED && position==TargetMgr.OUTSIDE) ||
            (alliance==TargetMgr.BLUE && position==TargetMgr.INSIDE)){
             xf=XF;
@@ -124,13 +118,10 @@ public class Autonomous extends SequentialCommandGroup  {
             xr=XR;
             yr=-YR;
             rr=-RR;
-            // yr=-YR;
-            // xf=XF;
-            // yf=-YF;
-            // rr=RR;
+
         }
         if((alliance==TargetMgr.BLUE && position==TargetMgr.OUTSIDE) ||
-           (alliance==TargetMgr.RED && position==TargetMgr.INSIDE)){
+          (alliance==TargetMgr.RED && position==TargetMgr.INSIDE)){
             xf=XF;
             yf=YF;
             rf=RF;
@@ -138,7 +129,7 @@ public class Autonomous extends SequentialCommandGroup  {
             yr=YR;
             rr=RR;
         }
-        rf=-rr;
+        //rf=-rr;
         if(test_coord_rotation){
           double xrot=xr;
           double yrot=yr;
@@ -152,10 +143,11 @@ public class Autonomous extends SequentialCommandGroup  {
         }
       
         return new SequentialCommandGroup(
-              new Shoot(m_arm),
+              new Shoot(m_drive,m_arm),
               new DrivePath(m_drive, opt, xf, yf, rf),
-              new Pickup(m_drive, m_arm, 2)//,
-              //new DrivePath(m_drive, opt, xr,yr,rr)
+              new Pickup(m_drive, m_arm, 4),
+              new DrivePath(m_drive, opt, xr,yr,rr),
+              new Shoot(m_drive,m_arm)
         );
       }
     }

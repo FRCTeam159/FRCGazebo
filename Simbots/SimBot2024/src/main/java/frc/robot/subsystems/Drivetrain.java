@@ -319,7 +319,7 @@ public class Drivetrain extends SubsystemBase implements Constants {
 			simstarted=true;
 		}
 		if(robot_disabled)
-			drive(0.0,0.0,0,true); // stay in place
+			drive(0.0,0.0,0,false); // stay in place
 		updateOdometry();
 		log();
 	}

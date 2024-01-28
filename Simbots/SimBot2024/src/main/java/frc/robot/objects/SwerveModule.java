@@ -51,6 +51,7 @@ public class SwerveModule {
   boolean m_enabled=false;
 
   static boolean debug=false;
+  static public boolean optimize=true;
   /**
    * Constructs a SwerveModule with a drive motor, turning motor, drive encoder and turning encoder.
    * @param i
@@ -131,8 +132,14 @@ public class SwerveModule {
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
     //SwerveModuleState state = desiredState;  // don't optimize
-    SwerveModuleState state =SwerveModuleState.optimize(desiredState, getRotation2d());
-
+    SwerveModuleState state=desiredState;
+    if(optimize){
+      SwerveModuleState newstate =SwerveModuleState.optimize(desiredState, getRotation2d());
+      //if(newstate.angle.getDegrees()!=state.angle.getDegrees())
+     //   System.out.println(name+"-optimized "+state.angle.getDegrees()+":"+newstate.angle.getDegrees());
+      state=newstate;
+    }
+   
     double velocity=getVelocity();
     
     // Calculate the drive output from the drive PID controller.

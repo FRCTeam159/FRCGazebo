@@ -1,14 +1,20 @@
 #include "GzEncoder.h"
 
+//#define DEBUG
+
 std::string GzEncoder::topic_base= "~/gazebo/frc/simulator/encoder/";
 GzEncoder::GzEncoder(int i,std::shared_ptr<nt::NetworkTable> t) : chnl(i), 
     GzNode(topic_base+std::to_string(i),t)
 {
+    #ifdef DEBUG
     std::cout<<"GzEncoder::GzEncoder("<<i<<") gztopic:"<<gz_topic<<std::endl;
+    #endif
     x=y=0;
 }
 GzEncoder::~GzEncoder(){
+    #ifdef DEBUG
     std::cout<<"GzEncoder::~GzEncoder("<<chnl<<")"<<std::endl;
+    #endif
 }
 
 void GzEncoder::callback(const ConstVector3dPtr &msg){
@@ -29,11 +35,12 @@ bool GzEncoder::connect(){
     
     pub = gz_node->Advertise<gazebo::msgs::GzString>(gz_topic+"/control");
     success=pub->WaitForConnection(gazebo::common::Time(2, 0));
-
+#ifdef DEBUG
     if(!success)
         std::cerr << "GzEncoder"<<chnl<<" command connection failed"<< std::endl;
     else
         std::cerr << "GzEncoder"<<chnl<<" command connection established"<< std::endl;
+ #endif
     status=success?CONNECTED:0;
     return success;
 }
