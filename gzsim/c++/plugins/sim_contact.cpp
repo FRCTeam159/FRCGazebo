@@ -53,14 +53,18 @@ gazebo::msgs::Vector3d msg;
 
   if(have_contact){
     if(!contact_made){
+#ifdef DEBUG
         std::cout << "contact made"<<std::endl;
+#endif
         new_state=true;
         contact_made=true;
     }
     contact_made=true;
   }else{
       if(contact_made){
+#ifdef DEBUG
           std::cout << "contact lost"<<std::endl;
+#endif          
           new_state=true;
           contact_made=false;
       }

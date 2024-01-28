@@ -60,6 +60,7 @@ public class Pickup extends CommandBase implements Constants{
     //m_drive.disable();
     m_drive.resetPose();
     m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE);
+    m_arm.setPickupOff();
    // m_drive.driveForward(0.1);
     //SmartDashboard.putBoolean("Gazebo", true);
 
