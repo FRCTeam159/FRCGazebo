@@ -49,7 +49,7 @@
 		<width>72</width>
 	</widget>
 	<widget field="Use Tags" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="160" y="15"/>
+		<location x="169" y="16"/>
 	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
 		<location x="-16" y="144"/>
@@ -86,7 +86,7 @@
 		<width>83</width>
 	</widget>
 	<widget field="Field Oriented" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="228" y="15"/>
+		<location x="242" y="15"/>
 	</widget>
 	<widget field="SendableChooser[2]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
 		<location x="407" y="-5"/>

@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sdf version="1.5">
   <model name="TapeLines">
-    <pose>0 0 0 0 0 0</pose>
+    <pose>0 0 -0.01127 0 0 0</pose>
    
-    <link name="NewLink">
+    <link name="Lines">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>5.48960124421663 3.76133635863295 0.00124228152536165 1.5707963267949 0 0</pose>
+      <pose>0.0281578984571149 -0.684850776536286 9.02650062517257E-05 -1.5707963267949 0 -3.14159265358979</pose>
       <must_be_base_link>1</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
         <angular>0</angular>
       </velocity_decay>
       <inertial>
-        <mass>5.52469766769733</mass>
+        <mass>12.1855060682561</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
-          <ixx>13.0705538995519</ixx>
-          <ixy>0.000715105604197241</ixy>
-          <ixz>2.95998983447857</ixz>
-          <iyy>83.935524760579</iyy>
-          <iyz>0.000678675429991097</iyz>
-          <izz>70.8649735222867</izz>
+          <ixx>82.7995865044618</ixx>
+          <ixy>0.000186908513684621</ixy>
+          <ixz>0.263951147068778</ixz>
+          <iyy>720.319001769873</iyy>
+          <iyz>0.00369345068443424</iyz>
+          <izz>637.519417897121</izz>
         </inertia>
       </inertial>
       <!--
-      <collision name="NewLink_collision">
-        <pose>0.213143255802087 -0.00601748152550113 0.0811707622869506 0 0 0</pose>
+      <collision name="Lines_collision">
+        <pose>0.0281578984571148 -0.00595493499374843 -0.684851012914707 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://TapeLines/meshes/NewLink_col.STL</uri>
+            <uri>model://TapeLines/meshes/Lines_col.STL</uri>
           </mesh>
         </geometry>
         <surface>
@@ -46,23 +46,23 @@
         </surface>
       </collision>
       -->
-      <visual name="NewLink_visual">
-        <pose>0.213143255802087 -0.00601748152550113 0.0811707622869506 0 0 0</pose>
+      <visual name="Lines_visual">
+        <pose>0.0281578984571148 -0.00595493499374843 -0.684851012914707 0 0 0</pose>
         <material>
-          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
-          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
         </material>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://TapeLines/meshes/NewLink.STL</uri>
+            <uri>model://TapeLines/meshes/Lines.STL</uri>
           </mesh>
         </geometry>
       </visual>
     </link>
     <joint name="tape-World" type="fixed">
       <parent>world</parent>
-      <child>NewLink</child>
+      <child>Lines</child>
    </joint>
   </model>
 </sdf>
