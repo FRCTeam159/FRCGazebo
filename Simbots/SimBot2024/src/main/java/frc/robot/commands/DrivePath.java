@@ -209,7 +209,7 @@ public class DrivePath extends CommandBase {
   // =================================================
   @Override
   public boolean isFinished() {
-    return (elapsed >= 1.001 * runtime || m_trajectory == null)||m_drive.disabled();
+    return (elapsed >= 1.001 * runtime || m_trajectory == null)||m_drive.disabled()||!Autonomous.ok2run;
   }
 
   // *********************** trajectory functions *******************/

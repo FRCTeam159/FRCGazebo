@@ -31,12 +31,12 @@ public class Autonomous extends SequentialCommandGroup  {
   static double i2m=0.0254;
 
   
-  static double XF=0.9;
-  static double YF=-1.3;
+  static double XF=0.95;
+  static double YF=-1.4;
   static double RF=-60;
 
   static double YR=-0.5;
-  static double XR=-1.3;
+  static double XR=-1.45;
   static double RR=60;
 
   static double xp=XF;
@@ -48,6 +48,7 @@ public class Autonomous extends SequentialCommandGroup  {
   public int selected_path=PROGRAM;
 
   public static boolean debug_commands=false;
+  public static boolean ok2run=false;
 
   SendableChooser<Integer> m_path_chooser = new SendableChooser<Integer>();
   /** Creates a new AutoCommands. */
@@ -118,7 +119,6 @@ public class Autonomous extends SequentialCommandGroup  {
             xr=XR;
             yr=-YR;
             rr=-RR;
-
         }
         if((alliance==TargetMgr.BLUE && position==TargetMgr.OUTSIDE) ||
           (alliance==TargetMgr.RED && position==TargetMgr.INSIDE)){
@@ -145,7 +145,7 @@ public class Autonomous extends SequentialCommandGroup  {
         return new SequentialCommandGroup(
               new Shoot(m_drive,m_arm),
               new DrivePath(m_drive, opt, xf, yf, rf),
-              new Pickup(m_drive, m_arm, 4),
+              new Pickup(m_drive, m_arm, 6),
               new DrivePath(m_drive, opt, xr,yr,rr),
               new Shoot(m_drive,m_arm)
         );

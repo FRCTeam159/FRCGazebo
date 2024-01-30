@@ -15,6 +15,7 @@ import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.TagDetector;
+import frc.robot.subsystems.TargetMgr;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -68,12 +69,13 @@ public class RobotContainer {
   public void autonomousInit(){
     m_drivetrain.setRobotDisabled(false);
     //m_drivetrain.setFieldOriented(false);
+    Autonomous.ok2run=true;
     m_drivetrain.startAuto();
     Arm.status="Auto";
   }
   public void disabledInit(){
     m_drivetrain.setRobotDisabled(true);
-    m_drivetrain.disable();
+    //m_drivetrain.disable();
     m_drivetrain.endAuto();
     Arm.status="Disabled";
   }
@@ -94,6 +96,7 @@ public class RobotContainer {
     resetting=true;
     m_drivetrain.resetWheels();
     m_arm.reset();
+    TargetMgr.reset();
   }
   else if(!b && resetting){
     resetting=false;

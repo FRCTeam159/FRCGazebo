@@ -224,7 +224,7 @@
       <inertial>
         <mass>0.2</mass>
         <pose>0 0 0 0 0 0</pose>
-              </inertial>
+      </inertial>
       <collision name="FLwheel_collision">
         <pose>0.0451299782315297 0.0124186180039973 -0.0767334908027693 0 0 0</pose>
         <geometry>
@@ -255,8 +255,8 @@
       <visual name="FLwheel_visual">
         <pose>0.0451299782315297 0.0124186180039973 -0.0767334908027693 0 0 0</pose>
         <material>
-          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
-          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+          <ambient>0 1 0 1</ambient>
+          <diffuse>0 1 0 1</diffuse>
         </material>
         <geometry>
           <mesh>
@@ -356,7 +356,7 @@
       <inertial>
         <mass>0.2</mass>
         <pose>0 0 0 0 0 0</pose>
-              </inertial>
+      </inertial>
       <collision name="BLwheel_collision">
         <pose>0.041821602977172 0.0124230571185132 0.538331234651689 0 0 0</pose>
         <geometry>
@@ -387,8 +387,8 @@
       <visual name="BLwheel_visual">
         <pose>0.041821602977172 0.0124230571185132 0.538331234651689 0 0 0</pose>
         <material>
-          <ambient>0.501960784313725 0.501960784313725 0.501960784313725 1</ambient>
-          <diffuse>0.501960784313725 0.501960784313725 0.501960784313725 1</diffuse>
+          <ambient>0 1 0 1</ambient>
+          <diffuse>0 1 0 1</diffuse>
         </material>
         <geometry>
           <mesh>
@@ -422,7 +422,7 @@
       <inertial>
         <mass>0.123981364303097</mass>
         <pose>0 0 0 0 0 0</pose>
-              </inertial>
+      </inertial>
       <collision name="BRwheel_collision">
         <pose>0.657771605045132 0.0124230570938868 0.539238949120159 0 0 0</pose>
         <geometry>
@@ -523,11 +523,11 @@
         </geometry>
       </visual>
       <sensor name="ArmCamera" type="camera">
-        <visualize>0</visualize>
+        <visualize>1</visualize>
         <always_on>1</always_on>
         
-        <!--<pose>0 0.7 0.1 0 1.5 1.5707963267949</pose>-->
-        <pose>0.0 0.29 0.0 0 1.57 1.5707963267949</pose>
+        <!--<pose>0.0 0.29 0.0 0 1.57 1.5707963267949</pose>-->
+        <pose>0.0 0.29 0.0 0 1.9 1.5707963267949</pose>
         <camera name="Armcamera">
           <horizontal_fov>0.7</horizontal_fov>
           <image>
@@ -627,7 +627,7 @@
       <axis>
         <xyz>1 0 0</xyz>
         <dynamics>
-          <damping>2</damping>
+          <damping>1</damping>
           <friction>0</friction>
         </dynamics>
         
@@ -695,7 +695,7 @@
       <axis>
         <xyz>-1 0 0</xyz>
         <dynamics>
-          <damping>2</damping>
+          <damping>1</damping>
           <friction>0</friction>
         </dynamics>
         

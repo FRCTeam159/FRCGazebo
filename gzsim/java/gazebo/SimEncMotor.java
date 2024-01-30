@@ -14,7 +14,7 @@ public class SimEncMotor {
     public SimEncMotor(int id){
         motor=new SimMotor(id);
         encoder=new SimEncoder(id);
-        pid.setTolerance(0.001,0.001);
+        pid.setTolerance(0.002,0.002);
         this.id=id;
     }
     public void setInverted(){
@@ -58,6 +58,9 @@ public class SimEncMotor {
     public void setPosition(double d){
         target=d;
         pid.setSetpoint(d);
+    }
+    public double getAbsPosition(){
+        return encoder.getAbsPosition();
     }
     public void setPosition(){
         double a=encoder.getAbsPosition();

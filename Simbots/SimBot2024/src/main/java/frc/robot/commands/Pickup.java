@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Drivetrain;
 
 public class Pickup extends CommandBase implements Constants{
@@ -50,6 +51,8 @@ public class Pickup extends CommandBase implements Constants{
     if(!m_drive.wheelsReset()){
       m_drive.allignWheels();
     }
+    if(m_timer.get()>0.5*timeout)
+     m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE);
     // m_drive.drive(0,0,0,false);
    
   }
@@ -72,12 +75,13 @@ public class Pickup extends CommandBase implements Constants{
     double tm=m_timer.get();//m_drive.getClockTime();
     if(tm-starttm>timeout){
       System.out.println("Pickup - timout expired");
+      Autonomous.ok2run=false;
       return true;
     }
-    if(m_drive.wheelsReset()){
-      System.out.println("Pickup - wheels alligned at:"+(tm-starttm>timeout));
-      return true;
-    }
+    // if(m_drive.wheelsReset()){
+    //   System.out.println("Pickup - wheels alligned at:"+(tm-starttm>timeout));
+    //   return true;
+    // }
     if(m_arm.isNoteCaptured()){
       System.out.println("Pickup - note captured");
       return true;

@@ -196,7 +196,7 @@ public class Drivetrain extends SubsystemBase implements Constants {
 
 		m_gyro.reset();
 		last_heading = 0;
-		//resetPositions();
+		resetPositions();
 		//makeEstimator();
 	}
 

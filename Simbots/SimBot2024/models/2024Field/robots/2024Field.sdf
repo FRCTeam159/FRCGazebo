@@ -34,7 +34,13 @@
         </geometry>
         <surface>
           <contact>
-            <ode />
+             <ode>
+              <max_vel>0.1</max_vel>
+              <soft_cfm>0.8</soft_cfm>
+              <soft_erp>0.8</soft_erp>
+              <kd>1</kd>
+              <kp>1e9</kp>
+            </ode>        
           </contact>
           <friction>
             <ode>

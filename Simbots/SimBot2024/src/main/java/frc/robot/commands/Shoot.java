@@ -35,8 +35,7 @@ public class Shoot extends CommandBase implements Constants{
     m_arm.setShooterOn();
     m_arm.setPickupOff();
     m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE);
-    //m_drive.disable();
-   
+    ok2shoot=m_arm.isNoteCaptured();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -65,7 +64,7 @@ public class Shoot extends CommandBase implements Constants{
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(shooting && m_timer.get()>2 && !m_arm.isNoteCaptured())
+    if(shooting && m_timer.get()>3 && !m_arm.isNoteCaptured())
       return true;
     if(shooting && m_timer.get()>5)
       return true;

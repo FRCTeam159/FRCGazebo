@@ -22,11 +22,11 @@ public class Arm extends SubsystemBase implements Constants{
   private SimMotor pickup=new SimMotor(PICKUP);
   private SimMotor pusher=new SimMotor(PUSHER);
   private SimSwitch armLimit = new SimSwitch(ARM_LIMIT);
-  private SimContact noteContact= new SimContact(0);
+  private SimContact noteContact= new SimContact(0,5);
   private static boolean at_starting_position=false;
   private static boolean initialized=false;
   static int cnt=0;
-  static public double SHOOT_POWER=10;
+  static public double SHOOT_POWER=7;
   static public double PICKUP_POWER=0.5;
   static public double PUSH_POWER=1;
   static public double TARGET_SHOOTER_SPEED=90;
@@ -37,6 +37,7 @@ public class Arm extends SubsystemBase implements Constants{
   boolean pickup_on=false; 
   boolean pusher_on=false;
   public static String status;
+  boolean incontact=false;
 
   final PIDController pid=new PIDController(0.2,0.00,0.00);
 
@@ -62,8 +63,18 @@ public class Arm extends SubsystemBase implements Constants{
     //target_angle=SPEAKER_SHOOT_ANGLE;
   }
 
+   public void checkContact() {
+    boolean b=noteContact.inContact();
+    boolean n=noteContact.newState();
+    if(b && n)
+      incontact=true;
+    if(n && !b)
+      incontact=false;
+  
+  }
   public boolean isNoteCaptured() {
-    return noteContact.inContact();
+    checkContact();
+    return incontact;
   }
   public void setShooterOn(){
     shooter_on=true;
@@ -171,7 +182,7 @@ public class Arm extends SubsystemBase implements Constants{
       if(pickup_on)
         pickup.set(PICKUP_POWER);
       else
-        pickup.set(0.02);
+        pickup.set(0.03);
       if(pusher_on)
         pusher.set(PUSH_POWER);
       else

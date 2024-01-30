@@ -34,12 +34,11 @@ public class SwerveModule {
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final PIDController m_drivePIDController = new PIDController(10, 0.0, 0);
-  //private final PIDController m_turningPIDController = new PIDController(3, 0.05, 0);
-  // Gains are for example purposes only - must be determined for your own robot!
-  private final ProfiledPIDController m_turningPIDController =
-      new ProfiledPIDController(5,0.0,0,
-          new TrapezoidProfile.Constraints(
-              kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
+  private final PIDController m_turningPIDController = new PIDController(5, 0.05, 0);
+  // private final ProfiledPIDController m_turningPIDController =
+  //     new ProfiledPIDController(5,0.0,0,
+  //         new TrapezoidProfile.Constraints(
+  //             kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(0.1, 0.1);
@@ -50,7 +49,7 @@ public class SwerveModule {
   
   boolean m_enabled=false;
 
-  static boolean debug=false;
+  static boolean debug=true;
   static public boolean optimize=true;
   /**
    * Constructs a SwerveModule with a drive motor, turning motor, drive encoder and turning encoder.
@@ -91,8 +90,8 @@ public class SwerveModule {
   public void reset(){
     //m_turningPIDController.reset(0.0);
     m_drivePIDController.reset();
-    m_turningPIDController.reset(0.0);
-    m_enabled=false;
+    m_turningPIDController.reset();
+    //m_enabled=false;
     m_driveMotor.reset();
     m_turnMotor.reset();
   }
@@ -140,7 +139,7 @@ public class SwerveModule {
       state=newstate;
     }
    
-    double velocity=getVelocity();
+   // double velocity=getVelocity();
     
     // Calculate the drive output from the drive PID controller.
     final double driveOutput = m_drivePIDController.calculate(m_driveMotor.getRate(), state.speedMetersPerSecond);
@@ -156,8 +155,8 @@ public class SwerveModule {
     double set_turn=turnOutput+turnFeedforward;
 
     if(debug){
-      String s = String.format("Vel %-2.2f(%-2.2f) -> %-2.2f Angle %-3.3f(%-2.3f) -> %-2.3f\n", 
-      velocity,state.speedMetersPerSecond,set_drive,Math.toDegrees(turn_angle), state.angle.getDegrees(), set_turn); 
+      String s = String.format("Pos %-2.2f Angle %-3.3f\n", 
+      getDistance(),Math.toDegrees(heading())); 
       SmartDashboard.putString(name, s);
     }
       m_driveMotor.set(set_drive);

@@ -62,6 +62,9 @@ public class TargetMgr {
         start_pose=new Pose2d();
         start_pose_set=false;
     }
+    public static void reset(){
+        start_pose_set=false;
+    }
     public static Pose2d startPose(){
         return start_pose;
     }
