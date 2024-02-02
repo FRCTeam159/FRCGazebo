@@ -367,12 +367,7 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		m_backRight.setAngle(0, value);
 		updateOdometry();
 	}
-	public double getXVoltage(){
-		return 0.5*(m_frontLeft.getXVoltage()+m_frontRight.getXVoltage());
-	}
-	public double getYVoltage(){
-		return 0.5*(m_frontLeft.getYVoltage()+m_backLeft.getYVoltage());
-	}
+	
 	@SuppressWarnings("ParameterName")
 	public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
 		var swerveModuleStates = m_kinematics.toSwerveModuleStates(
@@ -388,7 +383,7 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	}
     public void resetWheels(){
 		//if(!alligning){
-			System.out.println("Drivetrain-ALLIGNING_WHEELS");
+			System.out.println("Drivetrain-ALIGNING_WHEELS");
 			alligning=true;
 		//}
 		m_frontLeft.resetWheel();
@@ -412,7 +407,7 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		if(!m_backRight.wheelReset())
 			return false;
 		if(alligning){
-			System.out.println("Drivetrain-WHEELS_ALLIGNED");
+			System.out.println("Drivetrain-WHEELS_ALIGNED");
 			alligning=false;
 		}
 		return true;
@@ -443,11 +438,8 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		m_positions[3]=new SwerveModulePosition();
 	}
 	public void resetOdometry(Pose2d pose) {
-		//reset();
-		//last_heading = 0;
-		//m_gyro.reset();
 		updatePositions();
-		//resetPositions();
+
 		m_kinematics = new SwerveDriveKinematics(
 			m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 		m_poseEstimator.resetPosition(gyroRotation2d(), m_positions,pose);

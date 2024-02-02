@@ -7,7 +7,9 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.AlignWheels;
 import frc.robot.commands.Calibrate;
 import frc.robot.commands.DrivePath;
 import frc.robot.commands.Pickup;
@@ -32,11 +34,11 @@ public class Autonomous extends SequentialCommandGroup  {
 
   
   static double XF=0.95;
-  static double YF=-1.4;
+  static double YF=-1.6;
   static double RF=-60;
 
   static double YR=-0.5;
-  static double XR=-1.45;
+  static double XR=-1.65;
   static double RR=60;
 
   static double xp=XF;
@@ -82,11 +84,6 @@ public class Autonomous extends SequentialCommandGroup  {
 
     boolean use_pathplanner=SmartDashboard.getBoolean("Pathplanner", false);
 
-    // TODO
-    // 1) calulate forward & reverse paths based on starting position and alliance
-    // 2) use field geometry of robot starting position and closest note to constuct paths
-    // 3) use pathplanner paths ?
-  
     switch (selected_path) {
       case CALIBRATE:
         return new SequentialCommandGroup(new Calibrate(m_drive));
@@ -129,8 +126,8 @@ public class Autonomous extends SequentialCommandGroup  {
             yr=YR;
             rr=RR;
         }
-        //rf=-rr;
-        if(test_coord_rotation){
+     
+        if(test_coord_rotation){ // not working ..
           double xrot=xr;
           double yrot=yr;
           double rrot=rr;
@@ -143,9 +140,11 @@ public class Autonomous extends SequentialCommandGroup  {
         }
       
         return new SequentialCommandGroup(
+              new AlignWheels(m_drive,2),
               new Shoot(m_drive,m_arm),
               new DrivePath(m_drive, opt, xf, yf, rf),
-              new Pickup(m_drive, m_arm, 6),
+              new ParallelCommandGroup(
+                new Pickup(m_arm, 4),new AlignWheels(m_drive,2)),
               new DrivePath(m_drive, opt, xr,yr,rr),
               new Shoot(m_drive,m_arm)
         );

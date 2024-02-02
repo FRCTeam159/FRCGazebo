@@ -140,12 +140,7 @@ public class DrivePath extends CommandBase {
    //m_drive.reset();
     m_timer.reset();
     m_timer.start();
-
-  //  if(xPath>0)
-  //     SwerveModule.optimize=false;
-  //   else
-  //     SwerveModule.optimize=true;
-    
+   
     pathdata.clear();
     m_drive.startAuto();
     elapsed=0;

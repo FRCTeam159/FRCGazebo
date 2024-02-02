@@ -13,34 +13,26 @@ import frc.robot.subsystems.Drivetrain;
 
 public class Pickup extends CommandBase implements Constants{
   private final Timer m_timer = new Timer();
-  private final Drivetrain m_drive;
   private final Arm m_arm;
   double timeout;
   boolean resetting=false;
   double starttm;
 
-  public Pickup(Drivetrain drive, Arm arm, double tm) {
-    m_drive=drive;
+  public Pickup(Arm arm, double tm) {
     m_arm=arm;
     timeout=tm;
     m_timer.start();
-    
-    //m_drive.resetPose();
-
-    addRequirements(drive);
+    addRequirements(arm);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
- 
     m_timer.reset();
-    starttm=0;//m_drive.getClockTime();
-    //m_drive.resetPose();
+    starttm=0;
     System.out.println("Pickup.init");
     m_arm.setPickupOn();
-  
-    m_drive.resetWheels();
+
     Arm.status="Pickup";
     resetting=true;
   }
@@ -48,46 +40,30 @@ public class Pickup extends CommandBase implements Constants{
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(!m_drive.wheelsReset()){
-      m_drive.allignWheels();
-    }
     if(m_timer.get()>0.5*timeout)
-     m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE);
-    // m_drive.drive(0,0,0,false);
-   
+      m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    //m_drive.disable();
-    m_drive.resetPose();
     m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE);
     m_arm.setPickupOff();
-   // m_drive.driveForward(0.1);
-    //SmartDashboard.putBoolean("Gazebo", true);
-
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    double tm=m_timer.get();//m_drive.getClockTime();
+    double tm=m_timer.get();
     if(tm-starttm>timeout){
       System.out.println("Pickup - timout expired");
       Autonomous.ok2run=false;
       return true;
-    }
-    // if(m_drive.wheelsReset()){
-    //   System.out.println("Pickup - wheels alligned at:"+(tm-starttm>timeout));
-    //   return true;
-    // }
+    } 
     if(m_arm.isNoteCaptured()){
       System.out.println("Pickup - note captured");
       return true;
     }
-    //return m_timer.get()>=timeout;
     return false;
-
   }
 }

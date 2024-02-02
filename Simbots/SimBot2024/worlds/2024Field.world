@@ -128,22 +128,22 @@
     <include>  
 
     <uri>model://Apriltag16_05_00003</uri>
-      <pose>-7.54 -0.637 1.44 0 0 1.57</pose>
+       <pose>-9.41142 -0.63551 1.44 0 -0 1.57</pose>
     </include>
 
     <include>
       <uri>model://Apriltag16_05_00004</uri>
-      <pose>-7.54 -1.2 1.44 0 0 1.57</pose>
+      <pose>-9.41578 -1.19851 1.44 0 -0 1.57</pose>
     </include>
 
-     <include>
+    <include>
       <uri>model://Apriltag16_05_00008</uri>
-      <pose>7.15 -1.69022 1.46021 0 0 -1.60641</pose>
+      <pose>7.18628 -1.70125 1.47983 0 0 -1.60641</pose>
     </include>
 
     <include>
       <uri>model://Apriltag16_05_00007</uri>
-       <pose>7.15 -1.1033 1.4659 0 0 -1.55425</pose>
+      <pose>7.19362 -1.16683 1.47997 0 0 -1.55425</pose>
     </include>
    
   </world>

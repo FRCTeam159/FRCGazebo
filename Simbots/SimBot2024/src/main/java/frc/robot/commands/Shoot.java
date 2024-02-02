@@ -13,7 +13,8 @@ import frc.robot.subsystems.Drivetrain;
 
 public class Shoot extends CommandBase implements Constants{
   /** Creates a new Shoot. 
-   * @param m_arm */
+   * @param m_arm 
+   * */
   Arm m_arm;
   Drivetrain m_drive;
   boolean shooter_ready=false;
@@ -48,7 +49,7 @@ public class Shoot extends CommandBase implements Constants{
       shooting=true;
       Arm.status="Shooting";
     }
-    m_drive.drive(0,0,0,false);
+    m_drive.drive(-0.1,0,0,false); // align bumpers with platform
   }
 
   // Called once the command ends or is interrupted.

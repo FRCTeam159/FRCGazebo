@@ -64,6 +64,7 @@ public class RobotContainer {
     m_drivetrain.setRobotDisabled(false);
    // m_drivetrain.setFieldOriented(m_drivetrain.isGyroEnabled());
     m_drivetrain.endAuto();
+    m_drivetrain.enable();
     Arm.status="Teleop";
   }
   public void autonomousInit(){

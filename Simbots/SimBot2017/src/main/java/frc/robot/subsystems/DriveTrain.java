@@ -237,7 +237,6 @@ public class DriveTrain extends SubsystemBase implements RobotMap {
 	 * Reset the robots sensors to the zero states.
 	 */
 	public void reset() {
-		
 		rightMotor.reset();
 		leftMotor.reset();
 	}

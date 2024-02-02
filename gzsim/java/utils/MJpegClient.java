@@ -83,7 +83,7 @@ public class MJpegClient {
             mat.put(0, 0, bytes);
             return mat;
         } catch (Exception ex) {
-            System.out.println("Exception:"+ex.getMessage());
+            //System.out.println("Exception:"+ex.getMessage());
         } 
         return null;
     }
