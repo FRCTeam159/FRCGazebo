@@ -5,10 +5,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drivetrain;
 
-public class TurnToAngle extends CommandBase {
+public class TurnToAngle extends Command {
   Drivetrain m_drive;
   double m_angle;
   double last_time;

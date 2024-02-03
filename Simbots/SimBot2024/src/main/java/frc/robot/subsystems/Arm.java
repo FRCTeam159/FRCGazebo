@@ -25,7 +25,7 @@ public class Arm extends SubsystemBase implements Constants{
   private SimContact noteContact= new SimContact(0,5);
   private static boolean at_starting_position=false;
   private static boolean initialized=false;
-  static int cnt=0;
+
   static public double SHOOT_POWER=7;
   static public double PICKUP_POWER=0.5;
   static public double PUSH_POWER=1;
@@ -38,6 +38,7 @@ public class Arm extends SubsystemBase implements Constants{
   boolean pusher_on=false;
   public static String status;
   boolean incontact=false;
+  boolean started=false;
 
   final PIDController pid=new PIDController(0.2,0.00,0.00);
 
@@ -52,9 +53,14 @@ public class Arm extends SubsystemBase implements Constants{
     pusher.enable();
     armLimit.enable();
     noteContact.enable();
+    target_angle=getAngle();
     pid.setTolerance(1,1);
   }
 
+  public void setStarted(){
+    started=true;
+
+  }
   public void reset(){
     shooter_on=false;
     pickup_on=false;
@@ -149,52 +155,70 @@ public class Arm extends SubsystemBase implements Constants{
     initialized=false;
     at_starting_position=false;
   }
+
+  public boolean isInititialized(){
+    return initialized;
+
+  }
+  public boolean isStarted(){
+    return started;
+
+  }
+  public boolean findZero(){
+    motor.set(-1);
+    if (atLowerLimit()) {
+          System.out.println("Arm low limit reached");
+          initialized = true;
+          motor.reset();
+          target_angle = SPEAKER_SHOOT_ANGLE;
+          pid.setSetpoint(target_angle);
+          status = "Initializing .. ";
+          return true;
+     }
+     return false;
+  }
   @Override
   public void periodic() {
-    double angle = getAngle();
-
-    if (!initialized) {
-       motor.set(-1);
-      if (atLowerLimit()) {
-        System.out.println("Arm low limit reached");
-        initialized = true;
-        motor.reset();
-        target_angle = SPEAKER_SHOOT_ANGLE;
-        pid.setSetpoint(target_angle);
-        status="Initializing .. ";
-      }
-    }
-    else{
+      double angle = getAngle();
       pid.setSetpoint(target_angle);
       double corr = pid.calculate(angle);
-      if(!at_starting_position){
-        if(atTargetAngle()){
-          at_starting_position=true;
-          status="Ready";
+      motor.set(corr);
+      if(!started){
+        log();
+        status = "NotStarted";
+        return;
+      }
+
+      if (!at_starting_position) {
+        if (atTargetAngle()) {
+          at_starting_position = true;
+          status = "Ready";
         }
       }
-      
-      motor.set(corr);
-      if(shooter_on)
+      if (shooter_on)
         shooter.set(SHOOT_POWER);
       else
         shooter.set(0);
-      if(pickup_on)
+      if (pickup_on)
         pickup.set(PICKUP_POWER);
       else
         pickup.set(0.03);
-      if(pusher_on)
+      if (pusher_on)
         pusher.set(PUSH_POWER);
       else
         pusher.set(-0.02);
-    }
-    cnt++;
-    SmartDashboard.putNumber("Arm", angle);
+    
+    log();
+  }
+
+  void log(){
+    SmartDashboard.putNumber("Arm", getAngle());
     SmartDashboard.putBoolean("Shooting", shooter_on);
     SmartDashboard.putBoolean("Pickup", pickup_on);
     SmartDashboard.putBoolean("Pushing", pusher_on);
     SmartDashboard.putBoolean("Note", isNoteCaptured());
     SmartDashboard.putNumber("Shooter", shooter.getRate());
     SmartDashboard.putString("Status", status);
+
   }
 }

@@ -12,16 +12,10 @@
       "desktop": true,
     },
     {
-      "type": "java",
-      "name": "Launch Simulation",
+      "type": "wpilib",
+      "name": "WPILib roboRIO Debug",
       "request": "launch",
-      "mainClass": "frc.robot.Main",
-      "projectName": "SwerveDriveTest",
-      "env": {
-        "PATH":"build/jni/release:$PATH",
-        "LD_LIBRARY_PATH": "build/jni/release;$PATH",
-        "DYLD_LIBRARY_PATH": "build/jni/release;$PATH"
-      }
+      "desktop": false,
     }
   ]
 }

@@ -4,6 +4,10 @@
 
 package frc.robot.subsystems;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -12,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AlignWheels;
 import frc.robot.commands.Calibrate;
 import frc.robot.commands.DrivePath;
+import frc.robot.commands.InitAuto;
 import frc.robot.commands.Pickup;
 import frc.robot.commands.Shoot;
 import utils.PlotUtils;
@@ -33,12 +38,12 @@ public class Autonomous extends SequentialCommandGroup  {
   static double i2m=0.0254;
 
   
-  static double XF=0.95;
+  static double XF=1.0;
   static double YF=-1.6;
   static double RF=-60;
 
   static double YR=-0.5;
-  static double XR=-1.65;
+  static double XR=-2.1;
   static double RR=60;
 
   static double xp=XF;
@@ -77,8 +82,10 @@ public class Autonomous extends SequentialCommandGroup  {
     SmartDashboard.putData(m_auto_plot_option);
     
   }
-  
-  public SequentialCommandGroup getCommand() {
+  public SequentialCommandGroup getCommand(){
+    return new SequentialCommandGroup(new InitAuto(m_arm),getAutoSequence());
+  }
+  SequentialCommandGroup getAutoSequence() {
     PlotUtils.auto_plot_option = m_auto_plot_option.getSelected();
     selected_path = m_path_chooser.getSelected();
 
@@ -92,60 +99,29 @@ public class Autonomous extends SequentialCommandGroup  {
         return new SequentialCommandGroup(new DrivePath(m_drive, PROGRAM));
       else
         return new SequentialCommandGroup(new DrivePath(m_drive, PROGRAMPP));
-      case PATHPLANNER:
-        return new SequentialCommandGroup(new DrivePath(m_drive, PATHPLANNER));
+      case PATHPLANNER:{
+        String pathname="BlueInside";
+        PathPlannerPath path = PathPlannerPath.fromPathFile(pathname);
+        if(path==null){
+          System.out.println("Pathplanner couldn't find path "+pathname);
+          return null;
+        }
+        Pose2d p = path.getPreviewStartingHolonomicPose();
+        m_drive.resetOdometry(p);
+       // Command cmd=AutoBuilder.buildAuto(pathname);
+        Command cmd=AutoBuilder.followPath(path);
+       
+        return new SequentialCommandGroup(cmd);
+      }
       case AUTOTEST: {
-        int opt=use_pathplanner?PROGRAMPP:PROGRAM;
-        System.out.println("pathplanner=" + use_pathplanner);
-        int alliance=TargetMgr.alliance;
-        int position=TargetMgr.position;
-        // set up default for center case
-        double xr=XR;
-        double yr=0;
-        double rr=0;
-        double xf=-XR;
-        double yf=0;
-        double rf=0;
-        System.out.println(TargetMgr.getStartString());
-        //for a simple curved path blue-outside=red-inside and blue-inside=red-outside
-        if((alliance==TargetMgr.RED && position==TargetMgr.OUTSIDE) ||
-           (alliance==TargetMgr.BLUE && position==TargetMgr.INSIDE)){
-            xf=XF;
-            yf=-YF;
-            rf=-RF;
-            xr=XR;
-            yr=-YR;
-            rr=-RR;
-        }
-        if((alliance==TargetMgr.BLUE && position==TargetMgr.OUTSIDE) ||
-          (alliance==TargetMgr.RED && position==TargetMgr.INSIDE)){
-            xf=XF;
-            yf=YF;
-            rf=RF;
-            xr=XR;
-            yr=YR;
-            rr=RR;
-        }
-     
-        if(test_coord_rotation){ // not working ..
-          double xrot=xr;
-          double yrot=yr;
-          double rrot=rr;
-          double cos=Math.cos(d2r*rrot);
-          double sin=Math.sin(d2r*rrot);
-          double x = yrot * cos + xrot * sin;
-          double y = -yrot * sin + xrot * cos;
-          System.out.println("reverse x:" + xr + " y:" + yr + " r:"+rr);
-          System.out.println("forward x:" + (x) + " y:" + y+ " r:"+rf);
-        }
-      
+        int opt=use_pathplanner?PROGRAMPP:PROGRAM;      
         return new SequentialCommandGroup(
               new AlignWheels(m_drive,2),
               new Shoot(m_drive,m_arm),
-              new DrivePath(m_drive, opt, xf, yf, rf),
+              new DrivePath(m_drive, opt, false),
               new ParallelCommandGroup(
                 new Pickup(m_arm, 4),new AlignWheels(m_drive,2)),
-              new DrivePath(m_drive, opt, xr,yr,rr),
+              new DrivePath(m_drive, opt, true),
               new Shoot(m_drive,m_arm)
         );
       }

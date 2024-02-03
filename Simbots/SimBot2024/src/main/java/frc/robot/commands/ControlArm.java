@@ -5,11 +5,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
 
-public class ControlArm extends CommandBase implements Constants {
+public class ControlArm extends Command implements Constants {
   Arm m_arm;
   XboxController m_controller;
   /** Creates a new ControlArm. 

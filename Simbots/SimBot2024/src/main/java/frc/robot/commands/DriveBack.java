@@ -14,11 +14,11 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drivetrain;
 
 
-public class DriveBack extends CommandBase {
+public class DriveBack extends Command {
   public static final double kMaxSpeed = 4; // 4 meters per second
   private final PIDController m_controller= 
     new PIDController(0.5, 0, 0);

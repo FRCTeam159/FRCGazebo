@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import objects.AprilTag;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -38,14 +39,16 @@ public class TargetMgr {
 
     static int type=FIELD_TAGS;  // changed by init function
 
-    static int alliance=UNKNOWN;
-    static int position=UNKNOWN;
+    public static int alliance=UNKNOWN;
+    public static int position=UNKNOWN;
 
     static Pose2d start_pose=new Pose2d();
     static boolean start_pose_set=false;
     public static boolean show_tag_info=false;
     
     static boolean field_relative=true;
+
+   
     static public void init(){ 
         setFieldTargets();  
     }
@@ -95,6 +98,44 @@ public class TargetMgr {
         return tag_trans;
     }
     
+    public static Pose2d getTarget(boolean reversed) {
+        double XF = 1.0; // forward
+        double YF = -1.6;
+        double RF = -60;
+
+        double YR = -0.5; //reverse
+        double XR = -2.1;
+        double RR = 60;
+
+        double xr = XR;  // center
+        double yr = 0;
+        double rr = 0;
+        double xf = -XR;
+        double yf = 0;
+        double rf = 0;
+        if ((alliance == TargetMgr.RED && position == TargetMgr.OUTSIDE) ||
+            (alliance == TargetMgr.BLUE && position == TargetMgr.INSIDE)) {
+            xf = XF;
+            yf = -YF;
+            rf = -RF;
+            xr = XR;
+            yr = -YR;
+            rr = -RR;
+        }
+        if ((alliance == TargetMgr.BLUE && position == TargetMgr.OUTSIDE) ||
+            (alliance == TargetMgr.RED && position == TargetMgr.INSIDE)) {
+            xf = XF;
+            yf = YF;
+            rf = RF;
+            xr = XR;
+            yr = YR;
+            rr = RR;
+        }
+        if (reversed)
+            return new Pose2d(xr, yr, new Rotation2d(rr));
+        else
+            return new Pose2d(xf, yf, new Rotation2d(rf));
+    }
     public static void setStartPose(AprilTag[] tags) {
         position = UNKNOWN;
         alliance = UNKNOWN;

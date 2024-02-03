@@ -3,13 +3,13 @@ package frc.robot.commands;
 import java.util.ArrayList;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import objects.PlotServer;
 import frc.robot.subsystems.Drivetrain;
 import utils.PathData;
 import utils.PlotUtils;
 
-public class Calibrate extends CommandBase {
+public class Calibrate extends Command {
   Timer m_timer;
    private double lastVelocity = 0;
   ArrayList<PathData> plotdata = new ArrayList<PathData>();
