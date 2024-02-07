@@ -19,7 +19,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -51,12 +50,11 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	private final SwerveModule m_backLeft = new SwerveModule(BL_DRIVE, BL_TURN,BL_ID);
 	private final SwerveModule m_backRight = new SwerveModule(BR_DRIVE, BR_TURN,BR_ID); 
 
+	private final SwerveModule[] modules={m_frontLeft,m_frontRight,m_backLeft,m_backRight};
+
 	private final SwerveModulePosition[] m_positions={
 		new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition()
 	};
-
-	//Translation2d cameraToRobotOffset=new Translation2d(Units.inchesToMeters(12.0),0);
-    //Transform2d cameraToRobot=new Transform2d(cameraToRobotOffset,new Rotation2d());
 	private Simulation simulation;
 
 	public SimGyro m_gyro = new SimGyro(0);
@@ -85,10 +83,12 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	double latency=0.05;
 	double vision_confidence=0.00;
 	double pose_error=0;
-	boolean use_tags=true;
+	boolean m_showtags=false;
 	boolean simstarted=false;
 
 	boolean m_disabled = true;
+	boolean m_resetting=false;
+
 	SwerveDrivePoseEstimator m_poseEstimator;
 
 	private final Timer m_timer = new Timer();
@@ -103,12 +103,10 @@ public class Drivetrain extends SubsystemBase implements Constants {
 
 		simulation = new Simulation();
 		SmartDashboard.putBoolean("Field Oriented", field_oriented);
-		SmartDashboard.putNumber("maxV", kMaxVelocity);
-		SmartDashboard.putNumber("maxA", kMaxAcceleration);
-		SmartDashboard.putBoolean("Use Tags", use_tags);
-		SmartDashboard.putNumber("Latency", latency);
-		SmartDashboard.putNumber("Conf", vision_confidence);
-		SmartDashboard.putNumber("Error", pose_error);
+		//SmartDashboard.putNumber("maxV", kMaxVelocity);
+		//SmartDashboard.putNumber("maxA", kMaxAcceleration);
+		SmartDashboard.putBoolean("ShowTags", m_showtags);
+		
 
 		// Configure AutoBuilder last
     	AutoBuilder.configureHolonomic(
@@ -117,10 +115,10 @@ public class Drivetrain extends SubsystemBase implements Constants {
             this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                    new PIDConstants(1, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(1, 0.0, 0.0), // Rotation PID constants
-                    2, // Max module speed, in m/s
-                    0.33, // Drive base radius in meters. Distance from robot center to furthest module.
+                    new PIDConstants(2, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(2, 0.0, 0.0), // Rotation PID constants
+                    1, // Max module speed, in m/s
+                    Units.inchesToMeters(front_wheel_base), // Drive base radius in meters. Distance from robot center to furthest module.
                     new ReplanningConfig() // Default path replanning config. See the API for the options here
             ),
             () -> {
@@ -164,24 +162,30 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		return Timer.getFPGATimestamp();
 	}
 	public void startAuto() {
+		System.out.println("START AUTO");
+		simulation.run();
 		simulation.startAuto();
 		enable();
 	}
 
 	public void endAuto() {
-		//if(debug)
-		System.out.println("Drivetrain.endAuto");
+		System.out.println("END AUTO");
+		if(debug)
+			System.out.println("Drivetrain.endAuto");
 		simulation.endAuto();
 		
 	}
 	public void init() {
 		if(debug)
-		System.out.println("Drivetrain.init");
+			System.out.println("Drivetrain.init");
 		field_pose = getPose();
+		
 		simulation.init();
 		enable();
 	}
-
+	public boolean showTags() {
+		return  m_showtags;
+	}
 	public boolean enabled(){
 		return !m_disabled;
 	}
@@ -191,11 +195,10 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	public void disable() {
 		m_disabled = true;
 		if(debug)
-		System.out.println("Drivetrain.disable");
-		m_frontLeft.disable();
-		m_frontRight.disable();
-		m_backLeft.disable();
-		m_backRight.disable();
+			System.out.println("Drivetrain.disable");
+		for (int i = 0; i < modules.length; i++) {
+			modules[i].disable();
+		}
 		m_gyro.disable();
 		simulation.end();
 	}
@@ -204,27 +207,22 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		m_disabled = false;
 		simulation.run();
 		if(debug)
-		System.out.println("Drivetrain.enable");
-		m_frontLeft.enable();
-		m_frontRight.enable();
-		m_backLeft.enable();
-		m_backRight.enable();
+			System.out.println("Drivetrain.enable");
+		for (int i = 0; i < modules.length; i++) {
+			modules[i].enable();
+		}
 		m_gyro.enable();
 	}
 
 	public void reset() {
-		//m_disabled = true;
 		if(debug)
-		System.out.println("Drivetrain.reset");
-		m_frontLeft.reset();
-		m_frontRight.reset();
-		m_backLeft.reset();
-		m_backRight.reset();
-
+			System.out.println("Drivetrain.reset");
+		for (int i = 0; i < modules.length; i++) {
+			modules[i].reset();
+		}
 		m_gyro.reset();
 		last_heading = 0;
 		resetPositions();
-		//makeEstimator();
 	}
 
 	public void resetPose() {
@@ -234,9 +232,6 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		field_pose = getPose();
 	}
 
-	public boolean useTags(){
-		return use_tags;
-	}
 	// get transform from pose
 	public static Transform2d getTransform(Pose2d pose) {
 		return new Transform2d(pose.getTranslation(), pose.getRotation());
@@ -306,51 +301,18 @@ public class Drivetrain extends SubsystemBase implements Constants {
 
 	public void log() {
 		if(!simstarted)
-		return;
-
-		SmartDashboard.putNumber("Distance", getDistance());
-		SmartDashboard.putNumber("Velocity", getVelocity());
-		Translation2d t=  getPose().getTranslation();
-		
+			return;
+		Translation2d t=  getPose().getTranslation();	
 		SmartDashboard.putNumber("H:", getHeading());
 		SmartDashboard.putNumber("X:", t.getX());
 		SmartDashboard.putNumber("Y:", t.getY());
 
 		field_oriented = SmartDashboard.getBoolean("Field Oriented", field_oriented);
-		kMaxVelocity=SmartDashboard.getNumber("maxV", kMaxVelocity);
-		kMaxAcceleration=SmartDashboard.getNumber("maxA", kMaxAcceleration);
-
-		use_tags = SmartDashboard.getBoolean("Use Tags", use_tags);
-		// SmartDashboard.putNumber("Error", pose_error);
-
-		// latency=SmartDashboard.getNumber("Latency", 0);
-		// double conf=SmartDashboard.getNumber("Conf", vision_confidence);
-		// if(Math.abs(conf-vision_confidence)>0.001){
-		// 	vision_confidence=conf;
-		// 	double vmult=1.0/vision_confidence;
-		// 	m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(vmult*x_std, vmult*y_std, Units.degreesToRadians(vmult*h_std)));
-		// }
+		m_showtags = SmartDashboard.getBoolean("ShowTags", m_showtags);
+		
 		if(debug_angles)
 			displayAngles();	
-	}
-
-	@Override
-	public void periodic() {
-		//updateOdometry();
-	}
-
-	@Override
-	public void simulationPeriodic() {
-		if(!simstarted && simulation.started()){
-			reset();
-			simstarted=true;
-		}
-		if(robot_disabled)
-			drive(0.0,0.0,0,false); // stay in place
-		updateOdometry();
-		log();
-	}
-
+	}	
 	void displayAngles(){
 		if((cnt%100)==0){
 			String str=String.format("angles fl:%-1.2f fr:%-1.2f bl:%-1.2f br:%-1.2f\n",
@@ -361,17 +323,13 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	}
 	
 	public void turn(double value) {
-		m_frontLeft.turn(value);
-		m_frontRight.turn(value);
-		m_backLeft.turn(value);
-		m_backRight.turn(value);
+		for (int i = 0; i < modules.length; i++)
+			modules[i].turn(value);
 	}
 
 	public void move(double value) {
-		m_frontLeft.move(value);
-		m_frontRight.move(value);
-		m_backLeft.move(value);
-		m_backRight.move(value);
+		for (int i = 0; i < modules.length; i++)
+			modules[i].move(value);
 	}
 
 	public void testDrive(double speed, double rot) {
@@ -388,10 +346,8 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	}
 
 	public void driveForward(double value) {
-		m_frontLeft.setAngle(0, value);
-		m_frontRight.setAngle(0, value);
-		m_backLeft.setAngle(0, value);
-		m_backRight.setAngle(0, value);
+		for (int i = 0; i < modules.length; i++) 
+			modules[i].setAngle(0, value);
 		updateOdometry();
 	}
 	
@@ -402,43 +358,32 @@ public class Drivetrain extends SubsystemBase implements Constants {
 						? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
 						: new ChassisSpeeds(xSpeed, ySpeed, rot));
 		SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxVelocity);
-		m_frontLeft.setDesiredState(swerveModuleStates[0]);
-		m_frontRight.setDesiredState(swerveModuleStates[1]);
-		m_backLeft.setDesiredState(swerveModuleStates[2]);
-		m_backRight.setDesiredState(swerveModuleStates[3]);
+		for (int i = 0; i < modules.length; i++){
+			modules[i].setDesiredState(swerveModuleStates[i]);
+		}
 		updateOdometry();
 	}
-    public void resetWheels(){
-		//if(!alligning){
+	 // reset wheels turn motor to starting position
+	public void resetWheels(boolean begin) {
+		if (begin) {
+			m_resetting = true;
 			System.out.println("Drivetrain-ALIGNING_WHEELS");
-			alligning=true;
-		//}
-		m_frontLeft.resetWheel();
-		m_frontRight.resetWheel();
-		m_backLeft.resetWheel();
-		m_backRight.resetWheel();
-	}
-	public void allignWheels(){
-		m_frontLeft.resetWheel();
-		m_frontRight.resetWheel();
-		m_backLeft.resetWheel();
-		m_backRight.resetWheel();
-	}
-	public boolean wheelsReset(){
-		if(!m_frontLeft.wheelReset())
-			return false;
-		if(!m_frontRight.wheelReset())
-			return false;
-		if(!m_backLeft.wheelReset())
-			return false;
-		if(!m_backRight.wheelReset())
-			return false;
-		if(alligning){
-			System.out.println("Drivetrain-WHEELS_ALIGNED");
-			alligning=false;
 		}
+		for (int i = 0; i < modules.length; i++)
+			modules[i].resetWheel();
+	}
+	
+	public boolean wheelsReset() {
+		for (int i = 0; i < modules.length; i++) {
+			if (!modules[i].wheelReset())
+				return false;
+		}
+		if(m_resetting)
+			System.out.println("Drivetrain-WHEELS_ALIGNED");
+		m_resetting = false;
 		return true;
 	}
+	
 	// A teleop drive method that uses odometry and kinematics
     public void odometryDrive(double xSpeed, double rot) {
 		drive(xSpeed, 0, rot, false);
@@ -453,16 +398,12 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	}
 
 	public void updatePositions(){
-		m_positions[0]=m_frontLeft.getPosition();
-		m_positions[1]=m_frontRight.getPosition();
-		m_positions[2]=m_backLeft.getPosition();
-		m_positions[3]=m_backRight.getPosition();
+		for(int i=0;i<m_positions.length;i++)
+			m_positions[i] = modules[i].getPosition();	  
 	}
 	public void resetPositions(){	
-		m_positions[0]=new SwerveModulePosition();
-		m_positions[1]=new SwerveModulePosition();
-		m_positions[2]=new SwerveModulePosition();
-		m_positions[3]=new SwerveModulePosition();
+		for(int i=0;i<m_positions.length;i++)
+			m_positions[i] = new SwerveModulePosition();	  
 	}
 	public void resetOdometry(Pose2d pose) {
 		updatePositions();
@@ -500,4 +441,20 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		m_poseEstimator.resetPosition(getRotation2d(), m_positions, pose);
 	}
 	
+	@Override
+	public void periodic() {
+		//updateOdometry();
+	}
+
+	@Override
+	public void simulationPeriodic() {
+		if(!simstarted && simulation.started()){
+			reset();
+			simstarted=true;
+		}
+		if(robot_disabled)
+			drive(0.0,0.0,0,false); // stay in place
+		updateOdometry();
+		log();
+	}
 }

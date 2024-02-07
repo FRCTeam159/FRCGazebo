@@ -523,7 +523,7 @@
         </geometry>
       </visual>
       <sensor name="ArmCamera" type="camera">
-        <visualize>1</visualize>
+        <visualize>0</visualize>
         <always_on>1</always_on>
         
         <!--<pose>0.0 0.29 0.0 0 1.57 1.5707963267949</pose>-->
@@ -1177,7 +1177,7 @@
         <joint>Arm-TopShootWheels</joint>
         <topic>~/gazebo/frc/simulator/encoder/11</topic>
     </plugin>
-
+<!--
     <plugin name="pusher_motor" filename="sim_motor.dll">
         <joint>Arm-MidRollersTop</joint>
         <topic>~/gazebo/frc/simulator/motor/12</topic>
@@ -1189,7 +1189,7 @@
         <topic>~/gazebo/frc/simulator/motor/12</topic>
         <multiplier>50</multiplier>
     </plugin>
-
+-->
     <plugin name="Arm_llimit" filename="sim_limitswitch.dll">
       <joint>Body-Arm</joint>
       <topic>~/gazebo/frc/simulator/switch/2</topic>

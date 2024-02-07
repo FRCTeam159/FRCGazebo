@@ -44,7 +44,8 @@ public class Shoot extends Command implements Constants{
   public void execute() {
     if(!shooter_ready && m_arm.atTargetSpeed()){
       shooter_ready=true;
-      m_arm.setPusherOn();
+      m_arm.setPickupOn();
+      //m_arm.setPusherOn();
       m_timer.reset();
       shooting=true;
       Arm.status="Shooting";
@@ -56,9 +57,10 @@ public class Shoot extends Command implements Constants{
   @Override
   public void end(boolean interrupted) {
     m_arm.setShooterOFf();
-    m_arm.setPusherOFf();
+    //m_arm.setPusherOFf();
+    m_arm.setPickupOff();
     m_arm.setTargetAngle(PICKUP_ANGLE);
-    m_drive.enable();
+   //m_drive.enable();
     Arm.status="End";
   }
 

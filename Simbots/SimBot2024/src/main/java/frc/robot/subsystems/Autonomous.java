@@ -6,7 +6,7 @@ package frc.robot.subsystems;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
-
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,8 +22,10 @@ import frc.robot.commands.Shoot;
 import utils.PlotUtils;
 
 public class Autonomous extends SequentialCommandGroup  {
-  SendableChooser<Command> m_chooser = new SendableChooser<>();
-  SendableChooser<Integer> m_auto_plot_option = new SendableChooser<>();
+  static SendableChooser<Integer> m_path_chooser = new SendableChooser<Integer>();
+  static SendableChooser<Integer> m_position_chooser = new SendableChooser<Integer>();
+  static SendableChooser<Integer> m_alliance_chooser = new SendableChooser<Integer>();
+  static SendableChooser<Integer> m_auto_plot_option = new SendableChooser<>();
 
   Drivetrain m_drive;
   Arm m_arm;
@@ -37,18 +39,9 @@ public class Autonomous extends SequentialCommandGroup  {
   static double d2r=2*Math.PI/360;
   static double i2m=0.0254;
 
-  
-  static double XF=1.0;
-  static double YF=-1.6;
-  static double RF=-60;
-
-  static double YR=-0.5;
-  static double XR=-2.1;
-  static double RR=60;
-
-  static double xp=XF;
-  static double yp=YF;
-  static double rp=RF;
+  static double xp=TargetMgr.XF;
+  static double yp=TargetMgr.YF;
+  static double rp=TargetMgr.RF;
 
   static boolean test_coord_rotation=false;
 
@@ -57,30 +50,45 @@ public class Autonomous extends SequentialCommandGroup  {
   public static boolean debug_commands=false;
   public static boolean ok2run=false;
 
-  SendableChooser<Integer> m_path_chooser = new SendableChooser<Integer>();
-  /** Creates a new AutoCommands. */
+      /** Creates a new AutoCommands. */
   public Autonomous(Drivetrain drive,Arm arm) {
     m_drive=drive;
     m_arm=arm;
-   
+    SmartDashboard.putNumber("xPath", xp);
+    SmartDashboard.putNumber("yPath", yp);
+    SmartDashboard.putNumber("rPath", rp);
+
+    SmartDashboard.putBoolean("Pathplanner", false);
+
     m_auto_plot_option.setDefaultOption("No Plot", PlotUtils.PLOT_NONE);
     m_auto_plot_option.addOption("Plot Dynamics", PlotUtils.PLOT_DYNAMICS);
     m_auto_plot_option.addOption("Plot Location", PlotUtils.PLOT_LOCATION);
     m_auto_plot_option.addOption("Plot Position", PlotUtils.PLOT_POSITION);
+    SmartDashboard.putData(m_auto_plot_option);
 
     m_path_chooser.setDefaultOption("Program", PROGRAM);
 	  m_path_chooser.addOption("Path", PATHPLANNER);
     m_path_chooser.addOption("AutoTest", AUTOTEST);
     m_path_chooser.addOption("Calibrate", CALIBRATE);
 
-    SmartDashboard.putNumber("xPath", xp);
-    SmartDashboard.putNumber("yPath", yp);
-    SmartDashboard.putNumber("rPath", rp);
-    SmartDashboard.putBoolean("Pathplanner", false);
+    SmartDashboard.putData(m_path_chooser);
+   
+    m_alliance_chooser.setDefaultOption("Blue", TargetMgr.BLUE);
+    m_alliance_chooser.addOption("Red", TargetMgr.RED);
+    SmartDashboard.putData(m_alliance_chooser);
 
-		SmartDashboard.putData(m_path_chooser);
-    SmartDashboard.putData(m_auto_plot_option);
+    m_position_chooser.setDefaultOption("Outside", TargetMgr.OUTSIDE);
+    m_position_chooser.addOption("Center", TargetMgr.CENTER);
+    m_position_chooser.addOption("Inside", TargetMgr.INSIDE);
     
+    SmartDashboard.putData(m_position_chooser);
+     
+  }
+  static public int getAlliance(){
+    return m_alliance_chooser.getSelected();
+  }
+  static public int getPosition(){
+    return m_position_chooser.getSelected();
   }
   public SequentialCommandGroup getCommand(){
     return new SequentialCommandGroup(new InitAuto(m_arm),getAutoSequence());
@@ -106,10 +114,21 @@ public class Autonomous extends SequentialCommandGroup  {
           System.out.println("Pathplanner couldn't find path "+pathname);
           return null;
         }
-        Pose2d p = path.getPreviewStartingHolonomicPose();
-        m_drive.resetOdometry(p);
-       // Command cmd=AutoBuilder.buildAuto(pathname);
-        Command cmd=AutoBuilder.followPath(path);
+        Pose2d p;
+        Command cmd;
+        if(use_pathplanner){
+          p = path.getPreviewStartingHolonomicPose();
+          cmd=AutoBuilder.followPath(path);
+        }
+        else{
+          cmd=AutoBuilder.buildAuto(pathname);
+          p = PathPlannerAuto.getStaringPoseFromAutoFile(pathname);
+        }
+       
+        if(p!=null)
+          m_drive.resetOdometry(p);
+        else
+          System.out.println("Pathplanner error - starting pose is null !");
        
         return new SequentialCommandGroup(cmd);
       }

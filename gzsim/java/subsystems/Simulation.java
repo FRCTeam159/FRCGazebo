@@ -41,8 +41,8 @@ public class Simulation extends SubsystemBase {
   }
 
   public double getSimTime() {
-    if(!running)
-      return 0;
+    //if(!running)
+    //  return 0;
     return m_simclock.getTime();
   }
 

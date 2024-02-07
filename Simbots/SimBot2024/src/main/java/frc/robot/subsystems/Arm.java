@@ -20,14 +20,14 @@ public class Arm extends SubsystemBase implements Constants{
 
   private SimEncMotor shooter=new SimEncMotor(SHOOTER);
   private SimMotor pickup=new SimMotor(PICKUP);
-  private SimMotor pusher=new SimMotor(PUSHER);
+  //private SimMotor pusher=new SimMotor(PUSHER);
   private SimSwitch armLimit = new SimSwitch(ARM_LIMIT);
   private SimContact noteContact= new SimContact(0,5);
   private static boolean at_starting_position=false;
   private static boolean initialized=false;
 
   static public double SHOOT_POWER=7;
-  static public double PICKUP_POWER=0.5;
+  static public double PICKUP_POWER=1;
   static public double PUSH_POWER=1;
   static public double TARGET_SHOOTER_SPEED=90;
 
@@ -50,7 +50,7 @@ public class Arm extends SubsystemBase implements Constants{
     motor.enable();
     shooter.enable();
     pickup.enable();
-    pusher.enable();
+    //pusher.enable();
     armLimit.enable();
     noteContact.enable();
     target_angle=getAngle();
@@ -76,7 +76,6 @@ public class Arm extends SubsystemBase implements Constants{
       incontact=true;
     if(n && !b)
       incontact=false;
-  
   }
   public boolean isNoteCaptured() {
     checkContact();
@@ -149,7 +148,6 @@ public class Arm extends SubsystemBase implements Constants{
   }
   public static boolean atStartingPosition(){
     return at_starting_position;
-
   }
   public static void init(){
     initialized=false;
@@ -199,14 +197,14 @@ public class Arm extends SubsystemBase implements Constants{
         shooter.set(SHOOT_POWER);
       else
         shooter.set(0);
-      if (pickup_on)
+      if (pickup_on || pusher_on)
         pickup.set(PICKUP_POWER);
       else
-        pickup.set(0.03);
-      if (pusher_on)
-        pusher.set(PUSH_POWER);
-      else
-        pusher.set(-0.02);
+        pickup.set(-0.03);
+      // if (pusher_on)
+      //   pusher.set(PUSH_POWER);
+      // else
+      //   pusher.set(-0.02);
     
     log();
   }
@@ -215,7 +213,7 @@ public class Arm extends SubsystemBase implements Constants{
     SmartDashboard.putNumber("Arm", getAngle());
     SmartDashboard.putBoolean("Shooting", shooter_on);
     SmartDashboard.putBoolean("Pickup", pickup_on);
-    SmartDashboard.putBoolean("Pushing", pusher_on);
+    //SmartDashboard.putBoolean("Pushing", pusher_on);
     SmartDashboard.putBoolean("Note", isNoteCaptured());
     SmartDashboard.putNumber("Shooter", shooter.getRate());
     SmartDashboard.putString("Status", status);

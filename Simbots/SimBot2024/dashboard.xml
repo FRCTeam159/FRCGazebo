@@ -1,150 +1,137 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="SendableChooser[0]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="340" y="-1"/>
+	</widget>
+	<widget field="SimClock" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="348" y="114"/>
+		<width>93</width>
+	</widget>
+	<widget field="SendableChooser[3]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="514" y="0"/>
+	</widget>
+	<widget field="SendableChooser[4]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="334" y="-1"/>
+	</widget>
+	<widget field="reversed" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="199" y="136"/>
+		<height>16</height>
+	</widget>
+	<widget field="ShowTags" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="87" y="175"/>
+	</widget>
+	<widget field="Autoset" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="271" y="134"/>
+	</widget>
 	<widget field="BR" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="295" y="560"/>
-		<width>278</width>
+		<location x="450" y="583"/>
+		<width>142</width>
 	</widget>
 	<widget field="BL" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="292" y="539"/>
-		<width>282</width>
+		<location x="148" y="585"/>
+		<width>132</width>
 	</widget>
 	<widget field="FR" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="5" y="561"/>
-		<width>279</width>
+		<location x="290" y="585"/>
+		<width>148</width>
 	</widget>
 	<widget field="FL" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="4" y="538"/>
-		<width>282</width>
-	</widget>
-	<widget field="Pushing" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
-		<location x="277" y="124"/>
+		<location x="11" y="584"/>
+		<width>130</width>
 	</widget>
 	<widget field="Note" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
-		<location x="387" y="124"/>
+		<location x="141" y="103"/>
 	</widget>
 	<widget field="Shooting" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
-		<location x="212" y="123"/>
+		<location x="18" y="106"/>
 		<height>14</height>
 	</widget>
 	<widget field="Status" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="438" y="120"/>
+		<location x="455" y="135"/>
+		<width>134</width>
+		<height>20</height>
 	</widget>
 	<widget field="Shooter" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="110" y="118"/>
+		<location x="100" y="75"/>
 		<width>90</width>
 	</widget>
 	<widget field="Pickup" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
-		<location x="333" y="125"/>
+		<location x="84" y="105"/>
 	</widget>
 	<widget field="Arm" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="17" y="117"/>
+		<location x="15" y="74"/>
 		<width>80</width>
 	</widget>
 	<widget field="Position" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="378" y="96"/>
+		<location x="98" y="134"/>
 		<width>93</width>
 	</widget>
 	<widget field="Alliance" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="294" y="96"/>
+		<location x="17" y="132"/>
 		<width>72</width>
 	</widget>
-	<widget field="Use Tags" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="169" y="16"/>
-	</widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
-		<location x="-16" y="144"/>
-		<width>599</width>
-		<height>390</height>
-		<property name="Camera Choice" value=""/>
-	</static-widget>
 	<widget field="Pathplanner" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="498" y="81"/>
+		<location x="424" y="84"/>
 	</widget>
 	<widget field="AutoTime" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="123" y="66"/>
+		<location x="346" y="135"/>
 		<width>92</width>
 	</widget>
 	<widget field="Y:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="122" y="89"/>
+		<location x="98" y="46"/>
 		<width>76</width>
 	</widget>
 	<widget field="X:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="39" y="90"/>
+		<location x="14" y="45"/>
 		<width>76</width>
 		<height>20</height>
 	</widget>
 	<widget field="H:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="205" y="89"/>
+		<location x="185" y="46"/>
 		<width>74</width>
 	</widget>
-	<widget field="maxA" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="229" y="65"/>
-		<width>79</width>
-	</widget>
-	<widget field="maxV" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="225" y="41"/>
-		<width>83</width>
-	</widget>
 	<widget field="Field Oriented" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="242" y="15"/>
+		<location x="177" y="12"/>
 	</widget>
 	<widget field="SendableChooser[2]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
-		<location x="407" y="-5"/>
-	</widget>
-	<widget field="SimClock" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="15" y="65"/>
-		<width>102</width>
-	</widget>
-	<widget field="Distance" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="15" y="43"/>
-		<width>99</width>
-	</widget>
-	<widget field="Velocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="127" y="42"/>
-		<width>90</width>
+		<location x="275" y="1"/>
 	</widget>
 	<widget field="yPath" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="493" y="31"/>
+		<location x="426" y="35"/>
 		<width>85</width>
+		<height>20</height>
 	</widget>
 	<widget field="xPath" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="492" y="8"/>
+		<location x="425" y="12"/>
 		<width>86</width>
 		<height>20</height>
 	</widget>
 	<widget field="rPath" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="496" y="54"/>
+		<location x="430" y="58"/>
 		<width>81</width>
 		<height>21</height>
 	</widget>
 	<widget field="SendableChooser[1]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
-		<location x="315" y="-5"/>
+		<location x="274" y="53"/>
 	</widget>
 	<widget field="Reset" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="49" y="15"/>
+		<location x="43" y="11"/>
 	</widget>
 	<widget field="Gazebo" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="105" y="15"/>
+		<location x="101" y="11"/>
 	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="17" y="11"/>
+		<location x="12" y="8"/>
 		<width>23</width>
 		<height>23</height>
 	</static-widget>
-		<property name="Team Number/Host" value="localhost"/>
-		<property name="Automatically Show Widgets" value="false"/>
-		<property name="Grid Cell Width(s)" value="16"/>
-		<property name="Grid Cell Height(s)" value="16"/>
-		<property name="Window X Position" value="1292"/>
-		<property name="Window Y Position" value="62"/>
-		<property name="Window Width" value="604"/>
-		<property name="Window Height" value="644"/>
-		<property name="Save File" value=".\dashboard.xml"/>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
+		<location x="6" y="168"/>
+		<width>600</width>
+		<height>448</height>
+		<property name="Camera Choice" value=""/>
+	</static-widget>
 </dashboard>
 <live-window>
 </live-window>
-	<hidden field="Conf"/>
-	<hidden field="Error"/>
-	<hidden field="Detect"/>
-	<hidden field="Latency"/>
 </xml>

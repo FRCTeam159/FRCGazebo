@@ -7,25 +7,13 @@ package frc.robot.commands;
 import java.util.ArrayList;
 import java.util.List;
 
-// import com.pathplanner.lib.PathConstraints;
-// import com.pathplanner.lib.PathPlanner;
-// import com.pathplanner.lib.PathPlannerTrajectory;
-// import com.pathplanner.lib.PathPoint;
-//import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
-
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.path.PathPlannerTrajectory;
-import com.pathplanner.lib.path.PathPlannerTrajectory.State;
-
-import com.pathplanner.lib.path.PathPoint;
-import com.pathplanner.lib.path.RotationTarget;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
-
-import com.pathplanner.lib.controllers.*;
 
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
@@ -39,12 +27,11 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-//import edu.wpi.first.math.trajectory.Trajectory.State;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import objects.PlotServer;
-import frc.robot.objects.SwerveModule;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Drivetrain;
@@ -60,22 +47,18 @@ public class DrivePath extends Command {
   boolean using_pathplanner=false;
 
   /** Creates a new AutoTest. */
-  private ArrayList<PathData> pathdata = new ArrayList<PathData>();
+  ArrayList<PathData> pathdata = new ArrayList<PathData>();
 
   public boolean holotest=true;
-  // private PPHolonomicDriveController m_ppcontroller=new PPHolonomicDriveController(
-  //     new PIDController(1, 0, 0), new PIDController(1, 0, 0), new PIDController(2, 0, 0));
-  private final PPHolonomicDriveController m_ppcontroller = new PPHolonomicDriveController(
+  final PPHolonomicDriveController m_ppcontroller = new PPHolonomicDriveController(
     new PIDConstants(4,0,0), new PIDConstants(4,0,0), Drivetrain.kMaxVelocity, 0.337);
 
-  TrapezoidProfile.Constraints c=new TrapezoidProfile.Constraints(0.25*6.3, 0.25*3.15);
-
-  private ProfiledPIDController ppc=new ProfiledPIDController(4, 0, 0,c);
+  TrapezoidProfile.Constraints c=new TrapezoidProfile.Constraints(6.3, 3.15);
+  ProfiledPIDController ppc=new ProfiledPIDController(4, 0, 0,c);
+  HolonomicDriveController m_hcontroller=new HolonomicDriveController(new PIDController(1, 0, 0), new PIDController(1, 0, 0),ppc);
   
-  private HolonomicDriveController m_hcontroller=new HolonomicDriveController(new PIDController(0.5, 0, 0), new PIDController(0.5, 0, 0),ppc);
-  
-  private Timer m_timer = new Timer();
-  private Drivetrain m_drive;
+  Timer m_timer = new Timer();
+  Drivetrain m_drive;
   static public boolean plot_trajectory_motion = false;
   static public boolean plot_trajectory_dynamics = false;
 
@@ -90,9 +73,11 @@ public class DrivePath extends Command {
   double rPath = 90;
   boolean reversed = false;
   boolean autostart=false;
+  double start_time;
 
   double maxV;
   double maxA;
+  
   double last_time;
 
   int plot_type = utils.PlotUtils.PLOT_NONE;
@@ -151,10 +136,11 @@ public class DrivePath extends Command {
     m_timer.start();
    
     pathdata.clear();
-    m_drive.startAuto();
+    
     elapsed=0;
+    start_time=m_drive.getTime();
     m_drive.resetPose();
-    m_drive.enable();
+    //m_drive.enable();
     Arm.status="DrivePath";
   
     System.out.println("runtime:" + runtime + " states:" + states + " intervals:" + intervals);
@@ -166,7 +152,7 @@ public class DrivePath extends Command {
   @Override
   public void execute() {
    
-    elapsed = m_drive.getTime();
+  elapsed = m_drive.getTime()-start_time;
   
    Trajectory.State reference=null;
     ChassisSpeeds speeds;

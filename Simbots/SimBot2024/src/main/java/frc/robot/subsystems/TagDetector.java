@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
@@ -23,9 +22,7 @@ import edu.wpi.first.apriltag.AprilTagPoseEstimator;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSource;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import objects.Camera;
 
@@ -46,39 +43,96 @@ public class TagDetector extends Thread {
   AprilTagPoseEstimator wpi_pose_estimator;
 
   Drivetrain m_drivetrain;
-
-  static AprilTag target_tag = null;
-  
-  boolean first = true;
-  
-  static boolean first_pose=true;
-
+ 
   public static double min_decision_margin=30; // reject tags less than this
 
-  static double maxtime = 0;
-  static double grab_time = 0;
-  static double detect_time=0;
-  static int count = 0;
-  static String test_image = System.getenv("GZ_SIM") + "/docs/frame_0000.jpg";
-
-  private static int target_id=0;
+  static int alliance=TargetMgr.BLUE;
+  static int position=TargetMgr.CENTER;
+  static boolean reversed=false;
+  static boolean autoselect=false;
 
   public TagDetector(Drivetrain drivetrain) {
-    m_drivetrain = drivetrain;
-    //test();
+    m_drivetrain = drivetrain; 
   }
 
-  // test tag detection jni using an image file
-  public void test() {
-    Mat mat = Imgcodecs.imread(test_image);
-    AprilTag[] tags = getTags(mat);
-    if(tags ==null)
-    return;
-    for (int i = 0; i < tags.length; i++) {
-      tags[i].print();
+  @Override
+  public void run() {
+    cam = new Camera(0, 640, 480, 40); // specs for Gazebo camera
+
+    wpi_detector = new AprilTagDetector();
+    wpi_detector.addFamily("tag16h5",0);
+   
+    wpi_poseEstConfig = new AprilTagPoseEstimator.Config(TargetMgr.targetSize, cam.fx, cam.fy, cam.cx, cam.cy);
+    wpi_pose_estimator = new AprilTagPoseEstimator(wpi_poseEstConfig);
+
+    ouputStream = CameraServer.putVideo("testCamera", cam.image_width, cam.image_height);
+    cam.start();
+   
+    SmartDashboard.putBoolean("Autoset",autoselect);
+
+    while (!Thread.interrupted()) {
+      try {
+        Thread.sleep(50);  
+        Mat mat = cam.getFrame();   
+        AprilTag[] tags = null;
+        
+        if (m_drivetrain.showTags() || (autoselect && !TargetMgr.startPoseSet()))
+          tags = getTags(mat);
+
+        if (autoselect) {
+          if (tags == null) {
+            TargetMgr.setStartPose(null);
+            ouputStream.putFrame(mat);
+            continue;
+          }
+          if (!TargetMgr.startPoseSet()) {
+            Arrays.sort(tags, new SortbyDistance());
+            TargetMgr.setStartPose(tags);
+          }
+        }
+        else{
+          alliance=Autonomous.getAlliance();
+          position=Autonomous.getPosition();
+          TargetMgr.setTarget(alliance,position,false);
+        }
+
+        if (tags != null && m_drivetrain.showTags())
+          showTags(tags, mat);
+        else
+          ouputStream.putFrame(mat);
+      } catch (Exception ex) {
+        //System.out.println("TagDetector exception:" + ex);
+      }
     }
   }
+  
+  void showTags(AprilTag[] tags, Mat mat) {
+    for (int i = 0; i < tags.length; i++) {
+      AprilTag tag = tags[i];
 
+      Point c = tag.center();
+
+      Scalar lns = new Scalar(255.0, 255.0, 0.0);
+      Imgproc.line(mat, tag.tl(), tag.tr(), lns, 2);
+      Imgproc.line(mat, tag.tr(), tag.br(), lns, 2);
+      Imgproc.line(mat, tag.br(), tag.bl(), lns, 2);
+      Imgproc.line(mat, tag.bl(), tag.tl(), lns, 2);
+
+      // Imgproc.rectangle(mat, tl, br, new Scalar(255.0, 255.0, 0.0), 2);
+      Imgproc.drawMarker(mat, c, new Scalar(0, 0, 255), Imgproc.MARKER_CROSS, 35, 2, 8);
+      Point p = new Point(tag.bl().x - 10, tag.bl().y - 10);
+      Imgproc.putText(
+          mat, // Matrix obj of the image
+          "[" + tag.getTagId() + "]", // Text to be added
+          p, // point
+          Imgproc.FONT_HERSHEY_SIMPLEX, // front face
+          1, // front scale
+          new Scalar(255, 0, 0), // Scalar object for color
+          2 // Thickness
+      );
+    }
+    ouputStream.putFrame(mat);
+  }
   // return an array of tag info structures from an image
   private AprilTag[] getTags(Mat mat) {
     AprilTag[] atags=null;
@@ -110,117 +164,6 @@ public class TagDetector extends Thread {
     return atags;
   }
 
-  static public void reset() {
-    maxtime = 0;
-    grab_time = 0;
-    count = 0;
-    detect_time=0;
-    first_pose=true;
-  }
-
-  static public void setTargetId(int i) {
-    target_id = i;
-  }
-
-  // project a scaler distance and angle to x and y coordinates
-  public static Translation2d project(
-      double radius, Rotation2d angle) {
-    return new Translation2d(angle.getCos() * radius, -angle.getSin() * radius);
-  }
-
-  @Override
-  public void run() {
-    cam = new Camera(0, 640, 480, 40); // specs for Gazebo camera
-
-    wpi_detector = new AprilTagDetector();
-    wpi_detector.addFamily("tag16h5",0);
-   
-    wpi_poseEstConfig = new AprilTagPoseEstimator.Config(TargetMgr.targetSize, cam.fx, cam.fy, cam.cx, cam.cy);
-    wpi_pose_estimator = new AprilTagPoseEstimator(wpi_poseEstConfig);
-
-    ouputStream = CameraServer.putVideo("testCamera", cam.image_width, cam.image_height);
-    cam.start();
-
-    while (!Thread.interrupted()) {
-      try {
-        Thread.sleep(50);
-        long endtime = 0;
-
-        long startTime = System.nanoTime();
-        Mat mat = cam.getFrame();
-        endtime = System.nanoTime();
-        double duration=(endtime - startTime);
-        double total=duration;
-        grab_time+=duration;
-
-        if (!m_drivetrain.useTags()) {
-          ouputStream.putFrame(mat);
-          continue;
-        }
-        startTime = System.nanoTime();
-        AprilTag[] tags = null;
-        
-        tags = getTags(mat);
-        endtime = System.nanoTime();
-        duration=(endtime - startTime);
-        total+=duration;
-
-        detect_time +=  duration;
-        count++;
-        if (count > 1)
-          maxtime = total > maxtime ? total : maxtime;
-        int ntags=tags==null?0:tags.length;
-        
-        String s = String.format("ntags:%d ave grab:%-2.1f detect:%-2.1f ms", ntags,1e-6*grab_time / count, 1e-6*detect_time/count);
-        SmartDashboard.putString("Detect", s);
-            
-        if (!TargetMgr.tagsPresent() || tags==null) {
-          //TargetMgr.setStartPose(tags);
-          ouputStream.putFrame(mat);
-          continue;
-        }
-        target_tag = null;
-
-        Arrays.sort(tags, new SortbyDistance());
-        if(Arm.atStartingPosition() && !TargetMgr.startPoseSet())
-          TargetMgr.setStartPose(tags);
-        target_tag=tags[0];
-      
-        for (int i = 0; i < tags.length; i++) {
-          AprilTag tag = tags[i];
-          if (first)
-            tag.print();
-
-          Point c = tag.center();
-
-          Scalar lns = new Scalar(255.0, 255.0, 0.0);
-          Imgproc.line(mat, tag.tl(), tag.tr(), lns, 2);
-          Imgproc.line(mat, tag.tr(), tag.br(), lns, 2);
-          Imgproc.line(mat, tag.br(), tag.bl(), lns, 2);
-          Imgproc.line(mat, tag.bl(), tag.tl(), lns, 2);
-
-          // Imgproc.rectangle(mat, tl, br, new Scalar(255.0, 255.0, 0.0), 2);
-          Imgproc.drawMarker(mat, c, new Scalar(0, 0, 255), Imgproc.MARKER_CROSS, 35, 2, 8);
-          Point p = new Point(tag.bl().x - 10, tag.bl().y - 10);
-          Imgproc.putText(
-              mat, // Matrix obj of the image
-              "[" + tag.getTagId() + "]", // Text to be added
-              p, // point
-              Imgproc.FONT_HERSHEY_SIMPLEX, // front face
-              1, // front scale
-              new Scalar(255, 0, 0), // Scalar object for color
-              2 // Thickness
-          );
-        }
-        first = false;
-
-        ouputStream.putFrame(mat);
-      } catch (Exception ex) {
-        //System.out.println("exception:" + ex);
-      }
-    }
-  }
-
  // Helper class extending Comparator interface
  // sort by distance (closest on top)
   class SortbyDistance implements Comparator<AprilTag> {
@@ -232,7 +175,6 @@ public class TagDetector extends Thread {
       if (d1 > d2)
         return 1;
       return 0;
-
     }
   }
 }

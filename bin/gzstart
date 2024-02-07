@@ -14,6 +14,9 @@ mkdir -p tmp
 start_gazebo --verbose &
 sleep 1
 GzProgram.exe &
-start_dashboard &
-sleep 4
+sleep 1
 simulate &
+sleep 2
+gradlew SmartDashboard &
+#start_dashboard &
+

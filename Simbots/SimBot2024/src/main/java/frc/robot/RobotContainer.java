@@ -26,6 +26,8 @@ import frc.robot.subsystems.TargetMgr;
 public class RobotContainer {
   static boolean resetting=false;
 
+  private final TargetMgr m_targetmgr=new TargetMgr();
+
   // The robot's subsystems and commands are defined here...
   private final Drivetrain m_drivetrain = new Drivetrain();
   private final Arm m_arm = new Arm();
@@ -62,21 +64,19 @@ public class RobotContainer {
   }
   public void teleopInit(){
     m_drivetrain.setRobotDisabled(false);
-   // m_drivetrain.setFieldOriented(m_drivetrain.isGyroEnabled());
     m_drivetrain.endAuto();
     m_drivetrain.enable();
     Arm.status="Teleop";
   }
   public void autonomousInit(){
     m_drivetrain.setRobotDisabled(false);
-    //m_drivetrain.setFieldOriented(false);
     Autonomous.ok2run=true;
+    m_drivetrain.enable();
     m_drivetrain.startAuto();
     Arm.status="Auto";
   }
   public void disabledInit(){
     m_drivetrain.setRobotDisabled(true);
-    //m_drivetrain.disable();
     m_drivetrain.endAuto();
     Arm.status="Disabled";
   }
@@ -95,7 +95,7 @@ public class RobotContainer {
   boolean b = SmartDashboard.getBoolean("Reset", false);
   if(b &&  !resetting){
     resetting=true;
-    m_drivetrain.resetWheels();
+    m_drivetrain.resetWheels(true);
     m_arm.reset();
     TargetMgr.reset();
   }
@@ -104,7 +104,7 @@ public class RobotContainer {
     m_drivetrain.resetPose();
   }
   else if(resetting && ! m_drivetrain.wheelsReset()){
-    m_drivetrain.allignWheels();
+    m_drivetrain.resetWheels(false);
   }
 }
 }
