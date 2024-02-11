@@ -23,7 +23,6 @@ import edu.wpi.first.apriltag.AprilTagPoseEstimator;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import objects.Camera;
 
 import objects.AprilTag;
@@ -45,12 +44,7 @@ public class TagDetector extends Thread {
   Drivetrain m_drivetrain;
  
   public static double min_decision_margin=30; // reject tags less than this
-
-  static int alliance=TargetMgr.BLUE;
-  static int position=TargetMgr.CENTER;
-  static boolean reversed=false;
-  static boolean autoselect=false;
-
+  
   public TagDetector(Drivetrain drivetrain) {
     m_drivetrain = drivetrain; 
   }
@@ -58,7 +52,6 @@ public class TagDetector extends Thread {
   @Override
   public void run() {
     cam = new Camera(0, 640, 480, 40); // specs for Gazebo camera
-
     wpi_detector = new AprilTagDetector();
     wpi_detector.addFamily("tag16h5",0);
    
@@ -67,39 +60,33 @@ public class TagDetector extends Thread {
 
     ouputStream = CameraServer.putVideo("testCamera", cam.image_width, cam.image_height);
     cam.start();
-   
-    SmartDashboard.putBoolean("Autoset",autoselect);
-
+    
     while (!Thread.interrupted()) {
       try {
         Thread.sleep(50);  
         Mat mat = cam.getFrame();   
         AprilTag[] tags = null;
+
+        boolean autoselect=Autonomous.getAutoset();
+        boolean usetags=Autonomous.getUsetags();
         
-        if (m_drivetrain.showTags() || (autoselect && !TargetMgr.startPoseSet()))
+        if (usetags && autoselect){
           tags = getTags(mat);
-
-        if (autoselect) {
-          if (tags == null) {
-            TargetMgr.setStartPose(null);
-            ouputStream.putFrame(mat);
-            continue;
-          }
-          if (!TargetMgr.startPoseSet()) {
-            Arrays.sort(tags, new SortbyDistance());
-            TargetMgr.setStartPose(tags);
+          if(tags!=null){
+            if(tags.length ==2){
+              Arrays.sort(tags, new SortbyDistance());
+              TargetMgr.setStartPose(tags);
+            }
+            showTags(tags, mat);
           }
         }
-        else{
-          alliance=Autonomous.getAlliance();
-          position=Autonomous.getPosition();
-          TargetMgr.setTarget(alliance,position,false);
+        if (autoselect) { 
+          int alliance=Autonomous.getAlliance();
+          int position=Autonomous.getPosition();
+          boolean reversed=Autonomous.getReversed();
+          TargetMgr.setTarget(alliance,position,reversed);     
         }
-
-        if (tags != null && m_drivetrain.showTags())
-          showTags(tags, mat);
-        else
-          ouputStream.putFrame(mat);
+        ouputStream.putFrame(mat);
       } catch (Exception ex) {
         //System.out.println("TagDetector exception:" + ex);
       }
@@ -131,7 +118,7 @@ public class TagDetector extends Thread {
           2 // Thickness
       );
     }
-    ouputStream.putFrame(mat);
+   
   }
   // return an array of tag info structures from an image
   private AprilTag[] getTags(Mat mat) {

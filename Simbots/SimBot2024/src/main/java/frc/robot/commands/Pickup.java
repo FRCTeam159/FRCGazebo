@@ -14,12 +14,14 @@ import frc.robot.subsystems.Drivetrain;
 public class Pickup extends Command implements Constants{
   private final Timer m_timer = new Timer();
   private final Arm m_arm;
+  private final Drivetrain m_drive;
   double timeout;
   boolean resetting=false;
   double starttm;
 
-  public Pickup(Arm arm, double tm) {
+  public Pickup(Arm arm, Drivetrain drive, double tm) {
     m_arm=arm;
+    m_drive=drive;
     timeout=tm;
     m_timer.start();
     addRequirements(arm);
@@ -42,6 +44,8 @@ public class Pickup extends Command implements Constants{
   public void execute() {
     if(m_timer.get()>0.5*timeout)
       m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE);
+    if(m_drive !=null)
+      m_drive.drive(0,0,0,false);
   }
 
   // Called once the command ends or is interrupted.

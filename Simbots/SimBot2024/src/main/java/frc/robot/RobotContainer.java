@@ -4,12 +4,16 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.ControlArm;
 import frc.robot.commands.DriveWithGamepad;
+import frc.robot.commands.Pickup;
+import frc.robot.commands.Shoot;
 import objects.PlotServer;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Autonomous;
@@ -26,23 +30,25 @@ import frc.robot.subsystems.TargetMgr;
 public class RobotContainer {
   static boolean resetting=false;
 
-  private final TargetMgr m_targetmgr=new TargetMgr();
-
   // The robot's subsystems and commands are defined here...
-  private final Drivetrain m_drivetrain = new Drivetrain();
+  private final Drivetrain m_drive = new Drivetrain();
   private final Arm m_arm = new Arm();
-  private final Autonomous m_autonomous = new Autonomous(m_drivetrain,m_arm);
+  private final Autonomous m_autonomous = new Autonomous(m_drive,m_arm);
   private final XboxController m_controller = new XboxController(0);
-  private final TagDetector m_detector= new TagDetector(m_drivetrain);
+  private final TagDetector m_detector= new TagDetector(m_drive);
   PlotServer m_plotsub=new PlotServer();
 
   private DriveWithGamepad m_driveCommand = null; // TODO
  
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    m_driveCommand=new DriveWithGamepad(m_drivetrain, m_controller);
-    m_drivetrain.setDefaultCommand(m_driveCommand);
+    m_driveCommand=new DriveWithGamepad(m_drive, m_controller);
+    m_drive.setDefaultCommand(m_driveCommand);
     m_arm.setDefaultCommand(new ControlArm(m_arm,m_controller));
+
+    NamedCommands.registerCommand("Pickup", new Pickup(m_arm,m_drive,3.0));
+    NamedCommands.registerCommand("Shoot", new Shoot(m_drive,m_arm));
+
     configureButtonBindings();
   }
 
@@ -63,48 +69,48 @@ public class RobotContainer {
     return m_autonomous.getCommand();
   }
   public void teleopInit(){
-    m_drivetrain.setRobotDisabled(false);
-    m_drivetrain.endAuto();
-    m_drivetrain.enable();
+    m_drive.setRobotDisabled(false);
+    m_drive.endAuto();
+    m_drive.enable();
     Arm.status="Teleop";
   }
   public void autonomousInit(){
-    m_drivetrain.setRobotDisabled(false);
+    m_drive.setRobotDisabled(false);
     Autonomous.ok2run=true;
-    m_drivetrain.enable();
-    m_drivetrain.startAuto();
+    m_drive.enable();
+    m_drive.startAuto();
     Arm.status="Auto";
   }
   public void disabledInit(){
-    m_drivetrain.setRobotDisabled(true);
-    m_drivetrain.endAuto();
+    m_drive.setRobotDisabled(true);
+    m_drive.endAuto();
     Arm.status="Disabled";
   }
   public void robotInit(){
-    m_drivetrain.setRobotDisabled(true);
-    m_drivetrain.init();
+    m_drive.setRobotDisabled(true);
+    m_drive.init();
     m_plotsub.start();
     m_detector.start();
   }
   public void reset(){
     System.out.println("Robot reset");
-    m_drivetrain.reset();
+    m_drive.reset();
   }
   public void simulationPeriodic(){
     
   boolean b = SmartDashboard.getBoolean("Reset", false);
   if(b &&  !resetting){
     resetting=true;
-    m_drivetrain.resetWheels(true);
+    m_drive.resetWheels(true);
     m_arm.reset();
     TargetMgr.reset();
   }
   else if(!b && resetting){
     resetting=false;
-    m_drivetrain.resetPose();
+    m_drive.resetPose();
   }
-  else if(resetting && ! m_drivetrain.wheelsReset()){
-    m_drivetrain.resetWheels(false);
+  else if(resetting && ! m_drive.wheelsReset()){
+    m_drive.resetWheels(false);
   }
 }
 }

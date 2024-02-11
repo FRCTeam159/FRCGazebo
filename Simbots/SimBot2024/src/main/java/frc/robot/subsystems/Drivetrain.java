@@ -63,11 +63,12 @@ public class Drivetrain extends SubsystemBase implements Constants {
 			m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
 	public static final double kTrackWidth = Units.inchesToMeters(2 * front_wheel_base); // bug? need to double actual value for geometry to work
+	public static final double kTrackRadius = 0.5* Units.inchesToMeters(Math.sqrt(front_wheel_base*front_wheel_base+side_wheel_base*side_wheel_base));
 
-	public static double kMaxVelocity = 3; // meters per second
+	public static double kMaxVelocity = 5; // meters per second
 	public static double kMaxAcceleration = 1; // meters/second/second
-	public static double kMaxAngularSpeed = Math.toRadians(360); // degrees per second
-	public static double kMaxAngularAcceleration = Math.toRadians(90);// degrees per second per second
+	public static double kMaxAngularSpeed = Math.toRadians(720); // degrees per second
+	public static double kMaxAngularAcceleration = Math.toRadians(360);// degrees per second per second
 
 	boolean field_oriented = false;
 	boolean alligning=false;
@@ -105,8 +106,7 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		SmartDashboard.putBoolean("Field Oriented", field_oriented);
 		//SmartDashboard.putNumber("maxV", kMaxVelocity);
 		//SmartDashboard.putNumber("maxA", kMaxAcceleration);
-		SmartDashboard.putBoolean("ShowTags", m_showtags);
-		
+			
 
 		// Configure AutoBuilder last
     	AutoBuilder.configureHolonomic(
@@ -115,10 +115,10 @@ public class Drivetrain extends SubsystemBase implements Constants {
             this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                    new PIDConstants(2, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(3, 0.0, 0.0), // Translation PID constants
                     new PIDConstants(2, 0.0, 0.0), // Rotation PID constants
                     1, // Max module speed, in m/s
-                    Units.inchesToMeters(front_wheel_base), // Drive base radius in meters. Distance from robot center to furthest module.
+                    kTrackRadius, // Drive base radius in meters. Distance from robot center to furthest module.
                     new ReplanningConfig() // Default path replanning config. See the API for the options here
             ),
             () -> {
@@ -258,15 +258,8 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		return getRotation2d().getDegrees();
 	}
 
-	public Rotation2d gyroRotation2d() {
-		return m_gyro.getRotation2d();
-	}
-	public double gyroHeading() {
-		return m_gyro.getHeading();
-	}
-
 	public Rotation2d getRotation2d() {
-		double angle = gyroHeading();
+		double angle =  m_gyro.getHeading();
 		angle = unwrap(last_heading, angle);
 		last_heading = angle;
 		return Rotation2d.fromDegrees(angle);
@@ -308,7 +301,6 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		SmartDashboard.putNumber("Y:", t.getY());
 
 		field_oriented = SmartDashboard.getBoolean("Field Oriented", field_oriented);
-		m_showtags = SmartDashboard.getBoolean("ShowTags", m_showtags);
 		
 		if(debug_angles)
 			displayAngles();	
@@ -391,7 +383,7 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	/** Updates the field relative position of the robot. */
 	public void updateOdometry() {
 		updatePositions();
-		m_poseEstimator.updateWithTime(getClockTime(),m_gyro.getRotation2d(), m_positions);
+		m_poseEstimator.updateWithTime(getClockTime(),getRotation2d(), m_positions);
 	
 		field_pose = getPose();
 		log();
@@ -410,7 +402,7 @@ public class Drivetrain extends SubsystemBase implements Constants {
 
 		m_kinematics = new SwerveDriveKinematics(
 			m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
-		m_poseEstimator.resetPosition(gyroRotation2d(), m_positions,pose);
+		m_poseEstimator.resetPosition(getRotation2d(), m_positions,pose);
 
 		System.out.println("reset odometry:"+getPose());
 		updateOdometry();

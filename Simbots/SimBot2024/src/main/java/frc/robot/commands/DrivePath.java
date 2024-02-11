@@ -14,7 +14,6 @@ import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
-
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -27,7 +26,6 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -49,18 +47,19 @@ public class DrivePath extends Command {
   /** Creates a new AutoTest. */
   ArrayList<PathData> pathdata = new ArrayList<PathData>();
 
-  public boolean holotest=true;
   final PPHolonomicDriveController m_ppcontroller = new PPHolonomicDriveController(
-    new PIDConstants(4,0,0), new PIDConstants(4,0,0), Drivetrain.kMaxVelocity, 0.337);
+    new PIDConstants(3,0.0,0), new PIDConstants(4,0.0,0.0), Drivetrain.kMaxVelocity, Drivetrain.kTrackRadius);
 
-  TrapezoidProfile.Constraints c=new TrapezoidProfile.Constraints(6.3, 3.15);
-  ProfiledPIDController ppc=new ProfiledPIDController(4, 0, 0,c);
+  TrapezoidProfile.Constraints c=new TrapezoidProfile.Constraints(Drivetrain.kMaxVelocity, Drivetrain.kMaxAcceleration);
+  ProfiledPIDController ppc=new ProfiledPIDController(2, 0, 0,c);
   HolonomicDriveController m_hcontroller=new HolonomicDriveController(new PIDController(1, 0, 0), new PIDController(1, 0, 0),ppc);
   
   Timer m_timer = new Timer();
   Drivetrain m_drive;
   static public boolean plot_trajectory_motion = false;
   static public boolean plot_trajectory_dynamics = false;
+
+  static boolean debug=false;
 
   Trajectory m_trajectory;
   PathPlannerTrajectory m_pptrajectory;
@@ -71,14 +70,18 @@ public class DrivePath extends Command {
   double yPath = 4;
   double xPath = 4;
   double rPath = 90;
-  boolean reversed = false;
-  boolean autostart=false;
+  boolean m_reversed = false;
+  boolean m_autoset = false;
   double start_time;
+
+  double last_heading = 0;
 
   double maxV;
   double maxA;
   
   double last_time;
+
+  boolean goingback=false;
 
   int plot_type = utils.PlotUtils.PLOT_NONE;
   int trajectory_option = Autonomous.PROGRAM;
@@ -86,17 +89,14 @@ public class DrivePath extends Command {
   public DrivePath(Drivetrain drive, int opt) {
     trajectory_option=opt;
     m_drive = drive;
-    xPath = SmartDashboard.getNumber("xPath", xPath);
-    yPath = SmartDashboard.getNumber("yPath", yPath);
-    rPath = SmartDashboard.getNumber("rPath", rPath);
+    m_reversed=Autonomous.getReversed();
     addRequirements(drive);
   }
 
   public DrivePath(Drivetrain drive,int opt, boolean rev) {
     trajectory_option=opt;
-    reversed=rev;
+    m_reversed=rev;
     m_drive = drive;
-    autostart=true;
     addRequirements(drive);
   }
   // =================================================
@@ -106,24 +106,35 @@ public class DrivePath extends Command {
   public void initialize() {
     plot_type = PlotUtils.auto_plot_option;
     System.out.println("DRIVEPATH_INIT");
-    if(autostart){
-      Pose2d target=TargetMgr.getTarget(reversed);
+    m_autoset=Autonomous.getAutoset();
+    m_ppcontroller.setEnabled(true);
+    Pose2d target;
+    if(m_autoset){
+      if(Autonomous.goback)
+        target=TargetMgr.getTarget(false);
+      else
+        target=TargetMgr.getTarget(m_reversed);
+      
       xPath=target.getX();
       yPath=target.getY();
-      rPath=target.getRotation().getRadians(); 
-    }
-    SmartDashboard.putNumber("xPath", xPath);
-    SmartDashboard.putNumber("yPath", yPath);
-    SmartDashboard.putNumber("rPath", rPath);
+      rPath=target.getRotation().getRadians();
 
+      System.out.println("X="+xPath);
+
+      SmartDashboard.putNumber("xPath", xPath);
+      SmartDashboard.putNumber("yPath", yPath);
+      SmartDashboard.putNumber("rPath", rPath);
+    }
+    else{
+       xPath = SmartDashboard.getNumber("xPath", xPath);
+       yPath = SmartDashboard.getNumber("yPath", yPath);
+       rPath = SmartDashboard.getNumber("rPath", rPath);
+    }
+ 
     maxV=Drivetrain.kMaxVelocity;
     maxA=Drivetrain.kMaxAcceleration;
 
-    using_pathplanner=(trajectory_option == Autonomous.PATHPLANNER || trajectory_option == Autonomous.PROGRAMPP);
-    if(xPath<0)
-      reversed=true;
-    else
-      reversed=false;
+    using_pathplanner=Autonomous.getUsePathplanner();
 
     PlotUtils.initPlot();
 
@@ -139,8 +150,10 @@ public class DrivePath extends Command {
     
     elapsed=0;
     start_time=m_drive.getTime();
-    m_drive.resetPose();
-    //m_drive.enable();
+    goingback=Autonomous.goback &&m_reversed;
+    if(!Autonomous.goback)
+      m_drive.resetPose();
+    m_ppcontroller.reset(m_drive.getPose(), new ChassisSpeeds());
     Arm.status="DrivePath";
   
     System.out.println("runtime:" + runtime + " states:" + states + " intervals:" + intervals);
@@ -152,9 +165,9 @@ public class DrivePath extends Command {
   @Override
   public void execute() {
    
-  elapsed = m_drive.getTime()-start_time;
+    elapsed = m_drive.getTime()-start_time;
   
-   Trajectory.State reference=null;
+    Trajectory.State reference=null;
     ChassisSpeeds speeds;
     if(using_pathplanner){
       PathPlannerTrajectory.State pstate = m_pptrajectory.sample(elapsed);
@@ -163,9 +176,20 @@ public class DrivePath extends Command {
     }
     else{
       reference = m_trajectory.sample(elapsed);
-      speeds= m_hcontroller.calculate(m_drive.getPose(), reference,reference.poseMeters.getRotation());
+      double angle=Drivetrain.unwrap(last_heading, reference.poseMeters.getRotation().getDegrees());
+      last_heading = angle;
+      Rotation2d rot=Rotation2d.fromDegrees(angle);
+      reference.poseMeters=new Pose2d(reference.poseMeters.getTranslation(),rot);
+      speeds= m_hcontroller.calculate(m_drive.getPose(), reference,rot);
     }
-    m_drive.drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, 2*speeds.omegaRadiansPerSecond, false);
+    if(debug){
+      Pose2d p=m_drive.getPose();
+      System.out.format("%-1.3f X a:%-1.1f t:%-1.1f c:%-1.1f Y a:%-1.1f t:%-1.1f c:%-1.1f R a:%-3.1f t:%-3.1f c:%-2.1f \n",elapsed,
+      p.getTranslation().getX(),reference.poseMeters.getX(),speeds.vxMetersPerSecond,
+      p.getTranslation().getY(),reference.poseMeters.getY(),speeds.vyMetersPerSecond,
+      p.getRotation().getDegrees(),reference.poseMeters.getRotation().getDegrees(),Math.toDegrees(speeds.omegaRadiansPerSecond));
+    }
+    m_drive.drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, false);
   
     if(plot_type == PlotUtils.PLOT_LOCATION)
       plotLocation(reference);
@@ -191,7 +215,7 @@ public class DrivePath extends Command {
   // =================================================
   @Override
   public boolean isFinished() {
-    return (elapsed >= 1.001 * runtime)||m_drive.disabled()||!Autonomous.ok2run;
+    return (elapsed >= 1.3 * runtime)||m_drive.disabled()||!Autonomous.ok2run;
   }
 
   // *********************** trajectory functions *******************/
@@ -203,9 +227,8 @@ public class DrivePath extends Command {
     switch (trajectory_option) {
       case Autonomous.PROGRAM:
         m_trajectory = programPath();
-        if (m_trajectory == null) {
+        if (m_trajectory == null) 
           return false;
-        }
         runtime = m_trajectory.getTotalTimeSeconds();
         states = m_trajectory.getStates().size();
         PlotUtils.setInitialPose(m_trajectory.sample(0).poseMeters, Drivetrain.kTrackWidth);
@@ -229,30 +252,38 @@ public class DrivePath extends Command {
     return true;
   }
 
-  // =================================================
+  // ===============================================
   // programPathPP: build a PathBuilder trajectory from variables
   // =================================================
   PathPlannerTrajectory pathplannerProgramPath() {
     List<Pose2d> points = new ArrayList<Pose2d>();
-    Pose2d pos1 = new Pose2d(0, 0, new Rotation2d(0));
-    Pose2d pos2 = new Pose2d(xPath, yPath, Rotation2d.fromDegrees(rPath));
+    double rpg = rPath;
+    double rps = 0;
 
-    points.add(pos1);
-    points.add(pos2);
- 
-    if (reversed) 
-      points=reverse(points);
-    
-    List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(points);   
-    PathConstraints constraints= new PathConstraints(maxV, maxA, Drivetrain.kMaxAngularSpeed, Drivetrain.kMaxAngularAcceleration);
-  
+    if (Autonomous.goback && m_reversed) {
+      Pose2d pose = m_drive.getPose();
+      rpg = 0;
+      rps = m_drive.getHeading();
+      points.add(pose);
+      points.add(new Pose2d());
+    } else {
+      points.add(new Pose2d());
+      points.add(new Pose2d(xPath, yPath, Rotation2d.fromDegrees(rPath)));
+    }
+
+    if (!Autonomous.goback && m_reversed)
+      points = reverse(points);
+
+    List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(points);
+    PathConstraints constraints = new PathConstraints(maxV, maxA, Drivetrain.kMaxAngularSpeed,
+        Drivetrain.kMaxAngularAcceleration);
+
     PathPlannerPath path = new PathPlannerPath(
-        bezierPoints,constraints,
-        new GoalEndState(0.0, Rotation2d.fromDegrees(rPath))
-    );
-   
-    PathPlannerTrajectory traj=new PathPlannerTrajectory(path,new ChassisSpeeds(),new Rotation2d(0));
-    return traj; 
+        bezierPoints, constraints,
+        new GoalEndState(0.0, Rotation2d.fromDegrees(rpg)));
+
+    PathPlannerTrajectory traj = new PathPlannerTrajectory(path, new ChassisSpeeds(), Rotation2d.fromDegrees(rps));
+    return traj;
   }
 
   // =================================================
@@ -270,32 +301,22 @@ public class DrivePath extends Command {
   // programPath: build a two-point trajectory from variables
   // =================================================
   Trajectory programPath() {
-    Pose2d pos1 = new Pose2d(0, 0, new Rotation2d(0));
-    Pose2d pos2 = new Pose2d(xPath, yPath, Rotation2d.fromDegrees(rPath));
-
     List<Pose2d> points = new ArrayList<Pose2d>();
-
-    points.add(pos1);
-    points.add(pos2);
    
-    return makeTrajectory(points, reversed);
-  }
-  // =================================================
-  // makeTrajectory: build a trajectory from a list of poses
-  // =================================================
-  // - lots of magic done when reverse is set in config
-  // - inverts coordinate system from p.o.v. of robot's last pose
-  //   (but facing in reverse direction)
-  // - just need to reverse order of points to drive backwards
-  // =================================================
-  Trajectory makeTrajectory(List<Pose2d> points, boolean reversed) {
     TrajectoryConfig config = new TrajectoryConfig(maxV,maxA);
-    System.out.println("reversed="+reversed);
-    config.setReversed(reversed);
-    //if (reversed)
-    //  Collections.reverse(points); // reverse order of waypoints first point=orig last point
+    if(Autonomous.goback && m_reversed){
+       Pose2d pose=m_drive.getPose();
+       points.add(pose);
+       points.add(new Pose2d()); // go to zero
+     }
+     else{
+       points.add(new Pose2d()); // start at zero after pose resety
+       points.add(new Pose2d(xPath, yPath, Rotation2d.fromDegrees(rPath)));
+       config.setReversed(m_reversed);
+    }
     return TrajectoryGenerator.generateTrajectory(points, config);
   }
+ 
   // =================================================
   // pathPlannerTest: build a trajectory from PathPlanner data
   // =================================================

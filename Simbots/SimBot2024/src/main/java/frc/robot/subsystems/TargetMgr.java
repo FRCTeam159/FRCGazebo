@@ -19,8 +19,8 @@ public class TargetMgr {
     static final public double YC = 0;
     static final public double RC = 0;
 
-    static final public double XF = 1.0; // forward
-    static final public double YF = -1.6;
+    static final public double XF = 0.9; // forward
+    static final public double YF = -1.3;
     static final public double RF = -60;
 
     static final public double YR = -0.5; //reverse
@@ -62,13 +62,11 @@ public class TargetMgr {
     static boolean field_relative=true;
 
    
-    public TargetMgr(){
+    static public void init(){ 
         SmartDashboard.putString("Alliance", aStrings[alliance]);
         SmartDashboard.putString("Position", pStrings[position]);
         SmartDashboard.putBoolean("reversed", reversed);   
-    }
-    static public void init(){ 
-     setFieldTargets();  
+        setFieldTargets();  
     }
     public static String getStartString(){
         return aStrings[alliance]+"-"+pStrings[position];
@@ -125,10 +123,10 @@ public class TargetMgr {
         SmartDashboard.putBoolean("reversed", reversed);
     }
     public static Pose2d getTarget(boolean reversed) {
-        double xr = XC;  // center
-        double yr = 0;
+        double xf = XC;  // center
+        double yr = 0.;
         double rr = 0;
-        double xf = -XC;
+        double xr = -XC;
         double yf = 0;
         double rf = 0;
         if ((alliance == TargetMgr.RED && position == TargetMgr.OUTSIDE) ||

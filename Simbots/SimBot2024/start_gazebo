@@ -1,6 +1,8 @@
 #!/bin/bash
 rm -f tmp/*;
 
-#gazebo --verbose 2024Field-trap.world &
-gazebo --verbose 2024Field.world &
+#gazebo 2024Field-center.world &
+#gazebo 2024Field-left.world &
+gazebo 2024Field-right.world &
+#gazebo -u --verbose temp.world &
 

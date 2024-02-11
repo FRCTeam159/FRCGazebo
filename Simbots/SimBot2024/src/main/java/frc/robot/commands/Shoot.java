@@ -32,6 +32,10 @@ public class Shoot extends Command implements Constants{
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    System.out.println("Shoot.init");
+    shooter_ready=false;
+    shooting=false;
+    ok2shoot=false;
     m_timer.reset();
     m_arm.setShooterOn();
     m_arm.setPickupOff();

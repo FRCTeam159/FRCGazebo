@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.4">
+  <world name="default">
+   <physics type="ode">
+      <ode>
+       <!-- 
+        <solver>
+        <iters>100</iters>
+        </solver>
+           
+        <constraints>
+          <contact_max_correcting_vel>1</contact_max_correcting_vel>
+          <contact_surface_layer>0.0001</contact_surface_layer>
+        </constraints>
+    --> 
+      </ode>
+      <!--<max_step_size>0.001</max_step_size>-->
+    </physics>
+   <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>2.67876 1.37769 5.63694 0 0.951639 -1.0518</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+    </gui>
+    <light name='sun' type='directional'>
+      <cast_shadows>0</cast_shadows>
+      <pose>0 0 10 0 -0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>0.5 0.1 -0.9</direction>
+      <spot>
+        <inner_angle>0</inner_angle>
+        <outer_angle>0</outer_angle>
+        <falloff>0</falloff>
+      </spot>
+    </light>
+    <!--
+    <include>
+      <uri>model://sun</uri>
+      <pose>0.5 0 10 0 -0 0</pose>
+      <direction>-0.5 0.1 -0.9</direction>
+    </include>
+    -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+    <!---->
+    <include>
+      <uri>model://2024Field</uri>
+      <pose>-7.53979 -4.68498 0.136131 0 0 0</pose>
+      <!--<pose>-5.6701 -4.30335 0.00038 0 -0 0</pose>-->
+    </include>
+    
+    <include>
+      <uri>model://TapeLines</uri>
+      <pose>-1.14584 0.3473 0 0 0 0</pose>
+    </include>
+    <include>
+      <name>Stage1</name>
+      <uri>model://StageDF</uri>
+      <pose>-1.17462 0.437304 0 1.5708 -0 3.14159</pose>
+    </include>
+    <!-- -->
+   <include>
+      <name>Chain1</name>
+      <uri>model://Chain</uri>
+      <pose>-3.6783 0.297697 0.736222 1.5708 -0 1.5708</pose>   
+    </include>
+   
+    <include>
+      <name>Stage2</name>
+      <uri>model://StageDF</uri>
+      <pose>-1.09766 0.306081 -0.003173 1.5708 6e-06 9.2e-05</pose>
+    </include>
+<!---->
+    <include>
+      <name>Note1</name>
+      <uri>model://Note</uri>
+      <pose>-6.54211 0.406638 0.011489 1.58 -0 0</pose>
+    </include>
+    
+    <include>
+      <name>Note2</name>
+      <uri>model://Note</uri>
+      <pose>-6.55544 -1.21026 0 1.58 -0 0</pose>
+    </include>
+    <include>
+    <name>Note3</name>
+      <uri>model://Note</uri>
+      <pose>-6.55594 -2.64036 -0 1.58 -0 0</pose>
+    </include>
+
+    <include>
+      <name>Note4</name>
+      <uri>model://Note</uri>
+      <pose>4.23685 0.353437 0.010998 1.58 -0 0</pose>
+    </include>
+
+    <include>
+      <name>Note5</name>
+      <uri>model://Note</uri>
+      <pose>4.22533 -1.10057 0.001007 1.58 -0 0</pose>
+    </include>
+
+    <include>
+      <name>Note6</name>
+      <uri>model://Note</uri>
+      <pose>4.22973 -2.53186 0.001034 1.58 -0 0</pose>
+    </include>
+ 
+
+    <include>
+      <name>HeldNote</name>
+      <uri>model://Note</uri>
+      <pose>6.34 -2.6 0.839508 -1.51095 -0 -0.389</pose>
+    </include>
+   
+    <include>
+      <uri>model://CompBot</uri>
+       <pose>6.45 -2.365 0.06617 0 0 -2.068</pose>
+    </include>
+    <include>  
+
+    <uri>model://Apriltag16_05_00003</uri>
+       <pose>-9.41142 -0.63551 1.44 0 -0 1.57</pose>
+    </include>
+
+    <include>
+      <uri>model://Apriltag16_05_00004</uri>
+      <pose>-9.41578 -1.19851 1.44 0 -0 1.57</pose>
+    </include>
+
+    <include>
+      <uri>model://Apriltag16_05_00008</uri>
+      <pose>7.18628 -1.70125 1.47983 0 0 -1.60641</pose>
+    </include>
+
+    <include>
+      <uri>model://Apriltag16_05_00007</uri>
+      <pose>7.19362 -1.16683 1.47997 0 0 -1.55425</pose>
+    </include>
+   
+  </world>
+</sdf>

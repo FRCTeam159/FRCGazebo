@@ -114,16 +114,17 @@
       <uri>model://Note</uri>
       <pose>4.22973 -2.53186 0.001034 1.58 -0 0</pose>
     </include>
-
+ 
 
     <include>
       <name>HeldNote</name>
       <uri>model://Note</uri>
-      <pose>6.34 -2.6 0.839508 -1.51095 -0 -0.389</pose>
+      <pose>6.3437 0.265423 0.814338 1.57443 -0.001083 -2.56141</pose>
     </include>
+   
     <include>
       <uri>model://CompBot</uri>
-       <pose>6.45 -2.365 0.06617 0 0 -2.068</pose>
+      <pose>6.47867 0.026555 0.044993 0.000516 -0.000147 2.09254</pose>
     </include>
     <include>  
 
