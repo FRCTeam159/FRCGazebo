@@ -83,8 +83,7 @@ public class TagDetector extends Thread {
         if (autoselect) { 
           int alliance=Autonomous.getAlliance();
           int position=Autonomous.getPosition();
-          boolean reversed=Autonomous.getReversed();
-          TargetMgr.setTarget(alliance,position,reversed);     
+          TargetMgr.setTarget(alliance,position);     
         }
         ouputStream.putFrame(mat);
       } catch (Exception ex) {

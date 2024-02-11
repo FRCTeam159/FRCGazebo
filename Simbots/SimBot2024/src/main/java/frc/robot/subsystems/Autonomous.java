@@ -49,17 +49,12 @@ public class Autonomous extends SequentialCommandGroup  {
   static double rp=TargetMgr.RF;
 
   static boolean test_coord_rotation=false;
-  public static boolean goback=true; // return to zero from current pose
- 
-
-  //public int selected_path=PROGRAM;
-
+  
   public static boolean debug_commands=false;
   public static boolean ok2run=false;
-  static boolean m_reversed=false;
+
   static boolean m_autoselect=true;
   static boolean m_usetags=false;
-  static boolean m_use_pathplanner=true;
 
   /** Creates a new AutoCommands. */
   public Autonomous(Drivetrain drive,Arm arm) {
@@ -84,12 +79,9 @@ public class Autonomous extends SequentialCommandGroup  {
     m_position_chooser.addOption("Inside", TargetMgr.INSIDE); 
     SmartDashboard.putData(m_position_chooser);
 
-    SmartDashboard.putBoolean("reversed",m_reversed);
     SmartDashboard.putBoolean("Autoset",m_autoselect);
     SmartDashboard.putBoolean("UseTags",m_usetags);
-
-    SmartDashboard.putBoolean("Pathplanner", m_use_pathplanner);
-    
+ 
     m_auto_plot_option.setDefaultOption("No Plot", PlotUtils.PLOT_NONE);
     m_auto_plot_option.addOption("Plot Dynamics", PlotUtils.PLOT_DYNAMICS);
     m_auto_plot_option.addOption("Plot Location", PlotUtils.PLOT_LOCATION);
@@ -103,18 +95,14 @@ public class Autonomous extends SequentialCommandGroup  {
   static public int getPosition(){
     return m_position_chooser.getSelected();
   }
-  static public boolean getReversed(){
-    return SmartDashboard.getBoolean("reversed",m_reversed);
-  }
+  
   static public boolean getAutoset(){
     return SmartDashboard.getBoolean("Autoset",m_autoselect);
   }
   static public boolean getUsetags(){
     return SmartDashboard.getBoolean("UseTags",m_usetags);
   }
-  static public boolean getUsePathplanner(){
-    return SmartDashboard.getBoolean("Pathplanner",m_use_pathplanner);
-  }
+  
   public SequentialCommandGroup getCommand(){
     return new SequentialCommandGroup(new InitAuto(m_arm),getAutoSequence());
   }
@@ -122,8 +110,7 @@ public class Autonomous extends SequentialCommandGroup  {
     PlotUtils.auto_plot_option = m_auto_plot_option.getSelected();
     int selected_path = m_path_chooser.getSelected();
 
-    boolean use_pathplanner=getUsePathplanner();
-    int opt=use_pathplanner?PROGRAMPP:PROGRAM;      
+    int opt=PROGRAM;      
 
     switch (selected_path) {
       case CALIBRATE:
@@ -131,7 +118,7 @@ public class Autonomous extends SequentialCommandGroup  {
       case PROGRAM:
         return new SequentialCommandGroup(
           new AlignWheels(m_drive,2),
-          new DrivePath(m_drive, opt)
+          new DrivePath(m_drive, opt,false)
         );
       case PATHPLANNER:
       {
@@ -143,30 +130,22 @@ public class Autonomous extends SequentialCommandGroup  {
         Pose2d p = PathPlannerAuto.getStaringPoseFromAutoFile(pathname);
         if(p!=null)
           m_drive.resetOdometry(p);
-        Command cmd;
-        if(use_pathplanner){
-          List<PathPlannerPath> pathGroup = PathPlannerAuto.getPathGroupFromAutoFile(pathname);
-          return new SequentialCommandGroup(
-            new Shoot(m_drive,m_arm),
-            AutoBuilder.followPath(pathGroup.get(0)),
-            new Pickup(m_arm, m_drive,3),
-            AutoBuilder.followPath(pathGroup.get(1)),
-            new Shoot(m_drive,m_arm)
-          );
-        }
-        else{
-          cmd=AutoBuilder.buildAuto(pathname);   
-          return new SequentialCommandGroup(cmd);
-        }     
+        
+        List<PathPlannerPath> pathGroup = PathPlannerAuto.getPathGroupFromAutoFile(pathname);
+        return new SequentialCommandGroup(
+          new Shoot(m_drive,m_arm),
+          AutoBuilder.followPath(pathGroup.get(0)),
+          new Pickup(m_arm, m_drive,3),
+          AutoBuilder.followPath(pathGroup.get(1)),
+          new Shoot(m_drive,m_arm)
+        );        
       }
       case AUTOTEST: {   
         return new SequentialCommandGroup(
               new AlignWheels(m_drive,2),
               new Shoot(m_drive,m_arm),
               new DrivePath(m_drive, opt, false),
-              goback?new Pickup(m_arm, m_drive,3):
-                new ParallelCommandGroup(       
-                new Pickup(m_arm, null,3),new AlignWheels(m_drive,2)),
+              new Pickup(m_arm, m_drive,3),
               new DrivePath(m_drive, opt, true),
               new Shoot(m_drive,m_arm)
         );

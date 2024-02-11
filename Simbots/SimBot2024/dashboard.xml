@@ -1,8 +1,5 @@
 <xml version="1.0">
 <dashboard>
-	<widget field="reversed" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="242" y="133"/>
-	</widget>
 	<widget field="UseTags" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
 		<location x="203" y="76"/>
 	</widget>
@@ -10,14 +7,14 @@
 		<location x="340" y="-1"/>
 	</widget>
 	<widget field="SimClock" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="348" y="114"/>
+		<location x="203" y="134"/>
 		<width>93</width>
 	</widget>
 	<widget field="SendableChooser[3]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
 		<location x="514" y="0"/>
 	</widget>
 	<widget field="Autoset" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="205" y="97"/>
+		<location x="207" y="103"/>
 	</widget>
 	<widget field="BR" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="450" y="583"/>
@@ -36,14 +33,14 @@
 		<width>130</width>
 	</widget>
 	<widget field="Note" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
-		<location x="141" y="103"/>
+		<location x="142" y="107"/>
 	</widget>
 	<widget field="Shooting" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
 		<location x="18" y="106"/>
 		<height>14</height>
 	</widget>
 	<widget field="Status" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="455" y="135"/>
+		<location x="412" y="134"/>
 		<width>134</width>
 		<height>20</height>
 	</widget>
@@ -66,11 +63,8 @@
 		<location x="17" y="132"/>
 		<width>72</width>
 	</widget>
-	<widget field="Pathplanner" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="424" y="84"/>
-	</widget>
 	<widget field="AutoTime" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="346" y="135"/>
+		<location x="310" y="134"/>
 		<width>92</width>
 	</widget>
 	<widget field="Y:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
