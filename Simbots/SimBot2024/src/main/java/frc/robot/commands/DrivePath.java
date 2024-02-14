@@ -38,45 +38,37 @@ public class DrivePath extends Command {
   ArrayList<PathData> pathdata = new ArrayList<PathData>();
 
   final PPHolonomicDriveController m_ppcontroller = new PPHolonomicDriveController(
-    new PIDConstants(3,0.0,0), new PIDConstants(4,0.0,0.0), Drivetrain.kMaxVelocity, Drivetrain.kTrackRadius);
+      new PIDConstants(3, 0.0, 0), new PIDConstants(4, 0.0, 0.0), Drivetrain.kMaxVelocity, Drivetrain.kTrackRadius);
 
   Timer m_timer = new Timer();
   Drivetrain m_drive;
   static public boolean plot_trajectory_motion = false;
   static public boolean plot_trajectory_dynamics = false;
 
-  static boolean debug=false;
+  static boolean debug = false;
 
   PathPlannerTrajectory m_pptrajectory;
   double runtime;
   double elapsed = 0;
   int states;
   int intervals;
-  double yPath = 4;
-  double xPath = 4;
-  double rPath = 90;
+  double yPath = 1;
+  double xPath = 0;
+  double rPath = 0;
   boolean m_reversed = false;
   boolean m_autoset = false;
   double start_time;
 
-  double last_heading = 0;
-
-  double maxV;
-  double maxA;
-  
-  double last_time;
-
-  boolean goingback=false;
+  boolean m_note_at_start;
 
   int plot_type = utils.PlotUtils.PLOT_NONE;
-  int trajectory_option = Autonomous.PROGRAM;
 
-  public DrivePath(Drivetrain drive,int opt, boolean rev) {
-    trajectory_option=opt;
-    m_reversed=rev;
+  public DrivePath(Drivetrain drive, boolean rev) {
+    m_reversed = rev;
     m_drive = drive;
     addRequirements(drive);
   }
+
   // =================================================
   // initialize: Called when the command is initially scheduled.
   // =================================================
@@ -84,55 +76,51 @@ public class DrivePath extends Command {
   public void initialize() {
     plot_type = PlotUtils.auto_plot_option;
     System.out.println("DRIVEPATH_INIT");
-    m_autoset=Autonomous.getAutoset();
+    m_autoset = Autonomous.getAutoset();
     m_ppcontroller.setEnabled(true);
 
-    if(m_autoset){ // use apriltags or smartdashboard buttons
-      Pose2d target=TargetMgr.getTarget();
-      xPath=target.getX();
-      yPath=target.getY();
-      rPath=target.getRotation().getRadians();
+    m_note_at_start=Arm.isNoteCaptured();
 
-      System.out.println("X="+xPath);
+    if (m_autoset) { // use apriltags or smartdashboard buttons
+      Pose2d target = TargetMgr.getTarget();
+      xPath = target.getX();
+      yPath = target.getY();
+      rPath = target.getRotation().getRadians();
 
       SmartDashboard.putNumber("xPath", xPath);
       SmartDashboard.putNumber("yPath", yPath);
       SmartDashboard.putNumber("rPath", rPath);
+    } else { // set path manually
+      xPath = SmartDashboard.getNumber("xPath", xPath);
+      yPath = SmartDashboard.getNumber("yPath", yPath);
+      rPath = SmartDashboard.getNumber("rPath", rPath);
     }
-    else{ // set path manually
-       xPath = SmartDashboard.getNumber("xPath", xPath);
-       yPath = SmartDashboard.getNumber("yPath", yPath);
-       rPath = SmartDashboard.getNumber("rPath", rPath);
-    }
- 
-    maxV=Drivetrain.kMaxVelocity;
-    maxA=Drivetrain.kMaxAcceleration;
 
     PlotUtils.initPlot();
 
     m_pptrajectory = pathplannerProgramPath();
-    if (m_pptrajectory == null){
+    if (m_pptrajectory == null) {
       System.out.println("DrivePath - path creation failed !");
-      return ;
+      return;
     }
     runtime = m_pptrajectory.getTotalTimeSeconds();
     states = m_pptrajectory.getStates().size();
     intervals = (int) (runtime / 0.02);
 
-    PlotUtils.setInitialPose(m_pptrajectory.sample(0).getTargetHolonomicPose(), Drivetrain.kTrackWidth);
+    PlotUtils.setInitialPose(m_pptrajectory.sample(0).getTargetHolonomicPose(), Drivetrain.kFrontWheelBase);
 
     m_timer.reset();
     m_timer.start();
-   
+
     pathdata.clear();
-    
-    elapsed=0;
-    start_time=m_drive.getTime();
-   
-    // important ! otherwise get rotation glitch at start or reverse path
+
+    elapsed = 0;
+    start_time = m_drive.getTime();
+
+    // important ! do this otherwise get rotation glitch at start or reverse path
     m_ppcontroller.reset(m_drive.getPose(), new ChassisSpeeds());
-    Arm.status="DrivePath";
-  
+    Arm.status = "DrivePath";
+
     System.out.println("runtime:" + runtime + " states:" + states + " intervals:" + intervals);
   }
 
@@ -141,26 +129,29 @@ public class DrivePath extends Command {
   // =================================================
   @Override
   public void execute() {
-   
-    elapsed = m_drive.getTime()-start_time;
-  
-    Trajectory.State reference=null;
+
+    elapsed = m_drive.getTime() - start_time;
+
+    Trajectory.State reference = null;
     ChassisSpeeds speeds;
-   
+
     PathPlannerTrajectory.State pstate = m_pptrajectory.sample(elapsed);
-    speeds= m_ppcontroller.calculateRobotRelativeSpeeds(m_drive.getPose(), pstate);
-    reference= new Trajectory.State(pstate.timeSeconds,pstate.velocityMps,pstate.accelerationMpsSq,pstate.getTargetHolonomicPose(),pstate.curvatureRadPerMeter);
-   
-    if(debug){
-      Pose2d p=m_drive.getPose();
-      System.out.format("%-1.3f X a:%-1.1f t:%-1.1f c:%-1.1f Y a:%-1.1f t:%-1.1f c:%-1.1f R a:%-3.1f t:%-3.1f c:%-2.1f \n",elapsed,
-      p.getTranslation().getX(),reference.poseMeters.getX(),speeds.vxMetersPerSecond,
-      p.getTranslation().getY(),reference.poseMeters.getY(),speeds.vyMetersPerSecond,
-      p.getRotation().getDegrees(),reference.poseMeters.getRotation().getDegrees(),Math.toDegrees(speeds.omegaRadiansPerSecond));
+    speeds = m_ppcontroller.calculateRobotRelativeSpeeds(m_drive.getPose(), pstate);
+    reference = new Trajectory.State(pstate.timeSeconds, pstate.velocityMps, pstate.accelerationMpsSq,
+        pstate.getTargetHolonomicPose(), pstate.curvatureRadPerMeter);
+
+    if (debug) {
+      Pose2d p = m_drive.getPose();
+      System.out.format(
+          "%-1.3f X a:%-1.1f t:%-1.1f c:%-1.1f Y a:%-1.1f t:%-1.1f c:%-1.1f R a:%-3.1f t:%-3.1f c:%-2.1f \n", elapsed,
+          p.getTranslation().getX(), reference.poseMeters.getX(), speeds.vxMetersPerSecond,
+          p.getTranslation().getY(), reference.poseMeters.getY(), speeds.vyMetersPerSecond,
+          p.getRotation().getDegrees(), reference.poseMeters.getRotation().getDegrees(),
+          Math.toDegrees(speeds.omegaRadiansPerSecond));
     }
     m_drive.drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, false);
-  
-    if(plot_type == PlotUtils.PLOT_LOCATION)
+
+    if (plot_type == PlotUtils.PLOT_LOCATION)
       plotLocation(reference);
     else if (plot_type == PlotUtils.PLOT_DYNAMICS)
       plotDynamics(reference);
@@ -174,7 +165,7 @@ public class DrivePath extends Command {
   @Override
   public void end(boolean interrupted) {
     System.out.println("DRIVEPATH_END");
-   
+
     if (plot_type != utils.PlotUtils.PLOT_NONE)
       PlotServer.publish(pathdata, 6, plot_type);
   }
@@ -184,7 +175,12 @@ public class DrivePath extends Command {
   // =================================================
   @Override
   public boolean isFinished() {
-    return (elapsed >= 1.3 * runtime)||m_drive.disabled()||!Autonomous.ok2run;
+  if (!m_reversed && !m_note_at_start && Arm.isNoteCaptured())
+      return true;
+
+    //return (elapsed >= 1.2 * runtime) || m_drive.disabled() || !Autonomous.ok2run;
+    return (elapsed >= 1.2 * runtime);
+
   }
 
   // *********************** trajectory functions *******************/
@@ -208,7 +204,10 @@ public class DrivePath extends Command {
     }
 
     List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(points);
-    PathConstraints constraints = new PathConstraints(maxV, maxA, Drivetrain.kMaxAngularSpeed,
+    PathConstraints constraints = new PathConstraints(
+        Drivetrain.kMaxVelocity,
+        Drivetrain.kMaxAcceleration,
+        Drivetrain.kMaxAngularVelocity,
         Drivetrain.kMaxAngularAcceleration);
 
     PathPlannerPath path = new PathPlannerPath(
@@ -232,16 +231,16 @@ public class DrivePath extends Command {
   void plotPosition(Trajectory.State state) {
     // PathPlanner uses holonomicRotation for heading
     Rotation2d r;
-   
-    r=state.poseMeters.getRotation();
-    Pose2d p=new Pose2d(state.poseMeters.getTranslation(),r);
-    state.poseMeters=p;
-    
+
+    r = state.poseMeters.getRotation();
+    Pose2d p = new Pose2d(state.poseMeters.getTranslation(), r);
+    state.poseMeters = p;
+
     PathData pd = PlotUtils.plotPosition(
         state.timeSeconds,
         state.poseMeters,
         m_drive.getPose(),
-        Drivetrain.kTrackWidth);
+        Drivetrain.kFrontWheelBase);
     pathdata.add(pd);
   }
 
@@ -277,16 +276,16 @@ public class DrivePath extends Command {
   void plotLocation(Trajectory.State state) {
     PathData pd = new PathData();
     pd.tm = state.timeSeconds;
-    Pose2d target_pose=state.poseMeters;
-    Pose2d current_pose=m_drive.getPose();
+    Pose2d target_pose = state.poseMeters;
+    Pose2d current_pose = m_drive.getPose();
 
     pd.d[0] = target_pose.getX();
     pd.d[1] = current_pose.getX();
     pd.d[2] = target_pose.getY();
     pd.d[3] = current_pose.getY();
-   
-      pd.d[4] = 2*state.poseMeters.getRotation().getRadians();
-    pd.d[5] = 2*current_pose.getRotation().getRadians();
+
+    pd.d[4] = 2 * state.poseMeters.getRotation().getRadians();
+    pd.d[5] = 2 * current_pose.getRotation().getRadians();
 
     pathdata.add(pd);
   }

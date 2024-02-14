@@ -1,24 +1,25 @@
-package frc.robot.objects;
 
-import java.io.IOException;
+
 import java.util.ArrayList;
 
 import javax.swing.SwingUtilities;
 
-import org.opencv.core.Core;
-
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.NetworkTablesJNI;
-import edu.wpi.first.util.CombinedRuntimeLoader;
-import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.math.WPIMathJNI;
 import edu.wpi.first.networktables.DoubleArrayPublisher;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import utils.PathData;
 import utils.PlotRenderer;
 import utils.PlotUtils;
+
+import edu.wpi.first.networktables.DoubleSubscriber;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTablesJNI;
+import edu.wpi.first.util.CombinedRuntimeLoader;
+import edu.wpi.first.math.WPIMathJNI;
+import edu.wpi.first.util.WPIUtilJNI;
+
 
 public class PlotServer extends Thread {
 
@@ -40,13 +41,10 @@ public class PlotServer extends Thread {
 
 	private static int plotCount = 0;
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		NetworkTablesJNI.Helper.setExtractOnStaticLoad(false);
         WPIUtilJNI.Helper.setExtractOnStaticLoad(false);
         WPIMathJNI.Helper.setExtractOnStaticLoad(false);
-
-		CombinedRuntimeLoader.loadLibraries(PlotServer.class, "wpiutiljni", "wpimathjni", "ntcorejni", Core.NATIVE_LIBRARY_NAME, "cscorejni");
-
 		PlotServer plotter = new PlotServer();
 		plotter.run();
 	}
@@ -57,7 +55,7 @@ public class PlotServer extends Thread {
 
 	public void run() {
 		System.out.println("starting Plot Server<"+mode+">");
-		NetworkTableInstance inst = NetworkTableInstance.getDefault();
+		var inst = NetworkTableInstance.getDefault();
 		
 		table = inst.getTable("plotdata");
 

@@ -22,14 +22,14 @@ public class Arm extends SubsystemBase implements Constants{
   private SimMotor pickup=new SimMotor(PICKUP);
   //private SimMotor pusher=new SimMotor(PUSHER);
   private SimSwitch armLimit = new SimSwitch(ARM_LIMIT);
-  private SimContact noteContact= new SimContact(0,5);
+  private static SimContact noteContact= new SimContact(0,5);
   private static boolean at_starting_position=false;
   private static boolean initialized=false;
 
-  static public double SHOOT_POWER=7;
+  static public double SHOOT_POWER=8;
   static public double PICKUP_POWER=1;
   static public double PUSH_POWER=1;
-  static public double TARGET_SHOOTER_SPEED=90;
+  static public double TARGET_SHOOTER_SPEED=80;
 
   public static final double MOVE_RATE=0.1;
 
@@ -37,10 +37,10 @@ public class Arm extends SubsystemBase implements Constants{
   boolean pickup_on=false; 
   boolean pusher_on=false;
   public static String status;
-  boolean incontact=false;
+  static boolean incontact=false;
   boolean started=false;
 
-  final PIDController pid=new PIDController(0.2,0.00,0.00);
+  final PIDController pid=new PIDController(0.1,0.00,0.00);
 
   double target_angle=0.0;
   public Arm() {
@@ -69,7 +69,7 @@ public class Arm extends SubsystemBase implements Constants{
     //target_angle=SPEAKER_SHOOT_ANGLE;
   }
 
-   public void checkContact() {
+   public static void checkContact() {
     boolean b=noteContact.inContact();
     boolean n=noteContact.newState();
     if(b && n)
@@ -77,7 +77,7 @@ public class Arm extends SubsystemBase implements Constants{
     if(n && !b)
       incontact=false;
   }
-  public boolean isNoteCaptured() {
+  public static boolean isNoteCaptured() {
     checkContact();
     return incontact;
   }
@@ -196,7 +196,7 @@ public class Arm extends SubsystemBase implements Constants{
       if (shooter_on)
         shooter.set(SHOOT_POWER);
       else
-        shooter.set(0);
+        shooter.set(-0.1);
       if (pickup_on || pusher_on)
         pickup.set(PICKUP_POWER);
       else

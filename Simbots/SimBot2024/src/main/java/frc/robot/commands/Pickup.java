@@ -64,7 +64,7 @@ public class Pickup extends Command implements Constants{
       Autonomous.ok2run=false;
       return true;
     } 
-    if(m_arm.isNoteCaptured()){
+    if(Arm.isNoteCaptured()){
       System.out.println("Pickup - note captured");
       return true;
     }

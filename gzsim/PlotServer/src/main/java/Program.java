@@ -1,4 +1,8 @@
-package frc.robot.objects;
+
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTablesJNI;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.util.CombinedRuntimeLoader;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -6,23 +10,23 @@ import java.util.ArrayList;
 import javax.swing.SwingUtilities;
 
 import org.opencv.core.Core;
+import org.opencv.core.Mat;
 
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.NetworkTablesJNI;
-import edu.wpi.first.util.CombinedRuntimeLoader;
-import edu.wpi.first.util.WPIUtilJNI;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.cscore.CameraServerCvJNI;
+import edu.wpi.first.cscore.CameraServerJNI;
 import edu.wpi.first.math.WPIMathJNI;
-import edu.wpi.first.networktables.DoubleArrayPublisher;
-import edu.wpi.first.networktables.DoubleArraySubscriber;
+import edu.wpi.first.util.WPIUtilJNI;
 import utils.PathData;
 import utils.PlotRenderer;
 import utils.PlotUtils;
+import edu.wpi.first.networktables.DoubleArraySubscriber;
+import edu.wpi.first.networktables.DoubleSubscriber;
 
-public class PlotServer extends Thread {
-
-	ArrayList<PathData> list = new ArrayList<PathData>();
+/**
+ * Program
+ */
+public class Program {
+    ArrayList<PathData> list = new ArrayList<PathData>();
 	int traces = 0;
 	int index = 0;
 	int points = 0;
@@ -39,25 +43,20 @@ public class PlotServer extends Thread {
 	static boolean newplot=false;
 
 	private static int plotCount = 0;
-
-	public static void main(String[] args) throws IOException {
-		NetworkTablesJNI.Helper.setExtractOnStaticLoad(false);
+    public static void main(String[] args) throws IOException {
+        NetworkTablesJNI.Helper.setExtractOnStaticLoad(false);
         WPIUtilJNI.Helper.setExtractOnStaticLoad(false);
         WPIMathJNI.Helper.setExtractOnStaticLoad(false);
+        CameraServerJNI.Helper.setExtractOnStaticLoad(false);
+        CameraServerCvJNI.Helper.setExtractOnStaticLoad(false);
 
-		CombinedRuntimeLoader.loadLibraries(PlotServer.class, "wpiutiljni", "wpimathjni", "ntcorejni", Core.NATIVE_LIBRARY_NAME, "cscorejni");
-
-		PlotServer plotter = new PlotServer();
+        CombinedRuntimeLoader.loadLibraries(Program.class, "wpiutiljni", "wpimathjni", "ntcorejni", Core.NATIVE_LIBRARY_NAME, "cscorejni");
+        PlotServer plotter = new PlotServer();
 		plotter.run();
-	}
-
-	public PlotServer() {
-		mode="server";
-	}
-
-	public void run() {
+    }
+    public void run() {
 		System.out.println("starting Plot Server<"+mode+">");
-		NetworkTableInstance inst = NetworkTableInstance.getDefault();
+		var inst = NetworkTableInstance.getDefault();
 		
 		table = inst.getTable("plotdata");
 
@@ -89,45 +88,7 @@ public class PlotServer extends Thread {
 			}
 		}
 	}
-
-	public static void publish(ArrayList<PathData> dataList, int traces, int type) {
-		if (table == null) {
-            NetworkTableInstance inst = NetworkTableInstance.getDefault();
-            table = inst.getTable("plotdata");
-        }
-		
-		DoubleArrayPublisher newPlotPub=table.getDoubleArrayTopic("NewPlot").publish();
-		DoubleArrayPublisher plotDataPub=table.getDoubleArrayTopic("PlotData").publish();
-
-        double info[] = new double[4];
-        int points = dataList.size();
-        info[0] = plotCount;
-        info[1] = traces;
-        info[2] = points;
-        info[3] = type;
-
-        System.out.println("Publishing Plot Data "+plotCount+" points:"+points+" traces:"+traces);
-
-        newPlotPub.set(info);
-
-        if(type==PlotUtils.PLOT_POSITION)
-            traces*=2;
-		double data[] = new double[points*(traces + 2)];
-        for (int i = 0; i < points; i++) {
-            PathData pathData = dataList.get(i);
-			int k=i*(traces+2);
-            data[k+0] = (double) i;
-            data[k+1] = pathData.tm;
-            for (int j = 0; j < traces; j++) {
-                data[k+j + 2] = pathData.d[j];
-            }
-        }
-		plotDataPub.set(data);
-        dataList.clear();
-        plotCount++;
-    }
-	
-	private void setPlotData(double[] data) {
+    private void setPlotData(double[] data) {
 		System.out.println("PlotData:" + id + " " + traces + " " + data.length);
 		int ptraces=traces;
 		if(type==PlotUtils.PLOT_POSITION)
@@ -175,4 +136,5 @@ public class PlotServer extends Thread {
 		list = new ArrayList<PathData>();
 	}
 	
+
 }

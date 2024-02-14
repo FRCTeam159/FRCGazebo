@@ -1,0 +1,26 @@
+PlotServer - A Windows Utility to display plots (usually generated in commands/PlotPath)
+Roborio - to windows plots
+- from laptop run start_plot_server in a terminal (located in FRCGazebo/bin)
+  note: need to have FRCGazebo/bin in Windows PATH
+Simulations 
+- add an instance of PlotServer in RobotContainer (e.g. m_plotserver =new PlotServer())
+- in RobotInit include "m_plotserver.run" in RobotInit()
+  note: Also need to modify biuild.gradle to include FRCGazebo source as a relative path e.g. from SimBots add:
+  sourceSets {
+    main {
+        java{
+            srcDirs '../../gzsim/java'
+        }
+    }
+  - In this situation PlotServer is running as a thread in the (Windows sim) application so don't need to envoke 
+    "start_plot_server" in a separate terminal
+}
+Building
+in a terminal in FRCGazebo/gzsim/PlotServer enter :
+- gradlew shadowJar
+  note: can also run by entering > gradlew runShadow 
+Exporting for RoboRio plots
+- in FRCGazebo/gzsim/PlotServer
+  > cp build/install/PlotServer-shadow/lib/TestApplication-win64.jar $GAZEBO_BIN/PlotServer.jar
+ 
+

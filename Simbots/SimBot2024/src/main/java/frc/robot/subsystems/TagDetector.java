@@ -80,7 +80,7 @@ public class TagDetector extends Thread {
             showTags(tags, mat);
           }
         }
-        if (autoselect) { 
+        else if (autoselect) { 
           int alliance=Autonomous.getAlliance();
           int position=Autonomous.getPosition();
           TargetMgr.setTarget(alliance,position);     
@@ -116,8 +116,7 @@ public class TagDetector extends Thread {
           new Scalar(255, 0, 0), // Scalar object for color
           2 // Thickness
       );
-    }
-   
+    }  
   }
   // return an array of tag info structures from an image
   private AprilTag[] getTags(Mat mat) {

@@ -19,7 +19,7 @@ public class SwerveModule {
 
   private double distancePerRotation=2*kWheelRadius*Math.PI;
 
-  private static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed; //degrees per second;
+  private static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularVelocity; //degrees per second;
   private static final double kModuleMaxAngularAcceleration = Drivetrain.kMaxAngularAcceleration;// degrees per second per second
 
   private SimEncMotor m_driveMotor;

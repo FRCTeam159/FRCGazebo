@@ -31,7 +31,7 @@ public class Calibrate extends Command {
   public static int vel_steps=10;
   public static int step=0;
   public static double vel_start=0;
-  public static double vel_delta=0.5;
+  public static double vel_delta=0.4;
 
   public static double warmup_time = 0.25;
   public static double run_time = 0.5;
@@ -128,7 +128,7 @@ public class Calibrate extends Command {
   @Override
   public void end(boolean interrupted) {
     System.out.println("Calibrate.end()");
-    System.out.format("max power=%f max velocity=%f\n", max_power,max_vel); 
+    System.out.format("max power=%f max velocity=%f max acccel=%f\n", max_power,max_vel,max_acc); 
   
     if (PlotUtils.auto_plot_option!=PlotUtils.PLOT_NONE) {
       PlotServer.publish(plotdata,3,PlotUtils.PLOT_CALIBRATE);

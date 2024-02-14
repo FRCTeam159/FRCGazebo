@@ -9,14 +9,13 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
@@ -34,11 +33,20 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	static public boolean debug=false;
 	static public boolean debug_angles=false;
 
-	public static double front_wheel_base = 29; // distance beteen front wheels
-	public static double side_wheel_base = 29; // distance beteen side wheels
+	public static final double kFrontWheelBase = Units.inchesToMeters(29); // distance beteen front wheels
+	public static final double kSideWheelBase = Units.inchesToMeters(29); // distance beteen side wheels
+	public static final double kTrackRadius = 0.5* (Math.sqrt(kFrontWheelBase*kFrontWheelBase+kSideWheelBase*kSideWheelBase));
 
-	public static double dely = Units.inchesToMeters(0.5 * side_wheel_base); // 0.2949 metters
-	public static double delx = Units.inchesToMeters(0.5 * front_wheel_base);
+	public static double kMaxVelocity = 2; // meters per second
+	public static double kMaxAcceleration = 1; // meters/second/second
+	public static double kMaxAngularVelocity = Math.toRadians(720); // degrees per second
+	public static double kMaxAngularAcceleration = Math.toRadians(360);// degrees per second per second
+
+	public static double kMaxVelocityObserved=0;
+	public static double kMaxAccelerationObserved=0;
+
+	public static double dely = 0.5 * kSideWheelBase; // 0.2949 metters
+	public static double delx = 0.5 * kFrontWheelBase;
 
 	private final Translation2d m_frontLeftLocation = new Translation2d(delx, dely);
 	private final Translation2d m_frontRightLocation = new Translation2d(delx, -dely);
@@ -52,46 +60,31 @@ public class Drivetrain extends SubsystemBase implements Constants {
 
 	private final SwerveModule[] modules={m_frontLeft,m_frontRight,m_backLeft,m_backRight};
 
-	private final SwerveModulePosition[] m_positions={
-		new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition()
-	};
-	private Simulation simulation;
-
-	public SimGyro m_gyro = new SimGyro(0);
-
 	private SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
 			m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
-	public static final double kTrackWidth = Units.inchesToMeters(2 * front_wheel_base); // bug? need to double actual value for geometry to work
-	public static final double kTrackRadius = 0.5* Units.inchesToMeters(Math.sqrt(front_wheel_base*front_wheel_base+side_wheel_base*side_wheel_base));
+	private final SwerveModulePosition[] m_positions={
+		new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition()
+	};
 
-	public static double kMaxVelocity = 5; // meters per second
-	public static double kMaxAcceleration = 1; // meters/second/second
-	public static double kMaxAngularSpeed = Math.toRadians(720); // degrees per second
-	public static double kMaxAngularAcceleration = Math.toRadians(360);// degrees per second per second
+	SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(m_kinematics,new Rotation2d(), m_positions,new Pose2d());
+	private Simulation simulation;
+
+	public SimGyro m_gyro = new SimGyro(0);
 
 	boolean field_oriented = false;
 	boolean alligning=false;
 	double last_heading = 0;
 	Pose2d field_pose;
+	Pose2d m_pose;
 
 	boolean robot_disabled=true;
-
-	double x_std=0.1;
-	double y_std=0.1;
-	double h_std=5.0;
-
-	double latency=0.05;
-	double vision_confidence=0.00;
-	double pose_error=0;
 	boolean m_showtags=false;
 	boolean simstarted=false;
 
 	boolean m_disabled = true;
 	boolean m_resetting=false;
-
-	SwerveDrivePoseEstimator m_poseEstimator;
-
+	
 	private final Timer m_timer = new Timer();
 
 	private int cnt=0;
@@ -99,15 +92,10 @@ public class Drivetrain extends SubsystemBase implements Constants {
     /** Creates a new Subsystem. */
 	public Drivetrain() {
 		m_timer.start();
-		makeEstimator();
 		TargetMgr.init();
 
 		simulation = new Simulation();
-		SmartDashboard.putBoolean("Field Oriented", field_oriented);
-		//SmartDashboard.putNumber("maxV", kMaxVelocity);
-		//SmartDashboard.putNumber("maxA", kMaxAcceleration);
 			
-
 		// Configure AutoBuilder last
     	AutoBuilder.configureHolonomic(
             this::getPose, // Robot pose supplier
@@ -134,20 +122,6 @@ public class Drivetrain extends SubsystemBase implements Constants {
             },
             this // Reference to this subsystem to set requirements
     );
-	}
-
-	void makeEstimator(){
-		double vmult=1.0/vision_confidence;
-		SwerveModulePosition[] positions={
-			new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition()
-		};
-		m_poseEstimator=new SwerveDrivePoseEstimator (
-          m_kinematics,
-          new Rotation2d(),
-          positions,
-          new Pose2d(),
-          VecBuilder.fill(x_std, y_std, Units.degreesToRadians(h_std)), // encoder accuracy
-          VecBuilder.fill(vmult*x_std, vmult*y_std, Units.degreesToRadians(vmult*h_std))); // encoder accuracy
 	}
 
 	public void setRobotDisabled(boolean f){
@@ -245,7 +219,6 @@ public class Drivetrain extends SubsystemBase implements Constants {
 
 	public void setFieldOriented(boolean t){
 		field_oriented=t;
-		//m_gyro.setEnabled(t);
 	}
 
 	public boolean fieldOriented(){
@@ -300,6 +273,9 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		SmartDashboard.putNumber("X:", t.getX());
 		SmartDashboard.putNumber("Y:", t.getY());
 
+		double v=getVelocity();
+		kMaxVelocityObserved=v>kMaxVelocityObserved?v:kMaxVelocityObserved;
+		//SmartDashboard.putNumber("maxV", kMaxVelocityObserved);
 		field_oriented = SmartDashboard.getBoolean("Field Oriented", field_oriented);
 		
 		if(debug_angles)
@@ -383,10 +359,8 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	/** Updates the field relative position of the robot. */
 	public void updateOdometry() {
 		updatePositions();
-		m_poseEstimator.updateWithTime(getClockTime(),getRotation2d(), m_positions);
-	
+		m_pose=m_odometry.update(getRotation2d(), m_positions);
 		field_pose = getPose();
-		log();
 	}
 
 	public void updatePositions(){
@@ -402,14 +376,14 @@ public class Drivetrain extends SubsystemBase implements Constants {
 
 		m_kinematics = new SwerveDriveKinematics(
 			m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
-		m_poseEstimator.resetPosition(getRotation2d(), m_positions,pose);
+		m_odometry.resetPosition(getRotation2d(), m_positions,pose);
 
 		System.out.println("reset odometry:"+getPose());
 		updateOdometry();
 	}
 
 	public Pose2d getPose() {
-		return m_poseEstimator.getEstimatedPosition();
+		return m_pose;
 	}
 
 	public Pose2d getFieldPose() {
@@ -423,14 +397,15 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		return previous_angle + d;
 	}
 
-	private ChassisSpeeds getRobotRelativeSpeeds(){
-		return m_kinematics.toChassisSpeeds(m_frontLeft.getState(), m_frontRight.getState(), m_backLeft.getState(), m_backRight.getState());
+	private ChassisSpeeds getRobotRelativeSpeeds() {
+		return m_kinematics.toChassisSpeeds(m_frontLeft.getState(), m_frontRight.getState(), m_backLeft.getState(),
+				m_backRight.getState());
 	}
 	private void driveRobotRelative(ChassisSpeeds speed){
 		this.drive(speed.vxMetersPerSecond, speed.vyMetersPerSecond, speed.omegaRadiansPerSecond, false);
 	}
 	public void resetPose(Pose2d pose){
-		m_poseEstimator.resetPosition(getRotation2d(), m_positions, pose);
+		m_odometry.resetPosition(getRotation2d(), m_positions, pose);
 	}
 	
 	@Override

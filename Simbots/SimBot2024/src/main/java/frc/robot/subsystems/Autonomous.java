@@ -55,6 +55,7 @@ public class Autonomous extends SequentialCommandGroup  {
 
   static boolean m_autoselect=true;
   static boolean m_usetags=false;
+  static boolean m_reverse=false;
 
   /** Creates a new AutoCommands. */
   public Autonomous(Drivetrain drive,Arm arm) {
@@ -79,6 +80,7 @@ public class Autonomous extends SequentialCommandGroup  {
     m_position_chooser.addOption("Inside", TargetMgr.INSIDE); 
     SmartDashboard.putData(m_position_chooser);
 
+    SmartDashboard.putBoolean("Reverse",m_reverse);
     SmartDashboard.putBoolean("Autoset",m_autoselect);
     SmartDashboard.putBoolean("UseTags",m_usetags);
  
@@ -94,6 +96,9 @@ public class Autonomous extends SequentialCommandGroup  {
   }
   static public int getPosition(){
     return m_position_chooser.getSelected();
+  }
+  static public boolean getReverse(){
+    return SmartDashboard.getBoolean("Reverse",m_reverse);
   }
   
   static public boolean getAutoset(){
@@ -117,8 +122,7 @@ public class Autonomous extends SequentialCommandGroup  {
         return new SequentialCommandGroup(new Calibrate(m_drive));
       case PROGRAM:
         return new SequentialCommandGroup(
-          new AlignWheels(m_drive,2),
-          new DrivePath(m_drive, opt,false)
+          new DrivePath(m_drive, getReverse())
         );
       case PATHPLANNER:
       {
@@ -142,19 +146,15 @@ public class Autonomous extends SequentialCommandGroup  {
       }
       case AUTOTEST: {   
         return new SequentialCommandGroup(
-              new AlignWheels(m_drive,2),
+              //new AlignWheels(m_drive,2),
               new Shoot(m_drive,m_arm),
-              new DrivePath(m_drive, opt, false),
+              new DrivePath(m_drive,false),
               new Pickup(m_arm, m_drive,3),
-              new DrivePath(m_drive, opt, true),
+              new DrivePath(m_drive, true),
               new Shoot(m_drive,m_arm)
         );
       }
     }
     return null;
-  }
-
-
-
-  
+  } 
 }

@@ -62,7 +62,7 @@ public class Shoot extends Command implements Constants{
   public void end(boolean interrupted) {
     m_arm.setShooterOFf();
     //m_arm.setPusherOFf();
-    m_arm.setPickupOff();
+    //m_arm.setPickupOff();
     m_arm.setTargetAngle(PICKUP_ANGLE);
    //m_drive.enable();
     Arm.status="End";

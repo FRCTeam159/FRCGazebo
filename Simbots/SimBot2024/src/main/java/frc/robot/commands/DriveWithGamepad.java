@@ -30,7 +30,7 @@ public class DriveWithGamepad extends Command {
     m_drive = subsystem;
     m_controller = controller;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+    addRequirements(m_drive);
   }
 
   // Called when the command is initially scheduled.
@@ -62,7 +62,7 @@ public class DriveWithGamepad extends Command {
 
     // Get the rate of angular rotation. 
     final var rot = m_rotLimiter.calculate(MathUtil.applyDeadband(vr, 0.3))
-            * Drivetrain.kMaxAngularSpeed;
+            * Drivetrain.kMaxAngularVelocity;
    
     if(m_drive.disabled()){
         m_drive.enable();

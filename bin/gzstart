@@ -16,7 +16,5 @@ sleep 1
 GzProgram.exe &
 sleep 1
 simulate &
-sleep 2
-gradlew SmartDashboard &
-#start_dashboard &
+start_dashboard &
 
