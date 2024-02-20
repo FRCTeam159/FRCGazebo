@@ -22,7 +22,6 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import objects.PlotServer;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Drivetrain;
@@ -38,7 +37,7 @@ public class DrivePath extends Command {
   ArrayList<PathData> pathdata = new ArrayList<PathData>();
 
   final PPHolonomicDriveController m_ppcontroller = new PPHolonomicDriveController(
-      new PIDConstants(3, 0.0, 0), new PIDConstants(4, 0.0, 0.0), Drivetrain.kMaxVelocity, Drivetrain.kTrackRadius);
+      new PIDConstants(4, 0.0, 0), new PIDConstants(4, 0.0, 0.0), Drivetrain.kMaxVelocity, Drivetrain.kTrackRadius);
 
   Timer m_timer = new Timer();
   Drivetrain m_drive;
@@ -58,6 +57,8 @@ public class DrivePath extends Command {
   boolean m_reversed = false;
   boolean m_autoset = false;
   double start_time;
+
+  double scale=1.0;
 
   boolean m_note_at_start;
 
@@ -79,7 +80,7 @@ public class DrivePath extends Command {
     m_autoset = Autonomous.getAutoset();
     m_ppcontroller.setEnabled(true);
 
-    m_note_at_start=Arm.isNoteCaptured();
+    m_note_at_start=Arm.noteAtIntake();
 
     if (m_autoset) { // use apriltags or smartdashboard buttons
       Pose2d target = TargetMgr.getTarget();
@@ -167,7 +168,7 @@ public class DrivePath extends Command {
     System.out.println("DRIVEPATH_END");
 
     if (plot_type != utils.PlotUtils.PLOT_NONE)
-      PlotServer.publish(pathdata, 6, plot_type);
+      utils.PlotUtils.publish(pathdata, 6, plot_type);
   }
 
   // =================================================
@@ -175,7 +176,7 @@ public class DrivePath extends Command {
   // =================================================
   @Override
   public boolean isFinished() {
-  if (!m_reversed && !m_note_at_start && Arm.isNoteCaptured())
+  if (!m_reversed && !m_note_at_start && Arm.noteAtIntake())
       return true;
 
     //return (elapsed >= 1.2 * runtime) || m_drive.disabled() || !Autonomous.ok2run;
@@ -205,10 +206,10 @@ public class DrivePath extends Command {
 
     List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(points);
     PathConstraints constraints = new PathConstraints(
-        Drivetrain.kMaxVelocity,
-        Drivetrain.kMaxAcceleration,
-        Drivetrain.kMaxAngularVelocity,
-        Drivetrain.kMaxAngularAcceleration);
+      scale*Drivetrain.kMaxVelocity,
+      scale*Drivetrain.kMaxAcceleration,
+      scale*Drivetrain.kMaxAngularVelocity,
+      scale*Drivetrain.kMaxAngularAcceleration);
 
     PathPlannerPath path = new PathPlannerPath(
         bezierPoints, constraints,

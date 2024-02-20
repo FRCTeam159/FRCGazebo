@@ -1,13 +1,16 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="Sensor2" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="507" y="133"/>
+	</widget>
+	<widget field="Sensor1" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="447" y="134"/>
+	</widget>
 	<widget field="Pickup" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
 		<location x="225" y="15"/>
 	</widget>
 	<widget field="Gazebo" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
 		<location x="97" y="12"/>
-	</widget>
-	<widget field="Note" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
-		<location x="369" y="114"/>
 	</widget>
 	<widget field="Reset" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
 		<location x="47" y="10"/>

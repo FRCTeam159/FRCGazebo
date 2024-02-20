@@ -21,6 +21,5 @@ in a terminal in FRCGazebo/gzsim/PlotServer enter :
   note: can also run by entering > gradlew runShadow 
 Exporting for RoboRio plots
 - in FRCGazebo/gzsim/PlotServer
-  > cp build/install/PlotServer-shadow/lib/TestApplication-win64.jar $GAZEBO_BIN/PlotServer.jar
- 
+cp build/install/PlotServer-shadow/lib/TestApplication-winx64.jar $GAZEBO_BIN/PlotServer.jar  
 

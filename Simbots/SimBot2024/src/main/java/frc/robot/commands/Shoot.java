@@ -26,7 +26,7 @@ public class Shoot extends Command implements Constants{
     m_drive=drive;
     addRequirements(arm);
     m_timer.start();
-    ok2shoot=m_arm.isNoteCaptured();
+    ok2shoot=Arm.noteAtIntake();
   }
 
   // Called when the command is initially scheduled.
@@ -40,7 +40,7 @@ public class Shoot extends Command implements Constants{
     m_arm.setShooterOn();
     m_arm.setPickupOff();
     m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE);
-    ok2shoot=m_arm.isNoteCaptured();
+    ok2shoot=Arm.noteAtIntake();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -49,7 +49,6 @@ public class Shoot extends Command implements Constants{
     if(!shooter_ready && m_arm.atTargetSpeed()){
       shooter_ready=true;
       m_arm.setPickupOn();
-      //m_arm.setPusherOn();
       m_timer.reset();
       shooting=true;
       Arm.status="Shooting";
@@ -61,17 +60,14 @@ public class Shoot extends Command implements Constants{
   @Override
   public void end(boolean interrupted) {
     m_arm.setShooterOFf();
-    //m_arm.setPusherOFf();
-    //m_arm.setPickupOff();
     m_arm.setTargetAngle(PICKUP_ANGLE);
-   //m_drive.enable();
     Arm.status="End";
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(shooting && m_timer.get()>3 && !m_arm.isNoteCaptured())
+    if(shooting && m_timer.get()>3 && !Arm.noteAtIntake())
       return true;
     if(shooting && m_timer.get()>5)
       return true;

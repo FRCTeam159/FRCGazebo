@@ -37,6 +37,8 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	public static final double kSideWheelBase = Units.inchesToMeters(29); // distance beteen side wheels
 	public static final double kTrackRadius = 0.5* (Math.sqrt(kFrontWheelBase*kFrontWheelBase+kSideWheelBase*kSideWheelBase));
 
+	public static final double kRobotLength = Units.inchesToMeters(31); // Waffle side length
+ 
 	public static double kMaxVelocity = 2; // meters per second
 	public static double kMaxAcceleration = 1; // meters/second/second
 	public static double kMaxAngularVelocity = Math.toRadians(720); // degrees per second
@@ -80,7 +82,7 @@ public class Drivetrain extends SubsystemBase implements Constants {
 
 	boolean robot_disabled=true;
 	boolean m_showtags=false;
-	boolean simstarted=false;
+	static boolean simstarted=false;
 
 	boolean m_disabled = true;
 	boolean m_resetting=false;
@@ -408,6 +410,9 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		m_odometry.resetPosition(getRotation2d(), m_positions, pose);
 	}
 	
+	public static boolean simStarted(){
+		return simstarted;
+	}
 	@Override
 	public void periodic() {
 		//updateOdometry();

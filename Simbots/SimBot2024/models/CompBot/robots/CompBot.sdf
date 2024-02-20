@@ -562,7 +562,7 @@
         <limit>
           <upper>0.8</upper>
           <lower>-1.1</lower>
-                  </limit>
+        </limit>
       </axis>
     </joint>
     <link name="TopShootWheels">
@@ -687,6 +687,15 @@
           </mesh>
         </geometry>
       </visual>
+      <sensor name="Shooter_contact" type="contact">
+        <always_on>1</always_on>
+        <contact>
+          <collision>BotShootWheels_collision</collision>
+        </contact>
+        <plugin name="Shoot_contact" filename="sim_contact.dll">
+          <topic>~/gazebo/frc/simulator/contact/1</topic>
+        </plugin>
+      </sensor>
     </link>
     <joint name="Arm-BotShootWheels" type="revolute">
       <parent>Arm</parent>
@@ -754,6 +763,7 @@
           </mesh>
         </geometry>
       </visual>
+       
     </link>
     <joint name="Arm-PickupTop" type="revolute">
       <parent>Arm</parent>
@@ -821,6 +831,7 @@
           </mesh>
         </geometry>
       </visual>
+     
     </link>
     <joint name="Arm-PickupBot" type="revolute">
       <parent>Arm</parent>
@@ -955,15 +966,16 @@
           </mesh>
         </geometry>
       </visual>
-      <sensor name="LimitSwitch_contact" type="contact">
+      <sensor name="Intake_contact" type="contact">
         <always_on>1</always_on>
         <contact>
           <collision>MidRollersBot_collision</collision>
         </contact>
-        <plugin name="note_contact" filename="sim_contact.dll">
+        <plugin name="intake_contact" filename="sim_contact.dll">
           <topic>~/gazebo/frc/simulator/contact/0</topic>
         </plugin>
       </sensor>
+      
     </link>
     <joint name="Arm-MidRollersBot" type="revolute">
       <parent>Arm</parent>
@@ -1052,6 +1064,13 @@
       <topic>~/gazebo/frc/simulator/gyro/0</topic>
       <units>degrees</units>
       <axis>yaw</axis>
+    </plugin>
+     <plugin name="Arm_gyro" filename="sim_gyro.dll">
+      <link>Arm</link>
+      <topic>~/gazebo/frc/simulator/gyro/1</topic>
+      <units>degrees</units>
+      <axis>roll</axis>
+      <num_axis>3</num_axis>
     </plugin>
 
     <plugin name="Body-FL-drive_motor" filename="sim_motor.dll">
