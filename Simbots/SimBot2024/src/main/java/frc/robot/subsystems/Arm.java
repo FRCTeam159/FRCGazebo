@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import gazebo.SimEncMotor;
 import gazebo.SimGyro;
 import gazebo.SimMotor;
@@ -26,27 +27,26 @@ public class Arm extends SubsystemBase implements Constants {
   private static boolean at_starting_position = false;
   private static boolean initialized = false;
 
-  static public double SHOOT_POWER = 8;
-  static public double PICKUP_POWER = 1;
-  static public double PUSH_POWER = 1;
-  static public double TARGET_SHOOTER_SPEED = 80;
+  static public double SHOOT_POWER = 10;
+  static public double PICKUP_POWER = 0.5;
+  static public double PUSH_POWER = 2;
+  static public double TARGET_SHOOTER_SPEED = 60;
 
   public static final double MOVE_RATE = 0.1;
 
   boolean shooter_on = false;
   boolean pickup_on = false;
   boolean pusher_on = false;
-  public static String status;
   static boolean incontact = false;
   boolean started = false;
 
-  final PIDController pid = new PIDController(0.1, 0.00, 0.00);
+  final PIDController angle_pid = new PIDController(0.1, 0.00, 0.00);
 
   public SimGyro m_gyro = new SimGyro(1, SimGyro.Mode.ROLL);
 
-  double armGyroOffset = 149;//
+  double armGyroOffset = 149; //imperically measured
 
-  static double starting_angle = 55.0;
+  static double starting_angle = 55.0; // imperically determined
   static double target_angle = starting_angle;
 
   public Arm() {
@@ -56,14 +56,13 @@ public class Arm extends SubsystemBase implements Constants {
     armLimit.enable();
     intakeContact.enable();
     shootContact.enable();
-    pid.setTolerance(1, 1);
+    angle_pid.setTolerance(1, 1);
     m_gyro.enable();
     m_gyro.reset();
   }
 
   public void setStarted() {
     started = true;
-
   }
 
   public void reset() {
@@ -79,6 +78,10 @@ public class Arm extends SubsystemBase implements Constants {
 
   public static boolean noteAtShooter() {
     return shootContact.inContact();
+  }
+
+  public static boolean haveNote() {
+    return noteAtIntake()||noteAtShooter();
   }
 
   public void setShooterOn() {
@@ -156,7 +159,7 @@ public class Arm extends SubsystemBase implements Constants {
   }
 
   public boolean atTargetAngle() {
-    return pid.atSetpoint();
+    return angle_pid.atSetpoint();
   }
 
   public static boolean atStartingPosition() {
@@ -170,43 +173,46 @@ public class Arm extends SubsystemBase implements Constants {
 
   public boolean isInititialized() {
     return initialized;
-
   }
 
   public boolean isStarted() {
     return started;
-
   }
 
   @Override
   public void periodic() {
     if (!Drivetrain.simStarted()) {
-      motor.set(0.5);
+      motor.set(0.5); // hold arm up until simulation is started
       return;
     }
 
     initialized = true;
 
     double angle = getAngle();
-    pid.setSetpoint(target_angle);
-    double corr = pid.calculate(angle);
+    angle_pid.setSetpoint(target_angle);
+    double corr = angle_pid.calculate(angle);
     motor.set(corr);
 
     if (!at_starting_position) {
       if (atTargetAngle()) {
         at_starting_position = true;
-        status = "Ready";
+        Robot.status = "Ready";
       }
     }
     if (shooter_on)
       shooter.set(SHOOT_POWER);
     else
-      shooter.set(-0.1);
-    if (pickup_on || pusher_on)
+      shooter.set(-0.3);
+    if (pickup_on)
       pickup.set(PICKUP_POWER);
-    else
-      pickup.set(-0.03);
-
+    else if (pusher_on)
+      pickup.set(PUSH_POWER);    
+    else if(haveNote()){
+      if(noteAtShooter())
+        pickup.set(-0.3);
+      else
+        pickup.set(0.01);
+    }
     log();
   }
 
@@ -218,13 +224,12 @@ public class Arm extends SubsystemBase implements Constants {
   }
 
   void log() {
-    SmartDashboard.putNumber("Arm", getAngle());
+    SmartDashboard.putNumber("ArmAngle", getAngle());
     SmartDashboard.putBoolean("Shooting", shooter_on);
     SmartDashboard.putBoolean("Pickup", pickup_on);
-    SmartDashboard.putBoolean("Sensor1", noteAtIntake());
-    SmartDashboard.putBoolean("Sensor2", noteAtShooter());
-    SmartDashboard.putNumber("Shooter", shooter.getRate());
-    SmartDashboard.putString("Status", status);
-
+    SmartDashboard.putBoolean("IntakeSensor", noteAtIntake());
+    SmartDashboard.putBoolean("ShootSensor", noteAtShooter());
+    SmartDashboard.putNumber("ShootSpeed", shooter.getRate());
+    SmartDashboard.putString("Status", Robot.status);
   }
 }

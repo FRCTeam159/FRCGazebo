@@ -6,21 +6,23 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Drivetrain;
 
 public class InitAuto extends Command implements Constants{
   /** Creates a new InitArm. */
-  Arm m_arm;
-  public InitAuto(Arm arm) {
-    m_arm=arm;
-    addRequirements(arm);
+  Drivetrain m_drive;
+  public InitAuto(Drivetrain drive) {
+    m_drive=drive;
+    addRequirements(drive);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Arm.status="Initializing";
-    m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE);
+    Robot.status="Auto Start";
+    m_drive.startAuto();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,13 +33,11 @@ public class InitAuto extends Command implements Constants{
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_arm.setStarted();
-    Arm.status="Started";
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_arm.isInititialized()&&m_arm.atTargetAngle();
+    return true;
   }
 }

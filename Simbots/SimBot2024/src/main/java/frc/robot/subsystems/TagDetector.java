@@ -33,8 +33,6 @@ public class TagDetector extends Thread {
   }
   Camera cam;
 
-  public static double maxPoseError = 2;
-
   protected static CvSource ouputStream;
   protected AprilTagDetector wpi_detector;
 
@@ -42,7 +40,11 @@ public class TagDetector extends Thread {
   AprilTagPoseEstimator wpi_pose_estimator;
 
   Drivetrain m_drivetrain;
- 
+
+  static boolean target_tags=false;
+
+  static AprilTag[] tags = null;
+
   public static double min_decision_margin=30; // reject tags less than this
   
   public TagDetector(Drivetrain drivetrain) {
@@ -65,25 +67,35 @@ public class TagDetector extends Thread {
       try {
         Thread.sleep(50);  
         Mat mat = cam.getFrame();   
-        AprilTag[] tags = null;
+        tags = null;
 
+        // if using tags for targeting
+        if(target_tags){  
+          tags = getTags(mat);
+          showTags(tags, mat);
+          ouputStream.putFrame(mat);
+          continue;
+        }
+
+        // set initial starting position and alliance
         boolean autoselect=Autonomous.getAutoset();
         boolean usetags=Autonomous.getUsetags();
-        
-        if (usetags && autoselect){
-          tags = getTags(mat);
-          if(tags!=null){
-            if(tags.length ==2){
-              Arrays.sort(tags, new SortbyDistance());
-              TargetMgr.setStartPose(tags);
+        if (autoselect && !TargetMgr.startPoseSet()){
+          if (usetags){
+            tags = getTags(mat);
+            if(tags!=null){
+              if(tags.length ==2){
+                Arrays.sort(tags, new SortbyDistance());
+                TargetMgr.setStartPose(tags);
+              }
+              showTags(tags, mat);
             }
-            showTags(tags, mat);
           }
-        }
-        else if (autoselect) { 
-          int alliance=Autonomous.getAlliance();
-          int position=Autonomous.getPosition();
-          TargetMgr.setTarget(alliance,position);     
+          else{
+             int alliance=Autonomous.getAlliance();
+             int position=Autonomous.getPosition();
+             TargetMgr.setTarget(alliance,position);     
+          }
         }
         ouputStream.putFrame(mat);
       } catch (Exception ex) {
@@ -92,6 +104,13 @@ public class TagDetector extends Thread {
     }
   }
   
+  // targeting methods
+  public static void setTargetTags(boolean state){
+    target_tags=state;
+  }
+  public static AprilTag[] getTags(){
+    return tags;
+  }
   void showTags(AprilTag[] tags, Mat mat) {
     for (int i = 0; i < tags.length; i++) {
       AprilTag tag = tags[i];
@@ -118,6 +137,8 @@ public class TagDetector extends Thread {
       );
     }  
   }
+ 
+
   // return an array of tag info structures from an image
   private AprilTag[] getTags(Mat mat) {
     AprilTag[] atags=null;

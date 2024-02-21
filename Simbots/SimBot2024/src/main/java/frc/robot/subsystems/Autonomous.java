@@ -17,12 +17,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.commands.AlignWheels;
 import frc.robot.commands.Calibrate;
 import frc.robot.commands.DrivePath;
+import frc.robot.commands.EndAuto;
 import frc.robot.commands.InitAuto;
 import frc.robot.commands.Pickup;
+import frc.robot.commands.SetArmAngle;
 import frc.robot.commands.Shoot;
 import utils.PlotUtils;
 
@@ -65,9 +69,9 @@ public class Autonomous extends SequentialCommandGroup  {
     SmartDashboard.putNumber("yPath", yp);
     SmartDashboard.putNumber("rPath", rp);
 
-    m_path_chooser.setDefaultOption("Program", PROGRAM);
+    m_path_chooser.addOption("Program", PROGRAM);
 	  m_path_chooser.addOption("Path", PATHPLANNER);
-    m_path_chooser.addOption("AutoTest", AUTOTEST);
+    m_path_chooser.setDefaultOption("AutoTest", AUTOTEST);
     m_path_chooser.addOption("Calibrate", CALIBRATE);
     SmartDashboard.putData(m_path_chooser);
    
@@ -109,13 +113,15 @@ public class Autonomous extends SequentialCommandGroup  {
   }
   
   public SequentialCommandGroup getCommand(){
-    return new SequentialCommandGroup(new InitAuto(m_arm),getAutoSequence());
+    return new SequentialCommandGroup(
+      new InitAuto(m_drive),
+      new SetArmAngle(m_arm,Constants.SPEAKER_SHOOT_ANGLE),
+      getAutoSequence(),
+      new EndAuto(m_drive));
   }
   SequentialCommandGroup getAutoSequence() {
     PlotUtils.auto_plot_option = m_auto_plot_option.getSelected();
     int selected_path = m_path_chooser.getSelected();
-
-    int opt=PROGRAM;      
 
     switch (selected_path) {
       case CALIBRATE:
@@ -139,18 +145,23 @@ public class Autonomous extends SequentialCommandGroup  {
         return new SequentialCommandGroup(
           new Shoot(m_drive,m_arm),
           AutoBuilder.followPath(pathGroup.get(0)),
-          new Pickup(m_arm, m_drive,3),
+          new Pickup(m_arm,3),
           AutoBuilder.followPath(pathGroup.get(1)),
           new Shoot(m_drive,m_arm)
         );        
       }
       case AUTOTEST: {   
         return new SequentialCommandGroup(
-              //new AlignWheels(m_drive,2),
               new Shoot(m_drive,m_arm),
-              new DrivePath(m_drive,false),
-              new Pickup(m_arm, m_drive,3),
-              new DrivePath(m_drive, true),
+              new SetArmAngle(m_arm,Constants.PICKUP_ANGLE),
+              new ParallelRaceGroup(
+                new DrivePath(m_drive,false),
+                new Pickup(m_arm, 8)
+              ),
+              new ParallelCommandGroup( 
+                new DrivePath(m_drive, true),
+                new SetArmAngle(m_arm,Constants.SPEAKER_SHOOT_ANGLE)
+              ),
               new Shoot(m_drive,m_arm)
         );
       }

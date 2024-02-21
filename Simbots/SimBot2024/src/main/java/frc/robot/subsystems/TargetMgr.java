@@ -24,7 +24,7 @@ public class TargetMgr {
     static final public double YC = 0;
     static final public double RC = 0;
 
-    static final public double XF = kSideX-Drivetrain.kRobotLength; 
+    static final public double XF = kSideX-1.1*Drivetrain.kRobotLength; 
     static final public double YF = -kSideY+0.5*Drivetrain.kRobotLength;
     static final public double RF = -60;
 
@@ -124,6 +124,8 @@ public class TargetMgr {
 
         SmartDashboard.putString("Alliance", aStrings[alliance]);
         SmartDashboard.putString("Position", pStrings[position]);
+
+        start_pose_set=true;
     }
 
     public static Pose2d getTarget() {

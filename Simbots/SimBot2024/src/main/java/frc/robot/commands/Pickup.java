@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Drivetrain;
@@ -14,14 +15,12 @@ import frc.robot.subsystems.Drivetrain;
 public class Pickup extends Command implements Constants{
   private final Timer m_timer = new Timer();
   private final Arm m_arm;
-  private final Drivetrain m_drive;
   double timeout;
   boolean resetting=false;
   double starttm;
 
-  public Pickup(Arm arm, Drivetrain drive, double tm) {
+  public Pickup(Arm arm, double tm) {
     m_arm=arm;
-    m_drive=drive;
     timeout=tm;
     m_timer.start();
     addRequirements(arm);
@@ -35,23 +34,23 @@ public class Pickup extends Command implements Constants{
     System.out.println("Pickup.init");
     m_arm.setPickupOn();
 
-    Arm.status="Pickup";
+    Robot.status="Pickup";
     resetting=true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_timer.get()>0.5*timeout)
-      m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE);
-    if(m_drive !=null)
-      m_drive.drive(0,0,0,false);
+   // if(m_timer.get()>0.5*timeout)
+  //   m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE);
+   
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE);
+     System.out.println("Pickup.end");
+   // m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE);
     m_arm.setPickupOff();
   }
 

@@ -31,8 +31,7 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	// square frame geometry
 
 	static public boolean debug=false;
-	static public boolean debug_angles=false;
-
+	
 	public static final double kFrontWheelBase = Units.inchesToMeters(29); // distance beteen front wheels
 	public static final double kSideWheelBase = Units.inchesToMeters(29); // distance beteen side wheels
 	public static final double kTrackRadius = 0.5* (Math.sqrt(kFrontWheelBase*kFrontWheelBase+kSideWheelBase*kSideWheelBase));
@@ -88,8 +87,6 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	boolean m_resetting=false;
 	
 	private final Timer m_timer = new Timer();
-
-	private int cnt=0;
 
     /** Creates a new Subsystem. */
 	public Drivetrain() {
@@ -270,27 +267,16 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	public void log() {
 		if(!simstarted)
 			return;
-		Translation2d t=  getPose().getTranslation();	
-		SmartDashboard.putNumber("H:", getHeading());
-		SmartDashboard.putNumber("X:", t.getX());
-		SmartDashboard.putNumber("Y:", t.getY());
+		Pose2d pose = getPose();
+		String s = String.format(" X:%-5.2f Y:%-5.2f H:%-4.1f",
+        pose.getX(), pose.getY(), pose.getRotation().getDegrees());
+    	SmartDashboard.putString("Pose", s);
 
 		double v=getVelocity();
 		kMaxVelocityObserved=v>kMaxVelocityObserved?v:kMaxVelocityObserved;
 		//SmartDashboard.putNumber("maxV", kMaxVelocityObserved);
 		field_oriented = SmartDashboard.getBoolean("Field Oriented", field_oriented);
-		
-		if(debug_angles)
-			displayAngles();	
 	}	
-	void displayAngles(){
-		if((cnt%100)==0){
-			String str=String.format("angles fl:%-1.2f fr:%-1.2f bl:%-1.2f br:%-1.2f\n",
-			m_frontLeft.getAngle(),m_frontRight.getAngle(),m_backLeft.getAngle(),m_backRight.getAngle());
-			SmartDashboard.putString("Wheels ", str);
-		}
-		cnt++;
-	}
 	
 	public void turn(double value) {
 		for (int i = 0; i < modules.length; i++)

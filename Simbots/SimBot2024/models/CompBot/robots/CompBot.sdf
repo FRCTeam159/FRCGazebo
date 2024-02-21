@@ -572,7 +572,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0</angular>
+        <angular>0.001</angular>
       </velocity_decay>
       <inertial>
         <mass>0.629822998132586</mass>
@@ -627,10 +627,9 @@
       <axis>
         <xyz>1 0 0</xyz>
         <dynamics>
-          <damping>1</damping>
+          <damping>1.0</damping>
           <friction>0</friction>
-        </dynamics>
-        
+        </dynamics>        
       </axis>
     </joint>
     <link name="BotShootWheels">
@@ -640,7 +639,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0</angular>
+        <angular>0.001</angular>
       </velocity_decay>
       <inertial>
         <mass>0.1</mass>
@@ -704,10 +703,9 @@
       <axis>
         <xyz>-1 0 0</xyz>
         <dynamics>
-          <damping>1</damping>
-          <friction>0</friction>
-        </dynamics>
-        
+          <damping>1.0</damping>
+          <friction>0.0</friction>
+        </dynamics>      
       </axis>
     </joint>
     <link name="PickupTop">
@@ -717,12 +715,12 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0</angular>
+        <angular>0.0</angular>
       </velocity_decay>
       <inertial>
         <mass>0.01</mass>
         <pose>0 0 0 0 0 0</pose>
-              </inertial>
+      </inertial>
       <collision name="PickupTop_collision">
         <pose>0.341859895435352 -0.79725609158215 -0.0941043559802404 0 0 0</pose>
         <geometry>
@@ -740,7 +738,7 @@
               <kd>25</kd>
               <kp>1e6</kp>
               <min_depth>0.0001</min_depth>
-            </ode>          
+            </ode> 
           </contact>
           <friction>
             <ode>
@@ -772,10 +770,9 @@
       <axis>
         <xyz>1 0 0</xyz>
         <dynamics>
-          <damping>1</damping>
-          <friction>0</friction>
-        </dynamics>
-        
+          <damping>0.2</damping>
+          <friction>0.1</friction>
+        </dynamics>     
       </axis>
     </joint>
     <link name="PickupBot">
@@ -790,7 +787,7 @@
       <inertial>
         <mass>0.01</mass>
         <pose>0 0 0 0 0 0</pose>
-              </inertial>
+      </inertial>
       <collision name="PickupBot_collision">
         <pose>0.342354952101494 -0.708321366577716 -0.0940178694931124 0 0 0</pose>
         <geometry>
@@ -840,8 +837,8 @@
       <axis>
         <xyz>-1 0 0</xyz>
         <dynamics>
-          <damping>1</damping>
-          <friction>0</friction>
+          <damping>0.2</damping>
+          <friction>0.1</friction>
         </dynamics>
         
       </axis>
@@ -909,8 +906,7 @@
         <dynamics>
           <damping>1</damping>
           <friction>0</friction>
-        </dynamics>
-        
+        </dynamics>    
       </axis>
     </joint>
     <link name="MidRollersBot">

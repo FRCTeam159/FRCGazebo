@@ -22,6 +22,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Robot;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Drivetrain;
@@ -120,7 +121,7 @@ public class DrivePath extends Command {
 
     // important ! do this otherwise get rotation glitch at start or reverse path
     m_ppcontroller.reset(m_drive.getPose(), new ChassisSpeeds());
-    Arm.status = "DrivePath";
+    Robot.status = "DrivePath";
 
     System.out.println("runtime:" + runtime + " states:" + states + " intervals:" + intervals);
   }

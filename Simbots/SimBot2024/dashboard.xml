@@ -1,10 +1,23 @@
 <xml version="1.0">
 <dashboard>
-	<widget field="Sensor2" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
-		<location x="507" y="133"/>
+	<widget field="Pose" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="7" y="70"/>
+		<width>170</width>
 	</widget>
-	<widget field="Sensor1" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
-		<location x="447" y="134"/>
+	<widget field="ShootSensor" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="533" y="136"/>
+	</widget>
+	<widget field="IntakeSensor" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="452" y="135"/>
+	</widget>
+	<widget field="ArmAngle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="143" y="40"/>
+		<width>106</width>
+		<height>20</height>
+	</widget>
+	<widget field="ShootSpeed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="5" y="40"/>
+		<width>126</width>
 	</widget>
 	<widget field="Pickup" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
 		<location x="225" y="15"/>
@@ -24,27 +37,9 @@
 	<widget field="SendableChooser[3]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
 		<location x="519" y="3"/>
 	</widget>
-	<widget field="Y:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="95" y="69"/>
-		<width>74</width>
-	</widget>
-	<widget field="X:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="16" y="70"/>
-		<width>72</width>
-	</widget>
-	<widget field="H:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="180" y="67"/>
-		<width>66</width>
-	</widget>
 	<widget field="Status" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="279" y="134"/>
+		<location x="276" y="130"/>
 		<width>153</width>
-	</widget>
-	<widget field="Shooter" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="136" y="38"/>
-	</widget>
-	<widget field="Arm" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="15" y="42"/>
 	</widget>
 	<widget field="SimClock" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="7" y="131"/>

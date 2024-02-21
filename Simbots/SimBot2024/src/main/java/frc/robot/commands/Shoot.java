@@ -8,6 +8,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 
@@ -39,7 +40,6 @@ public class Shoot extends Command implements Constants{
     m_timer.reset();
     m_arm.setShooterOn();
     m_arm.setPickupOff();
-    m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE);
     ok2shoot=Arm.noteAtIntake();
   }
 
@@ -51,7 +51,7 @@ public class Shoot extends Command implements Constants{
       m_arm.setPickupOn();
       m_timer.reset();
       shooting=true;
-      Arm.status="Shooting";
+      Robot.status="Shooting";
     }
     m_drive.drive(-0.1,0,0,false); // align bumpers with platform
   }
@@ -59,9 +59,10 @@ public class Shoot extends Command implements Constants{
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+     System.out.println("Shoot.end");
     m_arm.setShooterOFf();
-    m_arm.setTargetAngle(PICKUP_ANGLE);
-    Arm.status="End";
+    //m_arm.setTargetAngle(PICKUP_ANGLE);
+    Robot.status="End";
   }
 
   // Returns true when the command should end.
