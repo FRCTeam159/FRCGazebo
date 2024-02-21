@@ -761,7 +761,15 @@
           </mesh>
         </geometry>
       </visual>
-       
+       <sensor name="Intake_contact" type="contact">
+        <always_on>1</always_on>
+        <contact>
+          <collision>PickupTop_collision</collision>
+        </contact>
+        <plugin name="intake_contact" filename="sim_contact.dll">
+          <topic>~/gazebo/frc/simulator/contact/0</topic>
+        </plugin>
+      </sensor>
     </link>
     <joint name="Arm-PickupTop" type="revolute">
       <parent>Arm</parent>
@@ -962,15 +970,7 @@
           </mesh>
         </geometry>
       </visual>
-      <sensor name="Intake_contact" type="contact">
-        <always_on>1</always_on>
-        <contact>
-          <collision>MidRollersBot_collision</collision>
-        </contact>
-        <plugin name="intake_contact" filename="sim_contact.dll">
-          <topic>~/gazebo/frc/simulator/contact/0</topic>
-        </plugin>
-      </sensor>
+      
       
     </link>
     <joint name="Arm-MidRollersBot" type="revolute">

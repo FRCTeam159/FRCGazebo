@@ -7,20 +7,14 @@ package frc.robot.subsystems;
 import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.PathPoint;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
-import frc.robot.commands.AlignWheels;
 import frc.robot.commands.Calibrate;
 import frc.robot.commands.DrivePath;
 import frc.robot.commands.EndAuto;
@@ -143,26 +137,26 @@ public class Autonomous extends SequentialCommandGroup  {
         
         List<PathPlannerPath> pathGroup = PathPlannerAuto.getPathGroupFromAutoFile(pathname);
         return new SequentialCommandGroup(
-          new Shoot(m_drive,m_arm),
+          new Shoot(m_arm),
           AutoBuilder.followPath(pathGroup.get(0)),
-          new Pickup(m_arm,3),
+          new Pickup(m_arm),
           AutoBuilder.followPath(pathGroup.get(1)),
-          new Shoot(m_drive,m_arm)
+          new Shoot(m_arm)
         );        
       }
       case AUTOTEST: {   
         return new SequentialCommandGroup(
-              new Shoot(m_drive,m_arm),
+              new Shoot(m_arm),
               new SetArmAngle(m_arm,Constants.PICKUP_ANGLE),
-              new ParallelRaceGroup(
+              new ParallelCommandGroup(
                 new DrivePath(m_drive,false),
-                new Pickup(m_arm, 8)
+                new Pickup(m_arm)
               ),
               new ParallelCommandGroup( 
                 new DrivePath(m_drive, true),
                 new SetArmAngle(m_arm,Constants.SPEAKER_SHOOT_ANGLE)
               ),
-              new Shoot(m_drive,m_arm)
+              new Shoot(m_arm)
         );
       }
     }

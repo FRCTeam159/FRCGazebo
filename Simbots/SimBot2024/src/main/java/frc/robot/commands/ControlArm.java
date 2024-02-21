@@ -12,11 +12,17 @@ import frc.robot.subsystems.Arm;
 public class ControlArm extends Command implements Constants {
   Arm m_arm;
   XboxController m_controller;
+  Shoot shoot;
+  Pickup pickup;
+  boolean shooting=false;
+  boolean grabbing=false;
   /** Creates a new ControlArm. 
    * @param m_controller */
   public ControlArm(Arm arm, XboxController controller) {
     m_arm=arm;
     m_controller=controller;
+    shoot=new Shoot(arm);
+    pickup=new Pickup(arm);
     addRequirements(arm);
   }
 
@@ -30,12 +36,21 @@ public class ControlArm extends Command implements Constants {
     double left=m_controller.getLeftTriggerAxis();
     double right=m_controller.getRightTriggerAxis();
 
-    if(m_controller.getRightBumperPressed())
-      m_arm.togglePusher();
-    else if(m_controller.getLeftBumperPressed())
-      m_arm.toggleShooter();
+    if (m_controller.getRightBumperPressed()) {
+      if (!shooting) {
+        shoot.initialize();
+        shooting = true;
+      } else
+        shooting = false;
+    } else if (m_controller.getLeftBumperPressed()) {
+      if (!grabbing) {
+        pickup.initialize();
+        grabbing = true;
+      } else
+        grabbing = false;
+    }
     else if(m_controller.getXButtonPressed())
-      m_arm.togglePickup();
+       System.out.println("X pressed");
     else if(m_controller.getAButtonPressed())
       m_arm.setTargetAngle(PICKUP_ANGLE);
     else if(m_controller.getBButtonPressed())
@@ -43,10 +58,28 @@ public class ControlArm extends Command implements Constants {
     else if(m_controller.getYButtonPressed())
       m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE);
     else if (left > 0)
-        m_arm.stepDown(left);
+      m_arm.stepDown(left);
     else if (right > 0)
-        m_arm.stepUp(right);
+      m_arm.stepUp(right);
+    if(shooting)
+      shoot();
+    else if(grabbing)
+      pickup();
+  }
 
+  void shoot() {
+    if (shoot.isFinished()) {
+      shoot.end(false);
+      shooting = false;
+    } else
+      shoot.execute();
+  }
+  void pickup(){
+     if(pickup.isFinished()) {
+      pickup.end(false);
+      grabbing = false;
+    } else
+      pickup.execute();
   }
 
   // Called once the command ends or is interrupted.

@@ -51,8 +51,8 @@ public class RobotContainer {
     m_drive.setDefaultCommand(m_driveCommand);
     m_arm.setDefaultCommand(new ControlArm(m_arm, m_controller));
 
-    NamedCommands.registerCommand("Pickup", new Pickup(m_arm, 3.0));
-    NamedCommands.registerCommand("Shoot", new Shoot(m_drive, m_arm));
+    NamedCommands.registerCommand("Pickup", new Pickup(m_arm));
+    NamedCommands.registerCommand("Shoot", new Shoot(m_arm));
 
     configureButtonBindings();
   }
@@ -87,11 +87,9 @@ public class RobotContainer {
   public void autonomousInit() {
     m_drive.setRobotDisabled(false);
     Autonomous.ok2run = true;
-    m_drive.enable();
-   // m_drive.startAuto();
-    
+    m_drive.enable();   
     TargetMgr.reset();
-    Robot.status = "Auto";
+    Robot.status = "Autonomous";
   }
 
   public void disabledInit() {

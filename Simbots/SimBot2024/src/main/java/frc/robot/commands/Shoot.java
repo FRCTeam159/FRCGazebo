@@ -10,24 +10,20 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Drivetrain;
 
 public class Shoot extends Command implements Constants{
   /** Creates a new Shoot. 
    * @param m_arm 
    * */
   Arm m_arm;
-  Drivetrain m_drive;
   boolean shooter_ready=false;
   boolean shooting=false;
   Timer m_timer=new Timer();
-  boolean ok2shoot=false;
-  public Shoot(Drivetrain drive, Arm arm) {
+  boolean noteCaptured=false;
+  public Shoot(Arm arm) {
     m_arm=arm;
-    m_drive=drive;
     addRequirements(arm);
     m_timer.start();
-    ok2shoot=Arm.noteAtIntake();
   }
 
   // Called when the command is initially scheduled.
@@ -36,11 +32,10 @@ public class Shoot extends Command implements Constants{
     System.out.println("Shoot.init");
     shooter_ready=false;
     shooting=false;
-    ok2shoot=false;
+    noteCaptured=Arm.noteAtIntake();
     m_timer.reset();
     m_arm.setShooterOn();
     m_arm.setPickupOff();
-    ok2shoot=Arm.noteAtIntake();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -53,26 +48,23 @@ public class Shoot extends Command implements Constants{
       shooting=true;
       Robot.status="Shooting";
     }
-    m_drive.drive(-0.1,0,0,false); // align bumpers with platform
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-     System.out.println("Shoot.end");
+    System.out.println("Shoot.end");
     m_arm.setShooterOFf();
-    //m_arm.setTargetAngle(PICKUP_ANGLE);
-    Robot.status="End";
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(shooting && m_timer.get()>3 && !Arm.noteAtIntake())
+    if(shooter_ready && m_timer.get()>2 && !Arm.noteAtShooter())
       return true;
-    if(shooting && m_timer.get()>5)
+    if(shooting && m_timer.get()>5) // taking too long - something isn't right
       return true;
-    if(!ok2shoot)
+    if(!noteCaptured)
       return true;
     return false;
   }

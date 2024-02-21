@@ -74,7 +74,7 @@
 		<width>130</width>
 	</widget>
 	<widget field="Position" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="106" y="103"/>
+		<location x="95" y="100"/>
 		<width>93</width>
 	</widget>
 	<widget field="Alliance" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">

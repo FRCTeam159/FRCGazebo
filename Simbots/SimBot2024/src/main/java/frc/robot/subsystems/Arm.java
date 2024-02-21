@@ -196,7 +196,7 @@ public class Arm extends SubsystemBase implements Constants {
     if (!at_starting_position) {
       if (atTargetAngle()) {
         at_starting_position = true;
-        Robot.status = "Ready";
+        Robot.status = "Arm Ready";
       }
     }
     if (shooter_on)

@@ -4,67 +4,47 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Autonomous;
-import frc.robot.subsystems.Drivetrain;
 
 public class Pickup extends Command implements Constants{
-  private final Timer m_timer = new Timer();
   private final Arm m_arm;
-  double timeout;
-  boolean resetting=false;
-  double starttm;
+  boolean note_captured=false;
 
-  public Pickup(Arm arm, double tm) {
+  public Pickup(Arm arm) {
     m_arm=arm;
-    timeout=tm;
-    m_timer.start();
     addRequirements(arm);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_timer.reset();
-    starttm=0;
     System.out.println("Pickup.init");
     m_arm.setPickupOn();
-
     Robot.status="Pickup";
-    resetting=true;
+    note_captured=false;
   }
-
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-   // if(m_timer.get()>0.5*timeout)
-  //   m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE);
-   
+    if(Arm.noteAtIntake())
+      note_captured=true;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-     System.out.println("Pickup.end");
-   // m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE);
+    System.out.println("Pickup.end");
     m_arm.setPickupOff();
+    m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE); // lift note off the ground
   }
 
   // Returns true when the command should end.
   @Override
-  public boolean isFinished() {
-    double tm=m_timer.get();
-    if(tm-starttm>timeout){
-      System.out.println("Pickup - timout expired");
-      Autonomous.ok2run=false;
-      return true;
-    } 
-    if(Arm.noteAtIntake()){
-      System.out.println("Pickup - note captured");
+  public boolean isFinished() {   
+    if(note_captured && Arm.noteAtShooter()){
       return true;
     }
     return false;
