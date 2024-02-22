@@ -41,7 +41,7 @@ public class TagDetector extends Thread {
 
   Drivetrain m_drivetrain;
 
-  static boolean target_tags=false;
+  static boolean m_targeting=false;
 
   static AprilTag[] tags = null;
 
@@ -70,9 +70,13 @@ public class TagDetector extends Thread {
         tags = null;
 
         // if using tags for targeting
-        if(target_tags){  
+        if(m_targeting){  
           tags = getTags(mat);
-          showTags(tags, mat);
+          if(tags !=null){
+            if(tags.length ==2)
+              Arrays.sort(tags, new SortbyDistance());
+            showTags(tags, mat);
+          }
           ouputStream.putFrame(mat);
           continue;
         }
@@ -105,11 +109,15 @@ public class TagDetector extends Thread {
   }
   
   // targeting methods
-  public static void setTargetTags(boolean state){
-    target_tags=state;
+  public static void setTargeting(boolean state){
+    System.out.println("SET TARGETING "+state);
+    m_targeting=state;
   }
   public static AprilTag[] getTags(){
     return tags;
+  }
+  public static boolean isTargeting(){
+    return m_targeting;
   }
   void showTags(AprilTag[] tags, Mat mat) {
     for (int i = 0; i < tags.length; i++) {
@@ -137,7 +145,6 @@ public class TagDetector extends Thread {
       );
     }  
   }
- 
 
   // return an array of tag info structures from an image
   private AprilTag[] getTags(Mat mat) {

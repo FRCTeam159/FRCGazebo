@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.TagDetector;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.XboxController;
@@ -67,8 +68,8 @@ public class DriveWithGamepad extends Command {
     if(m_drive.disabled()){
         m_drive.enable();
     }
-    m_drive.drive(xSpeed, -ySpeed,-rot,m_drive.fieldOriented());
-
+    if(!TagDetector.isTargeting())
+      m_drive.drive(xSpeed, -ySpeed,-rot,m_drive.fieldOriented());
   }
 
   // Called once the command ends or is interrupted.

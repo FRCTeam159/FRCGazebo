@@ -34,9 +34,9 @@ public class Arm extends SubsystemBase implements Constants {
 
   public static final double MOVE_RATE = 0.1;
 
-  boolean shooter_on = false;
-  boolean pickup_on = false;
-  boolean pusher_on = false;
+  boolean m_shoot = false;
+  boolean m_intake = false;
+  boolean m_push = false;
   static boolean incontact = false;
   boolean started = false;
 
@@ -66,9 +66,9 @@ public class Arm extends SubsystemBase implements Constants {
   }
 
   public void reset() {
-    shooter_on = false;
-    pickup_on = false;
-    pusher_on = false;
+    m_shoot = false;
+    m_intake = false;
+    m_push = false;
     init();
   }
 
@@ -85,39 +85,39 @@ public class Arm extends SubsystemBase implements Constants {
   }
 
   public void setShooterOn() {
-    shooter_on = true;
+    m_shoot = true;
   }
 
   public void setShooterOFf() {
-    shooter_on = false;
+    m_shoot = false;
   }
 
   public void toggleShooter() {
-    shooter_on = shooter_on ? false : true;
+    m_shoot = m_shoot ? false : true;
   }
 
   public void togglePickup() {
-    pickup_on = pickup_on ? false : true;
+    m_intake = m_intake ? false : true;
   }
 
   public void setPickupOn() {
-    pickup_on = true;
+    m_intake = true;
   }
 
   public void setPickupOff() {
-    pickup_on = false;
+    m_intake = false;
   }
 
   public void togglePusher() {
-    pusher_on = pusher_on ? false : true;
+    m_push = m_push ? false : true;
   }
 
-  public void setPusherOn() {
-    pusher_on = true;
+  public void setPushOn() {
+    m_push = true;
   }
 
-  public void setPusherOFf() {
-    pusher_on = false;
+  public void setPushOFf() {
+    m_push = false;
   }
 
   public boolean atLowerLimit() {
@@ -187,25 +187,25 @@ public class Arm extends SubsystemBase implements Constants {
     }
 
     initialized = true;
-
+  
     double angle = getAngle();
     angle_pid.setSetpoint(target_angle);
     double corr = angle_pid.calculate(angle);
     motor.set(corr);
-
+    
     if (!at_starting_position) {
       if (atTargetAngle()) {
         at_starting_position = true;
         Robot.status = "Arm Ready";
       }
     }
-    if (shooter_on)
+    if (m_shoot)
       shooter.set(SHOOT_POWER);
     else
       shooter.set(-0.3);
-    if (pickup_on)
+    if (m_intake)
       pickup.set(PICKUP_POWER);
-    else if (pusher_on)
+    else if (m_push)
       pickup.set(PUSH_POWER);    
     else if(haveNote()){
       if(noteAtShooter())
@@ -225,8 +225,8 @@ public class Arm extends SubsystemBase implements Constants {
 
   void log() {
     SmartDashboard.putNumber("ArmAngle", getAngle());
-    SmartDashboard.putBoolean("Shooting", shooter_on);
-    SmartDashboard.putBoolean("Pickup", pickup_on);
+    SmartDashboard.putBoolean("Shooting", m_shoot);
+    SmartDashboard.putBoolean("Pickup", m_intake);
     SmartDashboard.putBoolean("IntakeSensor", noteAtIntake());
     SmartDashboard.putBoolean("ShootSensor", noteAtShooter());
     SmartDashboard.putNumber("ShootSpeed", shooter.getRate());

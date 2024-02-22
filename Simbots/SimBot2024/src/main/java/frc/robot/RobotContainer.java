@@ -49,7 +49,7 @@ public class RobotContainer {
   public RobotContainer() {
     m_driveCommand = new DriveWithGamepad(m_drive, m_controller);
     m_drive.setDefaultCommand(m_driveCommand);
-    m_arm.setDefaultCommand(new ControlArm(m_arm, m_controller));
+    m_arm.setDefaultCommand(new ControlArm(m_arm, m_drive, m_controller));
 
     NamedCommands.registerCommand("Pickup", new Pickup(m_arm));
     NamedCommands.registerCommand("Shoot", new Shoot(m_arm));
@@ -118,6 +118,7 @@ public class RobotContainer {
       m_drive.resetWheels(true);
       m_arm.reset();
       TargetMgr.reset();
+      TagDetector.setTargeting(false);
     } else if (!b && resetting) {
       resetting = false;
       m_drive.resetPose();
