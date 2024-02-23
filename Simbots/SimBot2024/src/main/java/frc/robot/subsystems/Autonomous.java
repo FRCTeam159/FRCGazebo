@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
+import frc.robot.commands.AlignWheels;
+import frc.robot.commands.AutoTarget;
 import frc.robot.commands.Calibrate;
 import frc.robot.commands.DrivePath;
 import frc.robot.commands.EndAuto;
@@ -109,6 +111,7 @@ public class Autonomous extends SequentialCommandGroup  {
   public SequentialCommandGroup getCommand(){
     return new SequentialCommandGroup(
       new InitAuto(m_drive),
+      new AlignWheels(m_drive, 1),
       new SetArmAngle(m_arm,Constants.SPEAKER_SHOOT_ANGLE),
       getAutoSequence(),
       new EndAuto(m_drive));
@@ -123,7 +126,24 @@ public class Autonomous extends SequentialCommandGroup  {
       case PROGRAM:
         return new SequentialCommandGroup(
           new DrivePath(m_drive, getReverse())
+        );    
+      case AUTOTEST: {   
+        return new SequentialCommandGroup(
+              new Shoot(m_arm),
+              new SetArmAngle(m_arm,Constants.PICKUP_ANGLE),
+              new ParallelCommandGroup(
+                new DrivePath(m_drive,false),
+                new Pickup(m_arm)
+              ),
+              new AlignWheels(m_drive, 1.5),
+              new ParallelCommandGroup( 
+                new DrivePath(m_drive, true),
+                new SetArmAngle(m_arm,Constants.SPEAKER_SHOOT_ANGLE)
+              ),
+              new AutoTarget(m_arm,m_drive),
+              new Shoot(m_arm)
         );
+      }
       case PATHPLANNER:
       {
         int position=TargetMgr.getStartPosition();
@@ -143,21 +163,6 @@ public class Autonomous extends SequentialCommandGroup  {
           AutoBuilder.followPath(pathGroup.get(1)),
           new Shoot(m_arm)
         );        
-      }
-      case AUTOTEST: {   
-        return new SequentialCommandGroup(
-              new Shoot(m_arm),
-              new SetArmAngle(m_arm,Constants.PICKUP_ANGLE),
-              new ParallelCommandGroup(
-                new DrivePath(m_drive,false),
-                new Pickup(m_arm)
-              ),
-              new ParallelCommandGroup( 
-                new DrivePath(m_drive, true),
-                new SetArmAngle(m_arm,Constants.SPEAKER_SHOOT_ANGLE)
-              ),
-              new Shoot(m_arm)
-        );
       }
     }
     return null;

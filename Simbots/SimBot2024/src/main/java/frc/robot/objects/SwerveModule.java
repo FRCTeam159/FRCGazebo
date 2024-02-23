@@ -31,7 +31,7 @@ public class SwerveModule {
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final PIDController m_drivePIDController = new PIDController(10, 0.0, 0);
-  private final PIDController m_turningPIDController = new PIDController(5, 0.05, 0);
+  private final PIDController m_turningPIDController = new PIDController(5, 0.0, 0);
   // private final ProfiledPIDController m_turningPIDController =
   //     new ProfiledPIDController(5,0.0,0,
   //         new TrapezoidProfile.Constraints(
@@ -43,11 +43,15 @@ public class SwerveModule {
 
   public int m_drive_chnl;
   public int m_turn_chnl;
+  public int chnl;
   
   boolean m_enabled=false;
 
   static boolean debug=true;
+  static boolean debug_align=false;
+
   static public boolean optimize=true;
+  boolean aligning=false;
   /**
    * Constructs a SwerveModule with a drive motor, turning motor, drive encoder and turning encoder.
    * @param i
@@ -66,9 +70,9 @@ public class SwerveModule {
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
-    m_turningPIDController.setTolerance(Math.toRadians(1));
-
-    name = chnlnames[i - 1];
+    m_turningPIDController.setTolerance(Math.toRadians(2));
+    chnl=i-1;
+    name = chnlnames[chnl];
     if(debug)
       SmartDashboard.putString(name, "Working");
   }
@@ -146,16 +150,20 @@ public class SwerveModule {
 
     if(debug){
       String s = String.format("Pos %-2.2f Angle %-3.3f\n", 
-      getDistance(),Math.toDegrees(heading())); 
+      getDistance(),Math.toDegrees(heading())%360); 
       SmartDashboard.putString(name, s);
     }
-      m_driveMotor.set(set_drive);
-      m_turnMotor.set(set_turn);
+    m_driveMotor.set(set_drive);
+    m_turnMotor.set(set_turn);
   }
-  public void resetWheel(){
-    setAngle(0,0);
+  public void resetWheel(boolean begin){
+    aligning=begin;
+    alignWheel();
   }
-  public boolean wheelReset(){
+  public void alignWheel(){
+     setAngle(0,0);
+  }
+  public boolean wheelReset() {
     return m_turningPIDController.atSetpoint();
   }
   // just apply a voltage to the turn motor
@@ -172,9 +180,14 @@ public class SwerveModule {
     double r=Math.toRadians(a);
     m_turningPIDController.setSetpoint(r);
     double current=getRotation2d().getRadians(); // rotations in radians
-    double turnOutput = m_turningPIDController.calculate(current,r);
+    double turnOutput =m_turningPIDController.calculate(current,r);
     m_driveMotor.set(d);
     m_turnMotor.set(turnOutput); 
+    if(debug_align && aligning && chnl==0){
+       String s = String.format("%s Target:%-2.2f Current:%-3.3f Correction:%-3.3f", 
+      name,a,Math.toDegrees(heading())%360,turnOutput); 
+      System.out.println(s);
+    }
   }
   
   public double getAngle(){

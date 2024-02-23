@@ -526,7 +526,11 @@
         <visualize>1</visualize>
         <always_on>1</always_on>
         
-        <pose>0.0 0.29 0.0 0 1.57 1.57</pose>
+        <!--<pose>0.0 0.29 0.0 0 1.7 1.57</pose>-->
+       <!--<pose>0.0 0.29 0.0 0 1.57 1.57</pose>-->
+
+       <pose>0.02 0.0 0.0 0 1.7 1.57</pose>
+
         <!--<pose>0.0 0.29 0.0 0 1.9 1.5707963267949</pose>-->
         <camera name="Armcamera">
           <horizontal_fov>0.7</horizontal_fov>

@@ -151,7 +151,7 @@ public class AprilTag {
         Pose3d pose=getPose();
         
         if(pose !=null)
-          str = String.format("id:%d X:%-2.1f Y:%-2.1f Z:%-2.1f H:%-2.1f P:%-2.1f",
+          str = String.format("id:%d X:%-3.2f Y:%-3.2f Z:%-3.2f H:%-3.2f P:%-3.2f",
                 tag_id, getX(), getY(), getZ(), getYaw(), getPitch());
         return str;
     }

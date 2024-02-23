@@ -321,21 +321,27 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	}
 	 // reset wheels turn motor to starting position
 	public void resetWheels(boolean begin) {
+		m_resetting = begin;
 		if (begin) {
-			m_resetting = true;
-			System.out.println("Drivetrain-ALIGNING_WHEELS");
+			System.out.println("Drivetrain-START ALIGNING_WHEELS");
+			m_timer.reset();
 		}
+		else
+			System.out.println("Drivetrain-END ALIGNING_WHEELS time="+m_timer.get());
 		for (int i = 0; i < modules.length; i++)
-			modules[i].resetWheel();
+			modules[i].resetWheel(begin);
 	}
-	
+	public void  alignWheels() {
+		for (int i = 0; i < modules.length; i++)
+			modules[i].alignWheel();
+	}
 	public boolean wheelsReset() {
 		for (int i = 0; i < modules.length; i++) {
 			if (!modules[i].wheelReset())
 				return false;
 		}
 		if(m_resetting)
-			System.out.println("Drivetrain-WHEELS_ALIGNED");
+			System.out.println("Drivetrain-WHEELS-ARE-ALIGNED");
 		m_resetting = false;
 		return true;
 	}

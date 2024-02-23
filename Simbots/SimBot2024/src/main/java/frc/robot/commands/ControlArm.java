@@ -58,15 +58,14 @@ public class ControlArm extends Command implements Constants {
         m_grabbing = true;
       } else
         m_grabbing = false;
-    }   
-     else if(m_controller.getXButtonPressed()){
+    } else if(m_controller.getXButtonPressed()){
       if(!m_targeting){
         target.initialize();
         m_targeting=true;
       }
       else
         m_targeting=true;
-    }else if(m_controller.getAButtonPressed())
+    } else if(m_controller.getAButtonPressed())
       m_arm.setTargetAngle(PICKUP_ANGLE);
     else if(m_controller.getBButtonPressed())
       m_arm.setTargetAngle(AMP_SHOOT_ANGLE);
@@ -99,13 +98,13 @@ public class ControlArm extends Command implements Constants {
     } else
       pickup.execute();
   }
-   void target() {
+  void target() {
      if(target.isFinished()) {
       target.end(m_controller.getXButtonReleased());
       m_targeting = false;
     } else
       target.execute();
-   }
+  }
 
   // Called once the command ends or is interrupted.
   @Override
