@@ -1,5 +1,12 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="Placement" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="185" y="101"/>
+		<width>94</width>
+	</widget>
+	<widget field="Pathplanner" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="347" y="104"/>
+	</widget>
 	<widget field="Pose" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="7" y="70"/>
 		<width>170</width>
@@ -55,7 +62,7 @@
 		<location x="355" y="2"/>
 	</widget>
 	<widget field="Autoset" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="220" y="103"/>
+		<location x="222" y="62"/>
 	</widget>
 	<widget field="BR" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="450" y="583"/>
@@ -74,11 +81,11 @@
 		<width>130</width>
 	</widget>
 	<widget field="Position" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="95" y="100"/>
+		<location x="82" y="102"/>
 		<width>93</width>
 	</widget>
 	<widget field="Alliance" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="16" y="100"/>
+		<location x="6" y="101"/>
 		<width>72</width>
 	</widget>
 	<widget field="SendableChooser[2]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">

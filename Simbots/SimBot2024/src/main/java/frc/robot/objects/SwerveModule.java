@@ -38,8 +38,8 @@ public class SwerveModule {
   //             kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
 
   // Gains are for example purposes only - must be determined for your own robot!
-  private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(0.1, 0.1);
-  private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(0.1, 0.1);
+  private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(0.5, 0.1);
+  private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(0.8, 0.3, 0.1);
 
   public int m_drive_chnl;
   public int m_turn_chnl;
@@ -142,8 +142,7 @@ public class SwerveModule {
     double turn_angle=getRotation2d().getRadians(); // rotations in radians
 
     final double turnOutput = m_turningPIDController.calculate(turn_angle,state.angle.getRadians());
-    final double turnFeedforward = 0;//m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
-    //final double turnFeedforward = m_turnFeedforward.calculate(state.angle.getRadians());
+    final double turnFeedforward = m_turnFeedforward.calculate(state.angle.getRadians());
 
     double set_drive=driveOutput+driveFeedforward;
     double set_turn=turnOutput+turnFeedforward;

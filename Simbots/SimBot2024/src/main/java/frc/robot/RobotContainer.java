@@ -6,7 +6,6 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,7 +13,6 @@ import frc.robot.commands.ControlArm;
 import frc.robot.commands.DriveWithGamepad;
 import frc.robot.commands.Pickup;
 import frc.robot.commands.Shoot;
-import objects.PlotServer;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Drivetrain;
@@ -41,7 +39,7 @@ public class RobotContainer {
   private final TagDetector m_detector = new TagDetector(m_drive);
   //PlotServer m_plotsub = new PlotServer();
 
-  private DriveWithGamepad m_driveCommand = null; // TODO
+  private DriveWithGamepad m_driveCommand = null; 
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -52,29 +50,17 @@ public class RobotContainer {
     m_arm.setDefaultCommand(new ControlArm(m_arm, m_drive, m_controller));
 
     NamedCommands.registerCommand("Pickup", new Pickup(m_arm));
-    NamedCommands.registerCommand("Shoot", new Shoot(m_arm));
-
-    configureButtonBindings();
+    NamedCommands.registerCommand("Shoot", new Shoot(m_arm,m_drive));
   }
 
-  /**
-   * Use this method to define your button->command mappings. Buttons can be
-   * created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
-   * it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
-  private void configureButtonBindings() {
-  }
-
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
   public Command getAutonomousCommand() {
     return m_autonomous.getCommand();
+  }
+
+  public void robotInit() {
+    m_drive.setRobotDisabled(true);
+    m_drive.init();
+    m_detector.start();
   }
 
   public void teleopInit() {
@@ -87,7 +73,8 @@ public class RobotContainer {
   public void autonomousInit() {
     m_drive.setRobotDisabled(false);
     Autonomous.ok2run = true;
-    m_drive.enable();   
+    m_drive.enable();  
+    m_drive.startAuto(); 
     TargetMgr.reset();
     Robot.status = "Autonomous";
   }
@@ -97,21 +84,13 @@ public class RobotContainer {
     m_drive.endAuto();
     Robot.status = "Disabled";
   }
-
-  public void robotInit() {
-    m_drive.setRobotDisabled(true);
-    m_drive.init();
-    //m_plotsub.start();
-    m_detector.start();
-  }
-
+  
   public void reset() {
     System.out.println("Robot reset");
     m_drive.reset();
   }
 
   public void simulationPeriodic() {
-
     boolean b = SmartDashboard.getBoolean("Reset", false);
     if (b && !resetting) {
       resetting = true;

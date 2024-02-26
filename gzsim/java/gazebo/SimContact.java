@@ -43,23 +43,10 @@ public class SimContact extends SimNode{
     public void enable(){
         enabled=true;
     }
+
     public boolean inContact() {
-       return contact_node.getBoolean(false);
-    }
-    public boolean newState() {
-        boolean b=inContact();
-        double val=b?1:0;
-        double a=averager.getAve(val);
-        if(a>0.99 && !last_contact){
-            last_contact=true;
-            System.out.println("Contact made");
-            return true;
-        }
-        else if (a==0 && last_contact){
-            last_contact=false;
-            System.out.println("Contact lost");
-            return true;
-        }
-        return false;
+       double val=contact_node.getBoolean(false)?1:0;
+       double a=averager.getAve(val);
+       return a>=0.5?true:false;
     }
 }

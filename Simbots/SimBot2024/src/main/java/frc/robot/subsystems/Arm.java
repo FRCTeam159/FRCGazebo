@@ -22,13 +22,13 @@ public class Arm extends SubsystemBase implements Constants {
   private SimEncMotor shooter = new SimEncMotor(SHOOTER);
   private SimMotor pickup = new SimMotor(PICKUP);
   private SimSwitch armLimit = new SimSwitch(ARM_LIMIT);
-  private static SimContact intakeContact = new SimContact(0, 10);
-  private static SimContact shootContact = new SimContact(1, 5);
+  private static SimContact intakeContact = new SimContact(0, 20);
+  private static SimContact shootContact = new SimContact(1, 20);
   private static boolean at_starting_position = false;
   private static boolean initialized = false;
 
   static public double SHOOT_POWER = 10;
-  static public double PICKUP_POWER = 0.5;
+  static public double PICKUP_POWER = 0.25;
   static public double PUSH_POWER = 2;
   static public double TARGET_SHOOTER_SPEED = 60;
 
@@ -209,9 +209,9 @@ public class Arm extends SubsystemBase implements Constants {
       pickup.set(PUSH_POWER);    
     else if(haveNote()){
       if(noteAtShooter())
-        pickup.set(-0.3);
+        pickup.set(-0.2);
       else
-        pickup.set(0.01);
+        pickup.set(0.0);
     }
     log();
   }

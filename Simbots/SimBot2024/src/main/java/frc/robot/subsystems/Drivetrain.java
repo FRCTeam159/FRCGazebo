@@ -198,6 +198,12 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		resetPositions();
 	}
 
+	public void setPose(Pose2d p) {
+		//reset();
+		last_heading = 0;
+		resetOdometry(p);
+		field_pose = getPose();
+	}
 	public void resetPose() {
 		reset();
 		last_heading = 0;
@@ -326,8 +332,8 @@ public class Drivetrain extends SubsystemBase implements Constants {
 			System.out.println("Drivetrain-START ALIGNING_WHEELS");
 			m_timer.reset();
 		}
-		else
-			System.out.println("Drivetrain-END ALIGNING_WHEELS time="+m_timer.get());
+		//else
+		//	System.out.println("Drivetrain-END ALIGNING_WHEELS time="+m_timer.get());
 		for (int i = 0; i < modules.length; i++)
 			modules[i].resetWheel(begin);
 	}
@@ -376,6 +382,9 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		updateOdometry();
 	}
 
+	public SwerveDriveKinematics getKinematics(){
+		return m_kinematics;
+	}
 	public Pose2d getPose() {
 		return m_pose;
 	}

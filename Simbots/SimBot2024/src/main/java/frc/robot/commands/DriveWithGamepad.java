@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
 public class DriveWithGamepad extends Command {
-  @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final Drivetrain m_drive;
   private final XboxController m_controller;
 
@@ -26,15 +25,13 @@ public class DriveWithGamepad extends Command {
   /**
    * Creates a new ExampleCommand.
    *
-   * @param subsystem    The subsystem used by this command.
-   * @param m_Controller
+   * @param drive      The subsystem used by this command.
+   * @param controller
    */
-  public DriveWithGamepad(Drivetrain subsystem, XboxController controller) {
-    m_drive = subsystem;
+  public DriveWithGamepad(Drivetrain drive, XboxController controller) {
+    m_drive = drive;
     m_controller = controller;
     m_align = new AlignWheels(m_drive, 2.0);
-
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_drive);
   }
 
@@ -66,8 +63,6 @@ public class DriveWithGamepad extends Command {
         * Drivetrain.kMaxVelocity;
 
     // Get the rate of angular rotation.
-    final var rot = m_rotLimiter.calculate(MathUtil.applyDeadband(vr, 0.3))
-        * Drivetrain.kMaxAngularVelocity;
 
     if (m_drive.disabled())
       m_drive.enable();
@@ -82,8 +77,11 @@ public class DriveWithGamepad extends Command {
     if (m_aligning)
       align();
     boolean do_targeting = TagDetector.isTargeting();
-    if (!m_aligning && !do_targeting)
+    if (!m_aligning && !do_targeting) {
+      final var rot = m_rotLimiter.calculate(MathUtil.applyDeadband(vr, 0.3))
+          * Drivetrain.kMaxAngularVelocity;
       m_drive.drive(xSpeed, -ySpeed, -rot, m_drive.fieldOriented());
+    }
   }
 
   // Called once the command ends or is interrupted.

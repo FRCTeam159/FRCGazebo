@@ -17,34 +17,39 @@ public class ControlArm extends Command implements Constants {
   Shoot shoot;
   Pickup pickup;
   AutoTarget target;
-  boolean m_shooting=false;
-  boolean m_grabbing=false;
-  boolean m_targeting=false;
-  /** Creates a new ControlArm. 
-   * @param m_controller */
-  public ControlArm(Arm arm, Drivetrain drive,XboxController controller) {
-    m_arm=arm;
-    m_drive=drive;
-    m_controller=controller;
-    shoot=new Shoot(arm);
-    pickup=new Pickup(arm);
-    target=new AutoTarget(m_arm,m_drive);
+  boolean m_shooting = false;
+
+  boolean m_grabbing = false;
+  boolean m_targeting = false;
+
+  /**
+   * Creates a new ControlArm.
+   * 
+   * @param m_controller
+   */
+  public ControlArm(Arm arm, Drivetrain drive, XboxController controller) {
+    m_arm = arm;
+    m_drive = drive;
+    m_controller = controller;
+    shoot = new Shoot(arm, drive);
+    pickup = new Pickup(arm);
+    target = new AutoTarget(m_arm, m_drive);
     addRequirements(arm);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-     m_shooting=false;
-     m_grabbing=false;
-     m_targeting=false;
+    m_shooting = false;
+    m_grabbing = false;
+    m_targeting = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double left=m_controller.getLeftTriggerAxis();
-    double right=m_controller.getRightTriggerAxis();
+    double left = m_controller.getLeftTriggerAxis();
+    double right = m_controller.getRightTriggerAxis();
 
     if (m_controller.getRightBumperPressed()) {
       if (!m_shooting) {
@@ -58,29 +63,28 @@ public class ControlArm extends Command implements Constants {
         m_grabbing = true;
       } else
         m_grabbing = false;
-    } else if(m_controller.getXButtonPressed()){
-      if(!m_targeting){
+    } else if (m_controller.getXButtonPressed()) {
+      if (!m_targeting) {
         target.initialize();
-        m_targeting=true;
-      }
-      else
-        m_targeting=true;
-    } else if(m_controller.getAButtonPressed())
+        m_targeting = true;
+      } else
+        m_targeting = true;
+    } else if (m_controller.getAButtonPressed())
       m_arm.setTargetAngle(PICKUP_ANGLE);
-    else if(m_controller.getBButtonPressed())
+    else if (m_controller.getBButtonPressed())
       m_arm.setTargetAngle(AMP_SHOOT_ANGLE);
-    else if(m_controller.getYButtonPressed())
+    else if (m_controller.getYButtonPressed())
       m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE);
     else if (left > 0)
       m_arm.stepDown(left);
     else if (right > 0)
       m_arm.stepUp(right);
-   
-    if(m_shooting)
+
+    if (m_shooting)
       shoot();
-    else if(m_grabbing)
+    else if (m_grabbing)
       pickup();
-    else if(m_targeting)
+    else if (m_targeting)
       target();
   }
 
@@ -91,15 +95,17 @@ public class ControlArm extends Command implements Constants {
     } else
       shoot.execute();
   }
-  void pickup(){
-    if(pickup.isFinished()) {
+
+  void pickup() {
+    if (pickup.isFinished()) {
       pickup.end(false);
       m_grabbing = false;
     } else
       pickup.execute();
   }
+
   void target() {
-     if(target.isFinished()) {
+    if (target.isFinished()) {
       target.end(m_controller.getXButtonReleased());
       m_targeting = false;
     } else
@@ -108,7 +114,8 @@ public class ControlArm extends Command implements Constants {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override

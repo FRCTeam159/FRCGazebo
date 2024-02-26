@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Robot;
@@ -11,10 +12,12 @@ import frc.robot.subsystems.Arm;
 
 public class Pickup extends Command implements Constants{
   private final Arm m_arm;
-  boolean note_captured=false;
+  boolean note_captured=false;  
+  Timer m_timer=new Timer();
 
   public Pickup(Arm arm) {
     m_arm=arm;
+    m_timer.start();
     addRequirements(arm);
   }
 
@@ -25,12 +28,17 @@ public class Pickup extends Command implements Constants{
     m_arm.setPickupOn();
     Robot.status="Pickup";
     note_captured=false;
+    m_timer.reset();
+    m_arm.setTargetAngle(Constants.PICKUP_ANGLE);
   }
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Arm.noteAtIntake())
+    if(m_timer.get()>0.5 && Arm.noteAtIntake() && m_arm.atTargetAngle()){
+      if(!note_captured)
+       m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE); // lift note off the ground
       note_captured=true;
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -43,8 +51,9 @@ public class Pickup extends Command implements Constants{
 
   // Returns true when the command should end.
   @Override
-  public boolean isFinished() {   
-    if(note_captured && Arm.noteAtShooter()){
+  public boolean isFinished() {  
+   
+    if(note_captured && Arm.noteAtShooter() /*&& m_arm.atTargetAngle()*/){
       return true;
     }
     return false;

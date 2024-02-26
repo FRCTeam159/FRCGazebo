@@ -10,18 +10,21 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Drivetrain;
 
 public class Shoot extends Command implements Constants{
   /** Creates a new Shoot. 
    * @param m_arm 
    * */
+  Drivetrain m_drive;
   Arm m_arm;
   boolean shooter_ready=false;
   boolean shooting=false;
   Timer m_timer=new Timer();
   boolean noteCaptured=false;
-  public Shoot(Arm arm) {
+  public Shoot(Arm arm, Drivetrain drive) {
     m_arm=arm;
+    m_drive=drive;
     addRequirements(arm);
     m_timer.start();
   }
@@ -48,6 +51,7 @@ public class Shoot extends Command implements Constants{
       shooting=true;
       Robot.status="Shooting";
     }
+    m_drive.drive(0.001,0,0,false);
   }
 
   // Called once the command ends or is interrupted.

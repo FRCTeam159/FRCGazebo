@@ -15,12 +15,12 @@ import objects.AprilTag;
 public class AutoTarget extends Command {
   Arm m_arm;
   Drivetrain m_drive;
-  PIDController turnPID = new PIDController(1, 0, 0);
-  PIDController anglePID = new PIDController(1, 0, 0);
+  PIDController turnPID = new PIDController(0.5, 0, 0);
+  PIDController anglePID = new PIDController(0.5, 0, 0);
   AprilTag[] tags;
   Timer m_timer=new Timer();
   boolean have_tags=false;
-  static boolean debug=true;
+  static boolean debug=false;
 
   /** Creates a new AutoTarget. 
  * @param drive 
@@ -30,7 +30,7 @@ public class AutoTarget extends Command {
     m_drive=drive;
     addRequirements(drive);
     turnPID.setSetpoint(0);
-    anglePID.setSetpoint(-0.5); // y offset if at speaker steps
+    anglePID.setSetpoint(-0.4); // y offset if at speaker steps
     anglePID.setTolerance(0.05);
     turnPID.setTolerance(.05);
     m_timer.start();

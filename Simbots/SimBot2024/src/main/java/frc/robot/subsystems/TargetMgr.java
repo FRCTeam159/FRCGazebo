@@ -14,30 +14,33 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TargetMgr {
 
-    public static final double kCenterX = Units.inchesToMeters(79); // Field geometry
+    public static final double kCenterX = Units.inchesToMeters(79); // from Field geometry
     public static final double kSideX = Units.inchesToMeters(71);
     public static final double kSideY = Units.inchesToMeters(70);
 
     static ArrayList<TagTarget> targets = new ArrayList<>();
 
-    static final public double XC = kCenterX-Drivetrain.kRobotLength; // center forward
+    static final public double XC = 0.9;//kCenterX-Drivetrain.kRobotLength; // center forward
     static final public double YC = 0;
     static final public double RC = 0;
 
-    static final public double XF = kSideX-1.1*Drivetrain.kRobotLength; 
-    static final public double YF = -kSideY+0.5*Drivetrain.kRobotLength;
+    static final public double XF = 0.9;//kSideX-Drivetrain.kRobotLength; 
+    static final public double YF = -1.2;//-kSideY;
     static final public double RF = -60;
 
-    static final public int UNKNOWN = 0;
-    static final public int OUTSIDE = 1;
-    static final public int CENTER = 2;
-    static final public int INSIDE = 3;
+    static final public int OUTSIDE = 0;
+    static final public int CENTER = 1;
+    static final public int INSIDE = 2;
 
-    static final public int RED = 1;
-    static final public int BLUE = 2;
+    static final public int RED = 0;
+    static final public int BLUE = 1;
 
-    static final String[] pStrings = { "???", "OUTSIDE", "CENTER", "INSIDE" };
-    static final String[] aStrings = { "???", "RED", "BLUE" };
+    static final public int LEFT = 0;
+    static final public int RIGHT = 2;
+
+    static final String[] pStrings = { "OUTSIDE", "CENTER", "INSIDE" };
+    static final String[] aStrings = { "RED", "BLUE" };
+    static final String[] bStrings = { "LEFT", "CENTER", "RIGHT" };
 
     public static double targetSize = 0.1524; // 0.371; side of inner rectangle of apriltag (meters)
 
@@ -49,6 +52,7 @@ public class TargetMgr {
 
     public static int alliance = BLUE;
     public static int position = OUTSIDE;
+    public static int placement = RIGHT;
 
     static Pose2d start_pose = new Pose2d();
     static boolean start_pose_set = false;
@@ -58,6 +62,7 @@ public class TargetMgr {
     static public void init() {
         SmartDashboard.putString("Alliance", aStrings[alliance]);
         SmartDashboard.putString("Position", pStrings[position]);
+        SmartDashboard.putString("Placement", bStrings[placement]);
         setFieldTargets();
     }
 
@@ -106,6 +111,10 @@ public class TargetMgr {
         return position;
     }
 
+    public static int getStartPlacement() {
+        return placement;
+    }
+
     public static boolean startPoseSet() {
         return start_pose_set;
     }
@@ -122,21 +131,27 @@ public class TargetMgr {
         alliance = side;
         position = pos;
 
+        placement=CENTER;
+        if ((alliance == RED && position == OUTSIDE) ||(alliance == BLUE && position == INSIDE)) 
+            placement=LEFT;
+        else if ((alliance == BLUE && position == OUTSIDE) || (alliance == RED && position == INSIDE))
+            placement=RIGHT;
+        start_pose_set=true;
         SmartDashboard.putString("Alliance", aStrings[alliance]);
         SmartDashboard.putString("Position", pStrings[position]);
-
-        start_pose_set=true;
+        SmartDashboard.putString("Placement", bStrings[placement]);
     }
 
     public static Pose2d getTarget() {
         double xf = XC; // center
         double yf = 0;
         double rf = 0;
+       
         if ((alliance == TargetMgr.RED && position == TargetMgr.OUTSIDE) ||
                 (alliance == TargetMgr.BLUE && position == TargetMgr.INSIDE)) {
             xf = XF;
             yf = -YF;
-            rf = -RF;
+            rf = -RF;          
         }
         if ((alliance == TargetMgr.BLUE && position == TargetMgr.OUTSIDE) ||
                 (alliance == TargetMgr.RED && position == TargetMgr.INSIDE)) {
@@ -148,8 +163,8 @@ public class TargetMgr {
     }
 
     public static void setStartPose(AprilTag[] tags) {
-        position = UNKNOWN;
-        alliance = UNKNOWN;
+        position = CENTER;
+        alliance = BLUE;
         if (tags == null)
             return;
         start_pose_set = true;
@@ -186,8 +201,8 @@ public class TargetMgr {
                     break;
             }
         }
-        SmartDashboard.putString("Alliance", aStrings[alliance]);
-        SmartDashboard.putString("Position", pStrings[position]);
+        setTarget(alliance,position);
+       
     }
 
     static void setFieldTargets() {
