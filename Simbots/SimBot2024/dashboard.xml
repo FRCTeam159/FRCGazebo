@@ -1,5 +1,8 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="ShowTags" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="523" y="111"/>
+	</widget>
 	<widget field="Placement" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="185" y="101"/>
 		<width>94</width>

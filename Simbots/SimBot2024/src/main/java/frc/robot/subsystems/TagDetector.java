@@ -40,6 +40,7 @@ public class TagDetector extends Thread {
   AprilTagPoseEstimator wpi_pose_estimator;
   Drivetrain m_drivetrain;
   static boolean m_targeting = false;
+
   static AprilTag[] tags = null;
 
   public static double min_decision_margin = 30; // reject tags less than this
@@ -52,7 +53,13 @@ public class TagDetector extends Thread {
   public void run() {
     cam = new Camera(0, 640, 480, 40); // specs for Gazebo camera
     wpi_detector = new AprilTagDetector();
-    wpi_detector.addFamily("tag16h5", 0);
+    try{
+      wpi_detector.addFamily("tag16h5", 0);
+      wpi_detector.addFamily("tag36h11", 0);
+      System.out.println("2 tag Families loaded");
+    } catch (Exception ex){
+      System.out.println("TagDetector exception:" + ex);
+    }
 
     wpi_poseEstConfig = new AprilTagPoseEstimator.Config(TargetMgr.targetSize, cam.fx, cam.fy, cam.cx, cam.cy);
     wpi_pose_estimator = new AprilTagPoseEstimator(wpi_poseEstConfig);
@@ -67,39 +74,33 @@ public class TagDetector extends Thread {
         if(mat==null)
           continue;
 
+        boolean autoselect = Autonomous.getAutoset();
+        boolean usetags = Autonomous.getUsetags();
+        boolean showtags = Autonomous.getShowtags();
+
         tags = null;
 
-        // if using tags for targeting
-        if (m_targeting) {
+        if (m_targeting || showtags ||(autoselect && !TargetMgr.startPoseSet()&&usetags)){
           tags = getTags(mat);
-          if (tags != null) {
-            if (tags.length == 2)
-              Arrays.sort(tags, new SortbyDistance());
-            showTags(tags, mat);
+          if(tags !=null && tags.length>1){
+            Arrays.sort(tags, new SortbyDistance());
           }
-          ouputStream.putFrame(mat);
-          continue;
         }
 
         // set initial starting position and alliance
-        boolean autoselect = Autonomous.getAutoset();
-        boolean usetags = Autonomous.getUsetags();
+       
         if (autoselect && !TargetMgr.startPoseSet()) {
           if (usetags) {
-            tags = getTags(mat);
-            if (tags != null) {
-              if (tags.length == 2) {
-                Arrays.sort(tags, new SortbyDistance());
+            if (tags != null && tags.length == 2) 
                 TargetMgr.setStartPose(tags);
-              }
-              showTags(tags, mat);
-            }
           } else {
             int alliance = Autonomous.getAlliance();
             int position = Autonomous.getPosition();
             TargetMgr.setTarget(alliance, position);
           }
         }
+        if(tags != null)
+          showTags(tags, mat);
         ouputStream.putFrame(mat);
       } catch (Exception ex) {
         System.out.println("TagDetector exception:" + ex);

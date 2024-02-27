@@ -59,6 +59,7 @@ public class Autonomous extends SequentialCommandGroup {
 
   static boolean m_autoselect = true;
   static boolean m_usetags = false;
+  static boolean m_showtags = false;
   static boolean m_reverse = false;
   static boolean m_pathplanner = false;
 
@@ -88,6 +89,8 @@ public class Autonomous extends SequentialCommandGroup {
     SmartDashboard.putBoolean("Reverse", m_reverse);
     SmartDashboard.putBoolean("Autoset", m_autoselect);
     SmartDashboard.putBoolean("UseTags", m_usetags);
+    SmartDashboard.putBoolean("ShowTags", m_showtags);
+
     SmartDashboard.putBoolean("Pathplanner", m_pathplanner);
 
     m_auto_plot_option.setDefaultOption("No Plot", PlotUtils.PLOT_NONE);
@@ -117,6 +120,11 @@ public class Autonomous extends SequentialCommandGroup {
   static public boolean getUsetags() {
     return SmartDashboard.getBoolean("UseTags", m_usetags);
   }
+
+  static public boolean getShowtags() {
+    return SmartDashboard.getBoolean("ShowTags", m_showtags);
+  }
+
 
   static public boolean getUsePathplanner() {
     return SmartDashboard.getBoolean("Pathplanner", m_pathplanner);
