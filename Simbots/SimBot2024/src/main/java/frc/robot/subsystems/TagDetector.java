@@ -40,6 +40,8 @@ public class TagDetector extends Thread {
   AprilTagPoseEstimator wpi_pose_estimator;
   Drivetrain m_drivetrain;
   static boolean m_targeting = false;
+  public static int kCamWidth=640;
+  public static int kCamHeight=480;
 
   static AprilTag[] tags = null;
 
@@ -51,7 +53,7 @@ public class TagDetector extends Thread {
 
   @Override
   public void run() {
-    cam = new Camera(0, 640, 480, 40); // specs for Gazebo camera
+    cam = new Camera(0, kCamWidth, kCamHeight, 40); // specs for Gazebo camera
     wpi_detector = new AprilTagDetector();
     try{
       wpi_detector.addFamily("tag16h5", 0);
@@ -127,7 +129,7 @@ public class TagDetector extends Thread {
       AprilTag tag = tags[i];
 
       Point c = tag.center();
-
+     
       Scalar lns = new Scalar(255.0, 255.0, 0.0);
       Imgproc.line(mat, tag.tl(), tag.tr(), lns, 2);
       Imgproc.line(mat, tag.tr(), tag.br(), lns, 2);
@@ -135,7 +137,7 @@ public class TagDetector extends Thread {
       Imgproc.line(mat, tag.bl(), tag.tl(), lns, 2);
 
       // Imgproc.rectangle(mat, tl, br, new Scalar(255.0, 255.0, 0.0), 2);
-      Imgproc.drawMarker(mat, c, new Scalar(0, 0, 255), Imgproc.MARKER_CROSS, 35, 2, 8);
+      //Imgproc.drawMarker(mat, c, new Scalar(0, 0, 255), Imgproc.MARKER_CROSS, 35, 2, 8);
       Point p = new Point(tag.bl().x - 10, tag.bl().y - 10);
       Imgproc.putText(
           mat, // Matrix obj of the image
@@ -146,6 +148,11 @@ public class TagDetector extends Thread {
           new Scalar(255, 0, 0), // Scalar object for color
           2 // Thickness
       );
+      if(i==TargetMgr.kBestTarget && m_targeting){
+        c.y+=TargetMgr.kVertOffset*kCamHeight;
+        c.x+=TargetMgr.kHorizOffset*kCamWidth;
+        Imgproc.drawMarker(mat, c, new Scalar(0, 0, 255), Imgproc.MARKER_CROSS, 35, 2, 8);
+      }
     }
   }
 

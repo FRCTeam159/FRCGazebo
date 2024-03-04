@@ -42,6 +42,7 @@ public class DriveWithGamepad extends Command {
     m_xspeedLimiter.reset(now);
     m_yspeedLimiter.reset(now);
     m_rotLimiter.reset(now);
+    m_aligning=false;
 
     System.out.println("DriveWithGampad started");
   }
@@ -64,8 +65,8 @@ public class DriveWithGamepad extends Command {
 
     // Get the rate of angular rotation.
 
-    if (m_drive.disabled())
-      m_drive.enable();
+    // if (m_drive.disabled())
+    //   m_drive.enable();
     if (m_controller.getRightStickButtonPressed()) {
       System.out.println("Aligning");
       if (!m_aligning) {

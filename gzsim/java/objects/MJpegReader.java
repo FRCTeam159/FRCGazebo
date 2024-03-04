@@ -26,6 +26,7 @@ public class MJpegReader implements VideoInterface {
     boolean connected = false;
     VideoCapture vcap;
     MJpegClient mjpeg_reader;
+    Mat mat=null;
     private boolean use_vcap=false;
 
     public MJpegReader(String url) {
@@ -54,9 +55,9 @@ public class MJpegReader implements VideoInterface {
     
     @Override
     public Mat getFrame() {
-        Mat mat = new Mat();
+        //Mat mat = new Mat();
         if(!connected)
-            return mat;
+            return null;
         if (use_vcap) {
             if (!vcap.read(mat))
                 return null;

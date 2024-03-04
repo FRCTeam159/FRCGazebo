@@ -483,10 +483,10 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0</angular>
+        <angular>0.0</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.25</mass>
+        <mass>0.5</mass>
         <pose>0 0 0 0 0 0</pose>
               </inertial>
       <collision name="Arm_collision">
@@ -560,8 +560,8 @@
       <axis>
         <xyz>-1 0 0</xyz>
         <dynamics>
-          <damping>20.0</damping>
-          <friction>1.0</friction>
+          <damping>100.0</damping>
+          <friction>0.0</friction>
         </dynamics>
         <limit>
           <upper>0.8</upper>

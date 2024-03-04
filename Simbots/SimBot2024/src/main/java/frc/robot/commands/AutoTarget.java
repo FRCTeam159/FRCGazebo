@@ -8,8 +8,10 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.TagDetector;
+import frc.robot.subsystems.TargetMgr;
 import objects.AprilTag;
 
 public class AutoTarget extends Command {
@@ -29,8 +31,8 @@ public class AutoTarget extends Command {
     m_arm=arm;
     m_drive=drive;
     addRequirements(drive);
-    turnPID.setSetpoint(0);
-    anglePID.setSetpoint(-0.4); // y offset if at speaker steps
+    turnPID.setSetpoint(TargetMgr.kHorizOffset);
+    anglePID.setSetpoint(TargetMgr.kVertOffset); // y offset if at speaker steps
     anglePID.setTolerance(0.05);
     turnPID.setTolerance(.05);
     m_timer.start();
@@ -40,7 +42,7 @@ public class AutoTarget extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("AutoTarget.start");
+    Autonomous.log("AutoTarget.init");
     TagDetector.setTargeting(true);
     tags=TagDetector.getTags();
     m_timer.reset();
@@ -58,11 +60,10 @@ public class AutoTarget extends Command {
       return;
     }
     have_tags=true;
-    AprilTag target=tags[0];
-    if(tags.length==2){
-      if(tags[1].getTagId()==7 || tags[1].getTagId()==4) // center tag
-        target=tags[1];
-    }
+    
+    TargetMgr.setBestTarget(tags);
+    AprilTag target=tags[TargetMgr.kBestTarget];
+
     double y=target.getY();
     double z=target.getZ();
     double acorr=anglePID.calculate(z);
@@ -78,12 +79,15 @@ public class AutoTarget extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    Autonomous.log("AutoTarget.end");
     TagDetector.setTargeting(false);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (!Autonomous.okToRun())
+      return true;
     if(!have_tags && m_timer.get()>2){
       System.out.println("Autotarget.end - timeout expired");
       return true;

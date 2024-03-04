@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Drivetrain;
 
 public class Shoot extends Command implements Constants{
@@ -32,7 +33,7 @@ public class Shoot extends Command implements Constants{
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("Shoot.init");
+    Autonomous.log("Shoot.init");
     shooter_ready=false;
     shooting=false;
     noteCaptured=Arm.noteAtIntake();
@@ -44,6 +45,7 @@ public class Shoot extends Command implements Constants{
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
     if(!shooter_ready && m_arm.atTargetSpeed()){
       shooter_ready=true;
       m_arm.setPickupOn();
@@ -57,19 +59,27 @@ public class Shoot extends Command implements Constants{
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("Shoot.end");
+    Autonomous.log("Shoot.end");
     m_arm.setShooterOFf();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(shooter_ready && m_timer.get()>2 && !Arm.noteAtShooter())
+    if (!Autonomous.okToRun())
       return true;
-    if(shooting && m_timer.get()>5) // taking too long - something isn't right
+    if(shooter_ready && m_timer.get()>3 && !Arm.noteAtShooter()){
+      System.out.println("Shoot - shot delivered");
       return true;
-    if(!noteCaptured)
+    }
+    if(shooting && m_timer.get()>5) {// taking too long - something isn't right
+      System.out.println("Shoot - timed out");
       return true;
+     }
+    if(!noteCaptured){
+      System.out.println("Shoot - no note at start - aborting");
+      return true;
+    }
     return false;
   }
 }

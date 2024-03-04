@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.objects.SwerveModule;
+import frc.robot.Robot;
 import gazebo.SimGyro;
 import subsystems.Simulation;
 
@@ -30,7 +30,7 @@ public class Drivetrain extends SubsystemBase implements Constants {
 
 	// square frame geometry
 
-	static public boolean debug=false;
+	static public boolean debug=true;
 	
 	public static final double kFrontWheelBase = Units.inchesToMeters(29); // distance beteen front wheels
 	public static final double kSideWheelBase = Units.inchesToMeters(29); // distance beteen side wheels
@@ -40,8 +40,8 @@ public class Drivetrain extends SubsystemBase implements Constants {
  
 	public static double kMaxVelocity = 2; // meters per second
 	public static double kMaxAcceleration = 1; // meters/second/second
-	public static double kMaxAngularVelocity = Math.toRadians(720); // degrees per second
-	public static double kMaxAngularAcceleration = Math.toRadians(360);// degrees per second per second
+	public static double kMaxAngularVelocity = Math.toRadians(2*720); // degrees per second
+	public static double kMaxAngularAcceleration = Math.toRadians(2*360);// degrees per second per second
 
 	public static double kMaxVelocityObserved=0;
 	public static double kMaxAccelerationObserved=0;
@@ -69,7 +69,7 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	};
 
 	SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(m_kinematics,new Rotation2d(), m_positions,new Pose2d());
-	private Simulation simulation;
+	private static Simulation simulation;
 
 	public SimGyro m_gyro = new SimGyro(0);
 
@@ -124,6 +124,7 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	}
 
 	public void setRobotDisabled(boolean f){
+		System.out.println("Setting Robot Disabled "+f);
 		robot_disabled=f;
 	}
 	public double getTime() {
@@ -135,14 +136,16 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		return Timer.getFPGATimestamp();
 	}
 	public void startAuto() {
-		System.out.println("START AUTO");
 		simulation.run();
 		simulation.startAuto();
-		enable();
+		//enable();
+	}
+
+	public static double autoTime(){
+		return simulation.getAutoTime();
 	}
 
 	public void endAuto() {
-		System.out.println("END AUTO");
 		if(debug)
 			System.out.println("Drivetrain.endAuto");
 		simulation.endAuto();
@@ -174,11 +177,13 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		}
 		m_gyro.disable();
 		simulation.end();
+		simstarted=false;
 	}
 
 	public void enable() {
 		m_disabled = false;
 		simulation.run();
+		simstarted=true;
 		if(debug)
 			System.out.println("Drivetrain.enable");
 		for (int i = 0; i < modules.length; i++) {
@@ -274,14 +279,15 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		if(!simstarted)
 			return;
 		Pose2d pose = getPose();
-		String s = String.format(" X:%-5.2f Y:%-5.2f H:%-4.1f",
-        pose.getX(), pose.getY(), pose.getRotation().getDegrees());
+		String s = String.format(" X:%-5.2f Y:%-5.2f H:%-4.1f D:%-3.1f",
+        pose.getX(), pose.getY(), pose.getRotation().getDegrees(),getDistance());
     	SmartDashboard.putString("Pose", s);
 
 		double v=getVelocity();
 		kMaxVelocityObserved=v>kMaxVelocityObserved?v:kMaxVelocityObserved;
-		//SmartDashboard.putNumber("maxV", kMaxVelocityObserved);
+		SmartDashboard.putNumber("maxV", kMaxVelocityObserved);
 		field_oriented = SmartDashboard.getBoolean("Field Oriented", field_oriented);
+		SmartDashboard.putString("Status", Robot.status);
 	}	
 	
 	public void turn(double value) {
@@ -423,10 +429,12 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	public void simulationPeriodic() {
 		if(!simstarted && simulation.started()){
 			reset();
+			System.out.println("Simulate started");
 			simstarted=true;
 		}
-		if(robot_disabled)
-			drive(0.0,0.0,0,false); // stay in place
+		if(robot_disabled){
+			drive(0.001,0.0,0,false); // stay in place
+		}
 		updateOdometry();
 		log();
 	}

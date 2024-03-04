@@ -29,7 +29,7 @@ import frc.robot.subsystems.TargetMgr;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  static boolean resetting = false;
+  static boolean m_resetting = false;
 
   // The robot's subsystems and commands are defined here...
   private final Drivetrain m_drive = new Drivetrain();
@@ -61,20 +61,22 @@ public class RobotContainer {
     m_drive.setRobotDisabled(true);
     m_drive.init();
     m_detector.start();
+    Robot.status = "Init";
+    Autonomous.end(); 
   }
 
   public void teleopInit() {
     m_drive.setRobotDisabled(false);
     m_drive.endAuto();
     m_drive.enable();
+    Autonomous.end(); 
     Robot.status = "Teleop";
   }
 
   public void autonomousInit() {
-    m_drive.setRobotDisabled(false);
-    Autonomous.ok2run = true;
-    m_drive.enable();  
-    m_drive.startAuto(); 
+    m_drive.setRobotDisabled(false); 
+    m_drive.enable();
+    Autonomous.start(); 
     TargetMgr.reset();
     Robot.status = "Autonomous";
   }
@@ -83,6 +85,7 @@ public class RobotContainer {
     m_drive.setRobotDisabled(true);
     m_drive.endAuto();
     Robot.status = "Disabled";
+    Autonomous.end(); 
   }
   
   public void reset() {
@@ -92,16 +95,16 @@ public class RobotContainer {
 
   public void simulationPeriodic() {
     boolean b = SmartDashboard.getBoolean("Reset", false);
-    if (b && !resetting) {
-      resetting = true;
+    if (b && !m_resetting) { // start aligning
+      m_resetting = true;
       m_drive.resetWheels(true);
       m_arm.reset();
       TargetMgr.reset();
       TagDetector.setTargeting(false);
-    } else if (!b && resetting) {
-      resetting = false;
+    } else if (!b && m_resetting) { // end aligning
+      m_resetting = false;
       m_drive.resetPose();
-    } else if (resetting && !m_drive.wheelsReset()) {
+    } else if (m_resetting && !m_drive.wheelsReset()) { // align the wheels
       m_drive.resetWheels(false);
     }
   }

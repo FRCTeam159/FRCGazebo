@@ -57,6 +57,10 @@ public class Simulation extends SubsystemBase {
     return m_timer.get();
   }
 
+  public double getAutoTime() {
+    return getSimTime()-auto_start_time;
+  }
+
   public void reset() {
     if(debug)
       System.out.println("Simulation.reset");
@@ -141,7 +145,7 @@ public class Simulation extends SubsystemBase {
     else
       SmartDashboard.putNumber("SimClock", 0);
     if(auto_running)
-      SmartDashboard.putNumber("AutoTime", getSimTime()-auto_start_time);
+      SmartDashboard.putNumber("AutoTime", getAutoTime());
     
     boolean m = SmartDashboard.getBoolean("Gazebo", false);
     boolean b = SmartDashboard.getBoolean("Reset", false);

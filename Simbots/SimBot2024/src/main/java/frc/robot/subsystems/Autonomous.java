@@ -55,13 +55,17 @@ public class Autonomous extends SequentialCommandGroup {
   static boolean test_coord_rotation = false;
 
   public static boolean debug_commands = false;
-  public static boolean ok2run = false;
+  static boolean m_ok2run = false;
+  static boolean m_inAuto = false;
+  static double last_time = 0;
 
   static boolean m_autoselect = true;
   static boolean m_usetags = false;
   static boolean m_showtags = false;
   static boolean m_reverse = false;
   static boolean m_pathplanner = false;
+
+
 
   /** Creates a new AutoCommands. */
   public Autonomous(Drivetrain drive, Arm arm) {
@@ -90,6 +94,7 @@ public class Autonomous extends SequentialCommandGroup {
     SmartDashboard.putBoolean("Autoset", m_autoselect);
     SmartDashboard.putBoolean("UseTags", m_usetags);
     SmartDashboard.putBoolean("ShowTags", m_showtags);
+    SmartDashboard.putBoolean("OkToRun", okToRun());
 
     SmartDashboard.putBoolean("Pathplanner", m_pathplanner);
 
@@ -98,7 +103,28 @@ public class Autonomous extends SequentialCommandGroup {
     m_auto_plot_option.addOption("Plot Location", PlotUtils.PLOT_LOCATION);
     m_auto_plot_option.addOption("Plot Position", PlotUtils.PLOT_POSITION);
     SmartDashboard.putData(m_auto_plot_option);
-
+  }
+  
+  public static void start(){
+    last_time=0;
+    m_ok2run=true;
+    m_inAuto=true;
+    log("Auto Start");
+  }
+   public static void end(){
+    last_time=0;
+    m_inAuto=false;
+    m_ok2run=true;
+    log("Auto End");
+  }
+  public static boolean okToRun(){
+    if(!m_inAuto)
+      return true;
+    return m_ok2run;
+  }
+  public static void stop(){
+   log("Auto error - aborting !!");
+   m_ok2run=false;
   }
 
   static public int getAlliance() {
@@ -125,9 +151,15 @@ public class Autonomous extends SequentialCommandGroup {
     return SmartDashboard.getBoolean("ShowTags", m_showtags);
   }
 
-
   static public boolean getUsePathplanner() {
     return SmartDashboard.getBoolean("Pathplanner", m_pathplanner);
+  }
+
+  public static void log(String msg){
+    double tm=Drivetrain.autoTime();
+    System.out.format("%-2.3f (%-2.3f) %s\n",tm,tm-last_time,msg);
+    last_time=tm;
+    SmartDashboard.putBoolean("OkToRun", okToRun());
   }
 
   public SequentialCommandGroup getCommand() {
@@ -150,14 +182,16 @@ public class Autonomous extends SequentialCommandGroup {
       case AUTOTEST: {
         return new SequentialCommandGroup(
             new GetStartPose(m_arm),
-            new AlignWheels(m_drive, 2),
+            new AutoTarget(m_arm, m_drive),
+            //new AlignWheels(m_drive, 2),
             new Shoot(m_arm, m_drive),
             new ParallelCommandGroup(
                 new DrivePath(m_drive, false),
                 new Pickup(m_arm)),// sets angle to ground at start then to speaker when note captured
             new DrivePath(m_drive, true),
             new AutoTarget(m_arm, m_drive),
-            new Shoot(m_arm, m_drive)
+            new Shoot(m_arm, m_drive),
+            new DrivePath(m_drive, false)
             );
       }
       case PATH: {    
@@ -206,7 +240,7 @@ public class Autonomous extends SequentialCommandGroup {
                   new DrivePath(traj1,m_drive,false),
                   new Pickup(m_arm)),
               new DrivePath(traj2,m_drive,true),
-              new AutoTarget(m_arm, m_drive),
+              //new AutoTarget(m_arm, m_drive),
               new Shoot(m_arm, m_drive));         
           } catch (IOException ex) {
             System.out.println("Unable to open trajectory");

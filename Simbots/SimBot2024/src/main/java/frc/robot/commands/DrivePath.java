@@ -42,7 +42,7 @@ import utils.PlotUtils;
 // =================================================
 public class DrivePath extends Command {
 
-  double scale = 0.5;
+  double scale = 1;
 
   ArrayList<PathData> pathdata = new ArrayList<PathData>();
 
@@ -53,8 +53,8 @@ public class DrivePath extends Command {
   final HolonomicDriveController m_hcontroller = new HolonomicDriveController(
       new PIDController(2, 0, 0),
       new PIDController(2, 0, 0),
-      new ProfiledPIDController(5, 0, 0,
-          new TrapezoidProfile.Constraints(Math.toRadians(720), Math.toRadians(360))));
+      new ProfiledPIDController(7, 0, 0,
+          new TrapezoidProfile.Constraints(scale * Drivetrain.kMaxAngularVelocity,scale * Drivetrain.kMaxAngularAcceleration)));
 
   Timer m_timer = new Timer();
   Drivetrain m_drive;
@@ -102,7 +102,7 @@ public class DrivePath extends Command {
   // =================================================
   @Override
   public void initialize() {
-    System.out.println("DRIVEPATH_INIT");
+    Autonomous.log("Drivepath.init");
     plot_type = PlotUtils.auto_plot_option;
     m_autoset = Autonomous.getAutoset();
 
@@ -130,8 +130,8 @@ public class DrivePath extends Command {
     PlotUtils.initPlot();
 
     if (!getTrajectory()) {
-      System.out.println("failed to create Trajectory");
-      Autonomous.ok2run = false;
+      Autonomous.log("DrivePath - failed to create Trajectory");
+      Autonomous.stop();
       return;
     }
     m_timer.start();
@@ -155,6 +155,8 @@ public class DrivePath extends Command {
   // =================================================
   @Override
   public void execute() {
+    if (!Autonomous.okToRun())
+      return;
 
     elapsed = m_drive.getTime() - start_time;
 
@@ -178,9 +180,9 @@ public class DrivePath extends Command {
     if (debug && (cnt % 10 == 0 || cnt == 0 || cnt == states - 1)) {
       Pose2d p = m_drive.getPose();
       System.out.format(
-          "%-1.3f X a:%-1.1f t:%-1.1f Y a:%-1.1f t:%-1.1f R a:%-3.1f t:%-3.1f\n", elapsed,
-          p.getTranslation().getX(), reference.poseMeters.getX(),
-          p.getTranslation().getY(), reference.poseMeters.getY(),
+          "%-1.3f X a:%-3.1f t:%-3.1f c:%-3.1f Y a:%-1.1f t:%-1.1f c:%-3.1f R a:%-3.1f t:%-3.1f\n", elapsed,
+          p.getTranslation().getX(), reference.poseMeters.getX(),speeds.vxMetersPerSecond,
+          p.getTranslation().getY(), reference.poseMeters.getY(),speeds.vyMetersPerSecond,
           p.getRotation().getDegrees(), reference.poseMeters.getRotation().getDegrees());
     }
     cnt++;
@@ -200,7 +202,7 @@ public class DrivePath extends Command {
   // =================================================
   @Override
   public void end(boolean interrupted) {
-    System.out.println("DRIVEPATH_END");
+    Autonomous.log("Drivepath.end");
     if (using_pathplanner)
       m_ppcontroller.setEnabled(false);
     else
@@ -215,10 +217,10 @@ public class DrivePath extends Command {
   // =================================================
   @Override
   public boolean isFinished() {
-    if (!Autonomous.ok2run)
+    if (!Autonomous.okToRun())
       return true;
-    if (!m_reversed && !m_note_at_start && Arm.noteAtIntake())
-      return true;
+    //if (!m_reversed && !m_note_at_start && Arm.noteAtIntake())
+    //  return true;
     return (elapsed >= 1.2 * runtime);
   }
 
@@ -308,9 +310,10 @@ public class DrivePath extends Command {
   // getTrajectory: return a selected trajectory
   // =================================================
   boolean getTrajectory() {
-    if (m_reversed && m_drive.getDistance() < 0.2) // probably an error to start too close to 0 ?
+    Pose2d pose = m_drive.getPose();
+    if (m_reversed && (pose.getX() < 0.2 && pose.getY()<0.2)) // probably an error to start too close to 0 ?
       return false;
-    else if (!m_reversed && m_drive.getDistance() > 0.2) // probably an error to start too far from 0 ?
+    else if (!m_reversed && (pose.getX() > 0.2 || pose.getY()>0.2)) // probably an error to start too far from 0 ?
       return false;
     if (using_pathplanner) {
       m_pptrajectory = pathplannerProgramPath();
