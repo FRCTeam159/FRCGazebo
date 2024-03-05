@@ -529,7 +529,7 @@
         <!--<pose>0.0 0.29 0.0 0 1.7 1.57</pose>-->
        <!--<pose>0.0 0.29 0.0 0 1.57 1.57</pose>-->
 
-       <pose>0.02 0.0 0.0 0 1.7 1.57</pose>
+       <pose>0.02 0.0 0.0 0 1.57 1.57</pose>
 
         <!--<pose>0.0 0.29 0.0 0 1.9 1.5707963267949</pose>-->
         <camera name="Armcamera">
@@ -561,7 +561,7 @@
         <xyz>-1 0 0</xyz>
         <dynamics>
           <damping>100.0</damping>
-          <friction>0.0</friction>
+          <friction>0.5</friction>
         </dynamics>
         <limit>
           <upper>0.8</upper>

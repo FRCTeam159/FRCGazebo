@@ -40,8 +40,8 @@ public class Drivetrain extends SubsystemBase implements Constants {
  
 	public static double kMaxVelocity = 2; // meters per second
 	public static double kMaxAcceleration = 1; // meters/second/second
-	public static double kMaxAngularVelocity = Math.toRadians(2*720); // degrees per second
-	public static double kMaxAngularAcceleration = Math.toRadians(2*360);// degrees per second per second
+	public static double kMaxAngularVelocity = Math.toRadians(720); // degrees per second
+	public static double kMaxAngularAcceleration = Math.toRadians(360);// degrees per second per second
 
 	public static double kMaxVelocityObserved=0;
 	public static double kMaxAccelerationObserved=0;

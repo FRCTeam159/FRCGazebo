@@ -42,19 +42,19 @@ import utils.PlotUtils;
 // =================================================
 public class DrivePath extends Command {
 
-  double scale = 1;
+  public static double scale = 1.4;
 
   ArrayList<PathData> pathdata = new ArrayList<PathData>();
 
   final PPHolonomicDriveController m_ppcontroller = new PPHolonomicDriveController(
-      new PIDConstants(4, 0.0, 0), new PIDConstants(6, 0.0, 0.0), scale * Drivetrain.kMaxVelocity,
+      new PIDConstants(4, 0.0, 0), new PIDConstants(4, 0.0, 0.0), scale * Drivetrain.kMaxVelocity,
       Drivetrain.kTrackRadius);
 
   final HolonomicDriveController m_hcontroller = new HolonomicDriveController(
       new PIDController(2, 0, 0),
       new PIDController(2, 0, 0),
-      new ProfiledPIDController(7, 0, 0,
-          new TrapezoidProfile.Constraints(scale * Drivetrain.kMaxAngularVelocity,scale * Drivetrain.kMaxAngularAcceleration)));
+      new ProfiledPIDController(5, 0, 0,
+          new TrapezoidProfile.Constraints( scale*Drivetrain.kMaxAngularVelocity, scale*Drivetrain.kMaxAngularAcceleration)));
 
   Timer m_timer = new Timer();
   Drivetrain m_drive;
@@ -75,6 +75,8 @@ public class DrivePath extends Command {
   double rPath = 0;
   boolean m_reversed = false;
   boolean m_autoset = false;
+  boolean m_cmndset = false;
+  int m_placement=TargetMgr.CENTER;
 
   double last_heading = 0;
   boolean m_note_at_start;
@@ -83,6 +85,14 @@ public class DrivePath extends Command {
   double start_time;
 
   double cnt;
+
+  public DrivePath(Drivetrain drive, int p ,boolean rev) {
+    m_reversed = rev;
+    m_drive = drive;
+    m_placement=p;
+    m_cmndset=true;
+    addRequirements(drive);
+  }
 
   public DrivePath(Drivetrain drive, boolean rev) {
     m_reversed = rev;
@@ -102,7 +112,7 @@ public class DrivePath extends Command {
   // =================================================
   @Override
   public void initialize() {
-    Autonomous.log("Drivepath.init");
+    Autonomous.log("Drivepath.init "+m_placement);
     plot_type = PlotUtils.auto_plot_option;
     m_autoset = Autonomous.getAutoset();
 
@@ -111,13 +121,17 @@ public class DrivePath extends Command {
     m_note_at_start = Arm.noteAtIntake();
 
     cnt = 0;
-
-    if (m_autoset) { // use apriltags or smartdashboard buttons
-      Pose2d target = TargetMgr.getTarget();
+    
+    if (m_cmndset || m_autoset) { // use apriltags or smartdashboard buttons
+      Pose2d target;
+      if(m_cmndset)
+        target= TargetMgr.getTarget(m_placement);
+      else
+        target= TargetMgr.getTarget();
       xPath = target.getX();
       yPath = target.getY();
       rPath = target.getRotation().getRadians();
-
+      
       SmartDashboard.putNumber("xPath", xPath);
       SmartDashboard.putNumber("yPath", yPath);
       SmartDashboard.putNumber("rPath", rPath);
@@ -147,7 +161,7 @@ public class DrivePath extends Command {
       m_ppcontroller.reset(m_drive.getPose(), new ChassisSpeeds());
     Robot.status = "DrivePath";
 
-    System.out.println("runtime:" + runtime + " states:" + states + " intervals:" + intervals);
+    Autonomous.log("DrivePath - runtime:" + runtime + " states:" + states + " intervals:" + intervals);
   }
 
   // =================================================
@@ -221,7 +235,7 @@ public class DrivePath extends Command {
       return true;
     //if (!m_reversed && !m_note_at_start && Arm.noteAtIntake())
     //  return true;
-    return (elapsed >= 1.2 * runtime);
+    return (elapsed >= 1.1 * runtime);
   }
 
   // *********************** trajectory functions *******************/

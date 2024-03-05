@@ -69,15 +69,15 @@ public class Shoot extends Command implements Constants{
     if (!Autonomous.okToRun())
       return true;
     if(shooter_ready && m_timer.get()>3 && !Arm.noteAtShooter()){
-      System.out.println("Shoot - shot delivered");
+      Autonomous.log("Shoot - shot delivered");
       return true;
     }
     if(shooting && m_timer.get()>5) {// taking too long - something isn't right
-      System.out.println("Shoot - timed out");
+      Autonomous.log("Shoot - timed out");
       return true;
      }
     if(!noteCaptured){
-      System.out.println("Shoot - no note at start - aborting");
+      Autonomous.log("Shoot - no note at start - aborting");
       return true;
     }
     return false;

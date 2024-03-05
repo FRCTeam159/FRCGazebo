@@ -13,7 +13,8 @@ import frc.robot.subsystems.Autonomous;
 
 public class Pickup extends Command implements Constants{
   private final Arm m_arm;
-  boolean note_captured=false;  
+  boolean note_captured=false; 
+  boolean note_detected=false;
   Timer m_timer=new Timer();
 
   public Pickup(Arm arm) {
@@ -29,19 +30,24 @@ public class Pickup extends Command implements Constants{
     m_arm.setPickupOn();
     Robot.status="Pickup";
     note_captured=false;
+    note_detected=false;
+
     m_timer.reset();
     m_arm.setTargetAngle(Constants.PICKUP_ANGLE);
   }
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
-    if(m_timer.get()>0.5 && Arm.noteAtIntake() && m_arm.atTargetAngle()){
-      if(!note_captured){
-        Autonomous.log("Pickup - note captured");
-        m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE); // lift note off the ground
-        note_captured=true;
-      }
+    if(!note_detected && Arm.noteAtIntake() && m_arm.atTargetAngle()){
+      Autonomous.log("Pickup - note detected");
+      m_timer.reset();
+      note_detected=true;
+    }   
+    if(!note_captured && note_detected && m_timer.get()>0.5){
+      Autonomous.log("Pickup - note captured");
+      m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE); // lift note off the ground
+      note_captured=true; 
+      m_timer.reset();  
     }
   }
 
@@ -49,7 +55,7 @@ public class Pickup extends Command implements Constants{
   @Override
   public void end(boolean interrupted) {
     Autonomous.log("Pickup.end");
-    m_arm.setPickupOff();
+    m_arm.setPickupOff();   
     m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE); // lift note off the ground
   }
 
@@ -58,7 +64,7 @@ public class Pickup extends Command implements Constants{
   public boolean isFinished() { 
     if (!Autonomous.okToRun())
       return true; 
-    if(note_captured && Arm.noteAtShooter() /*&& m_arm.atTargetAngle()*/){
+    if(note_captured &&  Arm.noteAtShooter()){
       return true;
     }
     return false;

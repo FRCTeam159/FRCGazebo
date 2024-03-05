@@ -1,8 +1,8 @@
 #!/bin/bash
 rm -f tmp/*;
 
-#gazebo 2024Field-center.world &
+gazebo 2024Field-center.world &
 #gazebo 2024Field-left.world &
-gazebo 2024Field-right.world &
+#gazebo 2024Field-right.world &
 #gazebo -u temp.world &
 

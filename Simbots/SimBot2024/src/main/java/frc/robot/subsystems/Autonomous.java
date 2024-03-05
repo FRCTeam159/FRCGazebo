@@ -26,6 +26,7 @@ import frc.robot.commands.DrivePath;
 import frc.robot.commands.EndAuto;
 import frc.robot.commands.GetStartPose;
 import frc.robot.commands.Pickup;
+import frc.robot.commands.SetShooter;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.StartAuto;
 import utils.PlotUtils;
@@ -43,7 +44,9 @@ public class Autonomous extends SequentialCommandGroup {
   public static final int PROGRAM = 1;
   public static final int PROGRAMPP = 2;
   public static final int PATH = 3;
-  public static final int AUTOTEST = 4;
+  public static final int ONE_NOTE = 4;
+  public static final int TWO_NOTE = 5;
+  public static final int THREE_NOTE = 6;
 
   static double d2r = 2 * Math.PI / 360;
   static double i2m = 0.0254;
@@ -54,7 +57,7 @@ public class Autonomous extends SequentialCommandGroup {
 
   static boolean test_coord_rotation = false;
 
-  public static boolean debug_commands = false;
+  public static boolean debug_commands = true;
   static boolean m_ok2run = false;
   static boolean m_inAuto = false;
   static double last_time = 0;
@@ -65,8 +68,6 @@ public class Autonomous extends SequentialCommandGroup {
   static boolean m_reverse = false;
   static boolean m_pathplanner = false;
 
-
-
   /** Creates a new AutoCommands. */
   public Autonomous(Drivetrain drive, Arm arm) {
     m_drive = drive;
@@ -76,17 +77,19 @@ public class Autonomous extends SequentialCommandGroup {
     SmartDashboard.putNumber("rPath", rp);
 
     m_path_chooser.addOption("Program", PROGRAM);
-    m_path_chooser.addOption("Path", PATH);
-    m_path_chooser.setDefaultOption("AutoTest", AUTOTEST);
-    m_path_chooser.addOption("Calibrate", CALIBRATE);
+    //m_path_chooser.addOption("Path", PATH);
+    m_path_chooser.setDefaultOption("OneNote", ONE_NOTE);
+    m_path_chooser.addOption("TwoNote", TWO_NOTE);
+    m_path_chooser.addOption("ThreeNote", THREE_NOTE);
+    //m_path_chooser.addOption("Calibrate", CALIBRATE);
     SmartDashboard.putData(m_path_chooser);
 
     m_alliance_chooser.setDefaultOption("Blue", TargetMgr.BLUE);
     m_alliance_chooser.addOption("Red", TargetMgr.RED);
     SmartDashboard.putData(m_alliance_chooser);
 
-    m_position_chooser.setDefaultOption("Outside", TargetMgr.OUTSIDE);
-    m_position_chooser.addOption("Center", TargetMgr.CENTER);
+    m_position_chooser.addOption("Outside", TargetMgr.OUTSIDE);
+    m_position_chooser.setDefaultOption("Center", TargetMgr.CENTER);
     m_position_chooser.addOption("Inside", TargetMgr.INSIDE);
     SmartDashboard.putData(m_position_chooser);
 
@@ -126,6 +129,9 @@ public class Autonomous extends SequentialCommandGroup {
    log("Auto error - aborting !!");
    m_ok2run=false;
   }
+  public static boolean running(){
+    return m_inAuto;
+  }
 
   static public int getAlliance() {
     return m_alliance_chooser.getSelected();
@@ -133,6 +139,12 @@ public class Autonomous extends SequentialCommandGroup {
 
   static public int getPosition() {
     return m_position_chooser.getSelected();
+  }
+
+  static public int getPlacement() {
+   int pos=m_position_chooser.getSelected();
+   int side=m_alliance_chooser.getSelected();
+   return TargetMgr.getPlacement(side,pos);
   }
 
   static public boolean getReverse() {
@@ -155,45 +167,71 @@ public class Autonomous extends SequentialCommandGroup {
     return SmartDashboard.getBoolean("Pathplanner", m_pathplanner);
   }
 
-  public static void log(String msg){
-    double tm=Drivetrain.autoTime();
-    System.out.format("%-2.3f (%-2.3f) %s\n",tm,tm-last_time,msg);
-    last_time=tm;
+  public static void log(String msg) {
+    if (!debug_commands)
+      return;
+    if (m_inAuto) {
+      double tm = Drivetrain.autoTime();
+      System.out.format("%-2.3f (%-2.3f) %s\n", tm, tm - last_time, msg);
+      last_time = tm;
+    }
+    else
+      System.out.format("%s\n", msg);
     SmartDashboard.putBoolean("OkToRun", okToRun());
   }
 
   public SequentialCommandGroup getCommand() {
-    SequentialCommandGroup acmnd=getAutoCommand();
+    PlotUtils.auto_plot_option = m_auto_plot_option.getSelected();
+    int auto_select= m_path_chooser.getSelected();
+    SequentialCommandGroup acmnd=getAutoCommand(auto_select);
     if(acmnd==null){
       System.out.println("failed to create Auto sequence !");
       return null;
     }
     return new SequentialCommandGroup(new StartAuto(m_drive),acmnd,new EndAuto(m_drive));
   }
-  public SequentialCommandGroup getAutoCommand() {
-    PlotUtils.auto_plot_option = m_auto_plot_option.getSelected();
-    int selected_path = m_path_chooser.getSelected();
-
-    switch (selected_path) {
+  SequentialCommandGroup startSequence() {
+    return new SequentialCommandGroup(
+        new GetStartPose(m_arm),
+        //new AutoTarget(m_arm, m_drive),
+        new Shoot(m_arm, m_drive));
+  }
+  
+  SequentialCommandGroup twoNoteSequence(int pos) {
+    return new SequentialCommandGroup(
+        new ParallelCommandGroup(
+            new DrivePath(m_drive, pos, false),
+            new Pickup(m_arm)), // sets angle to ground at start then to speaker when note captured
+        new DrivePath(m_drive, pos, true),
+        //new AutoTarget(m_arm, m_drive),
+        new Shoot(m_arm, m_drive));
+  }
+  public SequentialCommandGroup getAutoCommand(int auto_select) {
+    switch (auto_select) {
       case CALIBRATE:
         return new SequentialCommandGroup(new Calibrate(m_drive));
       case PROGRAM:
         return new SequentialCommandGroup(new DrivePath(m_drive, getReverse()));
-      case AUTOTEST: {
+      case ONE_NOTE: 
         return new SequentialCommandGroup(
-            new GetStartPose(m_arm),
-            new AutoTarget(m_arm, m_drive),
-            //new AlignWheels(m_drive, 2),
-            new Shoot(m_arm, m_drive),
-            new ParallelCommandGroup(
-                new DrivePath(m_drive, false),
-                new Pickup(m_arm)),// sets angle to ground at start then to speaker when note captured
+          startSequence(),
+          new ParallelCommandGroup(
+              new DrivePath(m_drive, false),
+              new Pickup(m_arm))
+          );
+      case TWO_NOTE: 
+        return new SequentialCommandGroup(
+            getAutoCommand(ONE_NOTE),
             new DrivePath(m_drive, true),
-            new AutoTarget(m_arm, m_drive),
-            new Shoot(m_arm, m_drive),
-            new DrivePath(m_drive, false)
+            //new AutoTarget(m_arm, m_drive),
+            new Shoot(m_arm, m_drive)
             );
-      }
+      case THREE_NOTE: 
+        return new SequentialCommandGroup(
+            startSequence(),
+            twoNoteSequence(TargetMgr.CENTER),
+            twoNoteSequence(TargetMgr.LEFT)
+            );
       case PATH: {    
         if (m_pathplanner) {
           int position = TargetMgr.getStartPosition();

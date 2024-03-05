@@ -27,10 +27,9 @@ public class Arm extends SubsystemBase implements Constants {
   private static boolean at_starting_position = false;
   private static boolean initialized = false;
 
-  static public double SHOOT_POWER = 10;
-  static public double PICKUP_POWER = 0.25;
-  static public double PUSH_POWER = 2;
-  static public double TARGET_SHOOTER_SPEED = 60;
+  static public double PICKUP_POWER = 0.3;
+  static public double PUSH_POWER = 10;
+  static public double TARGET_SHOOTER_SPEED = 40;
 
   public static final double MOVE_RATE = 0.1;
 
@@ -44,7 +43,7 @@ public class Arm extends SubsystemBase implements Constants {
   final PIDController shooter_pid = new PIDController(0.7, 0, 0);
   
   final SimpleMotorFeedforward m_angleFF = new SimpleMotorFeedforward(0.001, 0.001,0.0001);
-  final PIDController arm_pid = new PIDController(0.3, 0.0, 0.0);
+  final PIDController arm_pid = new PIDController(0.4, 0.0, 0.0);
   
   public SimGyro m_gyro = new SimGyro(1, SimGyro.Mode.ROLL);
 
@@ -148,6 +147,8 @@ public class Arm extends SubsystemBase implements Constants {
   }
 
   public void setTargetAngle(double a) {
+    if(!Autonomous.running())
+      System.out.println("Arm.setTargetAngle "+a);
     target_angle = a;
   }
 
@@ -193,8 +194,13 @@ public class Arm extends SubsystemBase implements Constants {
   }
 
   @Override
+  public void simulationPeriodic(){
+
+  }
+  @Override
   public void periodic() {
     if (!Drivetrain.simStarted()) {
+      System.out.println("Arm - simulation not started");
       arm.set(0.1); // hold arm up until simulation is started
       return;
     }
@@ -217,6 +223,7 @@ public class Arm extends SubsystemBase implements Constants {
           armEncoderOffset = getGyroAngle();
           initialized = true;
           System.out.println("Initial arm angle=" + armEncoderOffset);
+          arm.enable();
         }
         Robot.status = "Arm Ready";
       }
@@ -227,16 +234,16 @@ public class Arm extends SubsystemBase implements Constants {
       shooter.set(corr+ffcorr);
     }
     else
-      shooter.set(-0.0);
+      shooter.set(-0.1);
     if (m_intake)
       pickup.set(PICKUP_POWER);
     else if (m_push)
       pickup.set(PUSH_POWER);    
     else if(haveNote()){
       if(noteAtShooter())
-        pickup.set(-0.2);
+        pickup.set(-0.3);
       else
-        pickup.set(0.0);
+        pickup.set(0);
     }
     log();
   }

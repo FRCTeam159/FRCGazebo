@@ -50,23 +50,21 @@ public class DriveWithGamepad extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    // Get the x speed. We are inverting this because Xbox controllers return
-    // negative values when we push forward.
-    double vx = m_controller.getLeftY();
-    double vy = m_controller.getLeftX();
-    double vr = m_controller.getRightX();
-    final var xSpeed = -m_xspeedLimiter.calculate(MathUtil.applyDeadband(vx, 0.3))
+    double yAxisValue = m_controller.getLeftX();
+    double xAxisValue = m_controller.getLeftY();
+    double twistAxisValue = m_controller.getRightX();
+    double driveSpeed = 1;
+    double rotSpeed = 1;
+    double driveDeadband = 0.2;
+    double rotDeadband = 0.2;
+    final var xSpeed = -driveSpeed
+        * m_xspeedLimiter.calculate(Math.pow(MathUtil.applyDeadband(xAxisValue, driveDeadband), 3))
         * Drivetrain.kMaxVelocity;
-
-    // Get the y speed or sideways/strafe speed.
-    final var ySpeed = m_yspeedLimiter.calculate(MathUtil.applyDeadband(vy, 0.3))
+    final var ySpeed = -driveSpeed
+        * m_yspeedLimiter.calculate(Math.pow(MathUtil.applyDeadband(yAxisValue, driveDeadband), 3))
         * Drivetrain.kMaxVelocity;
-
-    // Get the rate of angular rotation.
-
-    // if (m_drive.disabled())
-    //   m_drive.enable();
+    final var rot = -rotSpeed * m_rotLimiter.calculate(Math.pow(MathUtil.applyDeadband(twistAxisValue, rotDeadband), 5))
+        * Drivetrain.kMaxAngularVelocity;
     if (m_controller.getRightStickButtonPressed()) {
       System.out.println("Aligning");
       if (!m_aligning) {
@@ -79,9 +77,7 @@ public class DriveWithGamepad extends Command {
       align();
     boolean do_targeting = TagDetector.isTargeting();
     if (!m_aligning && !do_targeting) {
-      final var rot = m_rotLimiter.calculate(MathUtil.applyDeadband(vr, 0.3))
-          * Drivetrain.kMaxAngularVelocity;
-      m_drive.drive(xSpeed, -ySpeed, -rot, m_drive.fieldOriented());
+      m_drive.drive(xSpeed, ySpeed, rot, m_drive.fieldOriented());
     }
   }
 

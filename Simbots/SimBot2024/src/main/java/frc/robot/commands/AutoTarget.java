@@ -17,12 +17,13 @@ import objects.AprilTag;
 public class AutoTarget extends Command {
   Arm m_arm;
   Drivetrain m_drive;
-  PIDController turnPID = new PIDController(0.5, 0, 0);
-  PIDController anglePID = new PIDController(0.5, 0, 0);
+  PIDController turnPID = new PIDController(1, 0, 0);
+  PIDController anglePID = new PIDController(1, 0, 0);
   AprilTag[] tags;
   Timer m_timer=new Timer();
   boolean have_tags=false;
   static boolean debug=false;
+  
 
   /** Creates a new AutoTarget. 
  * @param drive 
@@ -59,6 +60,10 @@ public class AutoTarget extends Command {
       have_tags=false;
       return;
     }
+    if(tags.length==1 && tags[0].getTagId() !=7 && tags[0].getTagId()!=4){
+      have_tags=false;
+      return;
+    }
     have_tags=true;
     
     TargetMgr.setBestTarget(tags);
@@ -79,7 +84,7 @@ public class AutoTarget extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Autonomous.log("AutoTarget.end");
+    //Autonomous.log("AutoTarget.end");
     TagDetector.setTargeting(false);
   }
 
@@ -89,11 +94,11 @@ public class AutoTarget extends Command {
     if (!Autonomous.okToRun())
       return true;
     if(!have_tags && m_timer.get()>2){
-      System.out.println("Autotarget.end - timeout expired");
+      Autonomous.log("Autotarget.end - timeout expired");
       return true;
     }
     if(anglePID.atSetpoint() && turnPID.atSetpoint()){
-      System.out.println("Autotarget.end - on target");
+      Autonomous.log("Autotarget.end - on target");
       return true;
     }
     return false;

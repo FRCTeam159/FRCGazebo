@@ -25,6 +25,8 @@ public class GetStartPose extends Command implements Constants{
     Autonomous.log("GetStartPose.init");
     if(Autonomous.getAutoset())
       TargetMgr.clearStartPose();
+    m_arm.setShooterOn(); // preset shooter to on (test this)
+    m_arm.setPickupOff();
     m_arm.setTargetAngle(Constants.SPEAKER_SHOOT_ANGLE);
   }
 

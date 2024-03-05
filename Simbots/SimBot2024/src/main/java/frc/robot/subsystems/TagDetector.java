@@ -112,7 +112,7 @@ public class TagDetector extends Thread {
 
   // targeting methods
   public static void setTargeting(boolean state) {
-    System.out.println("SET TARGETING " + state);
+   // System.out.println("SET TARGETING " + state);
     m_targeting = state;
   }
 
