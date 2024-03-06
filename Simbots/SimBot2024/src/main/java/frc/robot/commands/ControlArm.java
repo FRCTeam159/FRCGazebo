@@ -55,20 +55,26 @@ public class ControlArm extends Command implements Constants {
       if (!m_shooting) {
         shoot.initialize();
         m_shooting = true;
-      } else
+      } else{
         m_shooting = false;
+        shoot.end(true);
+      }
     } else if (m_controller.getLeftBumperPressed()) {
       if (!m_grabbing) {
         pickup.initialize();
         m_grabbing = true;
-      } else
+      } else{
         m_grabbing = false;
+        pickup.end(true);
+      }
     } else if (m_controller.getXButtonPressed()) {
       if (!m_targeting) {
         target.initialize();
         m_targeting = true;
-      } else
-        m_targeting = true;
+      } else{
+        m_targeting = false;
+        target.end(true);
+      }
     } else if (m_controller.getAButtonPressed())
       m_arm.setTargetAngle(PICKUP_ANGLE);
     else if (m_controller.getBButtonPressed())
@@ -106,7 +112,7 @@ public class ControlArm extends Command implements Constants {
 
   void target() {
     if (target.isFinished()) {
-      target.end(m_controller.getXButtonReleased());
+      target.end(false);
       m_targeting = false;
     } else
       target.execute();

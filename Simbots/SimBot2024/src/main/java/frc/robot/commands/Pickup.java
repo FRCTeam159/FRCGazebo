@@ -10,6 +10,7 @@ import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Autonomous;
+import frc.robot.subsystems.DualCameras;
 
 public class Pickup extends Command implements Constants{
   private final Arm m_arm;
@@ -31,6 +32,8 @@ public class Pickup extends Command implements Constants{
     Robot.status="Pickup";
     note_captured=false;
     note_detected=false;
+
+    DualCameras.setNoteCamera();
 
     m_timer.reset();
     m_arm.setTargetAngle(Constants.PICKUP_ANGLE);
@@ -57,6 +60,7 @@ public class Pickup extends Command implements Constants{
     Autonomous.log("Pickup.end");
     m_arm.setPickupOff();   
     m_arm.setTargetAngle(SPEAKER_SHOOT_ANGLE); // lift note off the ground
+    DualCameras.setTagCamera();
   }
 
   // Returns true when the command should end.

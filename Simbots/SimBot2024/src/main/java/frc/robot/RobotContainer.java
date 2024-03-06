@@ -16,6 +16,8 @@ import frc.robot.commands.Shoot;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DualCameras;
+import frc.robot.subsystems.NoteDetector;
 import frc.robot.subsystems.TagDetector;
 import frc.robot.subsystems.TargetMgr;
 
@@ -36,8 +38,9 @@ public class RobotContainer {
   private final Arm m_arm = new Arm();
   private final Autonomous m_autonomous = new Autonomous(m_drive, m_arm);
   private final XboxController m_controller = new XboxController(0);
-  private final TagDetector m_detector = new TagDetector(m_drive);
-  //PlotServer m_plotsub = new PlotServer();
+  private final TagDetector m_tag_detector = new TagDetector();
+  private final NoteDetector m_note_detector = new NoteDetector();
+  private final DualCameras m_cameras=new DualCameras();
 
   private DriveWithGamepad m_driveCommand = null; 
 
@@ -60,7 +63,9 @@ public class RobotContainer {
   public void robotInit() {
     m_drive.setRobotDisabled(true);
     m_drive.init();
-    m_detector.start();
+    //m_tag_detector.start();
+    //m_note_detector.start();
+    m_cameras.start();
     Robot.status = "Init";
     Autonomous.end(); 
   }

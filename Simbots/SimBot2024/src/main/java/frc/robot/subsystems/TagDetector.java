@@ -23,37 +23,29 @@ import edu.wpi.first.apriltag.AprilTagPoseEstimator;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import objects.Camera;
 
 import objects.AprilTag;
 
-public class TagDetector extends Thread {
+public class TagDetector extends SubsystemBase {
   static {
     System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
   }
-  Camera cam;
+  static Camera cam;
 
-  protected static CvSource ouputStream;
-  protected AprilTagDetector wpi_detector;
+  static AprilTagDetector wpi_detector;
 
-  AprilTagPoseEstimator.Config wpi_poseEstConfig;
-  AprilTagPoseEstimator wpi_pose_estimator;
-  Drivetrain m_drivetrain;
+  static AprilTagPoseEstimator.Config wpi_poseEstConfig;
+  static AprilTagPoseEstimator wpi_pose_estimator;
   static boolean m_targeting = false;
-  public static int kCamWidth=640;
-  public static int kCamHeight=480;
-
+  
   static AprilTag[] tags = null;
 
   public static double min_decision_margin = 30; // reject tags less than this
 
-  public TagDetector(Drivetrain drivetrain) {
-    m_drivetrain = drivetrain;
-  }
-
-  @Override
-  public void run() {
-    cam = new Camera(0, kCamWidth, kCamHeight, 40); // specs for Gazebo camera
+  public TagDetector() {
+    cam = new Camera(0, DualCameras.kCamWidth, DualCameras.kCamHeight, 40); // specs for Gazebo camera
     wpi_detector = new AprilTagDetector();
     try{
       wpi_detector.addFamily("tag16h5", 0);
@@ -62,54 +54,49 @@ public class TagDetector extends Thread {
     } catch (Exception ex){
       System.out.println("TagDetector exception:" + ex);
     }
-
     wpi_poseEstConfig = new AprilTagPoseEstimator.Config(TargetMgr.targetSize, cam.fx, cam.fy, cam.cx, cam.cy);
     wpi_pose_estimator = new AprilTagPoseEstimator(wpi_poseEstConfig);
 
-    ouputStream = CameraServer.putVideo("RobotCamera", cam.image_width, cam.image_height);
     cam.start();
-
-    while (!Thread.interrupted()) {
-      try {
-        Thread.sleep(50);
-        Mat mat = cam.getFrame();
-        if(mat==null)
-          continue;
-
-        boolean autoselect = Autonomous.getAutoset();
-        boolean usetags = Autonomous.getUsetags();
-        boolean showtags = Autonomous.getShowtags();
-
-        tags = null;
-
-        if (m_targeting || showtags ||(autoselect && !TargetMgr.startPoseSet()&&usetags)){
-          tags = getTags(mat);
-          if(tags !=null && tags.length>1){
-            Arrays.sort(tags, new SortbyDistance());
-          }
-        }
-
-        // set initial starting position and alliance
-       
-        if (autoselect && !TargetMgr.startPoseSet()) {
-          if (usetags) {
-            if (tags != null && tags.length == 2) 
-                TargetMgr.setStartPose(tags);
-          } else {
-            int alliance = Autonomous.getAlliance();
-            int position = Autonomous.getPosition();
-            TargetMgr.setTarget(alliance, position);
-          }
-        }
-        if(tags != null)
-          showTags(tags, mat);
-        ouputStream.putFrame(mat);
-      } catch (Exception ex) {
-        System.out.println("TagDetector exception:" + ex);
-      }
-    }
   }
 
+  public static Mat getFrame() {
+    Mat mat = cam.getFrame();
+    if (mat == null)
+      return null;
+
+    if(!DualCameras.kTagCamera)
+      return mat;
+
+    boolean autoselect = Autonomous.getAutoset();
+    boolean usetags = Autonomous.getUsetags();
+    boolean showtags = Autonomous.getShowtags();
+
+    tags = null;
+
+    if (m_targeting || showtags || (autoselect && !TargetMgr.startPoseSet() && usetags)) {
+      tags = getTags(mat);
+      if (tags != null && tags.length > 1) {
+        Arrays.sort(tags, new SortbyDistance());
+      }
+    }
+
+    // set initial starting position and alliance
+
+    if (autoselect && !TargetMgr.startPoseSet()) {
+      if (usetags) {
+        if (tags != null && tags.length == 2)
+          TargetMgr.setStartPose(tags);
+      } else {
+        int alliance = Autonomous.getAlliance();
+        int position = Autonomous.getPosition();
+        TargetMgr.setTarget(alliance, position);
+      }
+    }
+    if (tags != null)
+      showTags(tags, mat);
+    return mat;
+  }
   // targeting methods
   public static void setTargeting(boolean state) {
    // System.out.println("SET TARGETING " + state);
@@ -124,7 +111,7 @@ public class TagDetector extends Thread {
     return m_targeting;
   }
 
-  void showTags(AprilTag[] tags, Mat mat) {
+  static void showTags(AprilTag[] tags, Mat mat) {
     for (int i = 0; i < tags.length; i++) {
       AprilTag tag = tags[i];
 
@@ -149,15 +136,15 @@ public class TagDetector extends Thread {
           2 // Thickness
       );
       if(i==TargetMgr.kBestTarget && m_targeting){
-        c.y+=TargetMgr.kVertOffset*kCamHeight;
-        c.x+=TargetMgr.kHorizOffset*kCamWidth;
+        c.y+=TargetMgr.kVertOffset*DualCameras.kCamHeight;
+        c.x+=TargetMgr.kHorizOffset*DualCameras.kCamWidth;
         Imgproc.drawMarker(mat, c, new Scalar(0, 0, 255), Imgproc.MARKER_CROSS, 35, 2, 8);
       }
     }
   }
 
   // return an array of tag info structures from an image
-  private AprilTag[] getTags(Mat mat) {
+  private static AprilTag[] getTags(Mat mat) {
     AprilTag[] atags = null;
     Mat graymat = new Mat();
     Imgproc.cvtColor(mat, graymat, Imgproc.COLOR_RGB2GRAY);
@@ -189,7 +176,7 @@ public class TagDetector extends Thread {
 
   // Helper class extending Comparator interface
   // sort by distance (closest on top)
-  class SortbyDistance implements Comparator<AprilTag> {
+  static class SortbyDistance implements Comparator<AprilTag> {
     public int compare(AprilTag p1, AprilTag p2) {
       double d1 = p1.getDistance();
       double d2 = p2.getDistance();

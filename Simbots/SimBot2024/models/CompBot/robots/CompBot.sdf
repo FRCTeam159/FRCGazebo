@@ -51,6 +51,7 @@
           </mesh>
         </geometry>
       </visual>
+      
     </link>
     <link name="FLdrive">
       <gravity>1</gravity>
@@ -522,21 +523,15 @@
           </mesh>
         </geometry>
       </visual>
-      <sensor name="ArmCamera" type="camera">
+      <sensor name="TagCamera" type="camera">
         <visualize>1</visualize>
         <always_on>1</always_on>
-        
-        <!--<pose>0.0 0.29 0.0 0 1.7 1.57</pose>-->
-       <!--<pose>0.0 0.29 0.0 0 1.57 1.57</pose>-->
-
-       <pose>0.02 0.0 0.0 0 1.57 1.57</pose>
-
-        <!--<pose>0.0 0.29 0.0 0 1.9 1.5707963267949</pose>-->
-        <camera name="Armcamera">
+        <pose>0.02 0.0 0.0 0 1.57 1.57</pose>
+        <camera name="TagCamera">
           <horizontal_fov>0.7</horizontal_fov>
           <image>
-            <width>640</width>
-            <height>480</height>
+            <width>320</width>
+            <height>240</height>
           </image>
           <clip>
             <near>0.1</near>
@@ -549,8 +544,32 @@
           <fps>20</fps>
           <enabled>true</enabled>
           <savepath>tmp</savepath>
-          <maxframes>5</maxframes>
-      </plugin>
+          <maxframes>2</maxframes>
+        </plugin>
+      </sensor>
+      <sensor name="NoteCamera" type="camera">
+        <visualize>1</visualize>
+        <always_on>1</always_on>
+        <pose>0.0 0.3 0.2 0 -2.2 -1.57</pose>
+        <camera name="NoteCamera">
+          <horizontal_fov>0.9</horizontal_fov>
+          <image>
+            <width>320</width>
+            <height>240</height>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>10</far>
+          </clip>
+        </camera>
+        <plugin name="camera2" filename="sim_camera.dll">
+          <topic>~/gazebo/frc/simulator/camera/1</topic>
+          <port>9001</port>
+          <fps>20</fps>
+          <enabled>true</enabled>
+          <savepath>tmp</savepath>
+          <maxframes>2</maxframes>
+        </plugin>
       </sensor>
     </link>
     <joint name="Body-Arm" type="revolute">

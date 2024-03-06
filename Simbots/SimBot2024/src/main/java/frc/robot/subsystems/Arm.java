@@ -155,9 +155,9 @@ public class Arm extends SubsystemBase implements Constants {
   }
 
   public double getAngle() {
-    if(initialized)
-      return getArmEncoderAngle();
-    else
+    // if(initialized)
+    //   return getArmEncoderAngle();
+    // else
       return getGyroAngle();
   }
 

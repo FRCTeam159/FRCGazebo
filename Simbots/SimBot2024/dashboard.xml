@@ -133,14 +133,14 @@
 		<location x="9" y="80"/>
 		<width>629</width>
 		<height>560</height>
-		<property name="Camera Choice" value="RobotCamera"/>
+		<property name="Camera Choice" value="SwitchedCamera"/>
 	</static-widget>
 		<property name="Team Number/Host" value="localhost"/>
 		<property name="Automatically Show Widgets" value="false"/>
 		<property name="Grid Cell Width(s)" value="16"/>
 		<property name="Grid Cell Height(s)" value="16"/>
-		<property name="Window X Position" value="1243"/>
-		<property name="Window Y Position" value="75"/>
+		<property name="Window X Position" value="1236"/>
+		<property name="Window Y Position" value="95"/>
 		<property name="Window Width" value="668"/>
 		<property name="Window Height" value="680"/>
 		<property name="Save File" value=".\dashboard.xml"/>
