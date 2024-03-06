@@ -576,7 +576,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.001</angular>
+        <angular>0.000</angular>
       </velocity_decay>
       <inertial>
         <mass>0.629822998132586</mass>
@@ -631,7 +631,7 @@
       <axis>
         <xyz>1 0 0</xyz>
         <dynamics>
-          <damping>1.0</damping>
+          <damping>2.0</damping>
           <friction>0</friction>
         </dynamics>        
       </axis>
@@ -643,7 +643,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.001</angular>
+        <angular>0.000</angular>
       </velocity_decay>
       <inertial>
         <mass>0.1</mass>
@@ -707,7 +707,7 @@
       <axis>
         <xyz>-1 0 0</xyz>
         <dynamics>
-          <damping>1.0</damping>
+          <damping>2.0</damping>
           <friction>0.0</friction>
         </dynamics>      
       </axis>
@@ -719,7 +719,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.0</angular>
+        <angular>0.002</angular>
       </velocity_decay>
       <inertial>
         <mass>0.01</mass>
@@ -746,8 +746,8 @@
           </contact>
           <friction>
             <ode>
-              <mu>1</mu>
-              <mu2>1</mu2>
+              <mu>4</mu>
+              <mu2>4</mu2>
             </ode>
           </friction>
         </surface>
@@ -782,7 +782,7 @@
       <axis>
         <xyz>1 0 0</xyz>
         <dynamics>
-          <damping>0.2</damping>
+          <damping>0.3</damping>
           <friction>0.1</friction>
         </dynamics>     
       </axis>
@@ -794,7 +794,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0</angular>
+        <angular>0.002</angular>
       </velocity_decay>
       <inertial>
         <mass>0.01</mass>
@@ -821,8 +821,8 @@
           </contact>
           <friction>
             <ode>
-              <mu>1</mu>
-              <mu2>1</mu2>
+              <mu>4</mu>
+              <mu2>4</mu2>
             </ode>
           </friction>
         </surface>
@@ -849,7 +849,7 @@
       <axis>
         <xyz>-1 0 0</xyz>
         <dynamics>
-          <damping>0.2</damping>
+          <damping>0.3</damping>
           <friction>0.1</friction>
         </dynamics>
         
@@ -862,7 +862,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0</angular>
+        <angular>0.001</angular>
       </velocity_decay>
       <inertial>
         <mass>0.01</mass>

@@ -124,7 +124,7 @@
    
     <include>
       <uri>model://CompBot</uri>
-       <pose>5.78045 -1.19417 0.045001 0.00036 -0.000498 -3.13894</pose>
+       <pose>5.78045 -1.2 0.045001 0.000 -0.000 -3.1415</pose>
     </include>
     <include>  
 

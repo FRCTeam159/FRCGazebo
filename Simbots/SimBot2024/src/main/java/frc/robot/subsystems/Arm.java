@@ -27,9 +27,9 @@ public class Arm extends SubsystemBase implements Constants {
   private static boolean at_starting_position = false;
   private static boolean initialized = false;
 
-  static public double PICKUP_POWER = 0.3;
+  static public double PICKUP_POWER = 1.5;
   static public double PUSH_POWER = 10;
-  static public double TARGET_SHOOTER_SPEED = 40;
+  static public double TARGET_SHOOTER_SPEED = 50;
 
   public static final double MOVE_RATE = 0.1;
 
@@ -122,10 +122,12 @@ public class Arm extends SubsystemBase implements Constants {
 
   public void setPushOn() {
     m_push = true;
+    m_intake = false;
   }
 
   public void setPushOFf() {
     m_push = false;
+    m_intake = false;
   }
 
   public boolean atLowerLimit() {
@@ -243,7 +245,7 @@ public class Arm extends SubsystemBase implements Constants {
       if(noteAtShooter())
         pickup.set(-0.3);
       else
-        pickup.set(0);
+        pickup.set(0.01);
     }
     log();
   }
@@ -256,8 +258,9 @@ public class Arm extends SubsystemBase implements Constants {
   }
   void log() {
     SmartDashboard.putNumber("ArmAngle", getGyroAngle());
-    SmartDashboard.putBoolean("Shooting", m_shoot);
-    SmartDashboard.putBoolean("Pickup", m_intake);
+    SmartDashboard.putBoolean("Shoot", m_shoot);
+    SmartDashboard.putBoolean("Intake", m_intake);
+    SmartDashboard.putBoolean("Push", m_push);
     SmartDashboard.putBoolean("IntakeSensor", noteAtIntake());
     SmartDashboard.putBoolean("ShootSensor", noteAtShooter());
     SmartDashboard.putNumber("ShootSpeed", shooter.getRate());

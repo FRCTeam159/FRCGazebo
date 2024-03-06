@@ -46,7 +46,7 @@ public class SwerveModule {
 
   static boolean debug_states=true;
   static boolean debug_align=false;
-  static boolean debug_correction=true;
+  static boolean debug_correction=false;
 
   static public boolean optimize=true;
   boolean aligning=false;

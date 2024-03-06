@@ -64,9 +64,8 @@ public class Pickup extends Command implements Constants{
   public boolean isFinished() { 
     if (!Autonomous.okToRun())
       return true; 
-    if(note_captured &&  Arm.noteAtShooter()){
+    if(note_captured &&  Arm.noteAtShooter())
       return true;
-    }
     return false;
   }
 }

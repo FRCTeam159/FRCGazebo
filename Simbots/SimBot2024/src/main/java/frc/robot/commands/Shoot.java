@@ -19,10 +19,10 @@ public class Shoot extends Command implements Constants{
    * */
   Drivetrain m_drive;
   Arm m_arm;
-  boolean shooter_ready=false;
-  boolean shooting=false;
+  boolean m_shooter_ready=false;
+  boolean m_shooting=false;
   Timer m_timer=new Timer();
-  boolean noteCaptured=false;
+  boolean m_note_at_start=false;
   public Shoot(Arm arm, Drivetrain drive) {
     m_arm=arm;
     m_drive=drive;
@@ -34,9 +34,9 @@ public class Shoot extends Command implements Constants{
   @Override
   public void initialize() {
     Autonomous.log("Shoot.init");
-    shooter_ready=false;
-    shooting=false;
-    noteCaptured=Arm.noteAtIntake();
+    m_shooter_ready=false;
+    m_shooting=false;
+    m_note_at_start=Arm.noteAtIntake();
     m_timer.reset();
     m_arm.setShooterOn();
     m_arm.setPickupOff();
@@ -46,11 +46,11 @@ public class Shoot extends Command implements Constants{
   @Override
   public void execute() {
     
-    if(!shooter_ready && m_arm.atTargetSpeed()){
-      shooter_ready=true;
-      m_arm.setPickupOn();
+    if(!m_shooter_ready && m_arm.atTargetSpeed()){
+      m_shooter_ready=true;
+      m_arm.setPushOn();
       m_timer.reset();
-      shooting=true;
+      m_shooting=true;
       Robot.status="Shooting";
     }
     m_drive.drive(0.001,0,0,false);
@@ -61,6 +61,7 @@ public class Shoot extends Command implements Constants{
   public void end(boolean interrupted) {
     Autonomous.log("Shoot.end");
     m_arm.setShooterOFf();
+    m_arm.setPushOFf();
   }
 
   // Returns true when the command should end.
@@ -68,15 +69,15 @@ public class Shoot extends Command implements Constants{
   public boolean isFinished() {
     if (!Autonomous.okToRun())
       return true;
-    if(shooter_ready && m_timer.get()>3 && !Arm.noteAtShooter()){
+    if(m_shooter_ready && m_timer.get()>1 && !Arm.noteAtShooter()){
       Autonomous.log("Shoot - shot delivered");
       return true;
     }
-    if(shooting && m_timer.get()>5) {// taking too long - something isn't right
+    if(m_shooting && m_timer.get()>5) {// taking too long - something isn't right
       Autonomous.log("Shoot - timed out");
       return true;
      }
-    if(!noteCaptured){
+    if(!m_note_at_start){
       Autonomous.log("Shoot - no note at start - aborting");
       return true;
     }

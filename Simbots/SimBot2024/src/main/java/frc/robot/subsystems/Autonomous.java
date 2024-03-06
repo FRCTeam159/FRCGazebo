@@ -26,7 +26,6 @@ import frc.robot.commands.DrivePath;
 import frc.robot.commands.EndAuto;
 import frc.robot.commands.GetStartPose;
 import frc.robot.commands.Pickup;
-import frc.robot.commands.SetShooter;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.StartAuto;
 import utils.PlotUtils;
@@ -47,6 +46,7 @@ public class Autonomous extends SequentialCommandGroup {
   public static final int ONE_NOTE = 4;
   public static final int TWO_NOTE = 5;
   public static final int THREE_NOTE = 6;
+  public static final int FOUR_NOTE = 7;
 
   static double d2r = 2 * Math.PI / 360;
   static double i2m = 0.0254;
@@ -78,9 +78,10 @@ public class Autonomous extends SequentialCommandGroup {
 
     m_path_chooser.addOption("Program", PROGRAM);
     //m_path_chooser.addOption("Path", PATH);
-    m_path_chooser.setDefaultOption("OneNote", ONE_NOTE);
+    m_path_chooser.addOption("OneNote", ONE_NOTE);
     m_path_chooser.addOption("TwoNote", TWO_NOTE);
     m_path_chooser.addOption("ThreeNote", THREE_NOTE);
+    m_path_chooser.setDefaultOption("FourNote", FOUR_NOTE);
     //m_path_chooser.addOption("Calibrate", CALIBRATE);
     SmartDashboard.putData(m_path_chooser);
 
@@ -231,6 +232,11 @@ public class Autonomous extends SequentialCommandGroup {
             startSequence(),
             twoNoteSequence(TargetMgr.CENTER),
             twoNoteSequence(TargetMgr.LEFT)
+            );
+       case FOUR_NOTE: 
+        return new SequentialCommandGroup(
+            getAutoCommand(THREE_NOTE),
+            twoNoteSequence(TargetMgr.RIGHT)
             );
       case PATH: {    
         if (m_pathplanner) {
