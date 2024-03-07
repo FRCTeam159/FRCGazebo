@@ -148,6 +148,7 @@ public class TargetMgr {
                 return new Pose2d(XF2, YF2, new Rotation2d(RF));
         }
     }
+    
     public static int getPlacement(int side, int pos){
         int alliance = side;
         int position = pos;
@@ -158,6 +159,7 @@ public class TargetMgr {
             placement=RIGHT;
         return placement;
     }
+
     public static void setTarget(int side, int pos) {
         alliance = side;
         position = pos;

@@ -191,14 +191,14 @@ public class Autonomous extends SequentialCommandGroup {
     }
     return new SequentialCommandGroup(new StartAuto(m_drive),acmnd,new EndAuto(m_drive));
   }
-  SequentialCommandGroup startSequence() {
+  private SequentialCommandGroup startSequence() {
     return new SequentialCommandGroup(
         new GetStartPose(m_arm),
         //new AutoTarget(m_arm, m_drive),
         new Shoot(m_arm, m_drive));
   }
   
-  SequentialCommandGroup twoNoteSequence(int pos) {
+  private SequentialCommandGroup twoNoteSequence(int pos) {
     return new SequentialCommandGroup(
         new ParallelCommandGroup(
             new DrivePath(m_drive, pos, false),
