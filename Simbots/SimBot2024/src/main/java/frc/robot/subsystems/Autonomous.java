@@ -34,7 +34,7 @@ public class Autonomous extends SequentialCommandGroup {
   static SendableChooser<Integer> m_path_chooser = new SendableChooser<Integer>();
   static SendableChooser<Integer> m_position_chooser = new SendableChooser<Integer>();
   static SendableChooser<Integer> m_alliance_chooser = new SendableChooser<Integer>();
-  static SendableChooser<Integer> m_auto_plot_option = new SendableChooser<>();
+  static SendableChooser<Integer> m_auto_plot_option = new SendableChooser<Integer>();
 
   Drivetrain m_drive;
   Arm m_arm;

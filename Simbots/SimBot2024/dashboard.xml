@@ -1,5 +1,8 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="maxA" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="439" y="137"/>
+	</widget>
 	<widget field="Shoot" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
 		<location x="268" y="15"/>
 	</widget>

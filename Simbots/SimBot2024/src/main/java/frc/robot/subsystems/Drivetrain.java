@@ -38,13 +38,10 @@ public class Drivetrain extends SubsystemBase implements Constants {
 
 	public static final double kRobotLength = Units.inchesToMeters(31); // Waffle side length
  
-	public static double kMaxVelocity = 2; // meters per second
-	public static double kMaxAcceleration = 1; // meters/second/second
+	public static double kMaxVelocity = 1.5; // meters per second
+	public static double kMaxAcceleration = 2.1; // meters/second/second
 	public static double kMaxAngularVelocity = Math.toRadians(720); // degrees per second
 	public static double kMaxAngularAcceleration = Math.toRadians(360);// degrees per second per second
-
-	public static double kMaxVelocityObserved=0;
-	public static double kMaxAccelerationObserved=0;
 
 	public static double dely = 0.5 * kSideWheelBase; // 0.2949 metters
 	public static double delx = 0.5 * kFrontWheelBase;
@@ -87,6 +84,13 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	boolean m_resetting=false;
 	
 	private final Timer m_timer = new Timer();
+	private double last_time = 0;
+
+	public static double max_vel=0;
+	public static double max_acc=0;
+	private double last_velocity = 0;
+	utils.Averager acc_average =new utils.Averager(5);
+    utils.Averager vel_average =new utils.Averager(2);
 
     /** Creates a new Subsystem. */
 	public Drivetrain() {
@@ -200,6 +204,11 @@ public class Drivetrain extends SubsystemBase implements Constants {
 		}
 		m_gyro.reset();
 		last_heading = 0;
+		last_time=0;
+		max_vel=0;
+		max_acc=0;
+		acc_average.reset();
+		vel_average.reset();
 		resetPositions();
 	}
 
@@ -283,9 +292,20 @@ public class Drivetrain extends SubsystemBase implements Constants {
         pose.getX(), pose.getY(), pose.getRotation().getDegrees(),getDistance());
     	SmartDashboard.putString("Pose", s);
 
-		double v=getVelocity();
-		kMaxVelocityObserved=v>kMaxVelocityObserved?v:kMaxVelocityObserved;
-		SmartDashboard.putNumber("maxV", kMaxVelocityObserved);
+		double tm=getTime();
+		double delt=tm-last_time;
+		double v = vel_average.getAve(Math.abs(getVelocity()));
+		max_vel = v > max_vel ? v : max_vel;
+		if(delt>=0.015 && delt<=0.05){
+			double acceleration = (v - last_velocity) / delt;
+			double a = acc_average.getAve(acceleration);
+			max_acc = a > max_acc ? a : max_acc;
+		}
+	
+		last_velocity = v;
+		last_time=tm;
+		SmartDashboard.putNumber("maxV", max_vel);
+		SmartDashboard.putNumber("maxA", max_acc);
 		field_oriented = SmartDashboard.getBoolean("Field Oriented", field_oriented);
 		SmartDashboard.putString("Status", Robot.status);
 	}	
