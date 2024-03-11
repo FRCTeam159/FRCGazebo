@@ -28,7 +28,7 @@ public class SwerveModule {
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final PIDController m_drivePIDController = new PIDController(10, 0.0, 0);
-  private final PIDController m_turningPIDController = new PIDController(8, 0.0, 0);
+  private final PIDController m_turningPIDController = new PIDController(10, 0.0, 0);
   // private final ProfiledPIDController m_turningPIDController =
   //     new ProfiledPIDController(5,0.0,0,
   //         new TrapezoidProfile.Constraints(
@@ -36,7 +36,7 @@ public class SwerveModule {
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(0.1, 0.3);
-  private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(0.1, 0.3);
+  private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(0.1, 0.5);
 
   public int m_drive_chnl;
   public int m_turn_chnl;
@@ -143,7 +143,7 @@ public class SwerveModule {
     final double turnFeedforward = m_turnFeedforward.calculate(state.angle.getRadians());
 
     double set_drive=driveOutput+driveFeedforward;
-    double set_turn=turnOutput+turnFeedforward;
+    double set_turn=turnOutput;//+turnFeedforward;
     if(debug_states){
       String s;
       if(debug_correction)

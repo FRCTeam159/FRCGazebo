@@ -28,7 +28,7 @@ public class TargetMgr {
     static final public double RC = 0;
 
     static final public double XF = 1.0;
-    static final public double YF = -1.3;
+    static final public double YF = -1.4;
 
     static final public double XF2 = 1.2;  // optimized for center second pickup
     static final public double YF2 = -1.0;

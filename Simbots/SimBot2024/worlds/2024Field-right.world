@@ -139,7 +139,7 @@
 
     <include>
       <uri>model://Apriltag16_05_00008</uri>
-      <pose>7.18628 -1.70125 1.47983 0 0 -1.60641</pose>
+      <pose>7.18628  -0.63551 1.47983 0 0 -1.60641</pose>
     </include>
 
     <include>

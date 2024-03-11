@@ -67,6 +67,7 @@ public class Autonomous extends SequentialCommandGroup {
   static boolean m_showtags = false;
   static boolean m_reverse = false;
   static boolean m_pathplanner = false;
+  static boolean m_ontarget = false;
 
   /** Creates a new AutoCommands. */
   public Autonomous(Drivetrain drive, Arm arm) {
@@ -79,9 +80,9 @@ public class Autonomous extends SequentialCommandGroup {
     m_path_chooser.addOption("Program", PROGRAM);
     //m_path_chooser.addOption("Path", PATH);
     m_path_chooser.addOption("OneNote", ONE_NOTE);
-    m_path_chooser.addOption("TwoNote", TWO_NOTE);
+    m_path_chooser.setDefaultOption("TwoNote", TWO_NOTE);
     m_path_chooser.addOption("ThreeNote", THREE_NOTE);
-    m_path_chooser.setDefaultOption("FourNote", FOUR_NOTE);
+    m_path_chooser.addOption("FourNote", FOUR_NOTE);
     //m_path_chooser.addOption("Calibrate", CALIBRATE);
     SmartDashboard.putData(m_path_chooser);
 
@@ -89,22 +90,22 @@ public class Autonomous extends SequentialCommandGroup {
     m_alliance_chooser.addOption("Red", TargetMgr.RED);
     SmartDashboard.putData(m_alliance_chooser);
 
-    m_position_chooser.addOption("Outside", TargetMgr.OUTSIDE);
-    m_position_chooser.setDefaultOption("Center", TargetMgr.CENTER);
+    m_position_chooser.setDefaultOption("Outside", TargetMgr.OUTSIDE);
+    m_position_chooser.addOption("Center", TargetMgr.CENTER);
     m_position_chooser.addOption("Inside", TargetMgr.INSIDE);
     SmartDashboard.putData(m_position_chooser);
 
     SmartDashboard.putBoolean("Reverse", m_reverse);
     SmartDashboard.putBoolean("Autoset", m_autoselect);
-    SmartDashboard.putBoolean("UseTags", m_usetags);
+    //SmartDashboard.putBoolean("UseTags", m_usetags);
     SmartDashboard.putBoolean("ShowTags", m_showtags);
     SmartDashboard.putBoolean("OkToRun", okToRun());
-
     SmartDashboard.putBoolean("Pathplanner", m_pathplanner);
+    SmartDashboard.putBoolean("OnTarget", m_ontarget);
 
-    m_auto_plot_option.setDefaultOption("No Plot", PlotUtils.PLOT_NONE);
+    m_auto_plot_option.addOption("No Plot", PlotUtils.PLOT_NONE);
     m_auto_plot_option.addOption("Plot Dynamics", PlotUtils.PLOT_DYNAMICS);
-    m_auto_plot_option.addOption("Plot Location", PlotUtils.PLOT_LOCATION);
+    m_auto_plot_option.setDefaultOption("Plot Location", PlotUtils.PLOT_LOCATION);
     m_auto_plot_option.addOption("Plot Position", PlotUtils.PLOT_POSITION);
     SmartDashboard.putData(m_auto_plot_option);
   }
@@ -164,6 +165,11 @@ public class Autonomous extends SequentialCommandGroup {
     return SmartDashboard.getBoolean("ShowTags", m_showtags);
   }
 
+  static public void setOnTarget(boolean b){
+    m_ontarget=b;
+    SmartDashboard.putBoolean("OnTarget",b);
+  }
+
   static public boolean getUsePathplanner() {
     return SmartDashboard.getBoolean("Pathplanner", m_pathplanner);
   }
@@ -184,20 +190,18 @@ public class Autonomous extends SequentialCommandGroup {
   public SequentialCommandGroup getCommand() {
     PlotUtils.auto_plot_option = m_auto_plot_option.getSelected();
     int auto_select= m_path_chooser.getSelected();
-    SequentialCommandGroup acmnd=getAutoCommand(auto_select);
-    if(acmnd==null){
-      System.out.println("failed to create Auto sequence !");
-      return null;
-    }
-    return new SequentialCommandGroup(new StartAuto(m_drive),acmnd,new EndAuto(m_drive));
+    SequentialCommandGroup acmnd=getAutoSequence(auto_select);
+    
+    return new SequentialCommandGroup(
+      new StartAuto(m_drive),
+      acmnd,
+      new EndAuto(m_drive));
   }
   private SequentialCommandGroup startSequence() {
     return new SequentialCommandGroup(
         new GetStartPose(m_arm),
-        //new AutoTarget(m_arm, m_drive),
         new Shoot(m_arm, m_drive));
   }
-  
   private SequentialCommandGroup twoNoteSequence(int pos) {
     return new SequentialCommandGroup(
         new ParallelCommandGroup(
@@ -207,7 +211,7 @@ public class Autonomous extends SequentialCommandGroup {
         //new AutoTarget(m_arm, m_drive),
         new Shoot(m_arm, m_drive));
   }
-  public SequentialCommandGroup getAutoCommand(int auto_select) {
+  public SequentialCommandGroup getAutoSequence(int auto_select) {
     switch (auto_select) {
       case CALIBRATE:
         return new SequentialCommandGroup(new Calibrate(m_drive));
@@ -222,10 +226,10 @@ public class Autonomous extends SequentialCommandGroup {
           );
       case TWO_NOTE: 
         return new SequentialCommandGroup(
-            getAutoCommand(ONE_NOTE),
+            getAutoSequence(ONE_NOTE),
             new DrivePath(m_drive, true),
-            //new AutoTarget(m_arm, m_drive),
-            new Shoot(m_arm, m_drive)
+            new Shoot(m_arm, m_drive),
+            new DrivePath(m_drive, false)
             );
       case THREE_NOTE: 
         return new SequentialCommandGroup(
@@ -235,7 +239,7 @@ public class Autonomous extends SequentialCommandGroup {
             );
        case FOUR_NOTE: 
         return new SequentialCommandGroup(
-            getAutoCommand(THREE_NOTE),
+            getAutoSequence(THREE_NOTE),
             twoNoteSequence(TargetMgr.RIGHT)
             );
       case PATH: {    

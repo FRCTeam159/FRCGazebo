@@ -38,13 +38,13 @@ public class Drivetrain extends SubsystemBase implements Constants {
 
 	public static final double kRobotLength = Units.inchesToMeters(31); // Waffle side length
  
-	public static double kMaxVelocity = 1.5; // meters per second
-	public static double kMaxAcceleration = 2.1; // meters/second/second
-	public static double kMaxAngularVelocity = Math.toRadians(720); // degrees per second
-	public static double kMaxAngularAcceleration = Math.toRadians(360);// degrees per second per second
+	public static final double kMaxVelocity = 1.5; // meters per second
+	public static final double kMaxAcceleration = 2.1; // meters/second/second
+	public static final double kMaxAngularVelocity = Math.toRadians(360); // degrees per second
+	public static final double kMaxAngularAcceleration = Math.toRadians(720);// degrees per second per second
 
-	public static double dely = 0.5 * kSideWheelBase; // 0.2949 metters
-	public static double delx = 0.5 * kFrontWheelBase;
+	public static final double dely = 0.5 * kSideWheelBase; // 0.2949 metters
+	public static final double delx = 0.5 * kFrontWheelBase;
 
 	private final Translation2d m_frontLeftLocation = new Translation2d(delx, dely);
 	private final Translation2d m_frontRightLocation = new Translation2d(delx, -dely);

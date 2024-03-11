@@ -34,8 +34,8 @@ public class AutoTarget extends Command {
     addRequirements(drive);
     turnPID.setSetpoint(TargetMgr.kHorizOffset);
     anglePID.setSetpoint(TargetMgr.kVertOffset); // y offset if at speaker steps
-    anglePID.setTolerance(0.05);
-    turnPID.setTolerance(.05);
+    anglePID.setTolerance(0.05,0.02);
+    turnPID.setTolerance(.05,0.01);
     m_timer.start();
     tags=null;
    }
@@ -50,6 +50,7 @@ public class AutoTarget extends Command {
     have_tags=false;
     anglePID.reset();
     turnPID.reset();
+    Autonomous.setOnTarget(false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -81,6 +82,14 @@ public class AutoTarget extends Command {
       System.out.println(target);
   }
 
+  public double getZOffset(double x) {
+    // X       Z
+    // 1.67    -0.2
+    // 2.5     -0.04
+    // 3.09    -0
+    return -0.2 + (x-1.67) * ((0 - -0.2) / (3.09 - 1.67));
+  }
+
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
@@ -98,6 +107,7 @@ public class AutoTarget extends Command {
       return true;
     }
     if(anglePID.atSetpoint() && turnPID.atSetpoint()){
+      Autonomous.setOnTarget(true);
       Autonomous.log("Autotarget.end - on target");
       return true;
     }

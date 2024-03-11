@@ -47,15 +47,15 @@ public class DrivePath extends Command {
   ArrayList<PathData> pathdata = new ArrayList<PathData>();
 
   final PPHolonomicDriveController m_ppcontroller = new PPHolonomicDriveController(
-      new PIDConstants(4, 0.0, 0), new PIDConstants(4, 0.0, 0.0), scale * Drivetrain.kMaxVelocity,
+      new PIDConstants(4, 0.0, 0), new PIDConstants(4, 0.0, 0.0), 4*Drivetrain.kMaxVelocity,
       Drivetrain.kTrackRadius);
 
   final HolonomicDriveController m_hcontroller = new HolonomicDriveController(
-      new PIDController(2, 0, 0),
-      new PIDController(2, 0, 0),
-      new ProfiledPIDController(5, 0, 0,
-          new TrapezoidProfile.Constraints(scale * Drivetrain.kMaxAngularVelocity,
-              scale * Drivetrain.kMaxAngularAcceleration)));
+      new PIDController(4, 0, 0),
+      new PIDController(4, 0, 0),
+      new ProfiledPIDController(6, 0, 0,
+          new TrapezoidProfile.Constraints(scale*Drivetrain.kMaxAngularVelocity,
+              scale*Drivetrain.kMaxAngularAcceleration)));
 
   Timer m_timer = new Timer();
   Drivetrain m_drive;
@@ -118,7 +118,7 @@ public class DrivePath extends Command {
     m_autoset = Autonomous.getAutoset();
 
     using_pathplanner = Autonomous.getUsePathplanner();
-
+  
     m_note_at_start = Arm.noteAtIntake();
 
     cnt = 0;
@@ -142,13 +142,13 @@ public class DrivePath extends Command {
       rPath = SmartDashboard.getNumber("rPath", rPath);
     }
 
-    PlotUtils.initPlot();
-
     if (!getTrajectory()) {
       Autonomous.log("DrivePath - failed to create Trajectory");
       Autonomous.stop();
       return;
     }
+
+    PlotUtils.initPlot();
     m_timer.start();
     m_timer.reset();
 
@@ -192,13 +192,13 @@ public class DrivePath extends Command {
       speeds = m_hcontroller.calculate(m_drive.getPose(), reference, rot);
     }
     // if (debug) {
-    if (debug && (cnt % 10 == 0 || cnt == 0 || cnt == states - 1)) {
+    if (debug && (cnt % 10 == 0 || cnt == states - 1)) {
       Pose2d p = m_drive.getPose();
       System.out.format(
-          "%-1.3f X a:%-3.1f t:%-3.1f c:%-3.1f Y a:%-1.1f t:%-1.1f c:%-3.1f R a:%-3.1f t:%-3.1f\n", elapsed,
+          "%-1.3f X a:%-3.1f t:%-3.1f c:%-3.1f Y a:%-1.1f t:%-1.1f c:%-3.1f R a:%-3.1f t:%-3.1f c:%-3.1f\n", elapsed,
           p.getTranslation().getX(), reference.poseMeters.getX(), speeds.vxMetersPerSecond,
           p.getTranslation().getY(), reference.poseMeters.getY(), speeds.vyMetersPerSecond,
-          p.getRotation().getDegrees(), reference.poseMeters.getRotation().getDegrees());
+          p.getRotation().getDegrees(), reference.poseMeters.getRotation().getDegrees(),Math.toDegrees(speeds.omegaRadiansPerSecond));
     }
     cnt++;
 
@@ -234,7 +234,7 @@ public class DrivePath extends Command {
   public boolean isFinished() {
     if (!Autonomous.okToRun())
       return true;
-    return (elapsed >= 1.1 * runtime);
+    return (elapsed >= 1.0 * runtime);
   }
 
   // *********************** trajectory functions *******************/
