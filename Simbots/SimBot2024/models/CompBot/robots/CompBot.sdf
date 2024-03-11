@@ -1074,6 +1074,79 @@
         </limit>
       </axis>
     </joint>
+
+    <link name="Climber">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <!--
+      <pose>-0.17669453567969 0.010535513643805 0.680353591159112 1.5707963267949 0 1.5707963267949</pose>
+      -->
+      <pose>0.03 0.007 0.6 1.1 0 -1.57</pose>
+
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+
+      <inertial>
+        <mass>0.01</mass>
+        <pose>0 0 0 0 0 0</pose>  
+      </inertial>
+     
+      <collision name="Climber_collision">
+        <pose>0.340915220709725 -0.659396312294883 0.407050875681978 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot/meshes/Climber_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="Climber_visual">
+        <pose>0.340915220709725 -0.659396312294883 0.407050875681978 0 0 0</pose>
+        <material>
+          <ambient>0.250980392156863 0.250980392156863 0 1</ambient>
+          <diffuse>0.250980392156863 0.250980392156863 0 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://CompBot/meshes/Climber.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Arm-Climber" type="prismatic">
+      <parent>Arm</parent>
+      <child>Climber</child>
+      <pose>-0.001010513643807 -0.00080863797544406 -0.015405370431144 0 0 0</pose>
+      <axis>
+        <xyz>3.3055303903801E-15 -0.998625205893594 0.0524184905732451</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+        </dynamics>
+        <!-- -->
+        <limit>
+          <upper>0.4</upper>
+          <lower>0</lower>
+        
+        </limit>
+       
+      </axis>
+    </joint>
   
   <plugin name="clock" filename="sim_clock.dll">
       <topic>~/gazebo/frc/simulator/clock</topic>
