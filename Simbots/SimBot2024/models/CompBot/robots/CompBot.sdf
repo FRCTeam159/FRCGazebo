@@ -9,12 +9,22 @@
       <pose>-0.0237029953602895 1.63376267480753E-05 0.0384753884025163 1.5707963267949 0 1.5707963267949</pose>
       <must_be_base_link>1</must_be_base_link>
       <velocity_decay>
-        <linear>0</linear>
-        <angular>0</angular>
+        <linear>0.0</linear>
+        <angular>0.0</angular>
       </velocity_decay>
       <inertial>
-        <mass>150</mass>
-        <pose>0 0 0 0 0 0</pose>
+        <mass>60</mass>
+        <pose>0.1 0.0 0 0 0 0</pose>
+<!--
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+        -->
       </inertial>
       <!--
       <collision name="Body_collision">
@@ -63,9 +73,9 @@
         <angular>0.02</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.2</mass>
+        <mass>0.1</mass>
         <pose>0 0 0 0 0 0</pose>
-              </inertial>
+      </inertial>
       
       <visual name="FLdrive_visual">
         <pose>0.0429951846732238 -0.0282081764890776 -0.0767111731402816 0 0 0</pose>
@@ -103,7 +113,7 @@
         <angular>0.02</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.0814304850393228</mass>
+        <mass>0.1</mass>
         <pose>0 0 0 0 0 0</pose>
               </inertial>
       
@@ -143,7 +153,7 @@
         <angular>0.02</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.2</mass>
+        <mass>0.1</mass>
         <pose>0 0 0 0 0 0</pose>
               </inertial>
       
@@ -183,7 +193,7 @@
         <angular>0.02</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.123981363237599</mass>
+        <mass>0.1</mass>
         <pose>0 0 0 0 0 0</pose>
               </inertial>
       
@@ -223,7 +233,7 @@
         <angular>0.002</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.2</mass>
+        <mass>0.05</mass>
         <pose>0 0 0 0 0 0</pose>
       </inertial>
       <collision name="FLwheel_collision">
@@ -289,7 +299,7 @@
         <angular>0.002</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.123981365764209</mass>
+        <mass>0.05</mass>
         <pose>0 0 0 0 0 0</pose>
       </inertial>
       <collision name="FRwheel_collision">
@@ -355,7 +365,7 @@
         <angular>0.002</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.2</mass>
+        <mass>0.05</mass>
         <pose>0 0 0 0 0 0</pose>
       </inertial>
       <collision name="BLwheel_collision">
@@ -421,7 +431,7 @@
         <angular>0.002</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.123981364303097</mass>
+        <mass>0.05</mass>
         <pose>0 0 0 0 0 0</pose>
       </inertial>
       <collision name="BRwheel_collision">
@@ -487,7 +497,7 @@
         <angular>0.0</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.5</mass>
+        <mass>0.2</mass>
         <pose>0 0 0 0 0 0</pose>
               </inertial>
       <collision name="Arm_collision">
@@ -579,7 +589,7 @@
       <axis>
         <xyz>-1 0 0</xyz>
         <dynamics>
-          <damping>100.0</damping>
+          <damping>100</damping>
           <friction>0.5</friction>
         </dynamics>
         <limit>
@@ -595,10 +605,10 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.000</angular>
+        <angular>0</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.629822998132586</mass>
+        <mass>0.05</mass>
         <pose>0 0 0 0 0 0</pose>
         
       </inertial>
@@ -662,10 +672,10 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.000</angular>
+        <angular>0</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.1</mass>
+        <mass>0.05</mass>
         <pose>0 0 0 0 0 0</pose>
         
       </inertial>
@@ -881,7 +891,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.001</angular>
+        <angular>0</angular>
       </velocity_decay>
       <inertial>
         <mass>0.01</mass>
@@ -993,9 +1003,7 @@
           </mesh>
         </geometry>
       </visual>
-      
-      
-    </link>
+          </link>
     <joint name="Arm-MidRollersBot" type="revolute">
       <parent>Arm</parent>
       <child>MidRollersBot</child>
@@ -1006,8 +1014,7 @@
           <damping>1</damping>
           <friction>0</friction>
         </dynamics>
-        
-      </axis>
+       </axis>
     </joint>
     <link name="Bumpers">
       <gravity>1</gravity>
@@ -1019,10 +1026,9 @@
         <angular>0</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.5</mass>
+        <mass>0.25</mass>
         <pose>0 0 0 0 0 0</pose>
-       
-      </inertial>
+             </inertial>
       <collision name="Bumpers_collision">
         <pose>0.351461653965037 -0.0457177211357748 0.231266450327921 0 0 0</pose>
         <geometry>
@@ -1081,16 +1087,16 @@
       <!--
       <pose>-0.17669453567969 0.010535513643805 0.680353591159112 1.5707963267949 0 1.5707963267949</pose>
       -->
-      <pose>0.03 0.007 0.6 1.1 0 -1.57</pose>
+      <pose>0.03 0.08 0.4 2.1 0 1.57</pose>
 
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
-        <linear>0</linear>
+        <linear>0.001</linear>
         <angular>0</angular>
       </velocity_decay>
 
       <inertial>
-        <mass>0.01</mass>
+        <mass>0.25</mass>
         <pose>0 0 0 0 0 0</pose>  
       </inertial>
      
@@ -1104,12 +1110,15 @@
         </geometry>
         <surface>
           <contact>
-            <ode />
+            <ode>
+              <kd>1000</kd>
+              <kp>1e6</kp>
+            </ode>
           </contact>
           <friction>
             <ode>
-              <mu>0</mu>
-              <mu2>0</mu2>
+              <mu>2</mu>
+              <mu2>2</mu2>
             </ode>
           </friction>
         </surface>
@@ -1133,18 +1142,17 @@
       <child>Climber</child>
       <pose>-0.001010513643807 -0.00080863797544406 -0.015405370431144 0 0 0</pose>
       <axis>
-        <xyz>3.3055303903801E-15 -0.998625205893594 0.0524184905732451</xyz>
+        <xyz>0 -1 0</xyz>
         <dynamics>
-          <damping>0</damping>
-          <friction>0</friction>
+          <damping>100</damping>
+          <friction>10</friction>
         </dynamics>
-        <!-- -->
-        <limit>
-          <upper>0.4</upper>
-          <lower>0</lower>
         
+        <limit>
+          <upper>0.15</upper>
+          <lower>-0.4</lower>
+        <velocity>0.05</velocity>
         </limit>
-       
       </axis>
     </joint>
   
@@ -1288,20 +1296,27 @@
         <joint>Arm-TopShootWheels</joint>
         <topic>~/gazebo/frc/simulator/encoder/11</topic>
     </plugin>
-<!--
-    <plugin name="pusher_motor" filename="sim_motor.dll">
-        <joint>Arm-MidRollersTop</joint>
+
+    <plugin name="climber_motor" filename="sim_motor.dll">
+        <joint>Arm-Climber</joint>
         <topic>~/gazebo/frc/simulator/motor/12</topic>
-        <multiplier>50</multiplier>
+        <multiplier>500</multiplier>
     </plugin>
 
-    <plugin name="pusher_motor" filename="sim_motor.dll">
-        <joint>Arm-MidRollersBot</joint>
-        <topic>~/gazebo/frc/simulator/motor/12</topic>
-        <multiplier>50</multiplier>
+    <plugin name="Climberencoder" filename="sim_encoder.dll">
+        <joint>Arm-Climber</joint>
+        <topic>~/gazebo/frc/simulator/encoder/12</topic>
+            </plugin>
+
+    <plugin name="Climber_limit" filename="sim_limitswitch.dll">
+      <joint>Arm-Climber</joint>
+      <topic>~/gazebo/frc/simulator/switch/3</topic>
+      <units>radians</units>
+      <low>-0.4</low>
+      <high>0.6</high>
     </plugin>
--->
-    <plugin name="Arm_llimit" filename="sim_limitswitch.dll">
+
+    <plugin name="Arm_limit" filename="sim_limitswitch.dll">
       <joint>Body-Arm</joint>
       <topic>~/gazebo/frc/simulator/switch/2</topic>
       <units>radians</units>

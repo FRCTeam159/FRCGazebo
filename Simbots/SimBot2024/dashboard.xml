@@ -1,5 +1,19 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="Arm" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="445" y="196"/>
+		<width>171</width>
+	</widget>
+	<widget field="ClimberBot" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="326" y="189"/>
+	</widget>
+	<widget field="ClimberTop" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="326" y="168"/>
+	</widget>
+	<widget field="Climber" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="432" y="169"/>
+		<width>184</width>
+	</widget>
 	<widget field="maxA" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="439" y="137"/>
 	</widget>
@@ -68,14 +82,11 @@
 		<location x="7" y="70"/>
 		<width>185</width>
 	</widget>
-	<widget field="UseTags" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="477" y="103"/>
-	</widget>
 	<widget field="SendableChooser[0]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
-		<location x="378" y="-6"/>
+		<location x="371" y="-4"/>
 	</widget>
 	<widget field="Autoset" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="392" y="99"/>
+		<location x="478" y="99"/>
 	</widget>
 	<widget field="BR" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="450" y="583"/>
@@ -139,6 +150,7 @@
 		<property name="Camera Choice" value="SwitchedCamera"/>
 	</static-widget>
 		<property name="Team Number/Host" value="localhost"/>
+		<property name="Hide Menu" value="true"/>
 		<property name="Automatically Show Widgets" value="false"/>
 		<property name="Grid Cell Width(s)" value="16"/>
 		<property name="Grid Cell Height(s)" value="16"/>
@@ -151,4 +163,5 @@
 <live-window>
 </live-window>
 	<hidden field="SimClock"/>
+	<hidden field="OnTarget"/>
 </xml>

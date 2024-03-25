@@ -29,9 +29,10 @@ public interface Constants {
     public static final int ARM = 9;
     public static final int PICKUP = 10;
     public static final int SHOOTER = 11;
-    public static final int PUSHER = 12;
+    public static final int CLIMBER = 12;
 
     public static final int ARM_LIMIT = 2;
+    public static final int CLIMB_LIMIT = 3;
 
     public static double PICKUP_ANGLE=0;
     public static double SPEAKER_SHOOT_ANGLE=17;

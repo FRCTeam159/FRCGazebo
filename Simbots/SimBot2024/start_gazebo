@@ -1,7 +1,7 @@
 #!/bin/bash
 rm -f tmp/*;
 
-#gazebo -u hanging.world &
+#gazebo climber-test.world &
 #gazebo 2024Field-left.world &
 gazebo 2024Field-right.world &
 #gazebo -u temp.world &

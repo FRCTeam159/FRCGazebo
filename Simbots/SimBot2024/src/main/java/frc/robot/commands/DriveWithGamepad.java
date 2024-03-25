@@ -16,9 +16,9 @@ public class DriveWithGamepad extends Command {
   private final Drivetrain m_drive;
   private final XboxController m_controller;
 
-  private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(0.5);
-  private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(0.5);
-  private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(0.2);
+  private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(0.25);
+  private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(0.25);
+  private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(0.1);
   boolean m_aligning = false;
   AlignWheels m_align = null;
 

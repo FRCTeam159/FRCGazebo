@@ -9,12 +9,14 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.ClimberControls;
 import frc.robot.commands.ControlArm;
 import frc.robot.commands.DriveWithGamepad;
 import frc.robot.commands.Pickup;
 import frc.robot.commands.Shoot;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Autonomous;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.DualCameras;
 import frc.robot.subsystems.NoteDetector;
@@ -41,7 +43,9 @@ public class RobotContainer {
   private final TagDetector m_tag_detector = new TagDetector();
   private final NoteDetector m_note_detector = new NoteDetector();
   private final DualCameras m_cameras=new DualCameras();
+  private Climber m_climber = new Climber();
 
+  
   private DriveWithGamepad m_driveCommand = null; 
 
   /**
@@ -51,6 +55,7 @@ public class RobotContainer {
     m_driveCommand = new DriveWithGamepad(m_drive, m_controller);
     m_drive.setDefaultCommand(m_driveCommand);
     m_arm.setDefaultCommand(new ControlArm(m_arm, m_drive, m_controller));
+    m_climber.setDefaultCommand(new ClimberControls(m_climber, m_controller));
 
     NamedCommands.registerCommand("Pickup", new Pickup(m_arm));
     NamedCommands.registerCommand("Shoot", new Shoot(m_arm,m_drive));
@@ -61,17 +66,16 @@ public class RobotContainer {
   }
 
   public void robotInit() {
-    m_drive.setRobotDisabled(true);
+    Robot.disabled=true;
     m_drive.init();
-    //m_tag_detector.start();
-    //m_note_detector.start();
     m_cameras.start();
     Robot.status = "Init";
     Autonomous.end(); 
   }
 
+  
   public void teleopInit() {
-    m_drive.setRobotDisabled(false);
+    Robot.disabled=false;
     m_drive.endAuto();
     m_drive.enable();
     Autonomous.end(); 
@@ -79,7 +83,7 @@ public class RobotContainer {
   }
 
   public void autonomousInit() {
-    m_drive.setRobotDisabled(false); 
+    Robot.disabled=false;
     m_drive.enable();
     Autonomous.start(); 
     TargetMgr.reset();
@@ -87,7 +91,7 @@ public class RobotContainer {
   }
 
   public void disabledInit() {
-    m_drive.setRobotDisabled(true);
+    Robot.disabled=true;
     m_drive.endAuto();
     Robot.status = "Disabled";
     Autonomous.end(); 
@@ -104,6 +108,8 @@ public class RobotContainer {
       m_resetting = true;
       m_drive.resetWheels(true);
       m_arm.reset();
+      m_climber.reset();
+      Robot.initialized=false;
       TargetMgr.reset();
       TagDetector.setTargeting(false);
     } else if (!b && m_resetting) { // end aligning

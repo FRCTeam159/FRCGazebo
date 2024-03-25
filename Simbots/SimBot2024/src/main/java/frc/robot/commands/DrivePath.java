@@ -42,7 +42,7 @@ import utils.PlotUtils;
 // =================================================
 public class DrivePath extends Command {
 
-  public static double scale = 1;
+  public static double scale = 0.5;
 
   ArrayList<PathData> pathdata = new ArrayList<PathData>();
 
@@ -53,7 +53,7 @@ public class DrivePath extends Command {
   final HolonomicDriveController m_hcontroller = new HolonomicDriveController(
       new PIDController(4, 0, 0),
       new PIDController(4, 0, 0),
-      new ProfiledPIDController(6, 0, 0,
+      new ProfiledPIDController(8, 0, 0,
           new TrapezoidProfile.Constraints(scale*Drivetrain.kMaxAngularVelocity,
               scale*Drivetrain.kMaxAngularAcceleration)));
 
@@ -163,6 +163,9 @@ public class DrivePath extends Command {
     Robot.status = "DrivePath";
 
     Autonomous.log("DrivePath - runtime:" + runtime + " states:" + states + " intervals:" + intervals);
+    Pose2d p = m_drive.getPose();
+    String s=String.format("DrivePath.start X:%-2.1f Y:%-2.1f R:%-3.1f",p.getX(),p.getY(), p.getRotation().getDegrees());
+    Autonomous.log(s);
   }
 
   // =================================================
@@ -196,8 +199,8 @@ public class DrivePath extends Command {
       Pose2d p = m_drive.getPose();
       System.out.format(
           "%-1.3f X a:%-3.1f t:%-3.1f c:%-3.1f Y a:%-1.1f t:%-1.1f c:%-3.1f R a:%-3.1f t:%-3.1f c:%-3.1f\n", elapsed,
-          p.getTranslation().getX(), reference.poseMeters.getX(), speeds.vxMetersPerSecond,
-          p.getTranslation().getY(), reference.poseMeters.getY(), speeds.vyMetersPerSecond,
+          p.getX(), reference.poseMeters.getX(), speeds.vxMetersPerSecond,
+          p.getY(), reference.poseMeters.getY(), speeds.vyMetersPerSecond,
           p.getRotation().getDegrees(), reference.poseMeters.getRotation().getDegrees(),Math.toDegrees(speeds.omegaRadiansPerSecond));
     }
     cnt++;
@@ -217,7 +220,9 @@ public class DrivePath extends Command {
   // =================================================
   @Override
   public void end(boolean interrupted) {
-    Autonomous.log("Drivepath.end");
+    Pose2d p = m_drive.getPose();
+    String s=String.format("DrivePath.end X:%-2.1f Y:%-2.1f R:%-3.1f",p.getX(),p.getY(), p.getRotation().getDegrees());
+    Autonomous.log(s);
     if (using_pathplanner)
       m_ppcontroller.setEnabled(false);
     else
@@ -325,11 +330,11 @@ public class DrivePath extends Command {
   // getTrajectory: return a selected trajectory
   // =================================================
   boolean getTrajectory() {
-    Pose2d pose = m_drive.getPose();
-    if (m_reversed && (pose.getX() < 0.2 && pose.getY() < 0.2)) // probably an error to start too close to 0 ?
-      return false;
-    else if (!m_reversed && (pose.getX() > 0.2 || pose.getY() > 0.2)) // probably an error to start too far from 0 ?
-      return false;
+    //Pose2d pose = m_drive.getPose();
+    // if (m_reversed && (pose.getX() < 0.2 && pose.getY() < 0.2)) // probably an error to start too close to 0 ?
+    //   return false;
+    // else if (!m_reversed && (pose.getX() > 0.2 || pose.getY() > 0.2)) // probably an error to start too far from 0 ?
+    //   return false;
     if (using_pathplanner) {
       m_pptrajectory = pathplannerProgramPath();
       if (m_pptrajectory == null)

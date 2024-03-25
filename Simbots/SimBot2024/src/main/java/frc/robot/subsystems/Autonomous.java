@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AlignWheels;
 import frc.robot.commands.AutoTarget;
@@ -90,8 +91,8 @@ public class Autonomous extends SequentialCommandGroup {
     m_alliance_chooser.addOption("Red", TargetMgr.RED);
     SmartDashboard.putData(m_alliance_chooser);
 
-    m_position_chooser.setDefaultOption("Outside", TargetMgr.OUTSIDE);
-    m_position_chooser.addOption("Center", TargetMgr.CENTER);
+    m_position_chooser.addOption("Outside", TargetMgr.OUTSIDE);
+    m_position_chooser.setDefaultOption("Center", TargetMgr.CENTER);
     m_position_chooser.addOption("Inside", TargetMgr.INSIDE);
     SmartDashboard.putData(m_position_chooser);
 
@@ -103,9 +104,9 @@ public class Autonomous extends SequentialCommandGroup {
     SmartDashboard.putBoolean("Pathplanner", m_pathplanner);
     SmartDashboard.putBoolean("OnTarget", m_ontarget);
 
-    m_auto_plot_option.addOption("No Plot", PlotUtils.PLOT_NONE);
+    m_auto_plot_option.setDefaultOption("No Plot", PlotUtils.PLOT_NONE);
     m_auto_plot_option.addOption("Plot Dynamics", PlotUtils.PLOT_DYNAMICS);
-    m_auto_plot_option.setDefaultOption("Plot Location", PlotUtils.PLOT_LOCATION);
+    m_auto_plot_option.addOption("Plot Location", PlotUtils.PLOT_LOCATION);
     m_auto_plot_option.addOption("Plot Position", PlotUtils.PLOT_POSITION);
     SmartDashboard.putData(m_auto_plot_option);
   }
@@ -204,7 +205,7 @@ public class Autonomous extends SequentialCommandGroup {
   }
   private SequentialCommandGroup twoNoteSequence(int pos) {
     return new SequentialCommandGroup(
-        new ParallelCommandGroup(
+        new ParallelRaceGroup(
             new DrivePath(m_drive, pos, false),
             new Pickup(m_arm)), // sets angle to ground at start then to speaker when note captured
         new DrivePath(m_drive, pos, true),
@@ -216,20 +217,23 @@ public class Autonomous extends SequentialCommandGroup {
       case CALIBRATE:
         return new SequentialCommandGroup(new Calibrate(m_drive));
       case PROGRAM:
-        return new SequentialCommandGroup(new DrivePath(m_drive, getReverse()));
+        return new SequentialCommandGroup(
+          new DrivePath(m_drive, getReverse())
+        );
       case ONE_NOTE: 
         return new SequentialCommandGroup(
           startSequence(),
-          new ParallelCommandGroup(
+          new ParallelRaceGroup(
               new DrivePath(m_drive, false),
-              new Pickup(m_arm))
+              new Pickup(m_arm)
+          )
           );
       case TWO_NOTE: 
         return new SequentialCommandGroup(
             getAutoSequence(ONE_NOTE),
             new DrivePath(m_drive, true),
-            new Shoot(m_arm, m_drive),
-            new DrivePath(m_drive, false)
+            new Shoot(m_arm, m_drive)//,
+            //new DrivePath(m_drive, false)
             );
       case THREE_NOTE: 
         return new SequentialCommandGroup(

@@ -3,11 +3,11 @@
   <world name="default">
    <physics type="ode">
       <ode>
-       <!-- 
+      <!--
         <solver>
         <iters>100</iters>
         </solver>
-           
+             
         <constraints>
           <contact_max_correcting_vel>1</contact_max_correcting_vel>
           <contact_surface_layer>0.0001</contact_surface_layer>
@@ -17,7 +17,7 @@
       <!--<max_step_size>0.001</max_step_size>-->
     </physics>
    <gui fullscreen='0'>
-      <camera name='user_camera'>
+     <camera name='user_camera'>
         <pose>2.67876 1.37769 5.63694 0 0.951639 -1.0518</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
@@ -72,6 +72,12 @@
       <name>Chain1</name>
       <uri>model://Chain</uri>
       <pose>-3.6783 0.297697 0.736222 1.5708 -0 1.5708</pose>   
+    </include>
+
+    <include>
+      <name>Chain2</name>
+      <uri>model://Chain</uri>
+      <pose>2.82 -0.5 0.736222 1.5708 0 0.525</pose>   
     </include>
    
     <include>

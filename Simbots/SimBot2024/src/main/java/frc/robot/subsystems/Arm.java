@@ -33,17 +33,19 @@ public class Arm extends SubsystemBase implements Constants {
 
   public static final double MOVE_RATE = 0.1;
 
+
   boolean m_shoot = false;
   boolean m_intake = false;
   boolean m_push = false;
   static boolean incontact = false;
   boolean started = false;
+  double const_force=-1;
 
   final SimpleMotorFeedforward m_shooterFF = new SimpleMotorFeedforward(0.01, 0.1);
   final PIDController shooter_pid = new PIDController(0.7, 0, 0);
   
-  final SimpleMotorFeedforward m_angleFF = new SimpleMotorFeedforward(0.001, 0.001,0.0001);
-  final PIDController arm_pid = new PIDController(0.4, 0.0, 0.0);
+  final SimpleMotorFeedforward m_angleFF = new SimpleMotorFeedforward(0.01, 0.1,00);
+  final PIDController arm_pid = new PIDController(0.6, 0.2, 0.0);
   
   public SimGyro m_gyro = new SimGyro(1, SimGyro.Mode.ROLL);
 
@@ -201,28 +203,32 @@ public class Arm extends SubsystemBase implements Constants {
   }
   @Override
   public void periodic() {
+    double ffcorr=0;
+    double corr=const_force;
+    double angle=getGyroAngle();
     if (!Drivetrain.simStarted()) {
       System.out.println("Arm - simulation not started");
       arm.set(0.1); // hold arm up until simulation is started
       return;
     }
-    double ffcorr=0;
-    double corr=0;
-   // initialized = true;
-    //angle_pid.setSetpoint(target_angle);
-    if(initialized)
-      ffcorr=m_angleFF.calculate(getAngle(),arm.getRate());
-    else
-      ffcorr=m_angleFF.calculate(getAngle());
-    corr = arm_pid.calculate(getAngle(),target_angle)+ffcorr;
+    if(!Robot.initialized || !Robot.disabled){
+    // if(Robot.initialized && Robot.disabled){
+    // }
+    // else{
+      if(initialized)
+        ffcorr=m_angleFF.calculate(angle,arm.getRate());
+      else
+        ffcorr=m_angleFF.calculate(angle);
+      corr += arm_pid.calculate(angle,target_angle)+ffcorr;
+    }
     arm.set(corr);
-    
+
     if (!at_starting_position) {
       if (atTargetAngle()) {
         at_starting_position = true;
         if (!initialized) {
           arm.reset();
-          armEncoderOffset = getGyroAngle();
+          armEncoderOffset = angle;
           initialized = true;
           System.out.println("Initial arm angle=" + armEncoderOffset);
           arm.enable();
@@ -230,6 +236,8 @@ public class Arm extends SubsystemBase implements Constants {
         Robot.status = "Arm Ready";
       }
     }
+    String s=String.format("A:%-3.1f T:%-3.1f C:%-3.2f E:%-3.1f",angle,target_angle,corr,getArmEncoderAngle());
+    SmartDashboard.putString("Arm",s);
     if (m_shoot){
       ffcorr = m_shooterFF.calculate(TARGET_SHOOTER_SPEED);
       corr=shooter_pid.calculate(shooter.getRate(),TARGET_SHOOTER_SPEED);
@@ -237,6 +245,8 @@ public class Arm extends SubsystemBase implements Constants {
     }
     else
       shooter.set(-0.1);
+
+   
     if (m_intake)
       pickup.set(PICKUP_POWER);
     else if (m_push)

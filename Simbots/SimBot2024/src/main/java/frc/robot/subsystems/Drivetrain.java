@@ -38,8 +38,8 @@ public class Drivetrain extends SubsystemBase implements Constants {
 
 	public static final double kRobotLength = Units.inchesToMeters(31); // Waffle side length
  
-	public static final double kMaxVelocity = 1.5; // meters per second
-	public static final double kMaxAcceleration = 2.1; // meters/second/second
+	public static final double kMaxVelocity = 2; // meters per second
+	public static final double kMaxAcceleration = 1; // meters/second/second
 	public static final double kMaxAngularVelocity = Math.toRadians(360); // degrees per second
 	public static final double kMaxAngularAcceleration = Math.toRadians(720);// degrees per second per second
 
@@ -76,7 +76,6 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	Pose2d field_pose;
 	Pose2d m_pose;
 
-	boolean robot_disabled=true;
 	boolean m_showtags=false;
 	static boolean simstarted=false;
 
@@ -127,10 +126,6 @@ public class Drivetrain extends SubsystemBase implements Constants {
     );
 	}
 
-	public void setRobotDisabled(boolean f){
-		System.out.println("Setting Robot Disabled "+f);
-		robot_disabled=f;
-	}
 	public double getTime() {
 		//return simulation.getSimTime();
 		return simulation.getSimTime();
@@ -452,7 +447,7 @@ public class Drivetrain extends SubsystemBase implements Constants {
 			System.out.println("Simulate started");
 			simstarted=true;
 		}
-		if(robot_disabled){
+		if(Robot.disabled){
 			drive(0.001,0.0,0,false); // stay in place
 		}
 		updateOdometry();
