@@ -4,18 +4,18 @@ import frc.robot.Constants;
 //import frc.robot.PathData;
 import frc.robot.PhysicalConstants;
 import frc.robot.Robot;
+import frc.robot.jaci.pathfinder.Pathfinder;
+import frc.robot.jaci.pathfinder.Trajectory;
+import frc.robot.jaci.pathfinder.Waypoint;
+import frc.robot.jaci.pathfinder.Trajectory.Segment;
+import frc.robot.jaci.pathfinder.followers.DistanceFollower;
+import frc.robot.jaci.pathfinder.modifiers.TankModifier;
 import objects.PlotServer;
 
 import java.util.ArrayList;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import jaci.pathfinder.Pathfinder;
-import jaci.pathfinder.Trajectory;
-import jaci.pathfinder.Trajectory.Segment;
-import jaci.pathfinder.Waypoint;
-import jaci.pathfinder.followers.DistanceFollower;
-import jaci.pathfinder.modifiers.TankModifier;
 import utils.PathData;
 import utils.PlotUtils;
 import edu.wpi.first.math.geometry.Pose2d;

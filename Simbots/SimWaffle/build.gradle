@@ -12,8 +12,7 @@ sourceSets {
     main {
         java{
             srcDirs '../../gzsim/java'
-            srcDirs '../../vision'        
-        }
+         }
     }
 }
 

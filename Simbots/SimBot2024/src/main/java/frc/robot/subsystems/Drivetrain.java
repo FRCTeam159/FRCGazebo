@@ -38,8 +38,8 @@ public class Drivetrain extends SubsystemBase implements Constants {
 
 	public static final double kRobotLength = Units.inchesToMeters(31); // Waffle side length
  
-	public static final double kMaxVelocity = 2; // meters per second
-	public static final double kMaxAcceleration = 1; // meters/second/second
+	public static final double kMaxVelocity = 1.0; // meters per second
+	public static final double kMaxAcceleration = 0.5; // meters/second/second
 	public static final double kMaxAngularVelocity = Math.toRadians(360); // degrees per second
 	public static final double kMaxAngularAcceleration = Math.toRadians(720);// degrees per second per second
 
@@ -71,7 +71,7 @@ public class Drivetrain extends SubsystemBase implements Constants {
 	public SimGyro m_gyro = new SimGyro(0);
 
 	boolean field_oriented = false;
-	boolean alligning=false;
+	boolean aligning=false;
 	double last_heading = 0;
 	Pose2d field_pose;
 	Pose2d m_pose;

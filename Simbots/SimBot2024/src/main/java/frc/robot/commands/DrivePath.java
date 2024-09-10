@@ -42,7 +42,7 @@ import utils.PlotUtils;
 // =================================================
 public class DrivePath extends Command {
 
-  public static double scale = 0.5;
+  public static double scale = 1.5;
 
   ArrayList<PathData> pathdata = new ArrayList<PathData>();
 

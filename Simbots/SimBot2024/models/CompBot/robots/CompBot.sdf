@@ -1260,7 +1260,7 @@
     <plugin name="Arm_motor" filename="sim_motor.dll">
         <joint>Body-Arm</joint>
         <topic>~/gazebo/frc/simulator/motor/9</topic>
-        <multiplier>50</multiplier>
+        <multiplier>25</multiplier>
     </plugin>
     <plugin name="Arm_encoder" filename="sim_encoder.dll">
         <joint>Body-Arm</joint>
