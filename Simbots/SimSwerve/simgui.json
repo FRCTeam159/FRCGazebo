@@ -14,9 +14,6 @@
       "/SmartDashboard/SendableChooser[2]": "String Chooser"
     }
   },
-  "NetworkTables Info": {
-    "visible": true
-  },
   "NetworkTables View": {
     "visible": false
   }

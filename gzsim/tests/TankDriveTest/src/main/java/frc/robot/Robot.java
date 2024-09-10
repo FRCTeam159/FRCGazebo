@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import subsystems.Simulation;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -20,6 +22,9 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+  public static Simulation simulation= new Simulation();
+  //public static XboxController controller = new XboxController(0);
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -31,9 +36,13 @@ public class Robot extends TimedRobot {
     //SmartDashboard.putData(CommandScheduler.getInstance());
     m_robotContainer = new RobotContainer();
     m_robotContainer.robotInit();
-   
+    simulation.init();
+    simulation.run();
   }
 
+  public static double getTime(){
+		return simulation.getSimTime();
+	}
   /**
    * This function is called every robot packet, no matter the mode. Use this for items like
    * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
@@ -55,6 +64,7 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     CommandScheduler.getInstance().cancelAll();
     m_robotContainer.disabledInit();
+    simulation.end();
   }
   
   @Override
@@ -68,6 +78,9 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+    m_robotContainer.autonomousInit();
+    simulation.reset();
+		simulation.start();
   }
 
   /** This function is called periodically during autonomous. */
@@ -84,6 +97,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     m_robotContainer.teleopInit();
+    simulation.end();
   }
 
   /** This function is called periodically during operator control. */
@@ -94,6 +108,7 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    
   }
 
   /** This function is called periodically during test mode. */

@@ -20,13 +20,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import gazebo.SimEncMotor;
 import gazebo.SimGyro;
-import subsystems.Simulation;
+//import subsystems.Simulation;
 
 public class Drivetrain extends SubsystemBase {
 	private SimEncMotor leftMotor;
 	private SimEncMotor rightMotor;
 
-	private Simulation simulation;
+	//private Simulation simulation;
 	
 	public SimGyro gyro = new SimGyro(0);
 
@@ -59,18 +59,10 @@ public class Drivetrain extends SubsystemBase {
 
 	private Pose2d field_pose;
 	
-	// For Gazebo simulation use "Calibrate" auto routine to determine where 
-	// model velocity stops increasing with input power
-	// 1) set scale to 1 and in Calibrate set max power to ~5 step size to 1 etc.
-	// 2) run calibrate (record max power at max velocity)
-	// 3) set scale to max_velocity (full power range should now be -1 to 1)
-	// 4) re-run Calibrate to verify (set max power to 1 step to 0.1 etc.)
-	// note: may need to reduce PID and feed-forward values above as well to avoid jitters
 	private double scale=2.5; // 
 
 	/** Creates a new Subsystem. */
 	public Drivetrain() {
-		simulation = new Simulation();
 
 		leftMotor = new SimEncMotor(FRONT_LEFT);
 		rightMotor = new SimEncMotor(FRONT_RIGHT);
@@ -84,7 +76,6 @@ public class Drivetrain extends SubsystemBase {
 	
 		odometry = new DifferentialDriveOdometry(getRotation2d(),0,0);
 
-		
 		SmartDashboard.putBoolean("Enable gyro", enable_gyro);
 		SmartDashboard.putBoolean("Arcade mode", arcade_mode);
 	}
@@ -98,18 +89,16 @@ public class Drivetrain extends SubsystemBase {
 	private static double coerce(double min, double max, double value) {
 		return Math.max(min, Math.min(value, max));
 	}
-	public double getTime(){
-		return simulation.getSimTime();
-	}
+	
 	public void startAuto(){
-		simulation.reset();
-		simulation.start();
+		//simulation.reset();
+		//simulation.start();
 		enable();
 	}
 	public void init(){
 		System.out.println("Drivetrain.init");
 		field_pose=getPose();
-		simulation.init();
+		//simulation.init();
 		enable();
 	}
 	public void disable(){
@@ -117,10 +106,10 @@ public class Drivetrain extends SubsystemBase {
 		leftMotor.disable();
 		rightMotor.disable();
 		gyro.disable();
-		simulation.end();
+		//simulation.end();
 	}
 	public void enable(){
-		simulation.run();
+		//simulation.run();
 		System.out.println("Drivetrain.enable");
 		leftMotor.enable();
 		rightMotor.enable();

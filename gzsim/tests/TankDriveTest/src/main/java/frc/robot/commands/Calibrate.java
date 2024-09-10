@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 import utils.PathData;
 import utils.PlotUtils;
+import frc.robot.Robot;
 
 public class Calibrate extends CommandBase {
   Timer m_timer;
@@ -46,7 +47,6 @@ public class Calibrate extends CommandBase {
     SmartDashboard.putNumber("Max Power", max_power);
     SmartDashboard.putNumber("Max Speed", max_vel); 
     m_drive = drive;
-    //m_simulation=m_drive.simulation;
     addRequirements(drive);
     m_timer = new Timer();
     m_timer.start();
@@ -74,7 +74,7 @@ public class Calibrate extends CommandBase {
 
   // Called repeatedly when this Command is scheduled to run
   public void execute() {
-    elapsed = m_drive.getTime();
+    elapsed = Robot.getTime();
     if (elapsed > next_step) {
       if (max_vel > 0.1 && (max_vel - last_max_vel) / (max_vel) > 0.05)
         max_power = set_value;

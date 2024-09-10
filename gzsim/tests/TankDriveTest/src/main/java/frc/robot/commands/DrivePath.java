@@ -26,6 +26,7 @@ import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Drivetrain;
 import utils.PathData;
 import utils.PlotUtils;
+import frc.robot.Robot;
 
 // =================================================
 // DrivePath: class constructor (called from RobotContainer)
@@ -103,8 +104,7 @@ public class DrivePath extends CommandBase {
   // =================================================
   @Override
   public void execute() {
-    //elapsed = m_timer.get();
-    elapsed = m_drive.getTime();
+    elapsed = Robot.getTime();
     if (elapsed < 0.02)
       return;
 
