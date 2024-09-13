@@ -83,7 +83,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.01</angular>
+        <angular>0.02</angular>
       </velocity_decay>
       <inertial>
         <mass>1</mass>
@@ -111,7 +111,7 @@
       <axis>
         <xyz>0 1 0</xyz>
         <dynamics>
-          <damping>1</damping>
+          <damping>10</damping>
           <friction>1</friction>
         </dynamics>
       </axis>
@@ -189,7 +189,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.01</angular>
+        <angular>0.02</angular>
       </velocity_decay>
       <inertial>
         <mass>1</mass>
@@ -216,7 +216,7 @@
       <axis>
         <xyz>0 1 0</xyz>
         <dynamics>
-          <damping>1</damping>
+          <damping>10</damping>
           <friction>1</friction>
         </dynamics>    
       </axis>
@@ -294,7 +294,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.01</angular>
+        <angular>0.02</angular>
       </velocity_decay>
       <inertial>
         <mass>1</mass>
@@ -321,7 +321,7 @@
       <axis>
         <xyz>0 1 0</xyz>
         <dynamics>
-          <damping>1</damping>
+          <damping>10</damping>
           <friction>1</friction>
         </dynamics>      
       </axis>
@@ -399,7 +399,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.01</angular>
+        <angular>0.02</angular>
       </velocity_decay>
       <inertial>
         <mass>1</mass>
@@ -426,7 +426,7 @@
       <axis>
         <xyz>0 1 0</xyz>
         <dynamics>
-          <damping>1</damping>
+          <damping>10</damping>
           <friction>1</friction>
         </dynamics>      
       </axis>

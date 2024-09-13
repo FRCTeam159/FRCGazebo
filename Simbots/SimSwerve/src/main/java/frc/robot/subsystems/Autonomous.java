@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.Calibrate;
-import frc.robot.commands.DriveBack;
 import frc.robot.commands.DrivePath;
 import utils.PlotUtils;
 
@@ -21,9 +20,7 @@ public class Autonomous extends SequentialCommandGroup  {
 
   public static final int CALIBRATE = 0;
   public static final int PROGRAM = 1;
-  public static final int PATHPLANNER = 3;
-  public static final int AUTOTEST = 4;
-
+ 
   boolean reversed=false;
  
   public int selected_path=PROGRAM;
@@ -41,8 +38,7 @@ public class Autonomous extends SequentialCommandGroup  {
     m_auto_plot_option.addOption("Plot Position", PlotUtils.PLOT_POSITION);
 
     m_path_chooser.setDefaultOption("Program", PROGRAM);
- 	  m_path_chooser.addOption("AutoTest", AUTOTEST);
-    m_path_chooser.addOption("Calibrate", CALIBRATE);
+ 	  m_path_chooser.addOption("Calibrate", CALIBRATE);
 
     SmartDashboard.putNumber("xPath", -1.5);
     SmartDashboard.putNumber("yPath", -2);
@@ -54,24 +50,13 @@ public class Autonomous extends SequentialCommandGroup  {
   public SequentialCommandGroup  getCommand(){
     PlotUtils.auto_plot_option=m_auto_plot_option.getSelected();
     selected_path=m_path_chooser.getSelected();
-    
-    //clearGroupedCommands();
-      
+        
     switch (selected_path){
     case CALIBRATE:
       return new SequentialCommandGroup(new Calibrate(m_drive));
+    default:
     case PROGRAM:
       return new SequentialCommandGroup(new DrivePath(m_drive,PROGRAM));
-    case PATHPLANNER:
-      return new SequentialCommandGroup(new DrivePath(m_drive,PATHPLANNER));
-   case AUTOTEST:
-     //return new SequentialCommandGroup(new TurnToAngle(m_drive,45.0));
-      return new SequentialCommandGroup(
-        new DriveBack(m_drive,1.0)
-       // new TurnToAngle(m_drive,90.0)
-       //, new DrivePath(m_drive,PROGRAM,reversed)
-        );
     }
-    return null;
   }
 }

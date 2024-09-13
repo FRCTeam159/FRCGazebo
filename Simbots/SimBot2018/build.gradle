@@ -85,8 +85,11 @@ dependencies {
     // no sourceSet needed if using jar but indexer can't find classes
     //implementation files("file://$System.env.GAZEBO_SIM/bin/gzsim.jar")
 
-    //implementation files('Pathfinder-Java-2019.2.19.jar')
-    //implementation files('Pathfinder-Java-2019.2.19-sources.jar')
+    implementation files('Pathfinder-Java-2019.2.19.jar')
+    implementation files('Pathfinder-Java-2019.2.19-sources.jar')
+    implementation files('Pathfinder-JNI-2019.2.19-windowsx86-64.jar')
+    implementation files('Pathfinder-CoreJNI-2019.2.19-windowsx86-64.jar')
+    implementation files('JNILoader-1.0.0-sources.jar')
 
     testImplementation 'junit:junit:4.12'
 }

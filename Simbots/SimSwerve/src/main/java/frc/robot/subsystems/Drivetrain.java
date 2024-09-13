@@ -4,20 +4,18 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.objects.SwerveModule;
 import gazebo.SimGyro;
 import subsystems.Simulation;
 
@@ -26,7 +24,9 @@ public class Drivetrain extends SubsystemBase {
 	// square frame geometry
 
 	static public boolean debug=true;
-	static public boolean debug_angles=false;
+	static public boolean debug_angles=true;
+	static boolean m_resetting = false;
+
 
 	public static double front_wheel_base = 23.22; // distance beteen front wheels
 	public static double side_wheel_base = 23.22; // distance beteen side wheels
@@ -52,14 +52,14 @@ public class Drivetrain extends SubsystemBase {
 		new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition()
 	};
 
-	//Translation2d cameraToRobotOffset=new Translation2d(Units.inchesToMeters(12.0),0);
-    //Transform2d cameraToRobot=new Transform2d(cameraToRobotOffset,new Rotation2d());
 	private Simulation simulation;
 
 	public SimGyro m_gyro = new SimGyro(0);
 
 	private SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
 			m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
+
+	SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(m_kinematics,new Rotation2d(), m_positions,new Pose2d());
 
 	public static final double kTrackWidth = Units.inchesToMeters(2 * front_wheel_base); // bug? need to double actual value for geometry to work
 
@@ -68,60 +68,24 @@ public class Drivetrain extends SubsystemBase {
 	public static double kMaxAngularSpeed = Math.toRadians(360); // degrees per second
 	public static double kMaxAngularAcceleration = Math.toRadians(90);// degrees per second per second
 
-	boolean enable_gyro = true;
+	boolean m_field_oriented = false;
 	double last_heading = 0;
 	Pose2d field_pose;
+	Pose2d m_pose;
 
 	boolean robot_disabled=true;
-
-	double x_std=0.1;
-	double y_std=0.1;
-	double h_std=5.0;
-
-	double latency=0.05;
-	double vision_confidence=0.00;
-	double pose_error=0;
-	boolean use_tags=false;
-
 	boolean m_disabled = true;
-	SwerveDrivePoseEstimator m_poseEstimator;
-
-	private final Timer m_timer = new Timer();
-
+	
 	private int cnt=0;
 
     /** Creates a new Subsystem. */
 	public Drivetrain() {
-		m_timer.start();
-		makeEstimator();
-
 		simulation = new Simulation();
-		SmartDashboard.putBoolean("Field Oriented", enable_gyro);
+		SmartDashboard.putBoolean("Field Oriented", m_field_oriented);
 		SmartDashboard.putNumber("maxV", kMaxVelocity);
 		SmartDashboard.putNumber("maxA", kMaxAcceleration);
-		SmartDashboard.putBoolean("Use Tags", use_tags);
-		SmartDashboard.putNumber("Latency", latency);
-		SmartDashboard.putNumber("Conf", vision_confidence);
-		SmartDashboard.putNumber("Error", pose_error);
 	}
 
-	void makeEstimator(){
-		double vmult=1.0/vision_confidence;
-		SwerveModulePosition[] positions={
-			new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition()
-		};
-		m_poseEstimator=new SwerveDrivePoseEstimator (
-          m_kinematics,
-          new Rotation2d(),
-          positions,
-          new Pose2d(),
-          VecBuilder.fill(x_std, y_std, Units.degreesToRadians(h_std)), // encoder accuracy
-          VecBuilder.fill(vmult*x_std, vmult*y_std, Units.degreesToRadians(vmult*h_std))); // encoder accuracy
-	}
-
-	public void setRobotDisabled(boolean f){
-		robot_disabled=f;
-	}
 	public double getTime() {
 		return simulation.getSimTime();
 	}
@@ -129,7 +93,6 @@ public class Drivetrain extends SubsystemBase {
 	public double getClockTime() {
 		//return simulation.getClockTime();
 		return Timer.getFPGATimestamp();
-		//return m_timer.get();
 	}
 	public void startAuto() {
 		simulation.reset();
@@ -139,14 +102,11 @@ public class Drivetrain extends SubsystemBase {
 
 	public void endAuto() {
 		if(debug)
-		System.out.println("Drivetrain.endAuto");
-		setRobotDisabled(true);
-		//simulation.end();
-		//disable();
+			System.out.println("Drivetrain.endAuto");
 	}
 	public void init() {
 		if(debug)
-		System.out.println("Drivetrain.init");
+			System.out.println("Drivetrain.init");
 		field_pose = getPose();
 		simulation.init();
 		enable();
@@ -193,7 +153,6 @@ public class Drivetrain extends SubsystemBase {
 
 		m_gyro.reset();
 		last_heading = 0;
-		//makeEstimator();
 	}
 
 	public void resetPose() {
@@ -202,9 +161,6 @@ public class Drivetrain extends SubsystemBase {
 		field_pose = getPose();
 	}
 
-	public boolean useTags(){
-		return use_tags;
-	}
 	// get transform from pose
 	public static Transform2d getTransform(Pose2d pose) {
 		return new Transform2d(pose.getTranslation(), pose.getRotation());
@@ -217,11 +173,11 @@ public class Drivetrain extends SubsystemBase {
 	}
 
 	public void setFieldOriented(boolean t){
-		m_gyro.setEnabled(t);
+		m_field_oriented=t;
 	}
 
-	public boolean isGyroEnabled(){
-		return enable_gyro;
+	public boolean isFieldOriented(){
+		return m_field_oriented;
 	}
 	public double getHeading() {
 		return getRotation2d().getDegrees();
@@ -241,9 +197,6 @@ public class Drivetrain extends SubsystemBase {
 		return Rotation2d.fromDegrees(angle);
 	}
 
-	public double getAngle() {
-		return m_frontLeft.getAngle();
-	}
 	public double getLeftDistance() {
 		return 0.5*(m_frontLeft.getDistance()+m_backLeft.getDistance());
 	}
@@ -278,32 +231,37 @@ public class Drivetrain extends SubsystemBase {
 		SmartDashboard.putNumber("X:", t.getX());
 		SmartDashboard.putNumber("Y:", t.getY());
 
-		enable_gyro = SmartDashboard.getBoolean("Field Oriented", enable_gyro);
+		m_field_oriented = SmartDashboard.getBoolean("Field Oriented", m_field_oriented);
 		kMaxVelocity=SmartDashboard.getNumber("maxV", kMaxVelocity);
 		kMaxAcceleration=SmartDashboard.getNumber("maxA", kMaxAcceleration);
-
-		
+	
 		if(debug_angles)
 			displayAngles();	
 	}
 
 	@Override
 	public void periodic() {
-		//updateOdometry();
 	}
 
 	@Override
 	public void simulationPeriodic() {
-		if(robot_disabled)
-			drive(0.0,0.0,0,true); // stay in place
+		boolean b = SmartDashboard.getBoolean("Reset", false);
+		if (b && !m_resetting) { // start reset
+			m_resetting = true;
+		}
+		else if (!b && m_resetting) { // end reset
+			m_resetting = false;
+			reset();
+			resetPose();
+		}
 		updateOdometry();
 		log();
 	}
 
 	void displayAngles(){
 		if((cnt%100)==0){
-			String str=String.format("angles fl:%-1.2f fr:%-1.2f bl:%-1.2f br:%-1.2f\n",
-			m_frontLeft.getAngle(),m_frontRight.getAngle(),m_backLeft.getAngle(),m_backRight.getAngle());
+			String str=String.format("angles fl:%-1.1f fr:%-1.1f bl:%-1.1f br:%-1.1f\n",
+			m_frontLeft.getDegrees(),m_frontRight.getDegrees(),m_backLeft.getDegrees(),m_backRight.getDegrees());
 			SmartDashboard.putString("Wheels ", str);
 		}
 		cnt++;
@@ -370,8 +328,8 @@ public class Drivetrain extends SubsystemBase {
 	/** Updates the field relative position of the robot. */
 	public void updateOdometry() {
 		updatePositions();
-		m_poseEstimator.updateWithTime(getClockTime(),m_gyro.getRotation2d(), m_positions);
-		field_pose = getPose();
+		m_pose=m_odometry.update(getRotation2d(), m_positions);
+		field_pose = getPose();		
 		log();
 	}
 
@@ -388,20 +346,18 @@ public class Drivetrain extends SubsystemBase {
 		m_positions[3]=new SwerveModulePosition();
 	}
 	public void resetOdometry(Pose2d pose) {
-		//reset();
 		last_heading = 0;
 		m_gyro.reset();
 		resetPositions();
 		m_kinematics = new SwerveDriveKinematics(
 			m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
-		m_poseEstimator.resetPosition(gyroRotation2d(), m_positions,pose);
-
+		m_odometry.resetPosition(getRotation2d(), m_positions,pose);
 		System.out.println("reset odometry:"+getPose());
 		updateOdometry();
 	}
 
 	public Pose2d getPose() {
-		return m_poseEstimator.getEstimatedPosition();
+		return m_pose;
 	}
 
 	public Pose2d getFieldPose() {

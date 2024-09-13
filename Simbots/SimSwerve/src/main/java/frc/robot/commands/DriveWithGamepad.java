@@ -71,7 +71,7 @@ public class DriveWithGamepad extends Command {
     //m_drive.testDrive(xSpeed, rot);
     //m_drive.turnInPlace(xSpeed);
     //System.out.println("x:"+xSpeed+" y:"+ySpeed+" rot:"+rot);
-    m_drive.drive(xSpeed, ySpeed,rot,m_drive.isGyroEnabled());
+    m_drive.drive(xSpeed, ySpeed,rot,m_drive.isFieldOriented());
     //m_drive.drive(xSpeed, 0,0,true);
 
   }

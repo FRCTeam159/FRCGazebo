@@ -1,30 +1,57 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="Wheels " type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="13" y="276"/>
+		<width>252</width>
+	</widget>
+	<widget field="Velocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="142" y="95"/>
+		<width>95</width>
+	</widget>
+	<widget field="Distance" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="18" y="95"/>
+		<width>104</width>
+	</widget>
+	<widget field="maxA" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="374" y="63"/>
+		<width>87</width>
+	</widget>
+	<widget field="maxV" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="374" y="88"/>
+		<width>89</width>
+	</widget>
+	<widget field="AutoTime" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="127" y="43"/>
+		<width>107</width>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
+		<location x="284" y="117"/>
+		<width>261</width>
+		<height>200</height>
+		<property name="Camera Choice" value=""/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.MjpgStreamViewerImpl">
+		<location x="8" y="116"/>
+		<width>262</width>
+		<height>201</height>
+		<property name="MJPG Server URL" value="http://localhost:9000/?action=stream"/>
+	</static-widget>
 	<widget field="Field Oriented" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
 		<location x="172" y="13"/>
 	</widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
-		<location x="2" y="128"/>
-		<width>584</width>
-		<height>432</height>
-		<property name="Camera Choice" value=""/>
-	</static-widget>
 	<widget field="reversed" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
 		<location x="497" y="91"/>
 	</widget>
-	<widget field="Use Tags" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="141" y="40"/>
-	</widget>
 	<widget field="H:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="175" y="73"/>
+		<location x="176" y="69"/>
 		<width>57</width>
 	</widget>
 	<widget field="X:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="18" y="73"/>
+		<location x="20" y="69"/>
 		<width>70</width>
 	</widget>
 	<widget field="Y:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="95" y="73"/>
+		<location x="96" y="69"/>
 		<width>70</width>
 	</widget>
 	<widget field="Gazebo" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
@@ -39,7 +66,7 @@
 		<height>23</height>
 	</static-widget>
 	<widget field="SendableChooser[1]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
-		<location x="276" y="2"/>
+		<location x="271" y="-1"/>
 	</widget>
 	<widget field="SendableChooser[2]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
 		<location x="371" y="1"/>
@@ -67,27 +94,15 @@
 		<height>23</height>
 	</static-widget>
 		<property name="Team Number/Host" value="localhost"/>
-		<property name="Automatically Show Widgets" value="false"/>
+		<property name="Hide Menu" value="true"/>
 		<property name="Grid Cell Width(s)" value="16"/>
 		<property name="Grid Cell Height(s)" value="16"/>
 		<property name="Window X Position" value="1135"/>
 		<property name="Window Y Position" value="69"/>
-		<property name="Window Width" value="600"/>
-		<property name="Window Height" value="634"/>
+		<property name="Window Width" value="598"/>
+		<property name="Window Height" value="375"/>
 		<property name="Save File" value=".\dashboard.xml"/>
 </dashboard>
 <live-window>
 </live-window>
-	<hidden field="maxV"/>
-	<hidden field="Conf"/>
-	<hidden field="Error"/>
-	<hidden field="holographic"/>
-	<hidden field="Detect"/>
-	<hidden field="Velocity"/>
-	<hidden field="maxA"/>
-	<hidden field="Latency"/>
-	<hidden field="Field"/>
-	<hidden field="Tag"/>
-	<hidden field="SimTime"/>
-	<hidden field="Distance"/>
 </xml>

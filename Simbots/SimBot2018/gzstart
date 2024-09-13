@@ -1,0 +1,21 @@
+#!/bin/bash
+export CENTER=0
+export LEFT=1
+export RIGHT=2
+
+export POSITION=$RIGHT
+
+if [ "$#" -eq 1 ]; then
+    export POSITION="$1"
+fi
+
+echo position=$POSITION
+mkdir -p tmp
+cp pathfinder/*.dll build/jni/release
+start_gazebo --verbose &
+sleep 1
+GzProgram.exe &
+sleep 1
+simulate &
+start_dashboard &
+

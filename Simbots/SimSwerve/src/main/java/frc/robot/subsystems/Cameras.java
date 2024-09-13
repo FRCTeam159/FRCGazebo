@@ -3,31 +3,37 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
+
 import org.opencv.core.Mat;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSource;
+import objects.Camera;
 
 public class Cameras extends Thread {
-  static CvSource ouputStream;
+  CvSource ouputStream;
   public static int kCamWidth = 320;
   public static int kCamHeight = 240;
-  private final GazeboCamera m_gzcamera = new GazeboCamera(kCamWidth, kCamHeight);
+
+  Camera cam; // simulatiom camera
 
   /** Creates a new Camera. */
   public Cameras() {
-    ouputStream = CameraServer.putVideo("Camera", kCamWidth, kCamHeight);   
   }
 
- public void run() {
+  public void run() {
+    ouputStream = CameraServer.putVideo("Camera", kCamWidth, kCamHeight);
+    cam = new Camera(0, kCamWidth, kCamHeight, 80); // specs for Gazebo camera
+    cam.start();
     while (!Thread.interrupted()) {
       try {
-        Thread.sleep(50);     
-        Mat mat= m_gzcamera.getFrame();   
-        if(mat !=null)
+        Thread.sleep(50);
+        Mat mat = cam.getFrame();;
+        if (mat != null) {
           ouputStream.putFrame(mat);
+        }
       } catch (Exception ex) {
-        System.out.println("DualCameras exception:" + ex);
+        System.out.println("Cameras exception:" + ex);
       }
     }
   }

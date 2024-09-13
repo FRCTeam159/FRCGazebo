@@ -5,7 +5,6 @@
 package frc.robot.commands;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -14,13 +13,11 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -34,8 +31,6 @@ import utils.PlotUtils;
 // DrivePath: class constructor (called from RobotContainer)
 // =================================================
 public class DrivePath extends Command {
-
-  static boolean using_pathplanner=false;
 
   /** Creates a new AutoTest. */
   private ArrayList<PathData> pathdata = new ArrayList<PathData>();
@@ -73,7 +68,6 @@ public class DrivePath extends Command {
     trajectory_option=opt;
     m_drive = drive;
     addRequirements(drive);
-    
   }
 
   // =================================================
@@ -90,9 +84,8 @@ public class DrivePath extends Command {
     xPath = SmartDashboard.getNumber("xPath", xPath);
     yPath = SmartDashboard.getNumber("yPath", yPath);
     rPath = SmartDashboard.getNumber("rPath", rPath);
-   
-    using_pathplanner=(trajectory_option == Autonomous.PATHPLANNER);
-    if(!using_pathplanner && xPath<0)
+    
+    if(xPath<0)
       reversed=true;
 
     PlotUtils.initPlot();
@@ -104,7 +97,6 @@ public class DrivePath extends Command {
     }
     
     PlotUtils.setInitialPose(m_trajectory.sample(0).poseMeters, Drivetrain.kTrackWidth);
-    // PlotUtils.setDistanceUnits(PlotUtils.UnitType.FEET);
 
     runtime = m_trajectory.getTotalTimeSeconds();
     states = m_trajectory.getStates().size();

@@ -19,7 +19,8 @@ import frc.robot.subsystems.Drivetrain;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
-public class RobotContainer {
+public class RobotContainer { 
+
   // The robot's subsystems and commands are defined here...
   private final Drivetrain m_drivetrain = new Drivetrain();
   private final Autonomous m_autonomous = new Autonomous(m_drivetrain);
@@ -37,21 +38,19 @@ public class RobotContainer {
     return m_autonomous.getCommand();
   }
   public void teleopInit(){
-    m_drivetrain.setRobotDisabled(false);
-    m_drivetrain.setFieldOriented(m_drivetrain.isGyroEnabled());
+    m_drivetrain.enable();
+    m_drivetrain.setFieldOriented(m_drivetrain.isFieldOriented());
   }
   public void autonomousInit(){
-    m_drivetrain.setRobotDisabled(false);
-    m_drivetrain.setFieldOriented(true);
+    m_drivetrain.enable();
   }
   public void disabledInit(){
-    m_drivetrain.setRobotDisabled(true);
     m_drivetrain.disable();
   }
   public void robotInit(){
-    m_drivetrain.setRobotDisabled(true);
     m_drivetrain.init();
     m_cameras.start();
     m_plotsub.start();
   }
+
 }
