@@ -50,8 +50,12 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return m_autonomous.getCommand();
   }
+
+  public void autonomousInit(){
+    
+    m_drivetrain.startAuto();
+   }
   public void teleopInit(){
-   //m_drivetrain.enable();
   }
   public void disabledInit(){
     m_drivetrain.disable();
@@ -59,4 +63,5 @@ public class RobotContainer {
   public void robotInit(){
     m_drivetrain.init();
   }
+  
 }
