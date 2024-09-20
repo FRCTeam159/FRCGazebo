@@ -1,3 +1,2 @@
 #!/bin/bash
 java -jar ${SMART_DASHBOARD} ip localhost file "./dashboard.xml"
-l

@@ -16,7 +16,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import gazebo.SimGyro;
+import objects.Gyro;
 import subsystems.Simulation;
 
 public class Drivetrain extends SubsystemBase {
@@ -24,9 +24,8 @@ public class Drivetrain extends SubsystemBase {
 	// square frame geometry
 
 	static public boolean debug=true;
-	static public boolean debug_angles=true;
+	static public boolean debug_angles=false;
 	static boolean m_resetting = false;
-
 
 	public static double front_wheel_base = 23.22; // distance beteen front wheels
 	public static double side_wheel_base = 23.22; // distance beteen side wheels
@@ -44,17 +43,18 @@ public class Drivetrain extends SubsystemBase {
 	private final SwerveModule m_backLeft = new SwerveModule(5, 6,3);
 	private final SwerveModule m_backRight = new SwerveModule(7, 8,4); 
 	
-	//final PIDController m_controller=new PIDController(1,0.1,0.0);
-
 	public static String chnlnames[] = { "BR", "BL", "FL", "FR" };
 
 	private final SwerveModulePosition[] m_positions={
 		new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition()
 	};
+	private final SwerveModule[] modules={
+		m_frontLeft,m_frontRight,m_backLeft,m_backRight
+	};
 
-	private Simulation simulation;
+	private Simulation simulation=null;
 
-	public SimGyro m_gyro = new SimGyro(0);
+	public Gyro m_gyro = new Gyro();
 
 	private SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
 			m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
@@ -91,7 +91,6 @@ public class Drivetrain extends SubsystemBase {
 	}
 
 	public double getClockTime() {
-		//return simulation.getClockTime();
 		return Timer.getFPGATimestamp();
 	}
 	public void startAuto() {
@@ -100,6 +99,18 @@ public class Drivetrain extends SubsystemBase {
 		enable();
 	}
 
+	public double getVelocity(){
+		double speed=0;
+		for(int i=0;i<modules.length;i++)
+			speed+=modules[i].getVelocity();
+		return speed/modules.length;
+	}
+	public double getDistance(){
+		double distance=0;
+		for(int i=0;i<modules.length;i++)
+			distance+=modules[i].getDistance();
+		return distance/modules.length;
+	}
 	public void endAuto() {
 		if(debug)
 			System.out.println("Drivetrain.endAuto");
@@ -122,11 +133,9 @@ public class Drivetrain extends SubsystemBase {
 		m_disabled = true;
 		if(debug)
 			System.out.println("Drivetrain.disable");
-		m_frontLeft.disable();
-		m_frontRight.disable();
-		m_backLeft.disable();
-		m_backRight.disable();
-		m_gyro.disable();
+		for (int i = 0; i < modules.length; i++) {
+			modules[i].disable();
+		}
 		simulation.end();
 	}
 
@@ -135,22 +144,19 @@ public class Drivetrain extends SubsystemBase {
 		simulation.run();
 		if(debug)
 			System.out.println("Drivetrain.enable");
-		m_frontLeft.enable();
-		m_frontRight.enable();
-		m_backLeft.enable();
-		m_backRight.enable();
-		m_gyro.enable();
+		for (int i = 0; i < modules.length; i++) {
+			modules[i].enable();
+		}
 	}
 
 	public void reset() {
 		m_disabled = true;
 		if(debug)
 			System.out.println("Drivetrain.reset");
-		m_frontLeft.reset();
-		m_frontRight.reset();
-		m_backLeft.reset();
-		m_backRight.reset();
-
+		for (int i = 0; i < modules.length; i++) {
+			modules[i].reset();
+		}
+	
 		m_gyro.reset();
 		last_heading = 0;
 	}
@@ -184,10 +190,10 @@ public class Drivetrain extends SubsystemBase {
 	}
 
 	public Rotation2d gyroRotation2d() {
-		return m_gyro.getRotation2d();
+		return Rotation2d.fromDegrees(m_gyro.getAngle());
 	}
 	public double gyroHeading() {
-		return m_gyro.getHeading();
+		return m_gyro.getAngle();
 	}
 
 	public Rotation2d getRotation2d() {
@@ -197,40 +203,12 @@ public class Drivetrain extends SubsystemBase {
 		return Rotation2d.fromDegrees(angle);
 	}
 
-	public double getLeftDistance() {
-		return 0.5*(m_frontLeft.getDistance()+m_backLeft.getDistance());
-	}
-
-	public double getRightDistance() {
-		return 0.5*(m_frontRight.getDistance()+m_backRight.getDistance());
-	}
-
-	public double getLeftVelocity() {
-		return 0.5*(m_frontLeft.getMoveRate()+m_backLeft.getMoveRate());
-	}
-
-	public double getRightVelocity() {
-		return 0.5*(m_frontRight.getMoveRate()+m_backRight.getMoveRate());
-	}
-
-	public double getVelocity() {
-		return 0.5 * (getLeftVelocity() + getRightVelocity());
-	}
-
-	public double getDistance() {
-		return 0.5 * (getLeftDistance() + getRightDistance());
-	}
-
 	public void log() {
-
-		SmartDashboard.putNumber("Distance", getDistance());
-		SmartDashboard.putNumber("Velocity", getVelocity());
-		Translation2d t=  getPose().getTranslation();
-		
-		SmartDashboard.putNumber("H:", getHeading());
-		SmartDashboard.putNumber("X:", t.getX());
-		SmartDashboard.putNumber("Y:", t.getY());
-
+		Pose2d pose = getPose();
+		String s = String.format(" X:%-5.2f Y:%-5.2f H:%-4.1f D:%-3.1f V:%-3.1f",
+        pose.getX(), pose.getY(), pose.getRotation().getDegrees(),getDistance(),getVelocity());
+    	SmartDashboard.putString("Pose", s);
+	
 		m_field_oriented = SmartDashboard.getBoolean("Field Oriented", m_field_oriented);
 		kMaxVelocity=SmartDashboard.getNumber("maxV", kMaxVelocity);
 		kMaxAcceleration=SmartDashboard.getNumber("maxA", kMaxAcceleration);
@@ -241,10 +219,6 @@ public class Drivetrain extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-	}
-
-	@Override
-	public void simulationPeriodic() {
 		boolean b = SmartDashboard.getBoolean("Reset", false);
 		if (b && !m_resetting) { // start reset
 			m_resetting = true;
@@ -268,17 +242,13 @@ public class Drivetrain extends SubsystemBase {
 	}
 	
 	public void turn(double value) {
-		m_frontLeft.turn(value);
-		m_frontRight.turn(value);
-		m_backLeft.turn(value);
-		m_backRight.turn(value);
+		for (int i = 0; i < modules.length; i++)
+			modules[i].turn(value);
 	}
 
 	public void move(double value) {
-		m_frontLeft.move(value);
-		m_frontRight.move(value);
-		m_backLeft.move(value);
-		m_backRight.move(value);
+		for (int i = 0; i < modules.length; i++)
+			modules[i].move(value);
 	}
 
 	public void testDrive(double speed, double rot) {
@@ -295,29 +265,21 @@ public class Drivetrain extends SubsystemBase {
 	}
 
 	public void driveForward(double value) {
-		m_frontLeft.setAngle(0, value);
-		m_frontRight.setAngle(0, value);
-		m_backLeft.setAngle(0, value);
-		m_backRight.setAngle(0, value);
+		for (int i = 0; i < modules.length; i++) 
+			modules[i].setAngle(0, value);
 		updateOdometry();
 	}
-	public double getXVoltage(){
-		return 0.5*(m_frontLeft.getXVoltage()+m_frontRight.getXVoltage());
-	}
-	public double getYVoltage(){
-		return 0.5*(m_frontLeft.getYVoltage()+m_backLeft.getYVoltage());
-	}
+	
 	@SuppressWarnings("ParameterName")
 	public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
 		var swerveModuleStates = m_kinematics.toSwerveModuleStates(
 				fieldRelative
-						? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
+						? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot,  gyroRotation2d())
 						: new ChassisSpeeds(xSpeed, ySpeed, rot));
 		SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxVelocity);
-		m_frontLeft.setDesiredState(swerveModuleStates[0]);
-		m_frontRight.setDesiredState(swerveModuleStates[1]);
-		m_backLeft.setDesiredState(swerveModuleStates[2]);
-		m_backRight.setDesiredState(swerveModuleStates[3]);
+		for (int i = 0; i < modules.length; i++){
+			modules[i].setDesiredState(swerveModuleStates[i]);
+		}
 		updateOdometry();
 	}
 
@@ -334,16 +296,13 @@ public class Drivetrain extends SubsystemBase {
 	}
 
 	public void updatePositions(){
-		m_positions[0]=m_frontLeft.getPosition();
-		m_positions[1]=m_frontRight.getPosition();
-		m_positions[2]=m_backLeft.getPosition();
-		m_positions[3]=m_backRight.getPosition();
+		for(int i=0;i<m_positions.length;i++)
+			m_positions[i] = modules[i].getPosition();	  
 	}
-	public void resetPositions(){
-		m_positions[0]=new SwerveModulePosition();
-		m_positions[1]=new SwerveModulePosition();
-		m_positions[2]=new SwerveModulePosition();
-		m_positions[3]=new SwerveModulePosition();
+
+	public void resetPositions(){	
+		for(int i=0;i<m_positions.length;i++)
+			m_positions[i] = new SwerveModulePosition();	  
 	}
 	public void resetOdometry(Pose2d pose) {
 		last_heading = 0;
@@ -364,6 +323,29 @@ public class Drivetrain extends SubsystemBase {
 		return field_pose;
 	}
 	
+	// reset wheels turn motor to starting position
+	public void resetWheels(boolean begin) {
+		if (begin) {
+		  m_resetting = true;
+		  System.out.println("Drivetrain-ALIGNING_WHEELS");
+		}
+		for (int i = 0; i < modules.length; i++) {
+		  modules[i].resetWheel();
+		}
+	}
+	
+	// return true if all wheels are reset
+	public boolean wheelsReset() {
+		for (int i = 0; i < modules.length; i++) {
+			if (!modules[i].wheelReset())
+				return false;
+		}
+		if (m_resetting)
+			System.out.println("Drivetrain-WHEELS_ALIGNED");
+		m_resetting = false;
+		return true;
+	}
+
 	// removes heading discontinuity at 180 degrees
 	public static double unwrap(double previous_angle, double new_angle) {
 		double d = new_angle - previous_angle;

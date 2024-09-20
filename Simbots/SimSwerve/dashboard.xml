@@ -1,16 +1,12 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="Pose" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="19" y="83"/>
+		<width>247</width>
+	</widget>
 	<widget field="Wheels " type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="13" y="276"/>
 		<width>252</width>
-	</widget>
-	<widget field="Velocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="142" y="95"/>
-		<width>95</width>
-	</widget>
-	<widget field="Distance" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="18" y="95"/>
-		<width>104</width>
 	</widget>
 	<widget field="maxA" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="374" y="63"/>
@@ -38,21 +34,6 @@
 	</static-widget>
 	<widget field="Field Oriented" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
 		<location x="172" y="13"/>
-	</widget>
-	<widget field="reversed" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="497" y="91"/>
-	</widget>
-	<widget field="H:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="176" y="69"/>
-		<width>57</width>
-	</widget>
-	<widget field="X:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="20" y="69"/>
-		<width>70</width>
-	</widget>
-	<widget field="Y:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="96" y="69"/>
-		<width>70</width>
 	</widget>
 	<widget field="Gazebo" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
 		<location x="106" y="13"/>

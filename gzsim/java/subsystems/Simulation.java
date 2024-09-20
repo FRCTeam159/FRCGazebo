@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import gazebo.SimClock;
 import objects.SimControl;
-import gazebo.SimCamera;
 
 public class Simulation extends SubsystemBase {
   static public boolean debug=true;
@@ -27,8 +26,7 @@ public class Simulation extends SubsystemBase {
   public static boolean disabling = false;
 
   private SimClock m_simclock = new SimClock();
-  private ArrayList<SimCamera> m_cameras;
-
+  
   public Simulation() {
     SmartDashboard.putBoolean("Reset", true);
     SmartDashboard.putBoolean("Gazebo", true);
@@ -37,13 +35,10 @@ public class Simulation extends SubsystemBase {
     //SmartDashboard.putData("Field", m_fieldSim);
     m_timer.start();
     m_simclock.clear();
-    m_cameras = new ArrayList<SimCamera>();
   }
 
   public double getSimTime() {
-    //if(!running)
-    //  return 0;
-    return m_simclock.getTime();
+      return m_simclock.getTime();
   }
 
   public void startAuto(){
@@ -73,50 +68,6 @@ public class Simulation extends SubsystemBase {
     m_simclock.clear();
     m_timer.reset();
     running = false;
-  }
-
-  public void addCamera(SimCamera c) {
-    m_cameras.add(c);
-  }
-
-  public SimCamera getCamera(int n) {
-    for (int i = 0; i < m_cameras.size(); i++) {
-      SimCamera c = m_cameras.get(i);
-      if (c.getChannel() == n && c.isEnabled()) {
-        return c;
-      }
-    }
-    return null;
-  }
-
-  public void startCamera(int i) {
-    SimCamera camera = getCamera(i);
-    if (camera != null && !camera.isRecording())
-      camera.run();
-  }
-
-  public void stopCamera(int i) {
-    SimCamera camera = getCamera(i);
-    if (camera != null && camera.isRecording())
-      camera.stop();
-  }
-
-  public void resetCamera(int i) {
-    SimCamera camera = getCamera(i);
-    if (camera != null)
-      camera.reset();
-  }
-
-  public void enableCamera(int i) {
-    SimCamera camera = getCamera(i);
-    if (camera != null && !camera.isEnabled())
-      camera.enable();
-  }
-
-  public void disableCamera(int i) {
-    SimCamera camera = getCamera(i);
-    if (camera != null && camera.isEnabled())
-      camera.disable();
   }
 
   public void start() {

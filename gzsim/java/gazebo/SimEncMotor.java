@@ -9,6 +9,7 @@ public class SimEncMotor {
     boolean enabled=false;
     double target;
     int id;
+    boolean inverted=false;
     public SimEncMotor(int id){
         motor=new SimMotor(id);
         encoder=new SimEncoder(id);
