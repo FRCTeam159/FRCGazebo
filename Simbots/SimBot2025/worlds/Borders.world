@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.4">
+  <world name="default">
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+    <include>
+      <uri>model://Borders</uri>
+      <pose>-2.3092 -4.25197 0 3.14159 0 3.14159</pose>
+    </include>
+  </world>
+</sdf>

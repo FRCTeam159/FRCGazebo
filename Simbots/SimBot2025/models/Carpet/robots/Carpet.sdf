@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.5">
+  <model name="Carpet">
+    <pose>0 0 0 0 0 0</pose>
+    <link name="Rugs">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0 -0.00231262304582918 3.61551875598679E-05 0 0 0</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>1</mass>
+        <pose>-6.16297582203915E-33 0 -4.74338450462408E-20 0 0 0</pose>
+      </inertial>
+      <!--
+      <collision name="Rugs_collision">
+        <pose>3.6621838711529E-17 0.00231262304561833 -3.61551875577584E-05 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Carpet/meshes/Rugs_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      -->
+      <visual name="Rugs_visual">
+        <pose>3.6621838711529E-17 0.00231262304561833 -3.61551875577584E-05 0 0 0</pose>
+        <material>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Carpet/meshes/Rugs.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Rugs-World" type="fixed">
+      <parent>world</parent>
+      <child>Rugs</child>
+   </joint> 
+  </model>
+</sdf>

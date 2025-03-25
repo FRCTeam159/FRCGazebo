@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.5">
+  <model name="Barge">
+    <pose>0 0 0.00254 0 0 0</pose>
+    <plugin name="clock" filename="libgz_clock.so">
+      <topic>/gazebo/frc/time</topic>
+    </plugin>
+    <link name="BargeFrame">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.00302424393797561 0.00848850232325316 1.32177094537599 1.5707963267949 0 1.5707963267949</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>362.536172651561</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>192.914898804229</ixx>
+          <ixy>1.32908933346222</ixy>
+          <ixz>0.414710113622859</ixz>
+          <iyy>2195.74033358954</iyy>
+          <iyz>0.0424652342160599</iyz>
+          <izz>2383.92138602911</izz>
+        </inertia>
+      </inertial>
+      <collision name="BargeFrame_collision">
+        <pose>-0.00866525893440026 -1.32442778537599 0.000644117607912641 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Barge/meshes/BargeFrame_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="BargeFrame_visual">
+        <pose>-0.00866525893440026 -1.32442778537599 0.000644117607912641 0 0 0</pose>
+        <material>
+          <ambient>0.752941176470588 0.752941176470588 0.752941176470588 1</ambient>
+          <diffuse>0.752941176470588 0.752941176470588 0.752941176470588 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Barge/meshes/BargeFrame.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>

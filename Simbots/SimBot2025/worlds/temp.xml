@@ -1,0 +1,1755 @@
+<?xml version='1.0'?>
+<sdf version='1.7'>
+<world name='default'>
+  <light name='sun' type='directional'>
+    <cast_shadows>1</cast_shadows>
+    <pose>0 0 10 0 -0 0</pose>
+    <diffuse>0.8 0.8 0.8 1</diffuse>
+    <specular>0.2 0.2 0.2 1</specular>
+    <attenuation>
+      <range>1000</range>
+      <constant>0.9</constant>
+      <linear>0.01</linear>
+      <quadratic>0.001</quadratic>
+    </attenuation>
+    <direction>-0.5 0.1 -0.9</direction>
+    <spot>
+      <inner_angle>0</inner_angle>
+      <outer_angle>0</outer_angle>
+      <falloff>0</falloff>
+    </spot>
+  </light>
+  <model name='ground_plane'>
+    <static>1</static>
+    <link name='link'>
+      <collision name='collision'>
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>100 100</size>
+          </plane>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_bitmask>65535</collide_bitmask>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>100</mu>
+              <mu2>50</mu2>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <bounce/>
+        </surface>
+        <max_contacts>10</max_contacts>
+      </collision>
+      <visual name='visual'>
+        <cast_shadows>0</cast_shadows>
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>100 100</size>
+          </plane>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+        </material>
+      </visual>
+      <self_collide>0</self_collide>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+    </link>
+  </model>
+  <model name='Carpet'>
+    <pose>0 0 0 1.57 -0 0</pose>
+    <link name='Rugs'>
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0 -0.002313 3.6e-05 0 -0 0</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>1</mass>
+        <pose>-0 0 -0 0 -0 0</pose>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+      </inertial>
+      <visual name='Rugs_visual'>
+        <pose>0 0.002313 -3.6e-05 0 -0 0</pose>
+        <material>
+          <ambient>0.752941 0.752941 0.752941 1</ambient>
+          <diffuse>0.752941 0.752941 0.752941 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Carpet/meshes/Rugs.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+    </link>
+    <joint name='Rugs-World' type='fixed'>
+      <parent>world</parent>
+      <child>Rugs</child>
+    </joint>
+  </model>
+  <model name='Borders'>
+    <pose>-2.45621 -4.25196 0 3.14159 -0 3.14159</pose>
+    <link name='FieldBorder'>
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-2.65913 4.34446 -0.61414 -1.5708 -0 -3.14159</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>1000</mass>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+      </inertial>
+      <visual name='FieldBorder_visual'>
+        <pose>0.000398 -0.617315 0.002462 0 -0 0</pose>
+        <material>
+          <ambient>0.752941 0.752941 0.752941 1</ambient>
+          <diffuse>0.752941 0.752941 0.752941 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Borders/meshes/FieldBorder.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+    </link>
+    <joint name='Field-World' type='fixed'>
+      <parent>world</parent>
+      <child>FieldBorder</child>
+    </joint>
+  </model>
+  <model name='Barge'>
+    <pose>0 0 0 0 -0 0</pose>
+    <plugin name='clock' filename='libgz_clock.so'>
+      <topic>/gazebo/frc/time</topic>
+    </plugin>
+    <link name='BargeFrame'>
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.003024 0.008489 1.32177 1.5708 -0 1.5708</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>362.536</mass>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertia>
+          <ixx>192.915</ixx>
+          <ixy>1.32909</ixy>
+          <ixz>0.41471</ixz>
+          <iyy>2195.74</iyy>
+          <iyz>0.0424652</iyz>
+          <izz>2383.92</izz>
+        </inertia>
+      </inertial>
+      <collision name='BargeFrame_collision'>
+        <pose>-0.008665 -1.32443 0.000644 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Barge/meshes/BargeFrame_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <bounce/>
+        </surface>
+        <max_contacts>10</max_contacts>
+      </collision>
+      <visual name='BargeFrame_visual'>
+        <pose>-0.008665 -1.32443 0.000644 0 -0 0</pose>
+        <material>
+          <ambient>0.752941 0.752941 0.752941 1</ambient>
+          <diffuse>0.752941 0.752941 0.752941 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Barge/meshes/BargeFrame.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+    </link>
+  </model>
+  <model name='Reef'>
+    <pose>-4.3 0.585 0 1.57 -0 -0.5429</pose>
+    <plugin name='clock' filename='libgz_clock.so'>
+      <topic>/gazebo/frc/time</topic>
+    </plugin>
+    <link name='ReefDF'>
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.335205 0.580652 0.490541 0 -0 0</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>10</mass>
+        <pose>-0 -0 -0 0 -0 0</pose>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+      </inertial>
+      <collision name='ReefDF_collision'>
+        <pose>-0.5596 -0.745766 -0.163832 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Reef/meshes/ReefDF_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <bounce/>
+        </surface>
+        <max_contacts>10</max_contacts>
+      </collision>
+      <visual name='ReefDF_visual'>
+        <pose>-0.5596 -0.745766 -0.163832 0 -0 0</pose>
+        <material>
+          <ambient>0.25 0.25 0.25 1</ambient>
+          <diffuse>0.25 0.25 0.25 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Reef/meshes/ReefDF.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+    </link>
+  </model>
+  <model name='SimBot2025'>
+    <pose>-1.75839 3.51388 0.039847 -0.003963 0.000176 -2.15</pose>
+    <link name='Frame'>
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.031494 -0.003235 0.09444 1.5708 -0 0</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>12.5156</mass>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertia>
+          <ixx>0.55089</ixx>
+          <ixy>0.116629</ixy>
+          <ixz>0.00101124</ixz>
+          <iyy>1.14624</iyy>
+          <iyz>0.00213075</iyz>
+          <izz>0.779511</izz>
+        </inertia>
+      </inertial>
+      <collision name='Frame_collision'>
+        <pose>0.433814 -0.131961 -0.46665 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/Frame_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <bounce/>
+        </surface>
+        <max_contacts>10</max_contacts>
+      </collision>
+      <visual name='Frame_visual'>
+        <pose>0.433814 -0.131961 -0.46665 0 -0 0</pose>
+        <material>
+          <ambient>0.752941 0.752941 0.752941 1</ambient>
+          <diffuse>0.752941 0.752941 0.752941 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/Frame.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+    </link>
+    <link name='FLdrive'>
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.309731 0.30832 0.05234 1.5708 -0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.1</mass>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+      </inertial>
+      <collision name='FLdrive_collision'>
+        <pose>0.155578 -0.089862 -0.155094 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/FLdrive_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <bounce/>
+        </surface>
+        <max_contacts>10</max_contacts>
+      </collision>
+      <visual name='FLdrive_visual'>
+        <pose>0.155578 -0.089862 -0.155094 0 -0 0</pose>
+        <material>
+          <ambient>0.752941 0.752941 0.752941 1</ambient>
+          <diffuse>0.752941 0.752941 0.752941 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/FLdrive.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+    </link>
+    <joint name='Frame-FLdrive' type='revolute'>
+      <parent>Frame</parent>
+      <child>FLdrive</child>
+      <pose>3e-06 0 0.000481 0 -0 0</pose>
+      <axis>
+        <xyz>-0 -1 0</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <limit>
+          <effort>1</effort>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+      </axis>
+    </joint>
+    <link name='FRdrive'>
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.30973 -0.30763 0.05234 1.5708 -0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.1</mass>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+      </inertial>
+      <collision name='FRdrive_collision'>
+        <pose>0.155579 -0.089862 -0.771044 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/FRdrive_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <bounce/>
+        </surface>
+        <max_contacts>10</max_contacts>
+      </collision>
+      <visual name='FRdrive_visual'>
+        <pose>0.155579 -0.089862 -0.771044 0 -0 0</pose>
+        <material>
+          <ambient>0.752941 0.752941 0.752941 1</ambient>
+          <diffuse>0.752941 0.752941 0.752941 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/FRdrive.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+    </link>
+    <joint name='Frame-FRdrive' type='revolute'>
+      <parent>Frame</parent>
+      <child>FRdrive</child>
+      <pose>4e-06 0 0.000481 0 -0 0</pose>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <limit>
+          <effort>1</effort>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+      </axis>
+    </joint>
+    <link name='BLdrive'>
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.306212 0.307359 0.05234 1.5708 -0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.1</mass>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+      </inertial>
+      <collision name='BLdrive_collision'>
+        <pose>0.771521 -0.089862 -0.156056 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/BLdrive_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <bounce/>
+        </surface>
+        <max_contacts>10</max_contacts>
+      </collision>
+      <visual name='BLdrive_visual'>
+        <pose>0.771521 -0.089862 -0.156056 0 -0 0</pose>
+        <material>
+          <ambient>0.752941 0.752941 0.752941 1</ambient>
+          <diffuse>0.752941 0.752941 0.752941 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/BLdrive.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+    </link>
+    <joint name='Frame-BLdrive' type='revolute'>
+      <parent>Frame</parent>
+      <child>BLdrive</child>
+      <pose>-4e-06 0 -0.000481 0 -0 0</pose>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <limit>
+          <effort>1</effort>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+      </axis>
+    </joint>
+    <link name='BRdrive'>
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.306213 -0.308591 0.049722 1.5708 -0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.1</mass>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+      </inertial>
+      <collision name='BRdrive_collision'>
+        <pose>0.771522 -0.087243 -0.772006 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/BRdrive_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <bounce/>
+        </surface>
+        <max_contacts>10</max_contacts>
+      </collision>
+      <visual name='BRdrive_visual'>
+        <pose>0.771522 -0.087243 -0.772006 0 -0 0</pose>
+        <material>
+          <ambient>0.752941 0.752941 0.752941 1</ambient>
+          <diffuse>0.752941 0.752941 0.752941 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/BRdrive.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+    </link>
+    <joint name='Frame-BRdrive' type='revolute'>
+      <parent>Frame</parent>
+      <child>BRdrive</child>
+      <pose>-3e-06 0 -0.000481 0 -0 0</pose>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <limit>
+          <effort>1</effort>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+      </axis>
+    </joint>
+    <link name='FLwheel'>
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.309733 0.307388 0.011789 1.5708 -0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.413565</mass>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+      </inertial>
+      <collision name='FLwheel_collision'>
+        <pose>0.155576 -0.049311 -0.156026 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/FLwheel_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <bounce/>
+        </surface>
+        <max_contacts>10</max_contacts>
+      </collision>
+      <visual name='FLwheel_visual'>
+        <pose>0.155576 -0.049311 -0.156026 0 -0 0</pose>
+        <material>
+          <ambient>0.25098 0.501961 0.501961 1</ambient>
+          <diffuse>0.25098 0.501961 0.501961 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/FLwheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+    </link>
+    <joint name='FLdrive-FLwheel' type='revolute'>
+      <parent>FLdrive</parent>
+      <child>FLwheel</child>
+      <pose>4e-06 3.4e-05 -0 0 -0 0</pose>
+      <axis>
+        <xyz>-0.006084 0 -0.999981</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <limit>
+          <effort>1</effort>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+      </axis>
+    </joint>
+    <link name='FRwheel'>
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.309734 -0.308562 0.011789 1.5708 -0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.413565</mass>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+      </inertial>
+      <collision name='FRwheel_collision'>
+        <pose>0.155575 -0.049311 -0.771976 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/FRwheel_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <bounce/>
+        </surface>
+        <max_contacts>10</max_contacts>
+      </collision>
+      <visual name='FRwheel_visual'>
+        <pose>0.155575 -0.049311 -0.771976 0 -0 0</pose>
+        <material>
+          <ambient>0.501961 1 0.501961 1</ambient>
+          <diffuse>0.501961 1 0.501961 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/FRwheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+    </link>
+    <joint name='FRdrive-FRwheel' type='revolute'>
+      <parent>FRdrive</parent>
+      <child>FRwheel</child>
+      <pose>4e-06 3.4e-05 -0 0 -0 0</pose>
+      <axis>
+        <xyz>0.007532 -0 0.999972</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <limit>
+          <effort>1</effort>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+      </axis>
+    </joint>
+    <link name='BLwheel'>
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.306216 0.308291 0.011789 1.5708 -0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.413565</mass>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+      </inertial>
+      <collision name='BLwheel_collision'>
+        <pose>0.771525 -0.049311 -0.155124 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/BLwheel_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <bounce/>
+        </surface>
+        <max_contacts>10</max_contacts>
+      </collision>
+      <visual name='BLwheel_visual'>
+        <pose>0.771525 -0.049311 -0.155124 0 -0 0</pose>
+        <material>
+          <ambient>0.25098 0.501961 0.501961 1</ambient>
+          <diffuse>0.25098 0.501961 0.501961 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/BLwheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+    </link>
+    <joint name='BLdrive-BLwheel' type='revolute'>
+      <parent>BLdrive</parent>
+      <child>BLwheel</child>
+      <pose>-4e-06 3.4e-05 0 0 -0 0</pose>
+      <axis>
+        <xyz>-0.007532 -0 -0.999972</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <limit>
+          <effort>1</effort>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+      </axis>
+    </joint>
+    <link name='BRwheel'>
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.306215 -0.307659 0.00917 1.5708 -0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.413565</mass>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+      </inertial>
+      <collision name='BRwheel_collision'>
+        <pose>0.771524 -0.046692 -0.771074 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/BRwheel_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <bounce/>
+        </surface>
+        <max_contacts>10</max_contacts>
+      </collision>
+      <visual name='BRwheel_visual'>
+        <pose>0.771524 -0.046692 -0.771074 0 -0 0</pose>
+        <material>
+          <ambient>0.501961 1 0 1</ambient>
+          <diffuse>0.501961 1 0 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/BRwheel.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+    </link>
+    <joint name='BRdrive-BRwheel' type='revolute'>
+      <parent>BRdrive</parent>
+      <child>BRwheel</child>
+      <pose>-4e-06 3.4e-05 0 0 -0 0</pose>
+      <axis>
+        <xyz>0.006084 0 0.999981</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <limit>
+          <effort>1</effort>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+      </axis>
+    </joint>
+    <link name='Bumpers'>
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.001759 -0.000135 0.055563 1.5708 -0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>30.1655</mass>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <collision name='Bumpers_collision'>
+        <pose>0.46355 -0.093084 -0.46355 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/Bumpers_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <bounce/>
+        </surface>
+        <max_contacts>10</max_contacts>
+      </collision>
+      <visual name='Bumpers_visual'>
+        <pose>0.46355 -0.093084 -0.46355 0 -0 0</pose>
+        <material>
+          <ambient>1 0 0 1</ambient>
+          <diffuse>1 0 0 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/Bumpers.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+    </link>
+    <joint name='Frame-Bumpers' type='prismatic'>
+      <parent>Frame</parent>
+      <child>Bumpers</child>
+      <pose>-0.001759 0 -0.000135 0 -0 0</pose>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <limit>
+          <upper>0</upper>
+          <lower>0</lower>
+          <effort>1</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name='Climber'>
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.087221 -0.072127 0.207561 1.5708 -0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.562927</mass>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+      </inertial>
+      <collision name='Climber_collision'>
+        <pose>0.378088 -0.245083 -0.535542 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/Climber_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <bounce/>
+        </surface>
+        <max_contacts>10</max_contacts>
+      </collision>
+      <visual name='Climber_visual'>
+        <pose>0.378088 -0.245083 -0.535542 0 -0 0</pose>
+        <material>
+          <ambient>0.25098 0.25098 0 1</ambient>
+          <diffuse>0.25098 0.25098 0 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/Climber.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+    </link>
+    <joint name='Frame-Climber' type='prismatic'>
+      <parent>Frame</parent>
+      <child>Climber</child>
+      <pose>0.016412 0 0.016412 0 -0 0</pose>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <limit>
+          <upper>0</upper>
+          <lower>0</lower>
+          <effort>1</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name='Arm'>
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.514915 -0.043875 0.499145 1.5708 -0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>2.04812</mass>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertia>
+          <ixx>0.179727</ixx>
+          <ixy>0.00836914</ixy>
+          <ixz>0.00310555</ixz>
+          <iyy>0.181366</iyy>
+          <iyz>0.00219916</iyz>
+          <izz>0.0209553</izz>
+        </inertia>
+      </inertial>
+      <collision name='Arm_collision'>
+        <pose>-0.049606 -0.536667 -0.50729 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/Arm_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <bounce/>
+        </surface>
+        <max_contacts>10</max_contacts>
+      </collision>
+      <visual name='Arm_visual'>
+        <pose>-0.049606 -0.536667 -0.50729 0 -0 0</pose>
+        <material>
+          <ambient>0.501961 0.501961 0.501961 1</ambient>
+          <diffuse>0.501961 0.501961 0.501961 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/Arm.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+    </link>
+    <joint name='Frame-Arm' type='revolute'>
+      <parent>Frame</parent>
+      <child>Arm</child>
+      <pose>-0.240106 -0.21657 -0 0 -0 0</pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <limit>
+          <upper>0</upper>
+          <lower>0</lower>
+          <effort>1</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name='TopInRollers'>
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.529875 0.008755 0.608238 1.5708 -0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>1.1101</mass>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+      </inertial>
+      <collision name='TopInRollers_collision'>
+        <pose>-0.064566 -0.64576 -0.45466 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/TopInRollers_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <bounce/>
+        </surface>
+        <max_contacts>10</max_contacts>
+      </collision>
+      <visual name='TopInRollers_visual'>
+        <pose>-0.064566 -0.64576 -0.45466 0 -0 0</pose>
+        <material>
+          <ambient>0.25098 0.501961 0.501961 1</ambient>
+          <diffuse>0.25098 0.501961 0.501961 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/TopInRollers.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+    </link>
+    <joint name='Arm-TopInRollers' type='revolute'>
+      <parent>Arm</parent>
+      <child>TopInRollers</child>
+      <pose>-0.035395 -0.023515 0 0 -0 0</pose>
+      <axis>
+        <xyz>-0 0 1</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <limit>
+          <upper>0</upper>
+          <lower>0</lower>
+          <effort>1</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name='TopOutRollers'>
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.57563 -0.000566 0.633986 1.5708 -0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>1.21387</mass>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+      </inertial>
+      <collision name='TopOutRollers_collision'>
+        <pose>-0.110321 -0.671507 -0.46398 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/TopOutRollers_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <bounce/>
+        </surface>
+        <max_contacts>10</max_contacts>
+      </collision>
+      <visual name='TopOutRollers_visual'>
+        <pose>-0.110321 -0.671507 -0.46398 0 -0 0</pose>
+        <material>
+          <ambient>0.25098 0.501961 0.501961 1</ambient>
+          <diffuse>0.25098 0.501961 0.501961 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/TopOutRollers.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+    </link>
+    <joint name='Arm-TopOutRollers' type='revolute'>
+      <parent>Arm</parent>
+      <child>TopOutRollers</child>
+      <pose>0 0 0 0 -0 0</pose>
+      <axis>
+        <xyz>0 0 -1</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <limit>
+          <effort>1</effort>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+      </axis>
+    </joint>
+    <link name='BotInRollers'>
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.625794 0.009635 0.501492 1.5708 -0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>1.1101</mass>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+      </inertial>
+      <collision name='BotInRollers_collision'>
+        <pose>-0.160485 -0.539014 -0.45378 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/BotInRollers_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <bounce/>
+        </surface>
+        <max_contacts>10</max_contacts>
+      </collision>
+      <visual name='BotInRollers_visual'>
+        <pose>-0.160485 -0.539014 -0.45378 0 -0 0</pose>
+        <material>
+          <ambient>0.25098 0.501961 0.501961 1</ambient>
+          <diffuse>0.25098 0.501961 0.501961 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/BotInRollers.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+    </link>
+    <joint name='Arm-BotInRollers' type='revolute'>
+      <parent>Arm</parent>
+      <child>BotInRollers</child>
+      <pose>-0.027152 -0.032688 0 0 -0 0</pose>
+      <axis>
+        <xyz>-0 0 1</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <limit>
+          <upper>0</upper>
+          <lower>0</lower>
+          <effort>1</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name='BotOutRollers''>
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.65627 -0.000288 0.544244 1.5708 -0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>1.14766</mass>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+      </inertial>
+      <collision name='BotOutRollers'_collision'>
+        <pose>-0.190961 -0.581765 -0.463703 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/BotOutRollers'_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <bounce/>
+        </surface>
+        <max_contacts>10</max_contacts>
+      </collision>
+      <visual name='BotOutRollers'_visual'>
+        <pose>-0.190961 -0.581765 -0.463703 0 -0 0</pose>
+        <material>
+          <ambient>0.25098 0.501961 0.501961 1</ambient>
+          <diffuse>0.25098 0.501961 0.501961 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2025/meshes/BotOutRollers'.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+    </link>
+    <joint name='Arm-BotOutRollers'' type='revolute'>
+      <parent>Arm</parent>
+      <child>BotOutRollers'</child>
+      <pose>0 0 -0 0 -0 0</pose>
+      <axis>
+        <xyz>0 0 -1</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <limit>
+          <effort>1</effort>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+      </axis>
+    </joint>
+  </model>
+  <gravity>0 0 -9.8</gravity>
+  <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
+  <atmosphere type='adiabatic'/>
+  <physics type='ode'>
+    <max_step_size>0.001</max_step_size>
+    <real_time_factor>1</real_time_factor>
+    <real_time_update_rate>1000</real_time_update_rate>
+  </physics>
+  <scene>
+    <ambient>0.4 0.4 0.4 1</ambient>
+    <background>0.7 0.7 0.7 1</background>
+    <shadows>1</shadows>
+  </scene>
+  <wind/>
+  <spherical_coordinates>
+    <surface_model>EARTH_WGS84</surface_model>
+    <latitude_deg>0</latitude_deg>
+    <longitude_deg>0</longitude_deg>
+    <elevation>0</elevation>
+    <heading_deg>0</heading_deg>
+  </spherical_coordinates>
+  <state world_name='default'>
+    <sim_time>61 462000000</sim_time>
+    <real_time>75 587491200</real_time>
+    <wall_time>1742870295 971296100</wall_time>
+    <iterations>61462</iterations>
+    <model name='Barge'>
+      <pose>7e-06 -3.6e-05 0.004262 -2.7e-05 -6e-06 -2e-06</pose>
+      <scale>1 1 1</scale>
+      <link name='BargeFrame'>
+        <pose>0.003024 0.008489 1.32603 1.57079 2.7e-05 1.57079</pose>
+        <velocity>0 0 0 0 -0 0</velocity>
+        <acceleration>0 0 -9.15644 -3.14055 1.3788 3.1403</acceleration>
+        <wrench>0 0 -3319.54 0 -0 0</wrench>
+      </link>
+    </model>
+    <model name='Borders'>
+      <pose>-2.45621 -4.25196 -0 3.14159 -0 3.14159</pose>
+      <scale>1 1 1</scale>
+      <link name='FieldBorder'>
+        <pose>0.202929 0.092496 0.614151 1.5708 -0 -3e-06</pose>
+        <velocity>0 0 0 0 -0 0</velocity>
+        <acceleration>0 0 -0 0 -0 0</acceleration>
+        <wrench>0 0 -0 0 -0 0</wrench>
+      </link>
+    </model>
+    <model name='Carpet'>
+      <pose>0 0 0 1.57 -0 0</pose>
+      <scale>1 1 1</scale>
+      <link name='Rugs'>
+        <pose>0 -3.8e-05 -0.002313 1.57 -0 0</pose>
+        <velocity>0 0 0 0 -0 0</velocity>
+        <acceleration>0 0 0 0 -0 0</acceleration>
+        <wrench>0 0 0 0 -0 0</wrench>
+      </link>
+    </model>
+    <model name='Reef'>
+      <pose>-4.29974 0.58541 -0.090122 1.57083 -1.4e-05 -0.5429</pose>
+      <scale>1 1 1</scale>
+      <link name='ReefDF'>
+        <pose>-4.26618 -0.007786 0.490518 1.57083 -1.4e-05 -0.5429</pose>
+        <velocity>0 0 0 0 -0 0</velocity>
+        <acceleration>0 0 -1.15487 1.80117 1.01444 0</acceleration>
+        <wrench>0 0 -11.5487 0 -0 0</wrench>
+      </link>
+    </model>
+    <model name='SimBot2025'>
+      <pose>-1.75767 3.51397 0.040022 -0.000174 0.003934 -2.1508</pose>
+      <scale>1 1 1</scale>
+      <link name='Arm'>
+        <pose>-2.07755 3.10563 0.53713 1.57062 0.003915 -2.1508</pose>
+        <velocity>-0.000564 -0.000173 -0.003846 0.016452 -0.002373 -0.004569</velocity>
+        <acceleration>0.080436 -2.20663 -1.18655 -2.24782 -0.126101 -3.0028</acceleration>
+        <wrench>0.164743 -4.51943 -2.43019 0 -0 0</wrench>
+      </link>
+      <link name='BLdrive'>
+        <pose>-1.33286 3.6015 0.093506 1.57048 0.003939 -2.1825</pose>
+        <velocity>0.000546 -0.002003 -0.004945 0.008404 0.001055 -0.001283</velocity>
+        <acceleration>-0.014946 0.264268 0.789576 -1.50284 -1.45013 0.029737</acceleration>
+        <wrench>-0.001495 0.026427 0.078958 0 -0 0</wrench>
+      </link>
+      <link name='BLwheel'>
+        <pose>-1.33201 3.60111 0.052957 1.57049 0.002728 -2.1825</pose>
+        <velocity>0.000489 -0.00164 -0.005051 0.003678 0.004438 -0.001281</velocity>
+        <acceleration>0.027931 1.01023 0.79316 -1.27123 0.977555 0.034613</acceleration>
+        <wrench>0.011551 0.417796 0.328023 0 -0 0</wrench>
+      </link>
+      <link name='BRdrive'>
+        <pose>-1.84815 3.93872 0.091206 1.57329 0.003066 -1.41991</pose>
+        <velocity>0.002227 0.000453 0.015207 0.009178 0.001611 -0.00232</velocity>
+        <acceleration>0.434475 0.417791 62.8732 -0.137631 -0.621317 0.02202</acceleration>
+        <wrench>0.043447 0.041779 6.28732 0 -0 0</wrench>
+      </link>
+      <link name='BRwheel'>
+        <pose>-1.84715 3.93899 0.050647 1.57481 -0.231682 -1.42067</pose>
+        <velocity>0.002171 0.000855 0.014179 -0.157937 -0.024829 -0.002745</velocity>
+        <acceleration>0.484703 1.24721 59.4895 -0.977894 0.077102 3.12179</acceleration>
+        <wrench>0.200456 0.515802 24.6027 0 -0 0</wrench>
+      </link>
+      <link name='BotInRollers'>
+        <pose>-2.09356 2.98355 0.53903 1.57062 0.003926 -2.1508</pose>
+        <velocity>-0.000982 0.000341 -0.004895 0.003101 0.003988 -0.004407</velocity>
+        <acceleration>0.301211 -1.3907 -3.20945 0.802046 -0.463373 2.92005</acceleration>
+        <wrench>0.334375 -1.54382 -3.56282 0 -0 0</wrench>
+      </link>
+      <link name='BotOutRollers''>
+        <pose>-2.11865 2.96335 0.581664 1.57062 -0.001826 -2.1508</pose>
+        <velocity>-0.001372 -0.000632 -0.005841 0.003265 0.005084 -0.004533</velocity>
+        <acceleration>-0.407676 -3.2608 -4.87151 -2.51779 -0.535804 -0.393604</acceleration>
+        <wrench>-0.467872 -3.74229 -5.59082 0 -0 0</wrench>
+      </link>
+      <link name='Bumpers'>
+        <pose>-1.75886 3.51239 0.095574 1.57062 0.003937 -2.1508</pose>
+        <velocity>0.000119 7.3e-05 -0.00565 0.008223 0.001042 -0.004988</velocity>
+        <acceleration>0.003586 0.4454 -1.8879 0 -0 0</acceleration>
+        <wrench>0.108179 13.4357 -56.9495 0 -0 0</wrench>
+      </link>
+      <link name='Climber'>
+        <pose>-1.86622 3.47984 0.247249 1.57062 0.003938 -2.1508</pose>
+        <velocity>0.000112 -0.000627 -0.005987 0.008664 0.001236 -0.00496</velocity>
+        <acceleration>-0.486626 -1.6604 -2.77027 -0.078172 -0.460346 2.10428</acceleration>
+        <wrench>-0.273935 -0.934684 -1.55946 0 -0 0</wrench>
+      </link>
+      <link name='FLdrive'>
+        <pose>-1.66986 3.08556 0.091318 1.56825 0.003007 -2.80836</pose>
+        <velocity>-0.001934 -0.000448 -0.068724 0.011464 0.00216 0.028242</velocity>
+        <acceleration>-0.305074 0.317578 -83.9619 1.46023 -0.8254 0.037185</acceleration>
+        <wrench>-0.030507 0.031758 -8.39619 0 -0 0</wrench>
+      </link>
+      <link name='FLwheel'>
+        <pose>-1.67008 3.08658 0.050757 1.56728 0.157089 -2.80883</pose>
+        <velocity>-0.002074 5e-05 -0.065307 0.043793 -0.088757 0.028001</velocity>
+        <acceleration>-0.313571 1.21529 -79.6054 -0.694661 0.124025 0.059008</acceleration>
+        <wrench>-0.129682 0.5026 -32.922 0 -0 0</wrench>
+      </link>
+      <link name='FRdrive'>
+        <pose>-2.18483 3.42331 0.091207 1.57059 0.003945 -2.15309</pose>
+        <velocity>-0.000293 0.002099 -0.008729 0.007677 0.000326 -0.004072</velocity>
+        <acceleration>-0.079337 0.719848 -16.2598 0.352211 0.059282 -3.11978</acceleration>
+        <wrench>-0.007934 0.071985 -1.62598 0 -0 0</wrench>
+      </link>
+      <link name='FRwheel'>
+        <pose>-2.18553 3.42396 0.050657 1.56898 0.214379 -2.15331</pose>
+        <velocity>-0.000325 0.002465 -0.008509 -0.075036 0.054026 -0.004055</velocity>
+        <acceleration>0.023356 1.46935 -15.3925 -2.89943 -1.05899 0.024171</acceleration>
+        <wrench>0.009659 0.607673 -6.36581 0 -0 0</wrench>
+      </link>
+      <link name='Frame'>
+        <pose>-1.77782 3.48909 0.134338 1.57062 0.003934 -2.1508</pose>
+        <velocity>4.6e-05 -0.000151 -0.006191 0.011419 0.002149 -0.004678</velocity>
+        <acceleration>-0.131832 -0.104749 -2.53624 -2.65994 -1.51691 0.990932</acceleration>
+        <wrench>-1.64996 -1.311 -31.7425 0 -0 0</wrench>
+      </link>
+      <link name='TopInRollers'>
+        <pose>-2.04195 3.0639 0.646151 1.57062 0.003931 -2.1508</pose>
+        <velocity>-0.000283 1.7e-05 -0.003494 -0.001427 0.004646 -0.004269</velocity>
+        <acceleration>0.558479 -1.44793 -0.747169 -0.254628 -1.48031 3.11293</acceleration>
+        <wrench>0.619969 -1.60735 -0.829434 0 -0 0</wrench>
+      </link>
+      <link name='TopOutRollers'>
+        <pose>-2.07487 3.03065 0.67172 1.57062 -0.000432 -2.1508</pose>
+        <velocity>-0.000205 -1.2e-05 -0.003386 0.002315 0.003555 -0.004433</velocity>
+        <acceleration>0.880654 -1.64185 -0.508897 -1.00895 -0.113635 2.82132</acceleration>
+        <wrench>1.069 -1.99299 -0.617735 0 -0 0</wrench>
+      </link>
+    </model>
+    <model name='ground_plane'>
+      <pose>0 0 0 0 -0 0</pose>
+      <scale>1 1 1</scale>
+      <link name='link'>
+        <pose>0 0 0 0 -0 0</pose>
+        <velocity>0 0 0 0 -0 0</velocity>
+        <acceleration>0 0 0 0 -0 0</acceleration>
+        <wrench>0 0 0 0 -0 0</wrench>
+      </link>
+    </model>
+    <light name='sun'>
+      <pose>0 0 10 0 -0 0</pose>
+    </light>
+  </state>
+</world>
+</sdf>

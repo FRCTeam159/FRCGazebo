@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.4">
+  <world name="default">
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+    <include>
+      <uri>model://Carpet</uri>
+      <pose>0 0 0 1.57 0 0</pose>
+    </include>
+ 
+     <include>
+      <uri>model://Borders</uri>
+      <pose>-2.45621 -4.25196 0 3.14159 -0 3.14159</pose>
+    </include>
+
+    <include>
+      <uri>model://Barge</uri>
+      <pose>0 0 0 0 0 0</pose>
+    </include>
+   <include>
+      <uri>model://Reef</uri>
+      <pose>-4.29974 0.58541 -0.090122 1.57083 -1.4e-05 -0.5429</pose>
+    </include>
+    
+   <include>
+      <uri>model://SimBot2025</uri>
+      <pose>-1.75839 3.51388 0.039847 -0.003963 0.000176 -2.15</pose>
+    </include>
+    
+  </world>
+</sdf>
